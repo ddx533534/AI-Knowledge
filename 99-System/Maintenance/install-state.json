@@ -1,0 +1,11 @@
+{
+  "vault": "E:\\AI-Knowledge",
+  "global_rule": "C:\\Users\\Administrator\\.codex\\AGENTS.md",
+  "user_skill": "C:\\Users\\Administrator\\.agents\\skills\\technical-knowledge-capture",
+  "changed": [
+    "C:\\Users\\Administrator\\.agents\\skills\\technical-knowledge-capture\\SKILL.md",
+    "E:\\AI-Knowledge\\.agents\\skills\\knowledge-graph-builder\\SKILL.md"
+  ],
+  "check_only": false,
+  "backup": "C:\\Users\\Administrator\\.codex\\backups\\technical-knowledge\\20261010-102730-387972"
+}

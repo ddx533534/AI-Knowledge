@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.knowledge.lock
+.capture-*/
+.knowledge-*
+00-Inbox/*.json
+99-System/验收截图.png
+99-System/Maintenance/验收截图.png

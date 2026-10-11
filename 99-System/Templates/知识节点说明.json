@@ -1,0 +1,15 @@
+{
+  "id": "stable-technical-name",
+  "title": "实际技术名称",
+  "aliases": [],
+  "tags": [],
+  "type": "concept",
+  "status": "unverified",
+  "last_verified": null,
+  "sources": [{"document_id": "替换为 capture 返回的文档 ID", "locator": "具体章节/行号/页码"}],
+  "relationships": [],
+  "summary": "结论：这是什么、解决什么问题、适用条件。",
+  "findings": ["关键发现及其实际影响。"],
+  "analysis": "支撑结论的证据，明确适用版本、局限、推断与未知。",
+  "recommendations": ["具体可执行的建议或核实步骤。"]
+}

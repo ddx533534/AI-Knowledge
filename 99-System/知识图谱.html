@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>技术知识图谱</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#17324a;background:#f4f7fa}
+*{box-sizing:border-box}body{margin:0}header{padding:24px 28px 14px;border-bottom:1px solid #dce4eb;background:white}h1{font-size:24px;margin:0 0 8px}p{line-height:1.65;margin:8px 0;color:#536777}
+.controls{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}input,select,button{font:inherit;padding:9px 12px;border:1px solid #bccbd6;border-radius:7px;background:white}input{min-width:260px}button{cursor:pointer;color:#174568}main{display:grid;grid-template-columns:minmax(0,1fr) 330px;height:calc(100vh - 185px);min-height:520px}#canvas{position:relative}svg{width:100%;height:100%;touch-action:none}aside{padding:22px;background:#fff;border-left:1px solid #dce4eb;overflow:auto}aside h2{font-size:19px;overflow-wrap:anywhere}aside a{color:#1266a0;display:block;margin:10px 0;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 monospace}#list{width:100%;max-height:150px}.edge{stroke:#9faebc;stroke-width:1.4}.edge.evidence{stroke-dasharray:4 4;stroke:#b5c3cc}.edge-label{font-size:11px;fill:#536777;paint-order:stroke;stroke:#f4f7fa;stroke-width:4px}.node{cursor:pointer}.node:focus{outline:none}.node:focus circle{stroke:#111;stroke-width:3}.node text{font-size:12px;fill:#18374d;paint-order:stroke;stroke:#f4f7fa;stroke-width:4px}.node.selected circle{stroke:#1b334b;stroke-width:3}.node circle{stroke:white;stroke-width:2}.legend{font-size:13px;color:#536777}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}.empty{position:absolute;inset:40% 10%;text-align:center;color:#536777;pointer-events:none}.label{font-size:12px;color:#667b89;margin-top:16px}#status{font-size:13px}.hint{font-size:12px}li{line-height:1.7;margin-bottom:9px}
+@media(max-width:800px){main{grid-template-columns:1fr;height:auto}#canvas{height:520px}aside{border-left:0;border-top:1px solid #dce4eb}header{padding:18px}input{min-width:0;width:100%}}
+</style>
+<header><h1>技术知识图谱</h1><p>文档保留原文，知识节点保留解释，关系保留证据。选择节点查看来源，拖动节点调整布局。</p>
+<div class="controls"><input id="search" aria-label="搜索节点" placeholder="搜索标题、类型或项目"><select id="mode" aria-label="展示范围"><option value="all">知识与来源文档</option><option value="knowledge">只看知识关系</option><option value="document">只看归档文档</option></select><button id="reset">重置布局</button></div>
+<p class="legend"><span class="dot" style="background:#277c9d"></span>知识节点　<span class="dot" style="background:#e2a653"></span>原文文档　虚线：来源　箭头：技术关系　<span id="status"></span></p></header>
+<main><div id="canvas"><svg id="graph" role="img" aria-label="可交互技术知识图谱" viewBox="0 0 1000 650"><defs><marker id="arrow" viewBox="0 0 10 10" refX="38" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9faebc"/></marker></defs><g id="edges"></g><g id="labels"></g><g id="nodes"></g></svg><div id="empty" class="empty" hidden>当前筛选下没有节点。归档文档并提取知识后执行 build。</div></div>
+<aside><div class="label">节点列表</div><select id="list" size="5" aria-label="选择节点"></select><h2 id="detail-title">选择一个节点</h2><p id="detail-text">点击圆点或从列表中选择，查看原文、知识笔记和证据关系。</p><div id="links"></div><div id="relations"></div><pre id="metadata"></pre><p class="hint">本页是可重建的本地图谱。文件链接以本知识库目录为基准；网页预览若限制文件链接，可在 Obsidian 中按路径打开。</p></aside></main>
+<script id="data" type="application/json">{
+  "schema_version": 2,
+  "nodes": [
+    {
+      "id": "doc:22bbe9b15acb13a5a04d8ddb9deb40ee15e4a773c4f132edfc39a4d0416cc6da",
+      "kind": "document",
+      "title": "免费部署调研与实施记录",
+      "path": "05-Research/website-7b89a34872b0/免费部署调研与实施记录--22bbe9b15acb/原文-免费部署调研与实施记录.md",
+      "artifact": "05-Research/website-7b89a34872b0/免费部署调研与实施记录--22bbe9b15acb/原文-免费部署调研与实施记录.md",
+      "note": "05-Research/website-7b89a34872b0/免费部署调研与实施记录--22bbe9b15acb/归档说明.md",
+      "project": "E:\\测评\\website",
+      "source_path": "E:\\测评\\website\\docs\\免费部署调研与实施记录.md",
+      "sha256": "ed3e391df05bc261d26bd922eab37cc53a0b511a8f24e6a2c95d6c24991022bb",
+      "captured_at": "2026-10-11T15:05:35.063843+08:00"
+    },
+    {
+      "id": "doc:49850479e4e6141f46386bcf09e1181e828ddd3227af792b1d29520631333cc8",
+      "kind": "document",
+      "title": "测评网站技术方案",
+      "path": "05-Research/测评-bf2fd1863d36/测评网站技术方案--49850479e4e6/原文-测评网站技术方案.md",
+      "artifact": "05-Research/测评-bf2fd1863d36/测评网站技术方案--49850479e4e6/原文-测评网站技术方案.md",
+      "note": "05-Research/测评-bf2fd1863d36/测评网站技术方案--49850479e4e6/归档说明.md",
+      "project": "E:\\测评",
+      "source_path": "E:\\测评\\测评网站技术方案.md",
+      "sha256": "c7c57b8b035df6cef11f8cab874ea49f72e6b3a004a18a06c4803aad94311ea7",
+      "captured_at": "2026-10-11T10:13:21.184349+08:00"
+    },
+    {
+      "id": "doc:add72e7c471d2bd1e95bad1dadf025d52884f037c1c7c9e4e2249d9f5f6e3f25",
+      "kind": "document",
+      "title": "Strands Box 设计与架构调研",
+      "path": "05-Research/AI-Knowledge-7daee9459306/Strands-Box-设计与架构调研--add72e7c471d/原文-Strands-Box-设计与架构调研.md",
+      "artifact": "05-Research/AI-Knowledge-7daee9459306/Strands-Box-设计与架构调研--add72e7c471d/原文-Strands-Box-设计与架构调研.md",
+      "note": "05-Research/AI-Knowledge-7daee9459306/Strands-Box-设计与架构调研--add72e7c471d/归档说明.md",
+      "project": "E:\\AI-Knowledge",
+      "source_path": "E:\\AI-Knowledge\\05-Research\\Strands Box 设计与架构调研.md",
+      "sha256": "4013a5177cb7d921456a0c72f51b5f0445e3b89a253f210f14308b4053d4d780",
+      "captured_at": "2026-10-10T10:19:27+08:00"
+    },
+    {
+      "id": "doc:b8f58a8d9d319b771b81f7654b80549dbcac660994a0c7b27c8ee31ed01aebbb",
+      "kind": "document",
+      "title": "Makers-Blob替代数据库实施记录",
+      "path": "05-Research/website-7b89a34872b0/Makers-Blob替代数据库实施记录--b8f58a8d9d31/原文-Makers-Blob替代数据库实施记录.md",
+      "artifact": "05-Research/website-7b89a34872b0/Makers-Blob替代数据库实施记录--b8f58a8d9d31/原文-Makers-Blob替代数据库实施记录.md",
+      "note": "05-Research/website-7b89a34872b0/Makers-Blob替代数据库实施记录--b8f58a8d9d31/归档说明.md",
+      "project": "E:\\测评\\website",
+      "source_path": "E:\\测评\\website\\docs\\Makers-Blob替代数据库实施记录.md",
+      "sha256": "1a407c65009ade76f1a57805ec45ec41f0bab5349bbf24e50dece36be19837ea",
+      "captured_at": "2026-10-11T17:55:37.537880+08:00"
+    },
+    {
+      "id": "doc:ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+      "kind": "document",
+      "title": "recce-runtime-selection",
+      "path": "05-Research/algorithms-12281f86b27d/recce-runtime-selection--ed977e613aad/原文-recce-runtime-selection.md",
+      "artifact": "05-Research/algorithms-12281f86b27d/recce-runtime-selection--ed977e613aad/原文-recce-runtime-selection.md",
+      "note": "05-Research/algorithms-12281f86b27d/recce-runtime-selection--ed977e613aad/归档说明.md",
+      "project": "E:\\algorithms",
+      "source_path": "E:\\algorithms\\doc\\recce-runtime-selection.md",
+      "sha256": "b9b181d7553745ac4b9044e1a8836f8f0a536c6d83b56e9c57b7dc6f9eb4dbec",
+      "captured_at": "2026-10-11T22:21:28.002173+08:00"
+    },
+    {
+      "id": "node:bytecode-precompilation-vs-native-aot",
+      "kind": "knowledge",
+      "title": "字节码预编译与原生 AOT",
+      "path": "01-Knowledge/bytecode-precompilation-vs-native-aot.md",
+      "type": "concept",
+      "status": "verified",
+      "tags": [
+        "编译",
+        "运行时",
+        "Hermes"
+      ],
+      "sources": [
+        {
+          "document_id": "ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+          "locator": "§3.1–3.3：典型执行路径、AOT 产物与引擎模式；§9 来源 S2–S6"
+        }
+      ]
+    },
+    {
+      "id": "node:deterministic-narrative-result-generation",
+      "kind": "knowledge",
+      "title": "冻结内容库的确定性生成与跨语言一致性",
+      "path": "01-Knowledge/deterministic-narrative-result-generation.md",
+      "type": "architecture",
+      "status": "verified",
+      "tags": [
+        "确定性",
+        "版本管理",
+        "跨语言验证"
+      ],
+      "sources": [
+        {
+          "document_id": "b8f58a8d9d319b771b81f7654b80549dbcac660994a0c7b27c8ee31ed01aebbb",
+          "locator": "第4节：固定结果算法迁移；第6节：本地验证与云端未验收边界"
+        }
+      ]
+    },
+    {
+      "id": "node:hong-kong-assessment-stack",
+      "kind": "knowledge",
+      "title": "香港部署的中文测评网站架构",
+      "path": "01-Knowledge/hong-kong-assessment-stack.md",
+      "type": "architecture",
+      "status": "partial",
+      "tags": [
+        "Supabase",
+        "GitHub",
+        "香港部署",
+        "移动端"
+      ],
+      "sources": [
+        {
+          "document_id": "49850479e4e6141f46386bcf09e1181e828ddd3227af792b1d29520631333cc8",
+          "locator": "第2节：香港自托管Supabase架构与官方来源；第8节：图片保存与分享；第11节：部署与大陆访问验证"
+        },
+        {
+          "document_id": "49850479e4e6141f46386bcf09e1181e828ddd3227af792b1d29520631333cc8",
+          "locator": "第4.2—4.4节：预留、数据库不变量、完成事务与幂等；第5节：表与唯一约束；第12节：并发测试要求"
+        },
+        {
+          "document_id": "49850479e4e6141f46386bcf09e1181e828ddd3227af792b1d29520631333cc8",
+          "locator": "第6节：答题状态与结果一致性"
+        }
+      ]
+    },
+    {
+      "id": "node:makers-blob-assessment-storage",
+      "kind": "knowledge",
+      "title": "Makers Blob测评存储与最佳努力扣次",
+      "path": "01-Knowledge/makers-blob-assessment-storage.md",
+      "type": "architecture",
+      "status": "partial",
+      "tags": [
+        "Makers",
+        "Blob",
+        "对象存储",
+        "并发边界",
+        "测评"
+      ],
+      "sources": [
+        {
+          "document_id": "b8f58a8d9d319b771b81f7654b80549dbcac660994a0c7b27c8ee31ed01aebbb",
+          "locator": "第1—3节：接受的Blob并发边界、SDK条件写限制和数据组织；第4—6节：固定算法、配置与实测范围"
+        }
+      ]
+    },
+    {
+      "id": "node:makers-postgresql-quiz-deployment",
+      "kind": "knowledge",
+      "title": "Makers与PostgreSQL的趣味测评部署边界",
+      "path": "01-Knowledge/makers-postgresql-quiz-deployment.md",
+      "type": "architecture",
+      "status": "partial",
+      "tags": [
+        "Makers",
+        "CloudBase",
+        "Supabase",
+        "PostgreSQL",
+        "大陆访问"
+      ],
+      "sources": [
+        {
+          "document_id": "22bbe9b15acb13a5a04d8ddb9deb40ee15e4a773c4f132edfc39a4d0416cc6da",
+          "locator": "第1—2节：官方免费套餐、域名与数据库连接边界；第3—5节：函数适配、验证与待验收项"
+        },
+        {
+          "document_id": "b8f58a8d9d319b771b81f7654b80549dbcac660994a0c7b27c8ee31ed01aebbb",
+          "locator": "第1—3节：接受的Blob并发边界、SDK条件写限制和数据组织；第4—6节：固定算法、配置与实测范围"
+        }
+      ]
+    },
+    {
+      "id": "node:os-sandbox",
+      "kind": "knowledge",
+      "title": "操作系统沙箱",
+      "path": "01-Knowledge/os-sandbox.md",
+      "type": "concept",
+      "status": "unverified",
+      "tags": [
+        "安全",
+        "历史资料"
+      ],
+      "sources": [
+        {
+          "document_id": "add72e7c471d2bd1e95bad1dadf025d52884f037c1c7c9e4e2249d9f5f6e3f25",
+          "locator": "S1：项目定位与预览平台；S3：直接访问与代办请求分工；原始 README 第 26–49 行与 policy.md 第 23–44 行的归档摘录"
+        }
+      ]
+    },
+    {
+      "id": "node:recce-runtime-selection",
+      "kind": "knowledge",
+      "title": "Recce 运行时与语言选型",
+      "path": "01-Knowledge/recce-runtime-selection.md",
+      "type": "architecture",
+      "status": "partial",
+      "tags": [
+        "Recce",
+        "React Native",
+        "Wasm",
+        "Hermes"
+      ],
+      "sources": [
+        {
+          "document_id": "ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+          "locator": "§1–2：选型层次；§3.1：执行路径；§5.2–5.3：通信与证据；§6–8：安全和阶段边界"
+        },
+        {
+          "document_id": "ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+          "locator": "§3.1–3.2：Recce 原型执行路径与 AOT 产物"
+        },
+        {
+          "document_id": "ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+          "locator": "§5.2 与 §6：Wasm 内存访问和模块隔离"
+        }
+      ]
+    },
+    {
+      "id": "node:strands-box",
+      "kind": "knowledge",
+      "title": "Strands Box",
+      "path": "01-Knowledge/strands-box.md",
+      "type": "tool",
+      "status": "unverified",
+      "tags": [
+        "安全",
+        "历史资料"
+      ],
+      "sources": [
+        {
+          "document_id": "add72e7c471d2bd1e95bad1dadf025d52884f037c1c7c9e4e2249d9f5f6e3f25",
+          "locator": "S1：项目定位与预览平台；S3：直接访问与代办请求分工；原始 README 第 26–49 行与 policy.md 第 23–44 行的归档摘录"
+        }
+      ]
+    },
+    {
+      "id": "node:transactional-access-code-quota",
+      "kind": "knowledge",
+      "title": "有限次访问码的事务扣次与幂等设计",
+      "path": "01-Knowledge/transactional-access-code-quota.md",
+      "type": "architecture",
+      "status": "verified",
+      "tags": [
+        "PostgreSQL",
+        "访问码",
+        "幂等",
+        "事务"
+      ],
+      "sources": [
+        {
+          "document_id": "49850479e4e6141f46386bcf09e1181e828ddd3227af792b1d29520631333cc8",
+          "locator": "第4.2—4.4节：预留、数据库不变量、完成事务与幂等；第5节：表与唯一约束；第12节：并发测试要求"
+        },
+        {
+          "document_id": "22bbe9b15acb13a5a04d8ddb9deb40ee15e4a773c4f132edfc39a4d0416cc6da",
+          "locator": "第3节：事务实施；第4节：真实PostgreSQL 17.11并发与故障验证"
+        }
+      ]
+    },
+    {
+      "id": "node:webassembly-linear-memory-isolation",
+      "kind": "knowledge",
+      "title": "WebAssembly 线性内存隔离",
+      "path": "01-Knowledge/webassembly-linear-memory-isolation.md",
+      "type": "concept",
+      "status": "verified",
+      "tags": [
+        "WebAssembly",
+        "安全",
+        "FFI"
+      ],
+      "sources": [
+        {
+          "document_id": "ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+          "locator": "§6：安全优势，区分语言、模块与宿主；§9 来源 S12–S13"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "node:bytecode-precompilation-vs-native-aot",
+      "target": "doc:ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:deterministic-narrative-result-generation",
+      "target": "doc:b8f58a8d9d319b771b81f7654b80549dbcac660994a0c7b27c8ee31ed01aebbb",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:hong-kong-assessment-stack",
+      "target": "doc:49850479e4e6141f46386bcf09e1181e828ddd3227af792b1d29520631333cc8",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:hong-kong-assessment-stack",
+      "target": "node:transactional-access-code-quota",
+      "type": "uses",
+      "label": "使用",
+      "explanation": "本网站设计采用临时预留、完成事务与幂等账本控制每码3次；目前是拟实施架构。",
+      "sources": [
+        {
+          "document_id": "49850479e4e6141f46386bcf09e1181e828ddd3227af792b1d29520631333cc8",
+          "locator": "第4.2—4.4节：预留、数据库不变量、完成事务与幂等；第5节：表与唯一约束；第12节：并发测试要求"
+        }
+      ]
+    },
+    {
+      "source": "node:hong-kong-assessment-stack",
+      "target": "node:deterministic-narrative-result-generation",
+      "type": "uses",
+      "label": "使用",
+      "explanation": "本网站设计拟复用已存在的固定Python参考引擎与内容库，API只负责权限、事务与快照，不随机生成身份。",
+      "sources": [
+        {
+          "document_id": "49850479e4e6141f46386bcf09e1181e828ddd3227af792b1d29520631333cc8",
+          "locator": "第6节：答题状态与结果一致性"
+        }
+      ]
+    },
+    {
+      "source": "node:makers-blob-assessment-storage",
+      "target": "doc:b8f58a8d9d319b771b81f7654b80549dbcac660994a0c7b27c8ee31ed01aebbb",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:makers-blob-assessment-storage",
+      "target": "node:makers-postgresql-quiz-deployment",
+      "type": "alternative_to",
+      "label": "可替代",
+      "explanation": "用户接受并发额度偏差后，Node云函数与Blob替换原Makers/PostgreSQL方案，省去数据库配置和迁移；不保留原事务保证。",
+      "sources": [
+        {
+          "document_id": "b8f58a8d9d319b771b81f7654b80549dbcac660994a0c7b27c8ee31ed01aebbb",
+          "locator": "第1—3节：接受的Blob并发边界、SDK条件写限制和数据组织；第4—6节：固定算法、配置与实测范围"
+        }
+      ]
+    },
+    {
+      "source": "node:makers-blob-assessment-storage",
+      "target": "node:deterministic-narrative-result-generation",
+      "type": "uses",
+      "label": "使用",
+      "explanation": "Blob后端使用移植的Node固定评分/查表算法，580组答案逐项对照Python，覆盖96变体；存储与随机会话不参与文学身份生成。",
+      "sources": [
+        {
+          "document_id": "b8f58a8d9d319b771b81f7654b80549dbcac660994a0c7b27c8ee31ed01aebbb",
+          "locator": "第1—3节：接受的Blob并发边界、SDK条件写限制和数据组织；第4—6节：固定算法、配置与实测范围"
+        }
+      ]
+    },
+    {
+      "source": "node:makers-postgresql-quiz-deployment",
+      "target": "doc:22bbe9b15acb13a5a04d8ddb9deb40ee15e4a773c4f132edfc39a4d0416cc6da",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:makers-postgresql-quiz-deployment",
+      "target": "doc:b8f58a8d9d319b771b81f7654b80549dbcac660994a0c7b27c8ee31ed01aebbb",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:makers-postgresql-quiz-deployment",
+      "target": "node:transactional-access-code-quota",
+      "type": "uses",
+      "label": "使用",
+      "explanation": "Makers函数复用同一FastAPI后端，以PostgreSQL事务预留和扣次；本地实现已测试，云端联调待验证。",
+      "sources": [
+        {
+          "document_id": "22bbe9b15acb13a5a04d8ddb9deb40ee15e4a773c4f132edfc39a4d0416cc6da",
+          "locator": "第1—2节：官方免费套餐、域名与数据库连接边界；第3—5节：函数适配、验证与待验收项"
+        }
+      ]
+    },
+    {
+      "source": "node:makers-postgresql-quiz-deployment",
+      "target": "node:deterministic-narrative-result-generation",
+      "type": "uses",
+      "label": "使用",
+      "explanation": "构建仅打包固定Python评分引擎、题库及结果库，随机会话或分享链接不参与文学身份生成。",
+      "sources": [
+        {
+          "document_id": "22bbe9b15acb13a5a04d8ddb9deb40ee15e4a773c4f132edfc39a4d0416cc6da",
+          "locator": "第1—2节：官方免费套餐、域名与数据库连接边界；第3—5节：函数适配、验证与待验收项"
+        }
+      ]
+    },
+    {
+      "source": "node:makers-postgresql-quiz-deployment",
+      "target": "node:hong-kong-assessment-stack",
+      "type": "alternative_to",
+      "label": "可替代",
+      "explanation": "在免费试运行且实际数据库网络可达的条件下，Makers函数可替代租用香港应用服务器；自有域名及生产验收仍必需。",
+      "sources": [
+        {
+          "document_id": "22bbe9b15acb13a5a04d8ddb9deb40ee15e4a773c4f132edfc39a4d0416cc6da",
+          "locator": "第1—2节：官方免费套餐、域名与数据库连接边界；第3—5节：函数适配、验证与待验收项"
+        }
+      ]
+    },
+    {
+      "source": "node:os-sandbox",
+      "target": "doc:add72e7c471d2bd1e95bad1dadf025d52884f037c1c7c9e4e2249d9f5f6e3f25",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:recce-runtime-selection",
+      "target": "doc:ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:recce-runtime-selection",
+      "target": "node:bytecode-precompilation-vs-native-aot",
+      "type": "uses",
+      "label": "使用",
+      "explanation": "Recce 原型将 Rust 预编译为 Wasm 字节码，再由 wasm3 解释执行，是字节码预编译路径。",
+      "sources": [
+        {
+          "document_id": "ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+          "locator": "§3.1–3.2：Recce 原型执行路径与 AOT 产物"
+        }
+      ]
+    },
+    {
+      "source": "node:recce-runtime-selection",
+      "target": "node:webassembly-linear-memory-isolation",
+      "type": "uses",
+      "label": "使用",
+      "explanation": "Recce 的 Wasm 动态模块路线采用 Wasm 隔离机制；Native 交互和 FFI 仍需检查边界。",
+      "sources": [
+        {
+          "document_id": "ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+          "locator": "§5.2 与 §6：Wasm 内存访问和模块隔离"
+        }
+      ]
+    },
+    {
+      "source": "node:strands-box",
+      "target": "doc:add72e7c471d2bd1e95bad1dadf025d52884f037c1c7c9e4e2249d9f5f6e3f25",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:strands-box",
+      "target": "node:os-sandbox",
+      "type": "uses",
+      "label": "使用",
+      "explanation": "归档 README 明确说明 Box 结合操作系统隔离与语义策略；policy.md 摘录说明宿主操作系统限制直接访问。此关系表达该历史设计的使用机制，当前实现未重新核实。",
+      "sources": [
+        {
+          "document_id": "add72e7c471d2bd1e95bad1dadf025d52884f037c1c7c9e4e2249d9f5f6e3f25",
+          "locator": "S1：项目定位与预览平台；S3：直接访问与代办请求分工；原始 README 第 26–49 行与 policy.md 第 23–44 行的归档摘录"
+        }
+      ]
+    },
+    {
+      "source": "node:transactional-access-code-quota",
+      "target": "doc:22bbe9b15acb13a5a04d8ddb9deb40ee15e4a773c4f132edfc39a4d0416cc6da",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:transactional-access-code-quota",
+      "target": "doc:49850479e4e6141f46386bcf09e1181e828ddd3227af792b1d29520631333cc8",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:webassembly-linear-memory-isolation",
+      "target": "doc:ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    }
+  ]
+}
+</script>
+<script>
+"use strict";
+const data=JSON.parse(document.getElementById('data').textContent), ns='http://www.w3.org/2000/svg';
+const types={concept:'概念',protocol:'协议',framework:'框架',model:'模型',runtime:'运行时',tool:'工具',architecture:'架构',comparison:'对比'},statuses={verified:'已核实',partial:'部分核实',unverified:'未核实'};
+const byId=new Map(data.nodes.map(n=>[n.id,n])), positions=new Map();
+let selected=null, visible=[], visibleEdges=[], drag=null;
+const $=id=>document.getElementById(id);
+function element(tag,attrs={},text){const el=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,v);if(text!==undefined)el.textContent=text;return el;}
+function relativeLink(path){return '../'+path.split('/').map(encodeURIComponent).join('/');}
+function addLink(label,path){const a=document.createElement('a');a.textContent=label+' · '+path;a.href=relativeLink(path);$('links').append(a);}
+function select(id){selected=id;const n=byId.get(id);if(!n)return;
+ $('detail-title').textContent=n.title;$('detail-text').textContent=n.kind==='document'?'原文归档副本；归档时间不等于事实核实时间。':`类型：${types[n.type]||n.type}；核实状态：${statuses[n.status]||n.status}`;
+ $('links').replaceChildren();if(n.kind==='document'){addLink('打开完整原文',n.artifact||n.path);if(n.note)addLink('归档说明',n.note);}else{addLink('知识笔记（提炼）',n.path);for(const docId of new Set((n.sources||[]).map(s=>s.document_id))){const doc=byId.get('doc:'+docId);if(doc)addLink('完整原文：'+doc.title,doc.artifact||doc.path);}}
+ $('metadata').textContent=n.kind==='document'?`来源项目：${n.project}\n来源路径：${n.source_path}\n归档时间：${n.captured_at}\nSHA-256：${n.sha256}`:(n.sources||[]).map((s,i)=>`证据 ${i+1}：${byId.get('doc:'+s.document_id)?.title||s.document_id}\n定位：${s.locator}`).join('\n\n');
+ const relations=data.edges.filter(e=>e.source===id||e.target===id);$('relations').replaceChildren();
+ const ul=document.createElement('ul');for(const e of relations){const li=document.createElement('li');const target=byId.get(e.source===id?e.target:e.source);const button=document.createElement('button');button.textContent=(e.source===id?'→ ':'← ')+e.label+'：'+target.title;button.onclick=()=>select(target.id);li.append(button);const p=document.createElement('p');p.textContent=e.explanation;li.append(p);ul.append(li);} $('relations').append(ul);
+ $('list').value=id;draw();
+}
+function arrange(){positions.clear();const groups=[visible.filter(n=>n.kind==='knowledge'),visible.filter(n=>n.kind==='document')];
+ groups.forEach((members,g)=>members.forEach((n,i)=>{const a=2*Math.PI*i/Math.max(members.length,1)-Math.PI/2;const radius=members.length===1?0:(g===0?180:270);positions.set(n.id,{x:500+radius*Math.cos(a)+(members.length===1?(g===0?-160:160):0),y:325+radius*Math.sin(a)});}));
+}
+function render(){const q=$('search').value.toLocaleLowerCase(),mode=$('mode').value;
+ visible=data.nodes.filter(n=>(mode==='all'||n.kind===mode)&&[n.title,n.type,n.project,...(n.tags||[])].filter(Boolean).join(' ').toLocaleLowerCase().includes(q));
+ const ids=new Set(visible.map(n=>n.id));visibleEdges=data.edges.filter(e=>ids.has(e.source)&&ids.has(e.target));
+ $('list').replaceChildren();for(const n of visible){const opt=document.createElement('option');opt.value=n.id;opt.textContent=n.title;$('list').append(opt);} if(selected)$('list').value=selected;
+ $('status').textContent=`显示 ${visible.length} / ${data.nodes.length} 个节点，${visibleEdges.length} 条边`;$('empty').hidden=visible.length>0;arrange();draw();
+}
+function draw(){for(const name of ['edges','labels','nodes'])$(name).replaceChildren();
+ for(const e of visibleEdges){const a=positions.get(e.source),b=positions.get(e.target);if(!a||!b)continue;const line=element('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:'edge'+(e.type==='evidence'?' evidence':''),'marker-end':e.type==='evidence'?'':'url(#arrow)'});line.append(element('title',{},e.explanation));$('edges').append(line);$('labels').append(element('text',{x:(a.x+b.x)/2,y:(a.y+b.y)/2-7,'text-anchor':'middle',class:'edge-label'},e.label));}
+ for(const n of visible){const p=positions.get(n.id);const g=element('g',{transform:`translate(${p.x},${p.y})`,class:'node'+(n.id===selected?' selected':''),tabindex:'0',role:'button','aria-label':n.title});g.append(element('circle',{r:n.kind==='knowledge'?15:11,fill:n.kind==='knowledge'?'#277c9d':'#e2a653'}));g.append(element('text',{y:31,'text-anchor':'middle'},n.title.length>22?n.title.slice(0,22)+'…':n.title));g.append(element('title',{},n.title));g.onclick=()=>select(n.id);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(n.id);}};g.onpointerdown=e=>{if(e.button!==0)return;drag=n.id;$('graph').setPointerCapture(e.pointerId);};$('nodes').append(g);}
+}
+$('graph').onpointermove=e=>{if(!drag)return;const pt=$('graph').createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const p=pt.matrixTransform($('graph').getScreenCTM().inverse());positions.set(drag,{x:Math.max(25,Math.min(975,p.x)),y:Math.max(25,Math.min(610,p.y))});draw();};
+$('graph').onpointerup=()=>{if(drag){const id=drag;drag=null;select(id);}};$('graph').onpointercancel=()=>{drag=null;};
+$('search').oninput=render;$('mode').onchange=render;$('reset').onclick=()=>{arrange();draw();};$('list').onchange=()=>select($('list').value);render();
+</script>
+</html>

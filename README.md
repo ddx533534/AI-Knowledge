@@ -1,58 +1,57 @@
-# AI-Knowledge
+# 技术知识库
 
-这个目录同时是 Obsidian Vault 和 Codex 项目。入口为 [[99-System/知识库首页|知识库首页]]。
+在 Codex 任意本地项目中创建技术调研、探索或分析文档后，保留原文，并自动复制一份到本库；再提取知识节点和有直接证据的关系。覆盖所有技术主题。
 
-在 Codex 中以本目录为工作目录。确认调研需求后，Codex 按 `AGENTS.md` 完成原任务，并使用项目内 `knowledge-graph-builder` Skill 整理知识。Markdown 保存事实、来源与关系；Obsidian 图谱显示笔记链接。
-
-写入正文、章节、解释和摘要统一使用中文，遵守 [[99-System/调研与分析输出规范]]。默认结构为“结论 → 关键发现 → 证据与分析 → 建议”；详细资料放附录，官方技术名称、代码与机器字段保留原样。
-
-## 开始使用
-
-1. 在 Codex 中打开 `/Users/dudongxu/Desktop/codex/AI-Knowledge`。首次使用新规则时启动一个新聊天，以便加载项目 `AGENTS.md`。
-2. 在 Obsidian 打开同一目录，进入 [[99-System/知识库首页|知识库首页]]。如 Obsidian 已打开此库但设置未刷新，重新打开库。
-3. 提出调研任务，例如：“调研 Microsoft AutoGen 和 LangGraph 的架构差异，核实当前官方资料。”先确认 Codex 的需求复述；完成后按项目规则归档。
-4. 查看 `05-Research` 原始调研、概念/框架笔记及变更摘要，在 Obsidian 侧栏打开图谱。再执行相同调研，检查是否复用旧节点。
-
-若 Skill 未显示，可以明确调用 `$knowledge-graph-builder`；也可以要求读取 `.agents/skills/knowledge-graph-builder/SKILL.md` 执行工作流。未完成一次真实任务验收前，不把技能自动发现、自动归档或图谱渲染称为已验证。
-
-## 目录
+日常阅读从 [首页](首页.md) 进入。目录分工如下：
 
 | 目录 | 用途 |
 | --- | --- |
-| `00-Inbox` | 未分类材料、新笔记入口 |
-| `01-Concepts` | 概念、协议、机制 |
-| `02-Frameworks` | 框架、模型、运行时、开发工具 |
-| `03-Architecture` | 架构与技术体系 |
-| `04-Comparisons` | 对比、适用条件与取舍 |
-| `05-Research` | 调研报告与原始证据摘要 |
-| `06-Learning-Gaps` | 资料缺口、待学习建议 |
-| `99-System` | 规范、模板、索引、日志、验收 |
+| `01-Knowledge` | 提炼后的技术知识 |
+| `05-Research` | 与来源版本字节一致的完整原文 |
+| `06-Learning-Gaps` | 待补证据与验证问题 |
+| `00-Inbox` | 临时节点说明，处理完成后清空 |
+| `99-System` | 索引、图谱与规范；维护记录集中在 `Maintenance`，备份在 `Backups` |
+| `tools`、`.agents`、`.obsidian` | 工具、技能与编辑器配置 |
+
+## 使用方式
+
+本机知识库路径：`E:\AI-Knowledge`。完成安装后，在其他项目新建聊天，照常要求调研、架构探索、技术对比或故障分析并生成文档。Codex 的全局规则会要求在任务收尾调用 `$technical-knowledge-capture`。
+
+原文副本保存在 `05-Research`，知识笔记保存在 `01-Knowledge`。在 Obsidian 打开本目录，从 [[首页]] 浏览；在浏览器打开 `99-System/知识图谱.html`，可搜索、拖动节点、查看带类型的关系与证据来源。
+
+如果只在聊天中回答、没有创建文档，不额外生成文档。用户明确不保存时跳过。重复归档不新增副本；文档内容变化时保留新版本。原文副本含原始链接，跨项目相对链接/附件不会自动修复或打包；结构化知识节点使用本库证据链接。
 
 ## 本地工具
 
-脚本使用 Python 3 和 PyYAML。本次配置时已核实本机 Python 3.11 与 PyYAML 6.0.2 可用。其他环境缺依赖时，可在自己的 Python 环境中安装技能内 `scripts/requirements.txt`；脚本不自动安装依赖。
+核心工具仅依赖 Python 3.10+ 标准库，无需 PyYAML；安装脚本和测试需要 Python 3.11+。Windows 入口会寻找可用 Python，包括当前 Codex 附带的运行时。
 
-```bash
-python3 .agents/skills/knowledge-graph-builder/scripts/vault_tool.py validate
-python3 .agents/skills/knowledge-graph-builder/scripts/vault_tool.py index
+```powershell
+& E:\AI-Knowledge\tools\knowledge.ps1 capture --source E:\OtherProject\docs\research.md --project E:\OtherProject --kind research
+& E:\AI-Knowledge\tools\knowledge.ps1 node --spec E:\AI-Knowledge\00-Inbox\node.json
+& E:\AI-Knowledge\tools\knowledge.ps1 validate
+& E:\AI-Knowledge\tools\knowledge.ps1 build
 ```
 
-`validate` 只读，检查链接、名称/别名冲突、必要字段、来源格式和关系结构。它不能判断外部来源是否真实支持一个结论。`index` 只重建两个派生索引，内容无变化时不写文件。索引不能作为独立知识源。
+`capture` 复制指定文件，不会自动扫描项目或上传数据；支持 Markdown、文本、PDF、Word 等文件的字节复制，语义提取由 Codex 使用相应读取工具完成。`node` 接收已阅读证据后的知识说明，维护 AI 区域并保留人工区域。`validate` 检查副本完整性、字段、证据定位、名称冲突、链接与关系；不证明技术事实正确。`build` 校验后生成索引、JSON 和无外部依赖的 HTML 图谱，内容无变化时不重写文件。
 
-## 自动化范围
+## 安装与迁移
 
-已配置当前项目内和跨项目的任务收尾规则。规则依赖 Codex 加载 `AGENTS.md` 并实际执行 Skill，不是后台服务，不保证任意会话都会自动触发。未安装文件监听器。
+本机安装脚本：`tools/install.ps1`。它安装用户级技能、追加全局归档规则，并将本库加入 `sandbox_workspace_write.writable_roots`；保留现有配置及权限模式。改动前在用户 Codex 目录内备份全局文件，备份不进入此 Git 仓库。
 
-2026-10-09 已追加全局 `~/.codex/AGENTS.md` 归档规则，并安装用户级 `~/.agents/skills/ai-knowledge-capture`。其他本地项目完成已确认的实质 AI 技术调研后，使用该入口将知识整理到本 Vault；在本 Vault 自身工作时使用项目 knowledge-graph-builder，避免一次任务归档两遍。用户明确不保存、项目规则禁止外部归档或没有实质新增知识时跳过。
+全局入口源文件位于 `99-System/Distribution`；项目内整理技能位于 `.agents/skills/knowledge-graph-builder`。迁移机器后重新执行安装，路径按本仓库实际位置生成。
 
-全局 config.toml 已将本 Vault 加入 `sandbox_workspace_write.writable_roots`，保留原模式与审批策略。该设置适用于 workspace-write；桌面端受管理权限是否采用它，需在其他项目的新会话核实。规则不能绕过会话实际权限，受阻时会明确报告归档失败。
+机制依赖 Codex 加载全局规则并执行技能，权限仍受当前会话约束。它不是后台监听器，不能保证任意旧聊天都执行。安装后重启 Codex，在另一个项目的新聊天验证规则加载、技能调用和实际写入。验收状态见 [[99-System/Maintenance/验收记录]]。
 
-首次跨项目使用建议重启 Codex，并在其他项目开启新聊天。可要求其列出已加载的 AI-Knowledge 归档规则，或明确调用 `$ai-knowledge-capture`。其他项目 Skill 自动发现、实际自动归档和写入权限仍待真实任务验收；从其他工作目录运行绝对路径校验/索引工具已验证成功。
+官方依据：[全局 AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)、[用户级 Skills](https://learn.chatgpt.com/docs/build-skills)、[额外可写目录](https://learn.chatgpt.com/docs/config-file/config-reference)。
 
-默认图谱过滤模板与系统文件，按目录给知识节点分组；还没有经过调研核实的知识节点时，图谱可能为空。关系类型保存在 Markdown 的 relationships 字段和解释正文中；原生图谱只显示链接，不给边添加类型标签。
+旧库完整备份：`99-System/Backups/2026-10-10-before-rebuild.zip`。Git 历史保留；未自动推送远程。
 
-现有 `欢迎.md` 和 `2026-10-09.md` 保留。原 Obsidian 设置见 `99-System/Backups/2026-10-09`，可按需恢复；恢复不会删除知识笔记。
+## 技术内容准入（2026-10-11 用户明确要求）
 
-规范见 [[99-System/知识规范]]、[[99-System/关系类型]]，验证状态见 [[99-System/验收记录]]。
+归档前必须阅读正文并判断研究对象，不能凭“调研”“总结”“分析”、research/analysis 标记、项目名称或出现代码就收录。
 
-官方参考：[Codex Skills](https://learn.chatgpt.com/docs/build-skills)、[AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)、[Obsidian Templates](https://obsidian.md/help/Plugins/Templates)、[Obsidian Graph view](https://obsidian.md/help/Plugins/Graph%2Bview)。
+- 仅收录以软件、算法、系统、协议、工程技术或其他技术机制为主要对象，且包含可复查技术证据的调研、探索、架构、技术对比和故障调查文档。
+- 非技术性的调研、总结、分析不归档、不提取节点、不进入图谱。明确排除趣味/人格测评的题库与结果文案、叙事身份设计、心理测量与用户访谈方案，以及营销、运营、商业策划和一般内容创作。
+- 测评等业务项目中的数据库事务、并发、存储、部署、权限和算法实现研究可收录；业务题材本身不是技术知识。
+- 混合文档以主要研究对象判断；非技术文档夹带少量计分规则、脚本或测试记录仍排除。已有独立技术研究文档时仅收录该文档，不为归档另造材料。
+- capture 只是复制工具，不负责语义准入；执行者必须先完成上述判断。用户明确要求清理的误收录材料应移出活跃归档、节点及派生视图，并清除悬空引用。

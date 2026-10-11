@@ -1,0 +1,6 @@
+interface:
+  display_name: "技术文档归档与知识图谱"
+  short_description: "把任意项目新建的技术调研分析文档复制到知识库，提取可追溯知识与关系"
+  default_prompt: "使用 $technical-knowledge-capture 归档本次创建的技术调研文档并更新知识图谱。"
+policy:
+  allow_implicit_invocation: true

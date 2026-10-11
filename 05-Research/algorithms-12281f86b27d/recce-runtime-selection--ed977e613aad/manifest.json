@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "id": "ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+  "title": "recce-runtime-selection",
+  "kind": "analysis",
+  "source_key": "48359d4fb39817518148be0c93cae5843b98dec9a9fc6d375d284758730a8738",
+  "source_project": "E:\\algorithms",
+  "source_path": "E:\\algorithms\\doc\\recce-runtime-selection.md",
+  "source_relative_path": "doc/recce-runtime-selection.md",
+  "source_commit": "0de585333295d8cce5f353ea7d311632b44f17ae",
+  "source_worktree_dirty": true,
+  "captured_at": "2026-10-11T22:21:28.002173+08:00",
+  "sha256": "b9b181d7553745ac4b9044e1a8836f8f0a536c6d83b56e9c57b7dc6f9eb4dbec",
+  "size": 11032,
+  "artifact": "05-Research/algorithms-12281f86b27d/recce-runtime-selection--ed977e613aad/原文-recce-runtime-selection.md",
+  "note": "05-Research/algorithms-12281f86b27d/recce-runtime-selection--ed977e613aad/归档说明.md",
+  "previous_version": null
+}

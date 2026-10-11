@@ -1,6 +1,6 @@
 {
   "collapse-filter": true,
-  "search": "-path:\"99-System\" -path:\"AGENTS.md\" -path:\"README.md\" -path:\"欢迎.md\"",
+  "search": "path:\"01-Knowledge\" OR (path:\"05-Research\" file:\"原文-\")",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": true,
@@ -8,45 +8,17 @@
   "collapse-color-groups": true,
   "colorGroups": [
     {
-      "query": "path:\"01-Concepts\"",
+      "query": "path:\"01-Knowledge\"",
       "color": {
         "a": 1,
-        "rgb": 5793266
-      }
-    },
-    {
-      "query": "path:\"02-Frameworks\"",
-      "color": {
-        "a": 1,
-        "rgb": 5025616
-      }
-    },
-    {
-      "query": "path:\"03-Architecture\"",
-      "color": {
-        "a": 1,
-        "rgb": 10053324
-      }
-    },
-    {
-      "query": "path:\"04-Comparisons\"",
-      "color": {
-        "a": 1,
-        "rgb": 16759603
+        "rgb": 2587805
       }
     },
     {
       "query": "path:\"05-Research\"",
       "color": {
         "a": 1,
-        "rgb": 16744448
-      }
-    },
-    {
-      "query": "path:\"06-Learning-Gaps\"",
-      "color": {
-        "a": 1,
-        "rgb": 15684432
+        "rgb": 14853715
       }
     }
   ],
@@ -60,6 +32,6 @@
   "repelStrength": 10,
   "linkStrength": 1,
   "linkDistance": 250,
-  "scale": 3.329098803586793,
-  "close": true
+  "scale": 5.416435544289165,
+  "close": false
 }

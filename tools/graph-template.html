@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>技术知识图谱</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,"Microsoft YaHei",sans-serif;color:#17324a;background:#f4f7fa}
+*{box-sizing:border-box}body{margin:0}header{padding:24px 28px 14px;border-bottom:1px solid #dce4eb;background:white}h1{font-size:24px;margin:0 0 8px}p{line-height:1.65;margin:8px 0;color:#536777}
+.controls{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}input,select,button{font:inherit;padding:9px 12px;border:1px solid #bccbd6;border-radius:7px;background:white}input{min-width:260px}button{cursor:pointer;color:#174568}main{display:grid;grid-template-columns:minmax(0,1fr) 330px;height:calc(100vh - 185px);min-height:520px}#canvas{position:relative}svg{width:100%;height:100%;touch-action:none}aside{padding:22px;background:#fff;border-left:1px solid #dce4eb;overflow:auto}aside h2{font-size:19px;overflow-wrap:anywhere}aside a{color:#1266a0;display:block;margin:10px 0;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 monospace}#list{width:100%;max-height:150px}.edge{stroke:#9faebc;stroke-width:1.4}.edge.evidence{stroke-dasharray:4 4;stroke:#b5c3cc}.edge-label{font-size:11px;fill:#536777;paint-order:stroke;stroke:#f4f7fa;stroke-width:4px}.node{cursor:pointer}.node:focus{outline:none}.node:focus circle{stroke:#111;stroke-width:3}.node text{font-size:12px;fill:#18374d;paint-order:stroke;stroke:#f4f7fa;stroke-width:4px}.node.selected circle{stroke:#1b334b;stroke-width:3}.node circle{stroke:white;stroke-width:2}.legend{font-size:13px;color:#536777}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}.empty{position:absolute;inset:40% 10%;text-align:center;color:#536777;pointer-events:none}.label{font-size:12px;color:#667b89;margin-top:16px}#status{font-size:13px}.hint{font-size:12px}li{line-height:1.7;margin-bottom:9px}
+@media(max-width:800px){main{grid-template-columns:1fr;height:auto}#canvas{height:520px}aside{border-left:0;border-top:1px solid #dce4eb}header{padding:18px}input{min-width:0;width:100%}}
+</style>
+<header><h1>技术知识图谱</h1><p>文档保留原文，知识节点保留解释，关系保留证据。选择节点查看来源，拖动节点调整布局。</p>
+<div class="controls"><input id="search" aria-label="搜索节点" placeholder="搜索标题、类型或项目"><select id="mode" aria-label="展示范围"><option value="all">知识与来源文档</option><option value="knowledge">只看知识关系</option><option value="document">只看归档文档</option></select><button id="reset">重置布局</button></div>
+<p class="legend"><span class="dot" style="background:#277c9d"></span>知识节点　<span class="dot" style="background:#e2a653"></span>原文文档　虚线：来源　箭头：技术关系　<span id="status"></span></p></header>
+<main><div id="canvas"><svg id="graph" role="img" aria-label="可交互技术知识图谱" viewBox="0 0 1000 650"><defs><marker id="arrow" viewBox="0 0 10 10" refX="38" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#9faebc"/></marker></defs><g id="edges"></g><g id="labels"></g><g id="nodes"></g></svg><div id="empty" class="empty" hidden>当前筛选下没有节点。归档文档并提取知识后执行 build。</div></div>
+<aside><div class="label">节点列表</div><select id="list" size="5" aria-label="选择节点"></select><h2 id="detail-title">选择一个节点</h2><p id="detail-text">点击圆点或从列表中选择，查看原文、知识笔记和证据关系。</p><div id="links"></div><div id="relations"></div><pre id="metadata"></pre><p class="hint">本页是可重建的本地图谱。文件链接以本知识库目录为基准；网页预览若限制文件链接，可在 Obsidian 中按路径打开。</p></aside></main>
+<script id="data" type="application/json">__GRAPH_JSON__</script>
+<script>
+"use strict";
+const data=JSON.parse(document.getElementById('data').textContent), ns='http://www.w3.org/2000/svg';
+const types={concept:'概念',protocol:'协议',framework:'框架',model:'模型',runtime:'运行时',tool:'工具',architecture:'架构',comparison:'对比'},statuses={verified:'已核实',partial:'部分核实',unverified:'未核实'};
+const byId=new Map(data.nodes.map(n=>[n.id,n])), positions=new Map();
+let selected=null, visible=[], visibleEdges=[], drag=null;
+const $=id=>document.getElementById(id);
+function element(tag,attrs={},text){const el=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,v);if(text!==undefined)el.textContent=text;return el;}
+function relativeLink(path){return '../'+path.split('/').map(encodeURIComponent).join('/');}
+function addLink(label,path){const a=document.createElement('a');a.textContent=label+' · '+path;a.href=relativeLink(path);$('links').append(a);}
+function select(id){selected=id;const n=byId.get(id);if(!n)return;
+ $('detail-title').textContent=n.title;$('detail-text').textContent=n.kind==='document'?'原文归档副本；归档时间不等于事实核实时间。':`类型：${types[n.type]||n.type}；核实状态：${statuses[n.status]||n.status}`;
+ $('links').replaceChildren();if(n.kind==='document'){addLink('打开完整原文',n.artifact||n.path);if(n.note)addLink('归档说明',n.note);}else{addLink('知识笔记（提炼）',n.path);for(const docId of new Set((n.sources||[]).map(s=>s.document_id))){const doc=byId.get('doc:'+docId);if(doc)addLink('完整原文：'+doc.title,doc.artifact||doc.path);}}
+ $('metadata').textContent=n.kind==='document'?`来源项目：${n.project}\n来源路径：${n.source_path}\n归档时间：${n.captured_at}\nSHA-256：${n.sha256}`:(n.sources||[]).map((s,i)=>`证据 ${i+1}：${byId.get('doc:'+s.document_id)?.title||s.document_id}\n定位：${s.locator}`).join('\n\n');
+ const relations=data.edges.filter(e=>e.source===id||e.target===id);$('relations').replaceChildren();
+ const ul=document.createElement('ul');for(const e of relations){const li=document.createElement('li');const target=byId.get(e.source===id?e.target:e.source);const button=document.createElement('button');button.textContent=(e.source===id?'→ ':'← ')+e.label+'：'+target.title;button.onclick=()=>select(target.id);li.append(button);const p=document.createElement('p');p.textContent=e.explanation;li.append(p);ul.append(li);} $('relations').append(ul);
+ $('list').value=id;draw();
+}
+function arrange(){positions.clear();const groups=[visible.filter(n=>n.kind==='knowledge'),visible.filter(n=>n.kind==='document')];
+ groups.forEach((members,g)=>members.forEach((n,i)=>{const a=2*Math.PI*i/Math.max(members.length,1)-Math.PI/2;const radius=members.length===1?0:(g===0?180:270);positions.set(n.id,{x:500+radius*Math.cos(a)+(members.length===1?(g===0?-160:160):0),y:325+radius*Math.sin(a)});}));
+}
+function render(){const q=$('search').value.toLocaleLowerCase(),mode=$('mode').value;
+ visible=data.nodes.filter(n=>(mode==='all'||n.kind===mode)&&[n.title,n.type,n.project,...(n.tags||[])].filter(Boolean).join(' ').toLocaleLowerCase().includes(q));
+ const ids=new Set(visible.map(n=>n.id));visibleEdges=data.edges.filter(e=>ids.has(e.source)&&ids.has(e.target));
+ $('list').replaceChildren();for(const n of visible){const opt=document.createElement('option');opt.value=n.id;opt.textContent=n.title;$('list').append(opt);} if(selected)$('list').value=selected;
+ $('status').textContent=`显示 ${visible.length} / ${data.nodes.length} 个节点，${visibleEdges.length} 条边`;$('empty').hidden=visible.length>0;arrange();draw();
+}
+function draw(){for(const name of ['edges','labels','nodes'])$(name).replaceChildren();
+ for(const e of visibleEdges){const a=positions.get(e.source),b=positions.get(e.target);if(!a||!b)continue;const line=element('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:'edge'+(e.type==='evidence'?' evidence':''),'marker-end':e.type==='evidence'?'':'url(#arrow)'});line.append(element('title',{},e.explanation));$('edges').append(line);$('labels').append(element('text',{x:(a.x+b.x)/2,y:(a.y+b.y)/2-7,'text-anchor':'middle',class:'edge-label'},e.label));}
+ for(const n of visible){const p=positions.get(n.id);const g=element('g',{transform:`translate(${p.x},${p.y})`,class:'node'+(n.id===selected?' selected':''),tabindex:'0',role:'button','aria-label':n.title});g.append(element('circle',{r:n.kind==='knowledge'?15:11,fill:n.kind==='knowledge'?'#277c9d':'#e2a653'}));g.append(element('text',{y:31,'text-anchor':'middle'},n.title.length>22?n.title.slice(0,22)+'…':n.title));g.append(element('title',{},n.title));g.onclick=()=>select(n.id);g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(n.id);}};g.onpointerdown=e=>{if(e.button!==0)return;drag=n.id;$('graph').setPointerCapture(e.pointerId);};$('nodes').append(g);}
+}
+$('graph').onpointermove=e=>{if(!drag)return;const pt=$('graph').createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const p=pt.matrixTransform($('graph').getScreenCTM().inverse());positions.set(drag,{x:Math.max(25,Math.min(975,p.x)),y:Math.max(25,Math.min(610,p.y))});draw();};
+$('graph').onpointerup=()=>{if(drag){const id=drag;drag=null;select(id);}};$('graph').onpointercancel=()=>{drag=null;};
+$('search').oninput=render;$('mode').onchange=render;$('reset').onclick=()=>{arrange();draw();};$('list').onchange=()=>select($('list').value);render();
+</script>
+</html>
