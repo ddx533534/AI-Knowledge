@@ -3,6 +3,23 @@ __pycache__/
 .knowledge.lock
 .capture-*/
 .knowledge-*
+# 助手工作区数据（会话记忆等），不属于知识库内容
+.workbuddy/
 00-Inbox/*.json
+00-Inbox/*.base
+# 00-Inbox 只是暂存区：截图类入口件归档进 05-Research 后即冗余，不再入库
+00-Inbox/*.png
+00-Inbox/*.jpg
+00-Inbox/*.jpeg
 99-System/验收截图.png
 99-System/Maintenance/验收截图.png
+
+# Obsidian 机器本地 UI 状态：每台机器/每次开窗都会变，不进入版本库
+.obsidian/workspace.json
+.obsidian/graph.json
+.obsidian/*.bak*
+
+# 备份默认不进版本库；仅保留 README 与验收记录引用的重建前备份
+99-System/Backups/*.zip
+!99-System/Backups/2026-10-10-before-rebuild.zip
+*.bin

@@ -15,7 +15,7 @@
 
 ## 使用方式
 
-本机知识库路径：`E:\AI-Knowledge`。完成安装后，在其他项目新建聊天，照常要求调研、架构探索、技术对比或故障分析并生成文档。Codex 的全局规则会要求在任务收尾调用 `$technical-knowledge-capture`。
+本机知识库路径：`/Users/dudongxu/Desktop/codex/AI-Knowledge`（2026-10-12 由 Windows 机器的 `E:\AI-Knowledge` 迁入，目录结构与内容不变）。完成安装后，在其他项目新建聊天，照常要求调研、架构探索、技术对比或故障分析并生成文档。Codex 的全局规则会要求在任务收尾调用归档技能。
 
 原文副本保存在 `05-Research`，知识笔记保存在 `01-Knowledge`。在 Obsidian 打开本目录，从 [[首页]] 浏览；在浏览器打开 `99-System/知识图谱.html`，可搜索、拖动节点、查看带类型的关系与证据来源。
 
@@ -23,28 +23,28 @@
 
 ## 本地工具
 
-核心工具仅依赖 Python 3.10+ 标准库，无需 PyYAML；安装脚本和测试需要 Python 3.11+。Windows 入口会寻找可用 Python，包括当前 Codex 附带的运行时。
+核心工具仅依赖 Python 3.10+ 标准库，无需 PyYAML；安装脚本和测试需要 Python 3.11+。`tools/*.ps1` 是 Windows 入口，会寻找可用 Python（含当前 Codex 附带的运行时）；macOS/Linux 直接调用 `tools/knowledge.py`。
 
-```powershell
-& E:\AI-Knowledge\tools\knowledge.ps1 capture --source E:\OtherProject\docs\research.md --project E:\OtherProject --kind research
-& E:\AI-Knowledge\tools\knowledge.ps1 node --spec E:\AI-Knowledge\00-Inbox\node.json
-& E:\AI-Knowledge\tools\knowledge.ps1 validate
-& E:\AI-Knowledge\tools\knowledge.ps1 build
+```bash
+python3 tools/knowledge.py capture --source /path/to/OtherProject/docs/research.md --project /path/to/OtherProject --kind research
+python3 tools/knowledge.py node --spec /Users/dudongxu/Desktop/codex/AI-Knowledge/00-Inbox/node.json
+python3 tools/knowledge.py validate
+python3 tools/knowledge.py build
 ```
 
 `capture` 复制指定文件，不会自动扫描项目或上传数据；支持 Markdown、文本、PDF、Word 等文件的字节复制，语义提取由 Codex 使用相应读取工具完成。`node` 接收已阅读证据后的知识说明，维护 AI 区域并保留人工区域。`validate` 检查副本完整性、字段、证据定位、名称冲突、链接与关系；不证明技术事实正确。`build` 校验后生成索引、JSON 和无外部依赖的 HTML 图谱，内容无变化时不重写文件。
 
 ## 安装与迁移
 
-本机安装脚本：`tools/install.ps1`。它安装用户级技能、追加全局归档规则，并将本库加入 `sandbox_workspace_write.writable_roots`；保留现有配置及权限模式。改动前在用户 Codex 目录内备份全局文件，备份不进入此 Git 仓库。
+本机安装脚本：`tools/install.py`（Windows 入口为 `tools/install.ps1`，macOS/Linux 用 `python3 tools/install.py`）。它安装用户级技能、追加全局归档规则，并将本库加入 `sandbox_workspace_write.writable_roots`；保留现有配置及权限模式。改动前在用户 Codex 目录内备份全局文件，备份不进入此 Git 仓库。`python3 tools/install.py --check` 只读比对分发源与已部署内容，可用来确认是否需要重新安装。
 
-全局入口源文件位于 `99-System/Distribution`；项目内整理技能位于 `.agents/skills/knowledge-graph-builder`。迁移机器后重新执行安装，路径按本仓库实际位置生成。
+全局入口源文件位于 `99-System/Distribution`；项目内整理技能位于 `.agents/skills/knowledge-graph-builder`。迁移机器后重新执行安装，路径按本仓库实际位置生成。当前机器与分发源的差异见 `99-System/Maintenance/install-state.json`。
 
 机制依赖 Codex 加载全局规则并执行技能，权限仍受当前会话约束。它不是后台监听器，不能保证任意旧聊天都执行。安装后重启 Codex，在另一个项目的新聊天验证规则加载、技能调用和实际写入。验收状态见 [[99-System/Maintenance/验收记录]]。
 
 官方依据：[全局 AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)、[用户级 Skills](https://learn.chatgpt.com/docs/build-skills)、[额外可写目录](https://learn.chatgpt.com/docs/config-file/config-reference)。
 
-旧库完整备份：`99-System/Backups/2026-10-10-before-rebuild.zip`。Git 历史保留；未自动推送远程。
+旧库完整备份：`99-System/Backups/2026-10-10-before-rebuild.zip`（保留在 Git 中）。其余备份只留在磁盘，不进入版本库——Git 历史本身已提供版本控制。Git 历史保留；未自动推送远程。
 
 ## 技术内容准入（2026-10-11 用户明确要求）
 

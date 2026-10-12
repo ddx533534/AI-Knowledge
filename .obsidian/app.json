@@ -1,5 +1,6 @@
 {
   "newFileLocation": "folder",
   "newFileFolderPath": "00-Inbox",
-  "useMarkdownLinks": false
+  "useMarkdownLinks": false,
+  "promptDelete": false
 }

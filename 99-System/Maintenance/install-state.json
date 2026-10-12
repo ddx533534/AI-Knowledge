@@ -1,11 +1,13 @@
 {
-  "vault": "E:\\AI-Knowledge",
-  "global_rule": "C:\\Users\\Administrator\\.codex\\AGENTS.md",
-  "user_skill": "C:\\Users\\Administrator\\.agents\\skills\\technical-knowledge-capture",
+  "vault": "/Users/dudongxu/Desktop/codex/AI-Knowledge",
+  "global_rule": "/Users/dudongxu/.codex/AGENTS.md",
+  "user_skill": "/Users/dudongxu/.agents/skills/ai-knowledge-capture",
   "changed": [
-    "C:\\Users\\Administrator\\.agents\\skills\\technical-knowledge-capture\\SKILL.md",
-    "E:\\AI-Knowledge\\.agents\\skills\\knowledge-graph-builder\\SKILL.md"
+    "/Users/dudongxu/.agents/skills/ai-knowledge-capture/SKILL.md",
+    "/Users/dudongxu/.agents/skills/ai-knowledge-capture/agents/openai.yaml",
+    "/Users/dudongxu/.codex/AGENTS.md"
   ],
-  "check_only": false,
-  "backup": "C:\\Users\\Administrator\\.codex\\backups\\technical-knowledge\\20261010-102730-387972"
+  "check_only": true,
+  "note": "本文件改为手工核对当前 macOS 机器的实际状态；原内容记录的是 2026-10-10 Windows 机器（E:\\AI-Knowledge、C:\\Users\\Administrator）的安装输出，已作废。当前 tools/install.py --check 报告 3 处与 99-System/Distribution 分发源不一致：用户级技能实际名为 ai-knowledge-capture（分发源为 technical-knowledge-capture），全局 AGENTS.md 归档区域为仅限 AI 主题的版本（分发源覆盖全部技术主题）。项目内技能 .agents/skills/knowledge-graph-builder 与分发源逐字节一致。本文件不记录全局配置内容，本次也未执行任何写入。",
+  "recorded_at": "2026-10-12T11:20:06+08:00"
 }
