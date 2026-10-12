@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "id": "048761078703df428c11e84444165da8d55e2b2e56502e5d3f72b754365300ed",
+  "title": "Wasm 虚拟机现状·基础对比表（放大截图）",
+  "kind": "analysis",
+  "source_key": "63f7c11bd4a4bc1794a3a27c7c77f8d1f36340b93d0a8e6ba4fb01bab3e15048",
+  "source_project": "/Users/dudongxu/Desktop/codex/AI-Knowledge",
+  "source_path": "/Users/dudongxu/Desktop/codex/AI-Knowledge/00-Inbox/Wasm-虚拟机现状-基础对比表截图.png",
+  "source_relative_path": "00-Inbox/Wasm-虚拟机现状-基础对比表截图.png",
+  "source_commit": "2c03d287e66dc5351fc6490366082867e665ad1d",
+  "source_worktree_dirty": true,
+  "captured_at": "2026-10-12T17:14:23.019295+08:00",
+  "sha256": "fe9489dfcadddeda7bc13a716efb29c1b621d7ec4d698de3b9ecdf0512e15a6b",
+  "size": 241162,
+  "artifact": "05-Research/AI-Knowledge-10bcb3471648/Wasm-虚拟机现状-基础对比表截图--048761078703/原文-Wasm-虚拟机现状-基础对比表截图.png",
+  "note": "05-Research/AI-Knowledge-10bcb3471648/Wasm-虚拟机现状-基础对比表截图--048761078703/归档说明.md",
+  "previous_version": null
+}

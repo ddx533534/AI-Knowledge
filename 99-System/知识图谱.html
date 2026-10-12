@@ -18,6 +18,18 @@
   "schema_version": 2,
   "nodes": [
     {
+      "id": "doc:048761078703df428c11e84444165da8d55e2b2e56502e5d3f72b754365300ed",
+      "kind": "document",
+      "title": "Wasm 虚拟机现状·基础对比表（放大截图）",
+      "path": "05-Research/AI-Knowledge-10bcb3471648/Wasm-虚拟机现状-基础对比表截图--048761078703/原文-Wasm-虚拟机现状-基础对比表截图.png",
+      "artifact": "05-Research/AI-Knowledge-10bcb3471648/Wasm-虚拟机现状-基础对比表截图--048761078703/原文-Wasm-虚拟机现状-基础对比表截图.png",
+      "note": "05-Research/AI-Knowledge-10bcb3471648/Wasm-虚拟机现状-基础对比表截图--048761078703/归档说明.md",
+      "project": "/Users/dudongxu/Desktop/codex/AI-Knowledge",
+      "source_path": "/Users/dudongxu/Desktop/codex/AI-Knowledge/00-Inbox/Wasm-虚拟机现状-基础对比表截图.png",
+      "sha256": "fe9489dfcadddeda7bc13a716efb29c1b621d7ec4d698de3b9ecdf0512e15a6b",
+      "captured_at": "2026-10-12T17:14:23.019295+08:00"
+    },
+    {
       "id": "doc:22bbe9b15acb13a5a04d8ddb9deb40ee15e4a773c4f132edfc39a4d0416cc6da",
       "kind": "document",
       "title": "免费部署调研与实施记录",
@@ -64,6 +76,18 @@
       "source_path": "E:\\测评\\website\\docs\\Makers-Blob替代数据库实施记录.md",
       "sha256": "1a407c65009ade76f1a57805ec45ec41f0bab5349bbf24e50dece36be19837ea",
       "captured_at": "2026-10-11T17:55:37.537880+08:00"
+    },
+    {
+      "id": "doc:d54d1158136448f8d6f773d2e31464a3f8008336bc091ccdc16db1c6ea9d5a98",
+      "kind": "document",
+      "title": "Wasm 虚拟机现状（整页截图）",
+      "path": "05-Research/AI-Knowledge-10bcb3471648/Wasm-虚拟机现状-移动端截图--d54d11581364/原文-Wasm-虚拟机现状-移动端截图.jpg",
+      "artifact": "05-Research/AI-Knowledge-10bcb3471648/Wasm-虚拟机现状-移动端截图--d54d11581364/原文-Wasm-虚拟机现状-移动端截图.jpg",
+      "note": "05-Research/AI-Knowledge-10bcb3471648/Wasm-虚拟机现状-移动端截图--d54d11581364/归档说明.md",
+      "project": "/Users/dudongxu/Desktop/codex/AI-Knowledge",
+      "source_path": "/Users/dudongxu/Desktop/codex/AI-Knowledge/00-Inbox/Wasm-虚拟机现状-移动端截图.jpg",
+      "sha256": "6df8c6c87389b3e01168155bf604df01ad83af3bd3a01c5f0f4825737dfb1eb1",
+      "captured_at": "2026-10-12T17:13:53.036910+08:00"
     },
     {
       "id": "doc:ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
@@ -274,6 +298,30 @@
         {
           "document_id": "22bbe9b15acb13a5a04d8ddb9deb40ee15e4a773c4f132edfc39a4d0416cc6da",
           "locator": "第3节：事务实施；第4节：真实PostgreSQL 17.11并发与故障验证"
+        }
+      ]
+    },
+    {
+      "id": "node:wasm-runtime-mobile-support",
+      "kind": "knowledge",
+      "title": "Wasm 运行时移动端支持与选型",
+      "path": "01-Knowledge/wasm-runtime-mobile-support.md",
+      "type": "comparison",
+      "status": "partial",
+      "tags": [
+        "WebAssembly",
+        "运行时",
+        "移动端",
+        "选型"
+      ],
+      "sources": [
+        {
+          "document_id": "d54d1158136448f8d6f773d2e31464a3f8008336bc091ccdc16db1c6ea9d5a98",
+          "locator": "标题「Wasm 虚拟机现状」；「基础对比」表；「支持功能」表；「性能」；「结论」——本次对比沿用的维度来自这份文档"
+        },
+        {
+          "document_id": "048761078703df428c11e84444165da8d55e2b2e56502e5d3f72b754365300ed",
+          "locator": "「基础对比」表：双端支持情况的 iOS 与 Android 两行、执行方式、实现语言"
         }
       ]
     },
@@ -515,6 +563,35 @@
       "label": "来源",
       "explanation": "节点的文档证据",
       "sources": []
+    },
+    {
+      "source": "node:wasm-runtime-mobile-support",
+      "target": "doc:048761078703df428c11e84444165da8d55e2b2e56502e5d3f72b754365300ed",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:wasm-runtime-mobile-support",
+      "target": "doc:d54d1158136448f8d6f773d2e31464a3f8008336bc091ccdc16db1c6ea9d5a98",
+      "type": "evidence",
+      "label": "来源",
+      "explanation": "节点的文档证据",
+      "sources": []
+    },
+    {
+      "source": "node:wasm-runtime-mobile-support",
+      "target": "node:bytecode-precompilation-vs-native-aot",
+      "type": "related_to",
+      "label": "相关",
+      "explanation": "该对比表用 JIT、AOT、解释执行区分五个运行时，与执行路径分类的概念节点互补",
+      "sources": [
+        {
+          "document_id": "048761078703df428c11e84444165da8d55e2b2e56502e5d3f72b754365300ed",
+          "locator": "「基础对比」表：双端支持情况的 iOS 与 Android 两行、执行方式、实现语言"
+        }
+      ]
     },
     {
       "source": "node:webassembly-linear-memory-isolation",
