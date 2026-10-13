@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 490" width="860" height="490" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="490" fill="#ffffff"/>
+  <text x="30" y="34" font-size="17" font-weight="600" fill="#1f2937">三类问题的应答框架：算法 / 系统设计 / 行为面</text>
+
+  <!-- 算法 -->
+  <rect x="30" y="54" width="256" height="290" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.4"/>
+  <text x="48" y="80" font-size="14" font-weight="600" fill="#1e40af">算法题 · 四步法</text>
+
+  <circle cx="62" cy="106" r="11" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.3"/>
+  <text x="62" y="111" font-size="11" text-anchor="middle" fill="#1e40af" font-weight="600">1</text>
+  <text x="82" y="103" font-size="12" font-weight="600" fill="#1e40af">澄清 Clarify</text>
+  <text x="82" y="119" font-size="10" fill="#475569">输入规模? 边界? 返回值?</text>
+  <text x="48" y="136" font-size="9.5" fill="#059669">最容易跳过，也最容易加分</text>
+
+  <circle cx="62" cy="162" r="11" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.3"/>
+  <text x="62" y="167" font-size="11" text-anchor="middle" fill="#1e40af" font-weight="600">2</text>
+  <text x="82" y="159" font-size="12" font-weight="600" fill="#1e40af">讲思路 Think Aloud</text>
+  <text x="82" y="175" font-size="10" fill="#475569">先暴力解，再谈优化</text>
+  <text x="48" y="192" font-size="9.5" fill="#059669">保证至少有一个正确答案</text>
+
+  <circle cx="62" cy="218" r="11" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.3"/>
+  <text x="62" y="223" font-size="11" text-anchor="middle" fill="#1e40af" font-weight="600">3</text>
+  <text x="82" y="215" font-size="12" font-weight="600" fill="#1e40af">编码 Code</text>
+  <text x="82" y="231" font-size="10" fill="#475569">先签名后细节，命名清晰</text>
+  <text x="48" y="248" font-size="9.5" fill="#059669">边写边解释，主动处理边界</text>
+
+  <circle cx="62" cy="274" r="11" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.3"/>
+  <text x="62" y="279" font-size="11" text-anchor="middle" fill="#1e40af" font-weight="600">4</text>
+  <text x="82" y="271" font-size="12" font-weight="600" fill="#1e40af">测试 Test</text>
+  <text x="82" y="287" font-size="10" fill="#475569">主动手推，别等被发现</text>
+  <text x="48" y="304" font-size="9.5" fill="#059669">能自己发现 bug 更加分</text>
+
+  <line x1="48" y1="316" x2="268" y2="316" stroke="#bfdbfe"/>
+  <text x="48" y="334" font-size="10" fill="#1e40af" font-weight="600">结尾必说：时间 O(?) 空间 O(?)</text>
+
+  <!-- 系统设计 -->
+  <rect x="302" y="54" width="256" height="290" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.4"/>
+  <text x="320" y="80" font-size="14" font-weight="600" fill="#166534">系统设计 · 七步</text>
+
+  <g font-size="11">
+    <rect x="320" y="94" width="220" height="26" rx="5" fill="#ffffff" stroke="#bbf7d0"/>
+    <text x="332" y="111" font-size="10.5" fill="#166534">① 需求澄清（功能+非功能）</text>
+    <rect x="320" y="126" width="220" height="26" rx="5" fill="#ffffff" stroke="#bbf7d0"/>
+    <text x="332" y="143" font-size="10.5" fill="#166534">② 容量估算（QPS/存储）</text>
+    <rect x="320" y="158" width="220" height="26" rx="5" fill="#ffffff" stroke="#bbf7d0"/>
+    <text x="332" y="175" font-size="10.5" fill="#166534">③ 接口 + 数据模型</text>
+    <rect x="320" y="190" width="220" height="26" rx="5" fill="#ffffff" stroke="#bbf7d0"/>
+    <text x="332" y="207" font-size="10.5" fill="#166534">④ 高层架构图 + 数据流</text>
+    <rect x="320" y="222" width="220" height="26" rx="5" fill="#ffffff" stroke="#bbf7d0"/>
+    <text x="332" y="239" font-size="10.5" fill="#166534">⑤ 选一个组件深入</text>
+    <rect x="320" y="254" width="220" height="26" rx="5" fill="#ffffff" stroke="#bbf7d0"/>
+    <text x="332" y="271" font-size="10.5" fill="#166534">⑥ 瓶颈与权衡</text>
+    <rect x="320" y="286" width="220" height="26" rx="5" fill="#ffffff" stroke="#bbf7d0"/>
+    <text x="332" y="303" font-size="10.5" fill="#166534">⑦ 未来扩展方向</text>
+  </g>
+  <text x="320" y="334" font-size="10" fill="#166534" font-weight="600">铁律：先澄清再画图</text>
+
+  <!-- 行为面 -->
+  <rect x="574" y="54" width="256" height="290" rx="8" fill="#faf5ff" stroke="#c4b5fd" stroke-width="1.4"/>
+  <text x="592" y="80" font-size="14" font-weight="600" fill="#6d28d9">行为面 · STAR</text>
+
+  <rect x="592" y="94" width="220" height="50" rx="6" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="606" y="114" font-size="12" font-weight="600" fill="#6d28d9">S · Situation</text>
+  <text x="606" y="132" font-size="10" fill="#475569">背景与约束是什么</text>
+
+  <rect x="592" y="150" width="220" height="50" rx="6" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="606" y="170" font-size="12" font-weight="600" fill="#6d28d9">T · Task</text>
+  <text x="606" y="188" font-size="10" fill="#475569">你要解决什么问题，目标为何</text>
+
+  <rect x="592" y="206" width="220" height="62" rx="6" fill="#f3e8ff" stroke="#c4b5fd" stroke-width="1.3"/>
+  <text x="606" y="226" font-size="12" font-weight="600" fill="#6d28d9">A · Action ★</text>
+  <text x="606" y="244" font-size="10" fill="#475569">你具体做了什么</text>
+  <text x="606" y="260" font-size="9.5" fill="#6d28d9" font-weight="600">占比要超过一半</text>
+
+  <rect x="592" y="274" width="220" height="50" rx="6" fill="#ffffff" stroke="#ddd6fe"/>
+  <text x="606" y="294" font-size="12" font-weight="600" fill="#6d28d9">R · Result</text>
+  <text x="606" y="312" font-size="10" fill="#475569">量化结果 + 你学到了什么</text>
+
+  <text x="592" y="338" font-size="10" fill="#6d28d9" font-weight="600">多用「我」，少用「我们」</text>
+
+  <!-- 底部通用原则 -->
+  <line x1="30" y1="362" x2="830" y2="362" stroke="#e5e7eb"/>
+  <text x="30" y="388" font-size="13.5" font-weight="600" fill="#1f2937">贯穿三类问题的通用原则</text>
+
+  <rect x="30" y="402" width="256" height="70" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="46" y="424" font-size="11.5" font-weight="600" fill="#334155">主动澄清，不要猜</text>
+  <text x="46" y="444" font-size="10.5" fill="#475569">面试官的模糊点是刻意留的，</text>
+  <text x="46" y="461" font-size="10.5" fill="#475569">问出来就是分。</text>
+
+  <rect x="302" y="402" width="256" height="70" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="318" y="424" font-size="11.5" font-weight="600" fill="#334155">主动说边界与代价</text>
+  <text x="318" y="444" font-size="10.5" fill="#475569">「这个方案的缺点是……」</text>
+  <text x="318" y="461" font-size="10.5" fill="#475569">直接区分「会用」与「会想」。</text>
+
+  <rect x="574" y="402" width="256" height="70" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="590" y="424" font-size="11.5" font-weight="600" fill="#334155">量化一切</text>
+  <text x="590" y="444" font-size="10.5" fill="#475569">「提升 30%」远胜「优化了」；</text>
+  <text x="590" y="461" font-size="10.5" fill="#475569">「读写比 100:1」远胜「读多写少」。</text>
+</svg>

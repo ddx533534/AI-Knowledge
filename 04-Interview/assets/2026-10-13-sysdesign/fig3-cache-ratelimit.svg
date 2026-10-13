@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 480" width="860" height="480" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="480" fill="#ffffff"/>
+  <text x="30" y="34" font-size="17" font-weight="600" fill="#1f2937">缓存三大问题与四种限流算法</text>
+
+  <!-- 缓存三大问题 -->
+  <text x="30" y="70" font-size="13.5" font-weight="600" fill="#1f2937">① 缓存三大问题（必背）</text>
+
+  <rect x="30" y="84" width="256" height="132" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="46" y="108" font-size="13" font-weight="600" fill="#991b1b">穿透 Penetration</text>
+  <text x="46" y="130" font-size="10.5" fill="#475569">查一个「根本不存在」的数据</text>
+  <text x="46" y="148" font-size="10.5" fill="#475569">缓存永远不命中，每次都打 DB</text>
+  <line x1="46" y1="160" x2="270" y2="160" stroke="#fecaca"/>
+  <text x="46" y="180" font-size="10.5" fill="#059669">方案：布隆过滤器拦掉不存在的 key</text>
+  <text x="46" y="198" font-size="10.5" fill="#059669">＋ 缓存空值（设短 TTL）兜底</text>
+
+  <rect x="302" y="84" width="256" height="132" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.4"/>
+  <text x="318" y="108" font-size="13" font-weight="600" fill="#92400e">击穿 Breakdown</text>
+  <text x="318" y="130" font-size="10.5" fill="#475569">单个「热点 key」过期的瞬间</text>
+  <text x="318" y="148" font-size="10.5" fill="#475569">大量并发请求同时打到 DB</text>
+  <line x1="318" y1="160" x2="542" y2="160" stroke="#fde68a"/>
+  <text x="318" y="180" font-size="10.5" fill="#059669">方案：互斥锁重建（只放一个线程去查）</text>
+  <text x="318" y="198" font-size="10.5" fill="#059669">＋ 热点 key 逻辑过期不物理删除</text>
+
+  <rect x="574" y="84" width="256" height="132" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="590" y="108" font-size="13" font-weight="600" fill="#991b1b">雪崩 Avalanche</text>
+  <text x="590" y="130" font-size="10.5" fill="#475569">大量 key「同时过期」，或缓存整体宕机</text>
+  <text x="590" y="148" font-size="10.5" fill="#475569">DB 瞬间承压，可能被击垮</text>
+  <line x1="590" y1="160" x2="814" y2="160" stroke="#fecaca"/>
+  <text x="590" y="180" font-size="10.5" fill="#059669">方案：过期时间加随机抖动打散</text>
+  <text x="590" y="198" font-size="10.5" fill="#059669">＋ 多级缓存 ＋ 熔断降级</text>
+
+  <text x="30" y="238" font-size="10.5" fill="#6b7280">一句话区分：不存在是穿透，热点失效是击穿，集体失效是雪崩。</text>
+
+  <!-- 限流 -->
+  <line x1="30" y1="254" x2="830" y2="254" stroke="#e5e7eb"/>
+  <text x="30" y="280" font-size="13.5" font-weight="600" fill="#1f2937">② 四种限流算法</text>
+
+  <!-- 固定窗口 -->
+  <rect x="30" y="294" width="192" height="118" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="46" y="316" font-size="12" font-weight="600" fill="#334155">固定窗口</text>
+  <g stroke="#94a3b8" stroke-width="1.4" fill="none">
+    <rect x="46" y="330" width="70" height="26" fill="#e2e8f0"/>
+    <rect x="116" y="330" width="70" height="26" fill="#e2e8f0"/>
+  </g>
+  <text x="81" y="348" font-size="10" text-anchor="middle" fill="#475569">窗口1</text>
+  <text x="151" y="348" font-size="10" text-anchor="middle" fill="#475569">窗口2</text>
+  <text x="46" y="376" font-size="10" fill="#dc2626">临界点可能双倍突发</text>
+  <text x="46" y="394" font-size="10" fill="#6b7280">实现最简单</text>
+
+  <!-- 滑动窗口 -->
+  <rect x="238" y="294" width="192" height="118" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="254" y="316" font-size="12" font-weight="600" fill="#334155">滑动窗口</text>
+  <text x="254" y="342" font-size="10" fill="#475569">把大窗口切成小格滚动统计</text>
+  <text x="254" y="366" font-size="10" fill="#059669">比固定窗口平滑</text>
+  <text x="254" y="384" font-size="10" fill="#6b7280">内存略高</text>
+
+  <!-- 漏桶 -->
+  <rect x="446" y="294" width="192" height="118" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="462" y="316" font-size="12" font-weight="600" fill="#334155">漏桶 Leaky Bucket</text>
+  <path d="M470 328 L520 328 L514 356 L476 356 Z" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.3"/>
+  <path d="M495 356 L495 372" stroke="#059669" stroke-width="2"/>
+  <text x="530" y="344" font-size="10" fill="#475569">恒定速率流出</text>
+  <text x="462" y="392" font-size="10" fill="#dc2626">输出绝对平滑，无法应对突发</text>
+
+  <!-- 令牌桶 -->
+  <rect x="654" y="294" width="176" height="118" rx="7" fill="#ecfdf5" stroke="#34d399" stroke-width="1.4"/>
+  <text x="670" y="316" font-size="12" font-weight="600" fill="#047857">令牌桶 Token Bucket</text>
+  <circle cx="700" cy="342" r="16" fill="#d1fae5" stroke="#34d399" stroke-width="1.3"/>
+  <text x="700" y="347" font-size="9" text-anchor="middle" fill="#065f46">桶</text>
+  <text x="726" y="338" font-size="9.5" fill="#475569">匀速放令牌</text>
+  <text x="726" y="354" font-size="9.5" fill="#475569">取到才放行</text>
+  <text x="670" y="382" font-size="10" fill="#047857" font-weight="600">允许突发，最常用</text>
+  <text x="670" y="400" font-size="10" fill="#6b7280">Guava RateLimiter / 秒杀</text>
+
+  <!-- 底部 -->
+  <line x1="30" y1="432" x2="830" y2="432" stroke="#e5e7eb"/>
+  <text x="30" y="458" font-size="11.5" fill="#475569">记忆点：漏桶「限速」输出恒定；令牌桶「限速 + 容忍突发」。需要平滑用漏桶，需要削峰允许突发用令牌桶。</text>
+</svg>
