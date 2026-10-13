@@ -1,0 +1,84 @@
+<svg viewBox="0 0 680 424" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>同一批组件在 2025 与 2026 两份规划里的属性支持数对照</title>
+  <desc>七行六列的对照表。列依次是组件、2025 的已支持数与总数、2025 的比例、2026 的已支持数与总数、2026 的比例、已支持数的变化。通用布局从 52/56 到 56/56，通用阴影从 0/4 到 4/4，ScrollView 从 27/61 到 38/59，Image 从 24/50 到 16/30，Label 从 31/69 到 17/42，View 与 Input 在 2026 那份表里留空。图下方的说明指出：Image 的比例从 48% 升到 53%，但已支持数从 24 掉到 16，Label 从 31 掉到 17，原因是 2026 按 RN 实现层把 JS 层属性从分母里剔掉了，而 2025 没有剔，因此两年的比例不能横向比较。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">分母换了，比值就没法横着比</text>
+
+  <rect x="24" y="30" width="608" height="30" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="32" y="45" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">组件</text>
+  <text x="136" y="38" font-size="9.5" font-weight="500" fill="#5b6470" dominant-baseline="central">2025 已支持/总</text>
+  <text x="136" y="52" font-size="8.5" fill="#8a929c" dominant-baseline="central">RN 0.72 文档全集</text>
+  <text x="240" y="45" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">比例</text>
+  <text x="308" y="38" font-size="9.5" font-weight="500" fill="#5b6470" dominant-baseline="central">2026 已支持/总</text>
+  <text x="308" y="52" font-size="8.5" fill="#8a929c" dominant-baseline="central">仅 native prop</text>
+  <text x="412" y="45" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">比例</text>
+  <text x="480" y="45" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">已支持数变化</text>
+
+  <line x1="128" y1="60" x2="128" y2="272" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="232" y1="60" x2="232" y2="272" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="300" y1="60" x2="300" y2="272" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="404" y1="60" x2="404" y2="272" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="472" y1="60" x2="472" y2="272" stroke="#e3e6ea" stroke-width="0.5"/>
+
+  <text x="32" y="77" font-size="10" fill="#1f2328" dominant-baseline="central">通用布局</text>
+  <text x="180" y="77" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">52 / 56</text>
+  <text x="266" y="77" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">93%</text>
+  <text x="352" y="77" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">56 / 56</text>
+  <text x="438" y="77" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">100%</text>
+  <rect x="484" y="68" width="46" height="18" rx="4" fill="#EAF7EE"/>
+  <text x="507" y="77" font-size="10" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">＋4</text>
+
+  <text x="32" y="107" font-size="10" fill="#1f2328" dominant-baseline="central">通用阴影</text>
+  <text x="180" y="107" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">0 / 4</text>
+  <text x="266" y="107" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">0%</text>
+  <text x="352" y="107" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">4 / 4</text>
+  <text x="438" y="107" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">100%</text>
+  <rect x="484" y="98" width="46" height="18" rx="4" fill="#EAF7EE"/>
+  <text x="507" y="107" font-size="10" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">＋4</text>
+
+  <text x="32" y="137" font-size="10" fill="#1f2328" dominant-baseline="central">ScrollView</text>
+  <text x="180" y="137" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">27 / 61</text>
+  <text x="266" y="137" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">44%</text>
+  <text x="352" y="137" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">38 / 59</text>
+  <text x="438" y="137" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">52%</text>
+  <rect x="484" y="128" width="46" height="18" rx="4" fill="#EAF7EE"/>
+  <text x="507" y="137" font-size="10" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">＋11</text>
+
+  <text x="32" y="167" font-size="10" fill="#1f2328" dominant-baseline="central">Image</text>
+  <text x="180" y="167" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">24 / 50</text>
+  <text x="266" y="167" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">48%</text>
+  <text x="352" y="167" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">16 / 30</text>
+  <text x="438" y="167" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">53%</text>
+  <rect x="484" y="158" width="46" height="18" rx="4" fill="#FCEBEB"/>
+  <text x="507" y="167" font-size="10" fill="#A32D2D" text-anchor="middle" dominant-baseline="central">−8</text>
+
+  <text x="32" y="197" font-size="10" fill="#1f2328" dominant-baseline="central">Label</text>
+  <text x="180" y="197" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">31 / 69</text>
+  <text x="266" y="197" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">46%</text>
+  <text x="352" y="197" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">17 / 42</text>
+  <text x="438" y="197" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">40%</text>
+  <rect x="484" y="188" width="46" height="18" rx="4" fill="#FCEBEB"/>
+  <text x="507" y="197" font-size="10" fill="#A32D2D" text-anchor="middle" dominant-baseline="central">−14</text>
+
+  <text x="32" y="227" font-size="10" fill="#8a929c" dominant-baseline="central">View</text>
+  <text x="180" y="227" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">46 / 94</text>
+  <text x="266" y="227" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">48%</text>
+  <text x="352" y="227" font-size="10" fill="#8a929c" text-anchor="middle" dominant-baseline="central">未填</text>
+  <text x="438" y="227" font-size="10" fill="#8a929c" text-anchor="middle" dominant-baseline="central">—</text>
+  <text x="484" y="227" font-size="9.5" fill="#8a929c" dominant-baseline="central">原文留空</text>
+
+  <text x="32" y="257" font-size="10" fill="#8a929c" dominant-baseline="central">Input</text>
+  <text x="180" y="257" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">41 / 67</text>
+  <text x="266" y="257" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">53%</text>
+  <text x="352" y="257" font-size="10" fill="#8a929c" text-anchor="middle" dominant-baseline="central">未填</text>
+  <text x="438" y="257" font-size="10" fill="#8a929c" text-anchor="middle" dominant-baseline="central">—</text>
+  <text x="484" y="257" font-size="9.5" fill="#8a929c" dominant-baseline="central">原文留空</text>
+
+  <rect x="24" y="288" width="632" height="120" rx="8" fill="#FFF8E8" stroke="#E0B84C" stroke-width="0.5"/>
+  <text x="40" y="310" font-size="10.5" font-weight="500" fill="#8A5A00" dominant-baseline="central">这张表真正要说的</text>
+  <text x="40" y="330" font-size="10" fill="#5b6470" dominant-baseline="central">Image 的比例从 48% 升到 53%，但已支持数从 24 掉到 16；Label 从 46% 掉到 40%，已支持数从 31 掉到 17。</text>
+  <text x="40" y="348" font-size="10" fill="#5b6470" dominant-baseline="central">原因是 2026 那份表多了一列「RN 实现层」，把只在 JS 层实现的属性从分母里剔掉了，2025 那份没有剔。</text>
+  <text x="40" y="366" font-size="10" fill="#5b6470" dominant-baseline="central">分母里还叠了第二个变量：RN 基线从 0.72 换到 0.86，组件本身的属性集合也变了。</text>
+  <text x="40" y="384" font-size="10" fill="#5b6470" dominant-baseline="central">所以「2026 的完成率比 2025 高」这句话在这张表上不成立；要先把分母连同 RN 版本一起定死，</text>
+  <text x="40" y="400" font-size="10" fill="#5b6470" dominant-baseline="central">并单独记一条「因升级新增/删除的属性数」，分子分母才都有解释。</text>
+</svg>

@@ -1,0 +1,48 @@
+<svg viewBox="0 0 680 486" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>三处判断口径值得换一下</title>
+  <desc>第一处是论证该不该做时的依据：现在用性能论证，只算了省下的一次跨语言调用、没算新增的一次数据解析，而且两端实测符号相反，值得换成两笔测不出来但确定的账，即三端共用一套代码与为换布局框架预留接口。第二处是挑验证载体时的口径：现在说「选低流量载体」，yoga 选了日均个位数的 B 端商家端，host 若照搬就没有任何量，值得给低流量配一个下限，够不够暴露问题比低不低更重要。第三处是定验收标准时的判据：现在沿用「符合预期」，统一标准会把大量「与旧架构一致」的正常表现记成问题，值得分开判，迁移类改动判「与旧架构行为一致」，能力补齐类判「对齐外部标准」。底部一条规则：能不能回滚决定要不要拆开发布，yoga 是直接升级、没有开关，host 有开关可回退，两件事因此被拆成两次上线。</desc>
+  <rect width="680" height="486" fill="#ffffff"/>
+
+  <text x="24" y="28" font-size="12.5" font-weight="600" fill="#1f2328">三处判断口径值得换一下</text>
+  <text x="24" y="48" font-size="9.5" fill="#8a929c">左边是这两份规划实际用的口径，右边是照实测结果看更稳的口径</text>
+
+  <!-- 行 1 -->
+  <rect x="24" y="62" width="632" height="92" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.8"/>
+  <text x="42" y="82" font-size="10" font-weight="600" fill="#1f2328">一、论证这件事该不该做时，拿什么当依据</text>
+  <line x1="340" y1="92" x2="340" y2="146" stroke="#e3e6ea" stroke-width="1"/>
+  <text x="42" y="104" font-size="9.5" fill="#A05A00" dominant-baseline="central">用性能：只算了省下的一次跨语言调用，</text>
+  <text x="42" y="120" font-size="9.5" fill="#A05A00" dominant-baseline="central">没算新增的一次数据解析；两端实测符号相反</text>
+  <text x="42" y="140" font-size="9" fill="#8a929c" dominant-baseline="central">方案里这一节只写了两个字：暂定</text>
+  <text x="358" y="104" font-size="9.5" fill="#2e7d4f" dominant-baseline="central">换成两笔测不出来但确定的账：</text>
+  <text x="358" y="120" font-size="9.5" fill="#2e7d4f" dominant-baseline="central">三端共用一套代码、为换布局框架预留接口</text>
+  <text x="358" y="140" font-size="9" fill="#8a929c" dominant-baseline="central">这两条才是决策依据，它们本来也不需要 benchmark</text>
+
+  <!-- 行 2 -->
+  <rect x="24" y="162" width="632" height="92" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.8"/>
+  <text x="42" y="182" font-size="10" font-weight="600" fill="#1f2328">二、挑验证载体时，用哪句口径</text>
+  <line x1="340" y1="192" x2="340" y2="246" stroke="#e3e6ea" stroke-width="1"/>
+  <text x="42" y="204" font-size="9.5" fill="#A05A00" dominant-baseline="central">「选低流量载体」：yoga 选了日均个位数的</text>
+  <text x="42" y="220" font-size="9.5" fill="#A05A00" dominant-baseline="central">B 端商家端，host 照搬就没有任何量</text>
+  <text x="42" y="240" font-size="9" fill="#8a929c" dominant-baseline="central">同一句话在两个项目里指向相反的答案</text>
+  <text x="358" y="204" font-size="9.5" fill="#2e7d4f" dominant-baseline="central">低流量要配一个下限：够不够暴露问题，</text>
+  <text x="358" y="220" font-size="9.5" fill="#2e7d4f" dominant-baseline="central">比低不低更重要（点评日均 3.35 万）</text>
+  <text x="358" y="240" font-size="9" fill="#8a929c" dominant-baseline="central">改架构主干与换引擎，风险不是一回事</text>
+
+  <!-- 行 3 -->
+  <rect x="24" y="262" width="632" height="92" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.8"/>
+  <text x="42" y="282" font-size="10" font-weight="600" fill="#1f2328">三、定验收标准时，判据是哪一条</text>
+  <line x1="340" y1="292" x2="340" y2="346" stroke="#e3e6ea" stroke-width="1"/>
+  <text x="42" y="304" font-size="9.5" fill="#A05A00" dominant-baseline="central">沿用「符合预期」：统一标准会把大量</text>
+  <text x="42" y="320" font-size="9.5" fill="#A05A00" dominant-baseline="central">「与旧架构一致」的正常表现记成问题</text>
+  <text x="42" y="340" font-size="9" fill="#8a929c" dominant-baseline="central">自测表里这类「可忽略」判定占了大半</text>
+  <text x="358" y="304" font-size="9.5" fill="#2e7d4f" dominant-baseline="central">分开判：迁移类判「与旧架构行为一致」，</text>
+  <text x="358" y="320" font-size="9.5" fill="#2e7d4f" dominant-baseline="central">能力补齐类判「对齐外部标准」</text>
+  <text x="358" y="340" font-size="9" fill="#8a929c" dominant-baseline="central">两类改动不能共用一套验收基线</text>
+
+  <!-- 规则条 -->
+  <rect x="24" y="366" width="632" height="100" rx="8" fill="#eef3f9" stroke="#c9d8e8" stroke-width="0.8"/>
+  <text x="42" y="390" font-size="11" font-weight="600" fill="#2f5f96">能不能回滚，决定要不要拆成两次发布</text>
+  <text x="42" y="412" font-size="9.5" fill="#5b6470" dominant-baseline="central">yoga 是直接升级、没有开关，出问题只能把 white list 置空、强制降级到 i 版收银台；</text>
+  <text x="42" y="430" font-size="9.5" fill="#5b6470" dominant-baseline="central">host 新架构有 horn 开关，可随时退回旧架构，埋点上带 useNewArchitecture 字段对照。</text>
+  <text x="42" y="450" font-size="9.5" fill="#5b6470" dominant-baseline="central">这两件事因此没有一起上，而是拆成了 11.51.0 与 11.55.0 两次上线。</text>
+</svg>

@@ -1,0 +1,61 @@
+<svg viewBox="0 0 680 330" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>三种方案的能力边界：哪些滚动能看到，哪些看不到</title>
+  <desc>四行场景对照三套方案。RN 官方能观察 RN 自己渲染树内的滚动，看不见原生容器滚动 RN 子树，也不涉及小窗分屏。Recce 1.24 三类都能观察，限制在 Recce 容器内，小窗是已知问题。微信读书方案靠原生侧绑触发器，能覆盖原生容器滚动，原文未涉及窗口形态。非 ScrollView 的 ViewGroup 移动只有 RN 官方能观察到。</desc>
+
+  <text x="24" y="18" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">谁能看到什么</text>
+
+  <rect x="24" y="30" width="632" height="36" fill="#F1EFE8" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="48" font-size="9.5" fill="#4a5158" dominant-baseline="central">要观察的东西在哪</text>
+  <text x="319" y="48" text-anchor="middle" font-size="9.5" fill="#0C447C" dominant-baseline="central">RN 官方（Canary）</text>
+  <text x="455" y="48" text-anchor="middle" font-size="9.5" fill="#7A4E0C" dominant-baseline="central">Recce 1.24</text>
+  <text x="591" y="48" text-anchor="middle" font-size="9.5" fill="#4a5158" dominant-baseline="central">微信读书事件触发</text>
+
+  <rect x="24" y="66" width="226" height="46" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="84" font-size="9.5" fill="#1f2328" dominant-baseline="central">页面只用 RN 自己的</text>
+  <text x="36" y="100" font-size="9.5" fill="#1f2328" dominant-baseline="central">ScrollView 滚动</text>
+  <rect x="254" y="66" width="130" height="46" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="319" y="84" text-anchor="middle" font-size="9.5" fill="#085041" dominant-baseline="central">✓ 能观察到</text>
+  <rect x="390" y="66" width="130" height="46" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="455" y="84" text-anchor="middle" font-size="9.5" fill="#085041" dominant-baseline="central">✓ 能观察到</text>
+  <rect x="526" y="66" width="130" height="46" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="591" y="84" text-anchor="middle" font-size="9.5" fill="#085041" dominant-baseline="central">✓ 能观察到</text>
+
+  <rect x="24" y="112" width="226" height="46" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="130" font-size="9.5" fill="#1f2328" dominant-baseline="central">有一层原生容器</text>
+  <text x="36" y="146" font-size="9.5" fill="#1f2328" dominant-baseline="central">滚动 RN 子树</text>
+  <rect x="254" y="112" width="130" height="46" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+  <text x="319" y="130" text-anchor="middle" font-size="9.5" fill="#7A1F1F" dominant-baseline="central">✗ 看不见</text>
+  <text x="319" y="146" text-anchor="middle" font-size="8.5" fill="#7A1F1F" dominant-baseline="central">只看 RN 渲染树内部</text>
+  <rect x="390" y="112" width="130" height="46" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="455" y="130" text-anchor="middle" font-size="9.5" fill="#085041" dominant-baseline="central">✓ 能观察到</text>
+  <text x="455" y="146" text-anchor="middle" font-size="8.5" fill="#085041" dominant-baseline="central">限 Recce 容器内</text>
+  <rect x="526" y="112" width="130" height="46" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="591" y="130" text-anchor="middle" font-size="9.5" fill="#085041" dominant-baseline="central">✓ 能观察到</text>
+  <text x="591" y="146" text-anchor="middle" font-size="8.5" fill="#085041" dominant-baseline="central">触发器放原生侧</text>
+
+  <rect x="24" y="158" width="226" height="46" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="176" font-size="9.5" fill="#1f2328" dominant-baseline="central">小窗、分屏、</text>
+  <text x="36" y="192" font-size="9.5" fill="#1f2328" dominant-baseline="central">沉浸式与导航栏变化</text>
+  <rect x="254" y="158" width="130" height="46" fill="#F7F6F3" stroke="#888780" stroke-width="0.5"/>
+  <text x="319" y="176" text-anchor="middle" font-size="9.5" fill="#4a5158" dominant-baseline="central">官方未说明</text>
+  <rect x="390" y="158" width="130" height="46" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="455" y="176" text-anchor="middle" font-size="9.5" fill="#085041" dominant-baseline="central">✓ 已实测</text>
+  <text x="455" y="192" text-anchor="middle" font-size="8.5" fill="#085041" dominant-baseline="central">小窗是已知问题</text>
+  <rect x="526" y="158" width="130" height="46" fill="#F7F6F3" stroke="#888780" stroke-width="0.5"/>
+  <text x="591" y="176" text-anchor="middle" font-size="9.5" fill="#4a5158" dominant-baseline="central">原文未涉及</text>
+
+  <rect x="24" y="204" width="226" height="46" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="222" font-size="9.5" fill="#1f2328" dominant-baseline="central">非 ScrollView 的</text>
+  <text x="36" y="238" font-size="9.5" fill="#1f2328" dominant-baseline="central">ViewGroup 移动</text>
+  <rect x="254" y="204" width="130" height="46" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="319" y="222" text-anchor="middle" font-size="9.5" fill="#085041" dominant-baseline="central">✓ 能观察到</text>
+  <text x="319" y="238" text-anchor="middle" font-size="8.5" fill="#085041" dominant-baseline="central">靠布局更新驱动</text>
+  <rect x="390" y="204" width="130" height="46" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+  <text x="455" y="222" text-anchor="middle" font-size="9.5" fill="#7A1F1F" dominant-baseline="central">✗ 不支持</text>
+  <rect x="526" y="204" width="130" height="46" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+  <text x="591" y="222" text-anchor="middle" font-size="9.5" fill="#7A1F1F" dominant-baseline="central">✗ 不支持</text>
+
+  <rect x="24" y="270" width="632" height="44" rx="8" fill="#F7F6F3" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="286" font-size="9.5" fill="#4a5158" dominant-baseline="central">绿底能观察到，红底看不见，灰底是原文没写。这张表只看能力边界。</text>
+  <text x="40" y="302" font-size="9.5" fill="#4a5158" dominant-baseline="central">可用状态另算：RN 官方还在 Canary，要新架构 0.83 以上；Recce 随 1.24 上线。</text>
+</svg>

@@ -1,0 +1,52 @@
+<svg viewBox="0 0 680 456" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>触摸事件新旧架构的调用链对照</title>
+  <desc>左右两列。左列是 1.35 之前的旧架构，依托 Android 原生分发：ACTION_DOWN 向下分发到点击范围内最深的子 View，该 View 若没有设 onTouch 或 onClick 就向上冒泡，冒泡到第一个设了事件的 View 并返回 true，原生层不再冒泡，后续冒泡交给 recce-ui。旧架构的三条缺点写在下方：ScrollView 设 OnTouchListener 返回 true 会阻碍滚动，移出父布局范围的 View 点击不触发，点击热区只能在父 View 上设 TouchDelegate。右列是 1.35 的新架构：RootView 统一观察 Android touch 流，ACTION_DOWN 锁定整段手势的 target，RecceTouchTargetHelper 从 root 递归深度优先，更深更靠上的 child 优先，pointerEvents 的四种取值决定 self 与 children 能否命中，边界判定额外考虑 hitSlop、overflow、clipChildren 与 transform 的逆矩阵映射，native 只发 touch 流、click 与 longclick 交给 recce-ui，ScrollView 只在真正 onInterceptTouchEvent 拦截成功后才发 touchcancel，move 事件按帧回调、每帧只发最新一次。底部一条说明：绕开原生分发后要一并接管的隐式收益——多指、无障碍、焦点与遥控方向键——在本次被列为 P0 未做。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">同一件事的两种做法：借原生分发，还是自己做一套</text>
+
+  <rect x="24" y="32" width="310" height="26" rx="6" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="36" y="45" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">旧架构（1.35 之前）：依托 Android 原生分发</text>
+  <rect x="346" y="32" width="310" height="26" rx="6" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="358" y="45" font-size="10" font-weight="500" fill="#1B5FA8" dominant-baseline="central">新架构（1.35）：RootView 统一观察 touch 流</text>
+
+  <rect x="24" y="68" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="85" font-size="8.5" fill="#5b6470" dominant-baseline="central">ACTION_DOWN 向下分发到最深的子 View</text>
+  <rect x="24" y="107" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="124" font-size="8.5" fill="#5b6470" dominant-baseline="central">该 View 没设 onTouch / onClick 就向上冒泡</text>
+  <rect x="24" y="146" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="163" font-size="8.5" fill="#5b6470" dominant-baseline="central">冒泡到第一个设了事件的 View 返回 true</text>
+  <rect x="24" y="185" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="202" font-size="8.5" fill="#5b6470" dominant-baseline="central">原生不再冒泡，后续冒泡交给 recce-ui</text>
+
+  <rect x="24" y="230" width="310" height="122" rx="8" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <text x="36" y="248" font-size="9" font-weight="500" fill="#A32A1C" dominant-baseline="central">三条已知缺点</text>
+  <text x="36" y="270" font-size="8.5" fill="#5b6470" dominant-baseline="central">· ScrollView 设 OnTouchListener 后</text>
+  <text x="36" y="284" font-size="8.5" fill="#5b6470" dominant-baseline="central">  返回 true 会阻碍滚动</text>
+  <text x="36" y="304" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 移出父布局范围的 View 点击不触发</text>
+  <text x="36" y="324" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 点击热区只能在父 View 上设</text>
+  <text x="36" y="338" font-size="8.5" fill="#5b6470" dominant-baseline="central">  TouchDelegate 打补丁</text>
+
+  <rect x="346" y="68" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="358" y="85" font-size="8.5" fill="#5b6470" dominant-baseline="central">RootView 统一观察 Android touch 流</text>
+  <rect x="346" y="107" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="358" y="124" font-size="8.5" fill="#5b6470" dominant-baseline="central">ACTION_DOWN 锁定整段手势的 target</text>
+  <rect x="346" y="146" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="358" y="163" font-size="8.5" fill="#5b6470" dominant-baseline="central">RecceTouchTargetHelper 从 root 递归 DFS</text>
+  <rect x="346" y="185" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="358" y="202" font-size="8.5" fill="#5b6470" dominant-baseline="central">更深、更靠上的 child 优先命中</text>
+  <rect x="346" y="224" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="358" y="241" font-size="8.5" fill="#5b6470" dominant-baseline="central">pointerEvents 决定 self / children 能否命中</text>
+  <rect x="346" y="263" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="358" y="280" font-size="8.5" fill="#5b6470" dominant-baseline="central">边界另算 hitSlop / overflow / transform</text>
+  <rect x="346" y="302" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="358" y="319" font-size="8.5" fill="#5b6470" dominant-baseline="central">native 只发 touch 流，click / longclick 交上层</text>
+  <rect x="346" y="341" width="310" height="34" rx="5" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="358" y="358" font-size="8.5" fill="#5b6470" dominant-baseline="central">move 按帧回调，每帧只发最新一次</text>
+
+  <rect x="24" y="364" width="632" height="40" rx="8" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
+  <text x="36" y="378" font-size="9" font-weight="500" fill="#8A4B00" dominant-baseline="central">绕开原生分发后要一并接管的隐式收益（本次未列全）</text>
+  <text x="36" y="394" font-size="8.5" fill="#A9743A" dominant-baseline="central">多指能力、无障碍、焦点与 TV 遥控方向键——原生的分发顺带给了这些，自己做就得自己补，本次被列为 P0 未做。</text>
+
+  <text x="24" y="424" font-size="8.5" fill="#8a929c" dominant-baseline="central">新架构另有两处旧架构没有的处理：root 的 onIntercept 与 onTouchEvent 会双发，需要去重；move 事件按帧节流。</text>
+  <text x="24" y="440" font-size="8.5" fill="#8a929c" dominant-baseline="central">这两处说明这次不是照抄 RN，而是在 Recce 里重实现之外，还补了上游没有专门管的边界。</text>
+</svg>

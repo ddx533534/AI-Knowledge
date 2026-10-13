@@ -1,0 +1,64 @@
+<svg viewBox="0 0 680 448" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>布局计算迁移前后的两层职责与两笔账</title>
+  <desc>左栏是迁移前：host 层只有 Yoga 树负责布局计算，platform 层同时维护影子树与 View 树，数据只解析一次。右栏是迁移后：影子树跟随布局计算一起搬到 host 层，platform 层只留 View 树负责渲染与交互，但 host 要先解析一次数据建影子树、platform 再解析一次，数据解析从一次变成两次。底部两笔账：跨语言调用从 N+2 次降到 N+1 次，是一笔省；数据解析从 1 次变成 2 次，是一笔增。技术方案里的「性能」一节只写了「暂定」，这两笔账没有合在一起算。</desc>
+  <rect width="680" height="448" fill="#ffffff"/>
+
+  <text x="24" y="28" font-size="12.5" font-weight="600" fill="#1f2328">布局计算从 platform 层挪到 host 层，影子树跟着一起搬</text>
+  <text x="24" y="48" font-size="9.5" fill="#8a929c">改动只有两处：影子树的归属，以及 host 传给 platform 的数据里要多带一份算好的布局信息</text>
+
+  <!-- 左栏：迁移前 -->
+  <text x="24" y="80" font-size="11" font-weight="600" fill="#5b6470">迁移前</text>
+  <rect x="24" y="92" width="300" height="84" rx="7" fill="#eef3f9" stroke="#c9d8e8" stroke-width="0.8"/>
+  <text x="42" y="114" font-size="10.5" font-weight="600" fill="#2f5f96">Host 层</text>
+  <text x="42" y="134" font-size="9.5" fill="#5b6470">Yoga 树 —— 只负责布局计算</text>
+  <text x="42" y="152" font-size="9" fill="#8a929c">算完把结果回给影子树</text>
+  <text x="42" y="168" font-size="9" fill="#8a929c">不持有视图，也不持有影子树</text>
+
+  <rect x="24" y="196" width="300" height="84" rx="7" fill="#fdf3e6" stroke="#e8d3b0" stroke-width="0.8"/>
+  <text x="42" y="218" font-size="10.5" font-weight="600" fill="#A05A00">Platform 层</text>
+  <text x="42" y="238" font-size="9.5" fill="#5b6470">影子树 + View 树都在这一层</text>
+  <text x="42" y="256" font-size="9" fill="#8a929c">布局信息与视图信息挨着放</text>
+  <text x="42" y="272" font-size="9" fill="#2e7d4f">数据只解析一次</text>
+
+  <path d="M174 176 L174 196" stroke="#8a929c" stroke-width="1.2" marker-end="url(#ah)"/>
+  <path d="M186 196 L186 176" stroke="#8a929c" stroke-width="1.2" marker-end="url(#ah)"/>
+  <text x="196" y="190" font-size="8.5" fill="#8a929c">跨语言调用</text>
+
+  <!-- 右栏：迁移后 -->
+  <text x="356" y="80" font-size="11" font-weight="600" fill="#5b6470">迁移后</text>
+  <rect x="356" y="92" width="300" height="84" rx="7" fill="#eef3f9" stroke="#c9d8e8" stroke-width="0.8"/>
+  <rect x="356" y="92" width="4" height="84" rx="2" fill="#4a7ebb"/>
+  <text x="374" y="114" font-size="10.5" font-weight="600" fill="#2f5f96">Host 层</text>
+  <text x="374" y="134" font-size="9.5" fill="#5b6470">Yoga 树 + 影子树</text>
+  <text x="374" y="152" font-size="9" fill="#8a929c">布局计算在这一层闭环，不再出层</text>
+  <text x="374" y="168" font-size="9" fill="#c0392b">代价：要先解析一次数据建影子树</text>
+
+  <rect x="356" y="196" width="300" height="84" rx="7" fill="#fdf3e6" stroke="#e8d3b0" stroke-width="0.8"/>
+  <text x="374" y="218" font-size="10.5" font-weight="600" fill="#A05A00">Platform 层</text>
+  <text x="374" y="238" font-size="9.5" fill="#5b6470">只剩 View 树</text>
+  <text x="374" y="256" font-size="9" fill="#8a929c">只负责视图渲染与事件交互</text>
+  <text x="374" y="272" font-size="9" fill="#c0392b">代价：收到数据还要再解析一次</text>
+
+  <path d="M506 176 L506 196" stroke="#8a929c" stroke-width="1.2" marker-end="url(#ah)"/>
+  <path d="M518 196 L518 176" stroke="#8a929c" stroke-width="1.2" marker-end="url(#ah)"/>
+  <text x="528" y="190" font-size="8.5" fill="#8a929c">带布局信息</text>
+
+  <!-- 两笔账 -->
+  <rect x="24" y="300" width="632" height="126" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.8"/>
+  <text x="42" y="322" font-size="10.5" font-weight="600" fill="#1f2328">两笔账要合在一起算，方案里只算了一笔</text>
+
+  <rect x="42" y="334" width="7" height="7" rx="1.5" fill="#2e7d4f"/>
+  <text x="58" y="341" font-size="9.5" fill="#5b6470" dominant-baseline="central">省下的：一次视图创建的跨语言调用从 N+2 次降到 N+1 次（布局计算那一趟不再跨层）</text>
+
+  <rect x="42" y="360" width="7" height="7" rx="1.5" fill="#c0392b"/>
+  <text x="58" y="367" font-size="9.5" fill="#5b6470" dominant-baseline="central">新增的：数据解析从 1 次变成 2 次（host 建影子树一次、platform 建视图又一次）</text>
+
+  <text x="42" y="392" font-size="9.5" fill="#5b6470" dominant-baseline="central">技术方案的「从性能上看」只写了两个字：暂定。也就是说这笔账在做方案时并没有结清，</text>
+  <text x="42" y="410" font-size="9.5" fill="#5b6470" dominant-baseline="central">而它后来成了这份规划最需要解释的地方——两端的实测给出了两个方向的答案。</text>
+
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8a929c"/>
+    </marker>
+  </defs>
+</svg>

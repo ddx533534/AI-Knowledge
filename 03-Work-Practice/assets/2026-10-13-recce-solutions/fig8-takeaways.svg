@@ -1,0 +1,69 @@
+<svg viewBox="0 0 680 440" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>18 份方案各一句可带走的判断</title>
+  <desc>十八行两列的清单。左列是方案，右列是这句话能在下一次同类工作里直接用上的判断。Yoga 引入：把补一个属性重定义成换掉一个依赖，一个动作拿三份收益。Lottie：相近窗口出现的新能力先看能否共用一层再逐个决策。字体路径：分歧点是复杂度放在哪一层时，先定接口再定数据形状。图片重构：本地版继承开源版的失效信号是子类里出现大量 super 调用。Android 升 yoga：引入原生库必须用 readelf 把 so 依赖链列出来。鸿蒙升 yoga：上游给了兼容开关就等于拿到安全网，不用它等于没升级。SVG：选型判据是宿主包体余量而不是技术优劣，被否掉的路要回头看成熟没有。Image 二期：同一批 bug 反复出在状态机边界上，说明缺的是状态机不是补丁。字体加载：缓存 key 必须能区分版本，最优解常常在构建期而不是运行期。文本渐变：搬开源实现先列出它的平台假设，把假设换成结构性判断而不是机型名单。安全区域：一个值算不对时先问信息在哪一层已知，不在自己这层就明确划出去。背景重构：照上游抄要抄职责划分，发现上游的写法更笨时就用更好的写法并写下来。Touch 指针：协议要按以后一定有的形态定结构，MVP 只在数量上做减法。Android 17 适配：适配的第一问是线上还有没有流量，没有流量的该进删除清单。补属性：危险不是漏做而是属性收下了却不生效，补协议与补行为要同批排期。触摸新架构：绕开原生就要一并接管它的隐式收益，接管清单不写全就会以缺陷的形式回来。实名调研：交机制的方案验收标准是外人能独立接入一次，所以要有可运行样例。差异扫描：diff 查得出不同，查不出两边都错，要配一路不依赖对照物的审查。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">每份方案各留一句能带走的判断</text>
+
+  <rect x="24" y="30" width="632" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="32" y="42" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">方案</text>
+  <text x="164" y="42" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">可带走的判断</text>
+
+  <rect x="24" y="54" width="632" height="360" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <g font-size="8.5" fill="#5b6470">
+    <text x="32" y="67" font-size="9" dominant-baseline="central">1.28 Yoga 引入</text>
+    <text x="164" y="67" dominant-baseline="central">把「补一个属性」重定义成「换掉一个依赖」，一个动作同时拿三份收益</text>
+    <text x="32" y="87" font-size="9" dominant-baseline="central">1.29 Lottie</text>
+    <text x="164" y="87" dominant-baseline="central">相近窗口出现的新能力，先看能否共用一层（引擎 / 资源解析 / 协议）</text>
+    <text x="32" y="107" font-size="9" dominant-baseline="central">1.30 字体路径</text>
+    <text x="164" y="107" dominant-baseline="central">分歧点是「复杂度放哪一层」时，先定接口再定数据形状</text>
+    <text x="32" y="127" font-size="9" dominant-baseline="central">1.31 图片重构</text>
+    <text x="164" y="127" dominant-baseline="central">「本地版继承开源版」的失效信号，是子类里出现大量 super 调用</text>
+    <text x="32" y="147" font-size="9" dominant-baseline="central">1.31 升 yoga</text>
+    <text x="164" y="147" dominant-baseline="central">引入原生库必须用 readelf 把 so 依赖链列出来，否则是隐形包体税</text>
+    <text x="32" y="167" font-size="9" dominant-baseline="central">1.31 鸿蒙升 yoga</text>
+    <text x="164" y="167" dominant-baseline="central">上游给了兼容开关就等于拿到安全网，不用它等于没升级</text>
+    <text x="32" y="187" font-size="9" dominant-baseline="central">1.32 SVG</text>
+    <text x="164" y="187" dominant-baseline="central">选型判据是宿主包体余量而非技术优劣；被否掉的路要回头看成熟没有</text>
+    <text x="32" y="207" font-size="9" dominant-baseline="central">1.32 Image 二期</text>
+    <text x="164" y="207" dominant-baseline="central">同一批 bug 反复出在状态机边界上，说明缺的是状态机不是补丁</text>
+    <text x="32" y="227" font-size="9" dominant-baseline="central">1.33 字体加载</text>
+    <text x="164" y="227" dominant-baseline="central">缓存 key 必须能区分版本；最优解常在构建期而不在运行期</text>
+    <text x="32" y="247" font-size="9" dominant-baseline="central">1.33 文本渐变</text>
+    <text x="164" y="247" dominant-baseline="central">搬开源实现先列出它的平台假设，换成结构性判断而非机型名单</text>
+    <text x="32" y="267" font-size="9" dominant-baseline="central">1.33 安全区域</text>
+    <text x="164" y="267" dominant-baseline="central">一个值算不对时先问信息在哪一层已知，不在自己这层就明确划出去</text>
+    <text x="32" y="287" font-size="9" dominant-baseline="central">1.34 背景重构</text>
+    <text x="164" y="287" dominant-baseline="central">照上游抄要抄职责划分；发现上游写法更笨，就用更好的并写下来</text>
+    <text x="32" y="307" font-size="9" dominant-baseline="central">1.34 Touch 指针</text>
+    <text x="164" y="307" dominant-baseline="central">协议按「以后一定有」定结构，MVP 只在数量上做减法</text>
+    <text x="32" y="327" font-size="9" dominant-baseline="central">1.35 Android 17</text>
+    <text x="164" y="327" dominant-baseline="central">适配第一问是线上还有没有流量；没有流量的该进删除清单</text>
+    <text x="32" y="347" font-size="9" dominant-baseline="central">1.35 补属性</text>
+    <text x="164" y="347" dominant-baseline="central">危险不是漏做，是属性收下了却不生效；补协议与补行为要同批排期</text>
+    <text x="32" y="367" font-size="9" dominant-baseline="central">1.35 触摸新架构</text>
+    <text x="164" y="367" dominant-baseline="central">绕开原生就要一并接管它的隐式收益，清单不写全就会以缺陷回来</text>
+    <text x="32" y="387" font-size="9" dominant-baseline="central">1.35 实名调研</text>
+    <text x="164" y="387" dominant-baseline="central">交机制的方案，验收标准是「外人能独立接入一次」，要有可跑样例</text>
+    <text x="32" y="407" font-size="9" dominant-baseline="central">1.35 差异扫描</text>
+    <text x="164" y="407" dominant-baseline="central">diff 查得出「不同」，查不出「两边都错」，要配一路独立审查</text>
+  </g>
+  <line x1="24" y1="74" x2="656" y2="74" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="94" x2="656" y2="94" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="114" x2="656" y2="114" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="134" x2="656" y2="134" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="154" x2="656" y2="154" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="174" x2="656" y2="174" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="194" x2="656" y2="194" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="214" x2="656" y2="214" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="234" x2="656" y2="234" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="254" x2="656" y2="254" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="274" x2="656" y2="274" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="294" x2="656" y2="294" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="314" x2="656" y2="314" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="334" x2="656" y2="334" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="354" x2="656" y2="354" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="374" x2="656" y2="374" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="24" y1="394" x2="656" y2="394" stroke="#eceff3" stroke-width="0.5"/>
+
+  <text x="24" y="428" font-size="8.5" fill="#8a929c" dominant-baseline="central">这 18 条里，一半以上是同一类：把「看起来是加法的事」当成「要先定契约的事」来做。</text>
+</svg>

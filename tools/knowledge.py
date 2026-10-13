@@ -28,6 +28,9 @@ RELATIONS = {
     "uses": "使用", "related_to": "相关",
 }
 BEGIN, END = "<!-- AI:BEGIN -->", "<!-- AI:END -->"
+RESEARCH = "05-Research"
+MANIFEST = RESEARCH + "/manifest.json"
+SCHEMA = 3
 
 
 def now():
@@ -42,9 +45,12 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def slug(value):
-    result = re.sub(r"[^\w\-]+", "-", value, flags=re.UNICODE).strip("-_")[:60]
-    return result or "document"
+def name_part(value):
+    """Keep the document's own name; strip only what a file name cannot hold."""
+    text = unicodedata.normalize("NFC", str(value))
+    text = re.sub(r'[\\/:*?"<>|\x00-\x1f\x7f]', "-", text)
+    text = re.sub(r"\s+", " ", text).strip().strip(".")
+    return text[:80].strip() or "document"
 
 
 def contained(root, path):
@@ -113,20 +119,50 @@ def git_value(project, *args):
         return None
 
 
-def manifests(root):
+def documents(root):
+    """Read the single archive registry that maps document IDs to the stored files."""
+    path = root / MANIFEST
     records = {}
-    for path in sorted((root / "05-Research").rglob("manifest.json")):
-        if not contained(root, path):
-            raise ValueError("归档清单越界")
-        record = read_json(path)
-        doc_id = record.get("id")
+    if not path.exists():
+        return records
+    data = read_json(path)
+    if not isinstance(data, dict) or data.get("schema_version") != SCHEMA or not isinstance(data.get("documents"), dict):
+        raise ValueError("归档清单格式无效")
+    for doc_id, record in data["documents"].items():
         if not isinstance(doc_id, str) or not re.fullmatch(r"[a-f0-9]{64}", doc_id):
-            raise ValueError(f"无效文档 ID：{path}")
-        if doc_id in records:
-            raise ValueError(f"重复文档 ID：{doc_id}")
-        record["_manifest"] = path.relative_to(root).as_posix()
+            raise ValueError("无效文档 ID")
+        if not isinstance(record, dict) or record.get("id") != doc_id:
+            raise ValueError(f"清单条目与文档 ID 不一致：{doc_id}")
+        record["_manifest"] = MANIFEST
         records[doc_id] = record
     return records
+
+
+def save_documents(root, records):
+    payload = {"schema_version": SCHEMA,
+               "documents": {doc_id: {key: value for key, value in record.items() if not key.startswith("_")}
+                             for doc_id, record in sorted(records.items())}}
+    return write(root / MANIFEST, dump(payload))
+
+
+def artifact_path(root, records, source_key, doc_id, stem, suffix):
+    """Pick a flat file name under 05-Research; the newest version keeps the plain name."""
+    taken = {record["artifact"]: owner for owner, record in records.items()}
+    plain = f"{RESEARCH}/{stem}{suffix}"
+    owner = taken.get(plain)
+    if owner is None:
+        return plain
+    if records[owner]["source_key"] == source_key:
+        renamed = f"{RESEARCH}/{stem}-{owner[:8]}{suffix}"
+        if renamed in taken:
+            raise ValueError("归档文件名冲突")
+        os.replace(local(root, plain), local(root, renamed))
+        records[owner]["artifact"] = renamed
+        return plain
+    candidate = f"{RESEARCH}/{stem}-{doc_id[:8]}{suffix}"
+    if candidate in taken:
+        raise ValueError("归档文件名冲突")
+    return candidate
 
 
 def capture(root, source, project, title, kind):
@@ -135,59 +171,40 @@ def capture(root, source, project, title, kind):
         raise ValueError("来源必须是指定项目中的真实文件")
     if kind not in KINDS:
         raise ValueError("无效文档类别")
-    if any((parent / "manifest.json").exists() and contained(root / "05-Research", parent)
-           for parent in source.parents):
+    if contained(root / RESEARCH, source) or source == (root / MANIFEST).resolve():
         raise ValueError("不能将归档副本再次归档")
     data = source.read_bytes()
     content_hash = digest(data)
     key = digest((os.path.normcase(str(project)) + "\n" + os.path.normcase(str(source))).encode("utf-8"))
     doc_id = digest((key + content_hash).encode("ascii"))
-    records = manifests(root)
+    records = documents(root)
     if doc_id in records:
         archived = local(root, records[doc_id]["artifact"])
-        if digest(archived.read_bytes()) != content_hash:
+        if not archived.is_file() or digest(archived.read_bytes()) != content_hash:
             raise ValueError("已有副本被改动；停止归档，先检查副本")
         return {"id": doc_id, "changed": False, "artifact": records[doc_id]["artifact"]}
-    project_key = digest(os.path.normcase(str(project)).encode("utf-8"))[:12]
-    directory = root / "05-Research" / f"{slug(project.name)}-{project_key}" / f"{slug(source.stem)}--{doc_id[:12]}"
-    artifact = (directory / ("原文-" + slug(source.stem) + source.suffix.lower())).relative_to(root).as_posix()
-    note = (directory / "归档说明.md").relative_to(root).as_posix()
+    stem, suffix = name_part(title or source.stem), source.suffix.lower()
+    artifact = artifact_path(root, records, key, doc_id, stem, suffix)
     previous = [r for r in records.values() if r["source_key"] == key]
     previous.sort(key=lambda r: (r["captured_at"], r["id"]))
     record = {
-        "schema_version": 2, "id": doc_id, "title": title or source.stem, "kind": kind,
+        "schema_version": SCHEMA, "id": doc_id, "title": title or source.stem, "kind": kind,
         "source_key": key, "source_project": str(project), "source_path": str(source),
         "source_relative_path": source.relative_to(project).as_posix(),
         "source_commit": git_value(project, "rev-parse", "HEAD"),
         "source_worktree_dirty": None, "captured_at": now(), "sha256": content_hash,
-        "size": len(data), "artifact": artifact, "note": note,
+        "size": len(data), "artifact": artifact,
         "previous_version": previous[-1]["id"] if previous else None,
     }
     status = git_value(project, "status", "--porcelain")
     if status is not None:
         record["source_worktree_dirty"] = bool(status)
-    if not contained(root, directory) or directory.exists():
-        raise ValueError("归档目录越界或已存在不完整副本")
-    directory.parent.mkdir(parents=True, exist_ok=True)
-    staged = Path(tempfile.mkdtemp(prefix=".capture-", dir=directory.parent))
-    try:
-        write(staged / Path(artifact).name, data)
-        explanation = (
-            f"# {record['title']}\n\n原文副本保持字节一致；本文仅记录归档来源，不表示事实已核实。\n\n"
-            f"- 来源项目：`{project}`\n- 来源文档：`{source}`\n"
-            f"- 来源提交：`{record['source_commit'] or '未知/非 Git 项目'}`\n"
-            f"- 来源工作区有变更：`{record['source_worktree_dirty']}`\n"
-            f"- 归档时间：{record['captured_at']}\n- SHA-256：`{content_hash}`\n"
-            f"- 文档 ID：`{doc_id}`\n\n原文：[[{artifact}|打开原文副本]]\n"
-        )
-        write(staged / "归档说明.md", explanation)
-        write(staged / "manifest.json", dump(record))
-        os.rename(staged, directory)
-    finally:
-        if staged.exists():
-            for file in staged.iterdir():
-                file.unlink()
-            staged.rmdir()
+    target = local(root, artifact)
+    if target.exists():
+        raise ValueError("归档文件已存在，但没有对应的清单条目")
+    write(target, data)
+    records[doc_id] = record
+    save_documents(root, records)
     return {"id": doc_id, "changed": True, "artifact": artifact}
 
 
@@ -231,9 +248,9 @@ def evidence_errors(sources, docs):
 
 
 def validate(root, docs=None, knowledge=None):
-    docs = manifests(root) if docs is None else docs
+    docs = documents(root) if docs is None else docs
     knowledge = nodes(root) if knowledge is None else knowledge
-    errors, owners = [], {}
+    errors, owners, paths = [], {}, {}
     for doc_id, record in docs.items():
         try:
             for field in ("source_project", "source_path", "source_relative_path", "source_key", "title", "kind", "captured_at"):
@@ -241,14 +258,17 @@ def validate(root, docs=None, knowledge=None):
                     raise ValueError(f"清单缺少 {field}")
             if record["kind"] not in KINDS:
                 raise ValueError("文档类别无效")
-            directory = local(root, record["_manifest"]).parent
             artifact = local(root, record["artifact"])
-            note = local(root, record["note"])
-            if artifact.parent != directory or note.parent != directory or not note.is_file():
-                raise ValueError("副本和说明必须在清单所在目录")
+            if artifact.parent != root / RESEARCH:
+                raise ValueError("归档文件必须直接放在 05-Research 下")
+            if not artifact.is_file():
+                raise ValueError("归档文件不存在")
+            if record["artifact"] in paths:
+                raise ValueError("归档文件被多份文档共用")
+            paths[record["artifact"]] = doc_id
             data = artifact.read_bytes()
             if digest(data) != record.get("sha256") or len(data) != record.get("size"):
-                raise ValueError("原文副本的校验值/大小不匹配")
+                raise ValueError("归档文件的校验值/大小不匹配")
             if digest((record["source_key"] + record["sha256"]).encode("ascii")) != doc_id:
                 raise ValueError("文档 ID 与来源/内容不匹配")
             previous = record.get("previous_version")
@@ -347,7 +367,7 @@ def upsert(root, spec):
     for field in ("findings", "recommendations"):
         if not isinstance(spec.get(field), list) or any(not isinstance(s, str) for s in spec[field]):
             raise ValueError(f"{field} 必须为字符串列表")
-    docs, knowledge = manifests(root), nodes(root)
+    docs, knowledge = documents(root), nodes(root)
     path = local(root, f"01-Knowledge/{node_id}.md")
     previous_meta, previous_body = parse_note(path) if path.exists() else ({}, f"# {spec['title']}\n\n{BEGIN}\n{END}\n\n## 人工笔记\n\n")
     if previous_body.count(BEGIN) != 1 or previous_body.count(END) != 1 or previous_body.find(BEGIN) > previous_body.find(END):
@@ -355,7 +375,7 @@ def upsert(root, spec):
     meta = dict(previous_meta)
     for key in ("id", "title", "type", "status", "last_verified", "sources", "relationships", "aliases", "tags"):
         meta[key] = spec.get(key, {"aliases": [], "tags": [], "relationships": [], "status": "unverified"}.get(key))
-    meta["schema_version"] = 2
+    meta["schema_version"] = SCHEMA
     meta["created"] = previous_meta.get("created", now())
     meta["updated"] = previous_meta.get("updated", meta["created"])
     lines = [BEGIN, "## 结论", "", spec["summary"], "", "## 关键发现", ""]
@@ -365,7 +385,7 @@ def upsert(root, spec):
         if not isinstance(evidence, dict) or evidence.get("document_id") not in docs:
             raise ValueError("来源文档不存在")
         doc = docs[evidence["document_id"]]
-        lines.append(f"- [S{number}] [[{doc['artifact']}|原文证据]]；定位：{evidence.get('locator', '')}")
+        lines.append(f"- [S{number}] [[{doc['artifact']}|{doc['title']}]]；定位：{evidence.get('locator', '')}")
     for edge in meta["relationships"]:
         if not isinstance(edge, dict):
             raise ValueError("关系必须为对象")
@@ -391,25 +411,25 @@ def upsert(root, spec):
 
 
 def build(root):
-    docs, knowledge = manifests(root), nodes(root)
+    docs, knowledge = documents(root), nodes(root)
     errors = validate(root, docs, knowledge)
     if errors:
         raise ValueError("\n".join(errors))
-    graph = {"schema_version": 2, "nodes": [], "edges": []}
-    document_lines = ["# 文档索引", "", "从归档清单派生，包含历史版本。请勿直接维护。", ""]
-    for doc_id, doc in sorted(docs.items()):
+    graph = {"schema_version": SCHEMA, "nodes": [], "edges": []}
+    lines = ["# 索引", "", "从归档清单与知识节点派生；请勿直接维护。", "", "## 归档文档", ""]
+    for doc_id, doc in sorted(docs.items(), key=lambda item: (item[1]["captured_at"], item[0])):
         graph["nodes"].append({"id": "doc:" + doc_id, "kind": "document", "title": doc["title"],
-                               "path": doc["artifact"], "artifact": doc["artifact"], "note": doc["note"], "project": doc["source_project"],
+                               "path": doc["artifact"], "artifact": doc["artifact"], "project": doc["source_project"],
                                "source_path": doc["source_path"], "sha256": doc["sha256"], "captured_at": doc["captured_at"]})
-        document_lines.append(f"- [[{doc['artifact']}|{doc['title']}]] — [[{doc['note']}|归档说明]]；{doc['kind']}；{doc['captured_at']}；`{doc_id[:12]}`")
-    node_lines = ["# 知识索引", "", "从知识节点派生，节点事实与证据保存在原笔记。", ""]
-    edge_lines = ["# 关系索引", "", "技术关系必须有直接证据；文档来源边另行展示。", ""]
+        lines.append(f"- [[{doc['artifact']}|{doc['title']}]]；{doc['kind']}；归档 {doc['captured_at'][:10]}")
+    lines.extend(["", "## 知识节点", ""])
+    edge_lines = []
     for node_id, note in sorted(knowledge.items()):
         meta = note["meta"]
         graph["nodes"].append({"id": "node:" + node_id, "kind": "knowledge", "title": meta["title"],
                                "path": note["path"], "type": meta["type"], "status": meta["status"],
                                "tags": meta.get("tags", []), "sources": meta["sources"]})
-        node_lines.append(f"- [[{note['path']}|{meta['title']}]] — {meta['type']}；{meta['status']}")
+        lines.append(f"- [[{note['path']}|{meta['title']}]] — {meta['type']}；{meta['status']}")
         for doc_id in sorted({s["document_id"] for s in meta["sources"]}):
             graph["edges"].append({"source": "node:" + node_id, "target": "doc:" + doc_id,
                                    "type": "evidence", "label": "来源", "explanation": "节点的文档证据", "sources": []})
@@ -417,13 +437,14 @@ def build(root):
             graph["edges"].append({"source": "node:" + node_id, "target": "node:" + edge["target"],
                                    "type": edge["type"], "label": RELATIONS[edge["type"]],
                                    "explanation": edge["explanation"], "sources": edge["sources"]})
-            edge_lines.append(f"- [[{note['path']}|{meta['title']}]] → **{RELATIONS[edge['type']]}** → [[01-Knowledge/{edge['target']}|{knowledge[edge['target']]['meta']['title']}]]：{edge['explanation']}")
+            edge_lines.append(f"- [[{note['path']}|{meta['title']}]] → **{RELATIONS[edge['type']]}** → "
+                              f"[[01-Knowledge/{edge['target']}|{knowledge[edge['target']]['meta']['title']}]]：{edge['explanation']}")
+    lines.extend(["", "## 技术关系", ""])
+    lines.extend(edge_lines or ["- 暂无"])
     template = (root / "tools/graph-template.html").read_text(encoding="utf-8")
     graph_html = template.replace("__GRAPH_JSON__", dump(graph).replace("<", "\\u003c").replace("&", "\\u0026"))
     outputs = {"99-System/graph.json": dump(graph), "99-System/知识图谱.html": graph_html,
-               "99-System/文档索引.md": "\n".join(document_lines) + "\n",
-               "99-System/知识索引.md": "\n".join(node_lines) + "\n",
-               "99-System/关系索引.md": "\n".join(edge_lines) + "\n"}
+               "99-System/索引.md": "\n".join(lines) + "\n"}
     changed = [rel for rel, content in outputs.items() if write(local(root, rel), content)]
     return {"documents": len(docs), "knowledge_nodes": len(knowledge),
             "technical_relations": sum(e["type"] != "evidence" for e in graph["edges"]), "changed": changed}
@@ -457,7 +478,7 @@ def main():
                 result = build(root)
             else:
                 errors = validate(root)
-                result = {"errors": errors, "documents": len(manifests(root)), "knowledge_nodes": len(nodes(root))}
+                result = {"errors": errors, "documents": len(documents(root)), "knowledge_nodes": len(nodes(root))}
                 print(dump(result), end="")
                 return int(bool(errors))
         print(dump(result), end="")

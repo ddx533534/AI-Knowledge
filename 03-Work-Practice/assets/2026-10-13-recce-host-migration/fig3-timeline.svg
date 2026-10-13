@@ -1,0 +1,61 @@
+<svg viewBox="0 0 680 486" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>排期改了三次顺序，落地顺序与规划正文相反</title>
+  <desc>规划正文写的顺序是先在 Android 跑通并验证、再依次推 iOS 与鸿蒙；《部分规划调整-1》改成 host 迁移先搞鸿蒙、验证问题后再推 Android 与 iOS；《部分规划调整-2》又改成新旧 host 与全新 yoga 一起上，并把这次改动称作「方案二」，而实际上线时是两件事依次上，同样被称作「方案二」。实际落地的四个节点：2025 年 7 月 Android 游乐场跑通并出 benchmark；2025 年 7 至 8 月鸿蒙游乐场跑通、完成全流程自测并修复 5 条问题；2025 年 12 月 12 日鸿蒙点评 11.51.0 上线 yoga 升级；2026 年 1 月 16 日鸿蒙点评 11.55.0 上线 host 新架构。底部是载体选择：B 端外卖商家端日均 1 次、快驴 0.3 次量太低暴露不了问题，C 端美团日均 49 万风险太大，点评日均 3.3 万被选中。</desc>
+  <rect width="680" height="486" fill="#ffffff"/>
+
+  <text x="24" y="28" font-size="12.5" font-weight="600" fill="#1f2328">排期表上改了三回顺序，最后落地的那一回与第一回相反</text>
+  <text x="24" y="48" font-size="9.5" fill="#8a929c">三次改动分别写在规划正文、两份《部分规划调整》里，谁也不覆盖谁，得并起来读</text>
+
+  <rect x="24" y="62" width="632" height="112" rx="8" fill="#fdf3e6" stroke="#e8d3b0" stroke-width="0.8"/>
+  <text x="42" y="82" font-size="10.5" font-weight="600" fill="#A05A00">顺序改了三回</text>
+
+  <rect x="42" y="94" width="7" height="7" rx="1.5" fill="#c9a063"/>
+  <text x="58" y="101" font-size="9.5" fill="#5b6470" dominant-baseline="central">规划正文：先在 Android 上跑通并验证，再依次尝试在 iOS 与鸿蒙上迁移</text>
+
+  <rect x="42" y="118" width="7" height="7" rx="1.5" fill="#c9a063"/>
+  <text x="58" y="125" font-size="9.5" fill="#5b6470" dominant-baseline="central">调整-1：host 迁移先搞到鸿蒙上，验证问题后再推 Android 与 iOS</text>
+
+  <rect x="42" y="142" width="7" height="7" rx="1.5" fill="#c9a063"/>
+  <text x="58" y="149" font-size="9.5" fill="#5b6470" dominant-baseline="central">调整-2：新旧 host 与全新 yoga 一起上，这一次叫「方案二」；实际上线改成依次上，也叫「方案二」</text>
+
+  <!-- 时间轴 -->
+  <line x1="48" y1="256" x2="648" y2="256" stroke="#d9dde3" stroke-width="1.5"/>
+  <circle cx="112" cy="256" r="5" fill="#4a7ebb"/>
+  <circle cx="288" cy="256" r="5" fill="#4a7ebb"/>
+  <circle cx="464" cy="256" r="5" fill="#4a7ebb"/>
+  <circle cx="624" cy="256" r="5" fill="#4a7ebb"/>
+
+  <text x="112" y="232" font-size="9.5" font-weight="600" fill="#2f5f96" text-anchor="middle">2025-07</text>
+  <text x="112" y="278" font-size="9" fill="#5b6470" text-anchor="middle">Android 游乐场跑通</text>
+  <text x="112" y="292" font-size="9" fill="#5b6470" text-anchor="middle">并出单端 benchmark</text>
+
+  <text x="288" y="232" font-size="9.5" font-weight="600" fill="#2f5f96" text-anchor="middle">2025-07 ~ 08</text>
+  <text x="288" y="278" font-size="9" fill="#5b6470" text-anchor="middle">鸿蒙游乐场跑通</text>
+  <text x="288" y="292" font-size="9" fill="#5b6470" text-anchor="middle">全流程自测 + 修复 5 条</text>
+
+  <text x="464" y="232" font-size="9.5" font-weight="600" fill="#2f5f96" text-anchor="middle">2025-12-12</text>
+  <text x="464" y="278" font-size="9" fill="#5b6470" text-anchor="middle">鸿蒙点评 11.51.0</text>
+  <text x="464" y="292" font-size="9" fill="#5b6470" text-anchor="middle">上线 yoga 升级</text>
+
+  <text x="624" y="232" font-size="9.5" font-weight="600" fill="#2f5f96" text-anchor="middle">2026-01-16</text>
+  <text x="624" y="278" font-size="9" fill="#5b6470" text-anchor="middle">鸿蒙点评 11.55.0</text>
+  <text x="624" y="292" font-size="9" fill="#5b6470" text-anchor="middle">上线 host 新架构</text>
+
+  <text x="112" y="320" font-size="8.5" fill="#8a929c" text-anchor="middle">规划表上这两格写的是已完成</text>
+  <text x="288" y="320" font-size="8.5" fill="#8a929c" text-anchor="middle">这一步不在正文的排期表里</text>
+  <text x="464" y="320" font-size="8.5" fill="#8a929c" text-anchor="middle">先上 yoga，它没有开关</text>
+  <text x="624" y="320" font-size="8.5" fill="#8a929c" text-anchor="middle">有开关，可回退</text>
+
+  <!-- 载体选择 -->
+  <rect x="24" y="344" width="632" height="120" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.8"/>
+  <text x="42" y="366" font-size="10.5" font-weight="600" fill="#1f2328">验证载体不是「随便挑个低流量」，是量级刚好落在能暴露问题的区间</text>
+
+  <rect x="42" y="380" width="7" height="7" rx="1.5" fill="#8a929c"/>
+  <text x="58" y="387" font-size="9.5" fill="#5b6470" dominant-baseline="central">B 端：外卖商家端日均 1 次、快驴合作商 0.3 次 —— 量太低，跑不出问题，验证不到任何一个开关</text>
+
+  <rect x="42" y="404" width="7" height="7" rx="1.5" fill="#c0392b"/>
+  <text x="58" y="411" font-size="9.5" fill="#5b6470" dominant-baseline="central">C 端：美团日均 49 万 —— 风险太大，不适合做这件事的第一站</text>
+
+  <rect x="42" y="428" width="7" height="7" rx="1.5" fill="#2e7d4f"/>
+  <text x="58" y="435" font-size="9.5" fill="#5b6470" dominant-baseline="central">C 端：点评日均 3.35 万 —— 选中。同一个「低流量载体」口径，在这里指向的答案与 yoga 相反</text>
+</svg>

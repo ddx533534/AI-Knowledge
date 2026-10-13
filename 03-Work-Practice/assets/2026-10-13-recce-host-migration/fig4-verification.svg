@@ -1,0 +1,63 @@
+<svg viewBox="0 0 680 452" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <desc>分左右两块对照「迁移类改动怎么验收」。左块是自测用例：整份文档是游乐场全流程回归，覆盖 UI 展示、桥、组件属性、RTL、动画、离线包六类，判据是「与旧架构行为一致即通过」，于是大量条目写「可忽略，与旧架构保持一致」，真正的修复只有 5 条——全局与局部注册视图不展示、图片 blurRadius 失效且 onloadstart 无回调、contentoffset 无效、补 text 与 input 缺失属性、以及桥问题判「不需要修复，保持和旧架构一样」。右块是上线数据：按 useNewArchitecture 字段分组对照，放量 10% 到 30% 再到 50% 递进，抵达率新架构 99.865% 对旧架构 99.9%，recce_run_tp50 新 859 对旧 861，两组几乎重合，说明真实收银台页面上迁移没有带来可观测的性能差异。底部说明两个结论为什么不矛盾：26 倍只出现在极端页 1680 个 label，日常页面规模远不到能体现布局差异的量级；而那条「不需要修复」的桥问题恰好说明等价判据——新架构有问题、旧架构同样有，就不算这次迁移引入的缺陷。has_new_layout 分析同理，新旧架构对「哪些节点需要重排」结论不同，查下来是旧实现把 NaN 与 0 比较判成了「变化了」。</desc>
+
+  <text x="24" y="30" font-size="13.5" font-weight="600" fill="#1f2328">验收这一环：整份回归大半判「与旧架构一致」，线上则看不到差异</text>
+  <text x="24" y="52" font-size="9.5" fill="#8a929c">游乐场极端页有 26 倍，日常页面没有差异——两个结论不矛盾，落差在页面规模</text>
+
+  <!-- 左：自测用例 -->
+  <rect x="24" y="70" width="316" height="252" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <rect x="40" y="86" width="7" height="7" rx="1.5" fill="#3E6E9E"/>
+  <text x="54" y="90" font-size="10.5" font-weight="600" fill="#1f2328" dominant-baseline="central">自测用例：游乐场全流程回归</text>
+  <text x="40" y="112" font-size="9" fill="#5b6470" dominant-baseline="central">覆盖：UI 展示 · 桥 · 组件属性 · RTL · 动画 · 离线包</text>
+  <line x1="40" y1="130" x2="324" y2="130" stroke="#e4e8ee" stroke-width="0.8"/>
+
+  <text x="40" y="150" font-size="9.5" fill="#5b6470" dominant-baseline="central">判据：</text>
+  <text x="78" y="150" font-size="9.5" font-weight="600" fill="#A05A00" dominant-baseline="central">与旧架构行为一致即通过</text>
+
+  <rect x="40" y="166" width="284" height="26" rx="5" fill="#eef3f8"/>
+  <text x="52" y="179" font-size="9.5" fill="#1f2328" dominant-baseline="central">大半条目 →「可忽略，与旧架构保持一致」</text>
+
+  <text x="40" y="210" font-size="9.5" fill="#5b6470" dominant-baseline="central">真修复只有</text>
+  <text x="94" y="210" font-size="11" font-weight="600" fill="#2F7D4F" dominant-baseline="central">5 条</text>
+  <text x="40" y="230" font-size="8.8" fill="#5b6470" dominant-baseline="central">· 全局与局部注册视图不展示</text>
+  <text x="40" y="246" font-size="8.8" fill="#5b6470" dominant-baseline="central">· 图片 blurRadius 失效、onloadstart 无回调</text>
+  <text x="40" y="262" font-size="8.8" fill="#5b6470" dominant-baseline="central">· contentoffset 无效</text>
+  <text x="40" y="278" font-size="8.8" fill="#5b6470" dominant-baseline="central">· 补 text 与 input 缺失属性</text>
+  <text x="40" y="294" font-size="8.8" fill="#B84A3A" dominant-baseline="central">· 桥 &#8594; 判「不需要修复，保持和旧架构一样」</text>
+  <text x="40" y="312" font-size="8.5" fill="#8a929c" dominant-baseline="central">最后一条最能说明判据：新架构有问题，旧架构同样有。</text>
+
+  <!-- 右：上线数据 -->
+  <rect x="340" y="70" width="316" height="252" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <rect x="356" y="86" width="7" height="7" rx="1.5" fill="#2F7D4F"/>
+  <text x="370" y="90" font-size="10.5" font-weight="600" fill="#1f2328" dominant-baseline="central">上线数据：按开关字段分组对照</text>
+  <text x="356" y="112" font-size="9" fill="#5b6470" dominant-baseline="central">useNewArchitecture 分组，放量 10% &#8594; 30% &#8594; 50%</text>
+  <line x1="356" y1="130" x2="640" y2="130" stroke="#e4e8ee" stroke-width="0.8"/>
+
+  <text x="436" y="152" font-size="9" fill="#8a929c" text-anchor="middle" dominant-baseline="central">新架构</text>
+  <text x="556" y="152" font-size="9" fill="#8a929c" text-anchor="middle" dominant-baseline="central">旧架构</text>
+
+  <text x="356" y="176" font-size="9.5" fill="#5b6470" dominant-baseline="central">抵达率</text>
+  <text x="436" y="176" font-size="10.5" font-weight="600" fill="#2F7D4F" text-anchor="middle" dominant-baseline="central">99.865%</text>
+  <text x="556" y="176" font-size="10.5" fill="#8a929c" text-anchor="middle" dominant-baseline="central">99.9%</text>
+
+  <text x="356" y="200" font-size="9.5" fill="#5b6470" dominant-baseline="central">recce_run_tp50</text>
+  <text x="436" y="200" font-size="10.5" font-weight="600" fill="#2F7D4F" text-anchor="middle" dominant-baseline="central">859</text>
+  <text x="556" y="200" font-size="10.5" fill="#8a929c" text-anchor="middle" dominant-baseline="central">861</text>
+
+  <text x="356" y="222" font-size="8.5" fill="#8a929c" dominant-baseline="central">（2026-01-05 那批）</text>
+  <line x1="356" y1="240" x2="640" y2="240" stroke="#e4e8ee" stroke-width="0.8"/>
+
+  <text x="356" y="260" font-size="9.5" fill="#1f2328" dominant-baseline="central">新老两组几乎重合</text>
+  <text x="356" y="280" font-size="9" fill="#5b6470" dominant-baseline="central">真实收银台页面上，这次迁移没有带来</text>
+  <text x="356" y="296" font-size="9" fill="#5b6470" dominant-baseline="central">可观测的性能差异。</text>
+
+  <!-- 底部：为什么不矛盾 -->
+  <rect x="24" y="336" width="632" height="100" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="40" y="356" font-size="10" font-weight="600" fill="#1f2328" dominant-baseline="central">26 倍与「没有差异」为什么不矛盾</text>
+  <rect x="40" y="370" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="374" font-size="9.3" fill="#5b6470" dominant-baseline="central">26 倍只出现在极端页（1680 个 label）；日常页面规模远不到能体现布局差异的量级。</text>
+  <rect x="40" y="390" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="394" font-size="9.3" fill="#5b6470" dominant-baseline="central">5 条里最典型的桥问题：新架构有问题、旧架构同样有，于是判「不需要修复」——这正是等价判据。</text>
+  <rect x="40" y="410" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="414" font-size="9.3" fill="#5b6470" dominant-baseline="central">has_new_layout 分析同理：新旧算出的「需重排节点」不同，查下来是旧实现把 NaN 与 0 比较判成了「变了」。</text>
+</svg>

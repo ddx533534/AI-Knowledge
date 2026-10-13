@@ -1,0 +1,61 @@
+<svg viewBox="0 0 680 344" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>三份重构方案的共同形态：立项写的是加能力，收益大头是清历史债</title>
+  <desc>三列对照。第一列是 1.31 图片重构，立项写的能力是让 ResizeMode 生效、支持动态更新与扩展取值，顺带清掉的债包括子类大量 super 调用导致 setImageDrawable 二次设置绘制边界、把普通图误判为动画图、父子关系混淆造成重复方法、Android 不支持动态更新 ResizeMode、fit_start 与 fit_end 未支持。第二列是 1.34 背景重构，立项写的是支持 BoxShadow 并为背景图与轮廓线铺垫，顺带清掉 14 条三端背景渲染不一致、背景绘制逻辑散在三个类里、borderStyle 与四边颜色不统一无法同时满足、elevation 圆角投影、低版本 overflow 圆角裁剪。第三列是 1.35 触摸新架构，立项写的是支持点击热区、pointer-events 精细控制、移出父布局可点击，顺带清掉 ScrollView 设 OnTouchListener 会阻碍滚动、移出父布局的 View 点击不触发、点击热区只能靠父 View 的 TouchDelegate、click 与 longclick 优先级混乱、move 事件无节流、root 事件双发。三列的收益大头都在下半部分，但立项理由里写的是上半部分。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">三份重构：上面写的是立项理由，下面才是真正的收益</text>
+
+  <rect x="24" y="32" width="205" height="26" rx="6" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="126.5" y="45" font-size="10" font-weight="500" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">图片重构（1.31）</text>
+  <rect x="237" y="32" width="205" height="26" rx="6" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="339.5" y="45" font-size="10" font-weight="500" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">背景重构（1.34）</text>
+  <rect x="450" y="32" width="205" height="26" rx="6" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="552.5" y="45" font-size="10" font-weight="500" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">触摸新架构（1.35）</text>
+
+  <text x="24" y="76" font-size="9" fill="#8a929c" dominant-baseline="central">立项写的能力</text>
+  <rect x="24" y="84" width="205" height="70" rx="6" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="104" font-size="9" fill="#5b6470" dominant-baseline="central">ResizeMode 设 Stretch 生效</text>
+  <text x="36" y="120" font-size="9" fill="#5b6470" dominant-baseline="central">支持动态更新 ResizeMode</text>
+  <text x="36" y="136" font-size="9" fill="#5b6470" dominant-baseline="central">扩展 ResizeMode 取值</text>
+
+  <rect x="237" y="84" width="205" height="70" rx="6" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="249" y="104" font-size="9" fill="#5b6470" dominant-baseline="central">支持 BoxShadow 高级阴影</text>
+  <text x="249" y="120" font-size="9" fill="#5b6470" dominant-baseline="central">为背景图与轮廓线铺垫</text>
+  <text x="249" y="136" font-size="9" fill="#5b6470" dominant-baseline="central">业务无需适配</text>
+
+  <rect x="450" y="84" width="205" height="70" rx="6" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="462" y="104" font-size="9" fill="#5b6470" dominant-baseline="central">支持点击热区 hitSlop</text>
+  <text x="462" y="120" font-size="9" fill="#5b6470" dominant-baseline="central">pointer-events 精细控制</text>
+  <text x="462" y="136" font-size="9" fill="#5b6470" dominant-baseline="central">移出父布局范围仍可点击</text>
+
+  <text x="24" y="176" font-size="14" fill="#8a929c" text-anchor="middle" dominant-baseline="central">↓</text>
+  <text x="237" y="176" font-size="14" fill="#8a929c" text-anchor="middle" dominant-baseline="central">↓</text>
+  <text x="450" y="176" font-size="14" fill="#8a929c" text-anchor="middle" dominant-baseline="central">↓</text>
+
+  <text x="24" y="200" font-size="9" font-weight="500" fill="#A32A1C" dominant-baseline="central">顺带清掉的历史债</text>
+  <rect x="24" y="208" width="205" height="118" rx="6" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <text x="36" y="226" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 子类大量 super 调用，让</text>
+  <text x="36" y="240" font-size="8.5" fill="#5b6470" dominant-baseline="central">  setImageDrawable 二次设边界</text>
+  <text x="36" y="256" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 把普通图误判为动画图</text>
+  <text x="36" y="272" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 父子关系混淆造成大量重复方法</text>
+  <text x="36" y="288" font-size="8.5" fill="#5b6470" dominant-baseline="central">· fit_start / fit_end 未支持</text>
+  <text x="36" y="306" font-size="8.5" fill="#5b6470" dominant-baseline="central">· source 与回调的状态机边界</text>
+  <text x="36" y="320" font-size="8" fill="#8a929c" dominant-baseline="central">  （后者并入 1.32 一起收）</text>
+
+  <rect x="237" y="208" width="205" height="118" rx="6" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <text x="249" y="226" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 14 条三端背景渲染不一致</text>
+  <text x="249" y="240" font-size="8.5" fill="#5b6470" dominant-baseline="central">  （边框 5、圆角 4、style 2）</text>
+  <text x="249" y="256" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 绘制逻辑散在三个类里且重叠</text>
+  <text x="249" y="272" font-size="8.5" fill="#5b6470" dominant-baseline="central">· borderStyle 与四边颜色不统一</text>
+  <text x="249" y="286" font-size="8.5" fill="#5b6470" dominant-baseline="central">  此前无法同时满足</text>
+  <text x="249" y="302" font-size="8.5" fill="#5b6470" dominant-baseline="central">· elevation 圆角投影</text>
+  <text x="249" y="318" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 低版本 overflow 圆角裁剪</text>
+
+  <rect x="450" y="208" width="205" height="118" rx="6" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <text x="462" y="226" font-size="8.5" fill="#5b6470" dominant-baseline="central">· ScrollView 设 OnTouchListener</text>
+  <text x="462" y="240" font-size="8.5" fill="#5b6470" dominant-baseline="central">  返回 true 会阻碍滚动</text>
+  <text x="462" y="256" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 移出父布局的 View 点击不触发</text>
+  <text x="462" y="272" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 热区只能靠父 View 的</text>
+  <text x="462" y="286" font-size="8.5" fill="#5b6470" dominant-baseline="central">  TouchDelegate 打补丁</text>
+  <text x="462" y="302" font-size="8.5" fill="#5b6470" dominant-baseline="central">· click / longclick 优先级混乱</text>
+  <text x="462" y="318" font-size="8.5" fill="#5b6470" dominant-baseline="central">· move 无节流、root 事件双发</text>
+</svg>

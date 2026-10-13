@@ -1,0 +1,53 @@
+<svg viewBox="0 0 680 460" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>同一份改动在三组实测里的两个方向</title>
+  <desc>Android 游乐场基准页：迁移后平均总时长 418.4ms，迁移前 340.8ms，慢了 78ms，而文档结论写的是慢 140ms。鸿蒙游乐场 286 个组件的基准页：旧架构 477.6ms、新架构 460.4ms，快了约 17ms。鸿蒙游乐场 1680 个 label 的极端页：host 层布局耗时从旧架构的 17.826 秒降到新架构的 0.694 秒，快约 26 倍，而两版的 platform 层耗时与通信耗时基本持平。归因：Android 变慢是因为 host 层多解析一次数据多花 72ms、platform 层主线程任务队列未优化多花 70ms；鸿蒙变快是因为旧架构的 host 布局本来就慢。结论是收益大小由被替换掉的旧实现有多差决定，而不是由架构本身决定。</desc>
+  <rect width="680" height="460" fill="#ffffff"/>
+
+  <text x="24" y="28" font-size="12.5" font-weight="600" fill="#1f2328">同一份改动，三组实测给出两个方向的答案</text>
+  <text x="24" y="48" font-size="9.5" fill="#8a929c">三组数据都在游乐场用新老架构对照跑，机型分别是华为 Mate 30（Android）与 Mate 60 Pro（鸿蒙）</text>
+
+  <!-- 卡片 1 -->
+  <rect x="24" y="66" width="200" height="132" rx="8" fill="#fdeeec" stroke="#eccac4" stroke-width="0.8"/>
+  <text x="40" y="88" font-size="10" font-weight="600" fill="#c0392b">Android · 游乐场基准页</text>
+  <text x="40" y="112" font-size="15" font-weight="600" fill="#1f2328">340.8 → 418.4 ms</text>
+  <text x="40" y="130" font-size="9.5" fill="#5b6470">旧架构 340.8ms，新架构 418.4ms</text>
+  <text x="40" y="148" font-size="9.5" fill="#c0392b">慢 78ms</text>
+  <text x="40" y="170" font-size="9" fill="#8a929c">文档结论另写「慢 140ms 左右」，</text>
+  <text x="40" y="184" font-size="9" fill="#8a929c">两个数对不上，见待核实</text>
+
+  <!-- 卡片 2 -->
+  <rect x="240" y="66" width="200" height="132" rx="8" fill="#edf7f0" stroke="#c6e2d2" stroke-width="0.8"/>
+  <text x="256" y="88" font-size="10" font-weight="600" fill="#2e7d4f">鸿蒙 · 游乐场基准页（286 组件）</text>
+  <text x="256" y="112" font-size="15" font-weight="600" fill="#1f2328">477.6 → 460.4 ms</text>
+  <text x="256" y="130" font-size="9.5" fill="#5b6470">旧架构 477.6ms，新架构 460.4ms</text>
+  <text x="256" y="148" font-size="9.5" fill="#2e7d4f">快约 17ms</text>
+  <text x="256" y="170" font-size="9" fill="#8a929c">幅度很小，属于常规波动区间，</text>
+  <text x="256" y="184" font-size="9" fill="#8a929c">不足以说明新架构更快</text>
+
+  <!-- 卡片 3 -->
+  <rect x="456" y="66" width="200" height="132" rx="8" fill="#edf7f0" stroke="#c6e2d2" stroke-width="0.8"/>
+  <text x="472" y="88" font-size="10" font-weight="600" fill="#2e7d4f">鸿蒙 · 极端页（1680 个 label）</text>
+  <text x="472" y="112" font-size="15" font-weight="600" fill="#1f2328">17.826 → 0.694 s</text>
+  <text x="472" y="130" font-size="9.5" fill="#5b6470">host 层布局耗时，旧架构对新架构</text>
+  <text x="472" y="148" font-size="9.5" fill="#2e7d4f">快约 26 倍</text>
+  <text x="472" y="170" font-size="9" fill="#8a929c">platform 层 5.544s 对 5.076s、通信</text>
+  <text x="472" y="184" font-size="9" fill="#8a929c">0.283s 对 0.273s，两版基本持平</text>
+
+  <!-- 归因 -->
+  <rect x="24" y="214" width="632" height="122" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.8"/>
+  <text x="42" y="236" font-size="10.5" font-weight="600" fill="#1f2328">变快与变慢都不是架构本身带来的，原因分别在两头</text>
+
+  <rect x="42" y="250" width="7" height="7" rx="1.5" fill="#c0392b"/>
+  <text x="58" y="257" font-size="9.5" fill="#5b6470" dominant-baseline="central">Android 慢在哪：host 层 +72ms（多解析一次数据、建 shadownode 树），platform 层 +70ms（主线程任务队列未优化）</text>
+
+  <rect x="42" y="278" width="7" height="7" rx="1.5" fill="#2e7d4f"/>
+  <text x="58" y="285" font-size="9.5" fill="#5b6470" dominant-baseline="central">鸿蒙快在哪：旧架构的 host 布局本身就慢（17.8 秒），迁移换掉了这个实现，不是新架构做得多快</text>
+
+  <text x="42" y="314" font-size="9.5" fill="#5b6470" dominant-baseline="central">两个原因都落在实现细节上：一边是迁移新增的成本没被优化掉，一边是被替换的旧实现本来就差。</text>
+
+  <!-- 结论条 -->
+  <rect x="24" y="352" width="632" height="84" rx="8" fill="#fdf3e6" stroke="#e8d3b0" stroke-width="0.8"/>
+  <text x="42" y="376" font-size="11" font-weight="600" fill="#A05A00">收益的大小由「被替换掉的旧实现有多差」决定，不由架构决定</text>
+  <text x="42" y="400" font-size="9.5" fill="#5b6470" dominant-baseline="central">这句话有个直接后果：性能不能用来判断这件事值不值得做。同一份改造换一个端、换一个页面，</text>
+  <text x="42" y="420" font-size="9.5" fill="#5b6470" dominant-baseline="central">符号都可能翻转。真正稳定的收益是那两条本来就测不出来的——三端一套代码、为换布局框架留接口。</text>
+</svg>

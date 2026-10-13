@@ -5,6 +5,9 @@
     python3 tools/daily-md2html.py                    # 默认转当天日期的 04-Daily/<今天>.md
     python3 tools/daily-md2html.py 2026-10-13         # 指定日期
     python3 tools/daily-md2html.py path/to/x.md       # 指定文件（输出同名 .html）
+    python3 tools/daily-md2html.py --title "标题" path/to/x.md   # 指定文件并自定义页面标题
+
+页面标题默认是「AI 日报 · <文件名>」。转非日报文档时用 --title 换掉。
 
 只支持日报用到的 markdown 子集：标题、段落、无序/有序列表、引用、围栏代码、
 分隔线、表格、图片，以及行内的 `code`、**加粗**、[文字](链接)。
@@ -197,7 +200,7 @@ TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI 日报 · __DATE__</title>
+<title>__TITLE__</title>
 <style>
   :root {
     --bg: #fbfbfc;
@@ -298,13 +301,20 @@ def resolve(arg: str | None) -> tuple[str, str]:
 
 
 def main() -> None:
-    src, dst = resolve(sys.argv[1] if len(sys.argv) > 1 else None)
+    args = sys.argv[1:]
+    title = None
+    if args and args[0] == "--title":
+        if len(args) < 3:
+            raise SystemExit("用法：daily-md2html.py [--title 页面标题] [<日期> | <文件>]")
+        title, args = args[1], args[2:]
+    src, dst = resolve(args[0] if args else None)
     with open(src, encoding="utf-8") as f:
         md = f.read()
     body = convert(md, os.path.dirname(src))
-    date = os.path.splitext(os.path.basename(src))[0]
+    if title is None:
+        title = "AI 日报 · " + os.path.splitext(os.path.basename(src))[0]
     with open(dst, "w", encoding="utf-8") as f:
-        f.write(TEMPLATE.replace("__BODY__", body).replace("__DATE__", date))
+        f.write(TEMPLATE.replace("__BODY__", body).replace("__TITLE__", html.escape(title)))
     print("wrote", dst, len(body), "chars body")
 
 

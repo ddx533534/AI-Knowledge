@@ -1,0 +1,64 @@
+<svg viewBox="0 0 680 372" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>背景与边框重构需求里 14 条已知三端不一致问题的分布</title>
+  <desc>左右两组横向条形图，统计同一批 14 条问题。左图按影响的端来分：Android 单端 4 条、三端 4 条、iOS 单端 3 条、Android 与 iOS 3 条。右图按问题类型来分：边框 5 条、圆角 4 条、borderStyle 相关 2 条、overflow 1 条、阴影能力 1 条、单边 borderStyle 1 条。图底注明这份清单来自背景逻辑重构需求文档，原文结尾写着已知问题之外还有很多未知问题、如何主动识别并解决它们才更重要。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">三端渲染不一致的已知问题：14 条</text>
+
+  <text x="24" y="42" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">按影响的端来分</text>
+
+  <text x="24" y="66" font-size="9.5" fill="#1f2328" dominant-baseline="central">Android 单端</text>
+  <rect x="126" y="59" width="120" height="14" rx="2" fill="#E8843C"/>
+  <text x="252" y="66" font-size="9.5" fill="#5b6470" dominant-baseline="central">4</text>
+
+  <text x="24" y="90" font-size="9.5" fill="#1f2328" dominant-baseline="central">三端</text>
+  <rect x="126" y="83" width="120" height="14" rx="2" fill="#E8843C"/>
+  <text x="252" y="90" font-size="9.5" fill="#5b6470" dominant-baseline="central">4</text>
+
+  <text x="24" y="114" font-size="9.5" fill="#1f2328" dominant-baseline="central">iOS 单端</text>
+  <rect x="126" y="107" width="90" height="14" rx="2" fill="#E8843C"/>
+  <text x="222" y="114" font-size="9.5" fill="#5b6470" dominant-baseline="central">3</text>
+
+  <text x="24" y="138" font-size="9.5" fill="#1f2328" dominant-baseline="central">Android + iOS</text>
+  <rect x="126" y="131" width="90" height="14" rx="2" fill="#E8843C"/>
+  <text x="222" y="138" font-size="9.5" fill="#5b6470" dominant-baseline="central">3</text>
+
+  <text x="24" y="166" font-size="9" fill="#8a929c" dominant-baseline="central">单端合计 7 条、跨端 7 条：三端统一渲染真不是</text>
+  <text x="24" y="180" font-size="9" fill="#8a929c" dominant-baseline="central">iOS 一条或 Android 一条就能改完的</text>
+
+  <line x1="344" y1="30" x2="344" y2="190" stroke="#e3e6ea" stroke-width="0.5"/>
+
+  <text x="364" y="42" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">按问题类型来分</text>
+
+  <text x="364" y="66" font-size="9.5" fill="#1f2328" dominant-baseline="central">边框</text>
+  <rect x="466" y="59" width="150" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="622" y="66" font-size="9.5" fill="#5b6470" dominant-baseline="central">5</text>
+
+  <text x="364" y="90" font-size="9.5" fill="#1f2328" dominant-baseline="central">圆角</text>
+  <rect x="466" y="83" width="120" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="592" y="90" font-size="9.5" fill="#5b6470" dominant-baseline="central">4</text>
+
+  <text x="364" y="114" font-size="9.5" fill="#1f2328" dominant-baseline="central">borderStyle</text>
+  <rect x="466" y="107" width="60" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="532" y="114" font-size="9.5" fill="#5b6470" dominant-baseline="central">2</text>
+
+  <text x="364" y="138" font-size="9.5" fill="#1f2328" dominant-baseline="central">overflow</text>
+  <rect x="466" y="131" width="30" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="502" y="138" font-size="9.5" fill="#5b6470" dominant-baseline="central">1</text>
+
+  <text x="364" y="162" font-size="9.5" fill="#1f2328" dominant-baseline="central">阴影能力</text>
+  <rect x="466" y="155" width="30" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="502" y="162" font-size="9.5" fill="#5b6470" dominant-baseline="central">1</text>
+
+  <text x="364" y="186" font-size="9.5" fill="#1f2328" dominant-baseline="central">单边 borderStyle</text>
+  <rect x="466" y="179" width="30" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="502" y="186" font-size="9.5" fill="#5b6470" dominant-baseline="central">1</text>
+
+  <rect x="24" y="206" width="632" height="150" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="40" y="228" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">清单是已知的，清单之外的才是大头</text>
+  <text x="40" y="250" font-size="9.5" fill="#5b6470" dominant-baseline="central">这份清单来自《1.3x Recce native 背景逻辑重构需求》。它的结尾只写了一句话：</text>
+  <text x="40" y="272" font-size="10" font-weight="500" fill="#8A5A00" dominant-baseline="central">「这些问题是已知的，当然还有很多未知的问题，如何主动识别并解决这些问题才是更重要的。」</text>
+  <text x="40" y="294" font-size="9.5" fill="#5b6470" dominant-baseline="central">这 14 条里有 7 条挂着缺陷单链接，都是 QA 或开发在真实业务里撞出来才登记的，没有一条是</text>
+  <text x="40" y="308" font-size="9.5" fill="#5b6470" dominant-baseline="central">靠属性清单推出来的。</text>
+  <text x="40" y="328" font-size="9.5" fill="#5b6470" dominant-baseline="central">2026 的关键结果里写了要「借助 AI 建立自动化测试，扩充测试用例，提前发现潜在的不一致性</text>
+  <text x="40" y="342" font-size="9.5" fill="#5b6470" dominant-baseline="central">问题」，但用例从哪来、判定标准是什么都还没落。这张清单本身就是现成的第一批用例来源。</text>
+</svg>

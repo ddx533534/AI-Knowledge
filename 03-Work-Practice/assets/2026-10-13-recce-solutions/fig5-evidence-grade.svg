@@ -1,0 +1,133 @@
+<svg viewBox="0 0 680 456" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>18 份方案在四个证据维度上的强弱分布</title>
+  <desc>十八行四列的矩阵，四个维度依次是文档内有可复核数字、有对照物、风险章节落到动作、有可执行的验收标准。绿格是有，橙格是部分，红格是没有或原文为空。有可复核数字的只有五行：1.28 Yoga 引入的耗时对照、1.31 Android 升 yoga 的包体明细、1.32 SVG 的耗时与包体、1.33 字体加载的缓存耗时、1.35 Android 17 的 DAU 口径。风险章节落到动作的比例也不高，1.29 Lottie、1.30 字体路径、1.31 图片重构、1.32 Image 二期、1.33 文本渐变与安全区域的风险或 todo 章节是空的或只写待定。验收标准较完整的是背景重构、Touch 指针、补属性、差异扫描四份。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">18 份方案，四个证据维度</text>
+  <text x="24" y="32" font-size="9" fill="#8a929c" dominant-baseline="central">绿＝有，橙＝部分，红＝没有或原文为空</text>
+
+  <rect x="24" y="44" width="176" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="32" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">方案</text>
+  <rect x="200" y="44" width="114" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="257" y="56" font-size="9" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">有可复核数字</text>
+  <rect x="314" y="44" width="114" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="371" y="56" font-size="9" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">有对照物</text>
+  <rect x="428" y="44" width="114" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="485" y="56" font-size="9" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">风险落到动作</text>
+  <rect x="542" y="44" width="114" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="599" y="56" font-size="9" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">有验收标准</text>
+
+  <g font-size="7.5">
+    <!-- 行 1 -->
+    <text x="32" y="77.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.28 Yoga 引入</text>
+    <rect x="200" y="69.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="257" y="77.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 耗时对照</text>
+    <rect x="314" y="69.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="77.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 新老引擎对照</text>
+    <rect x="428" y="69.5" width="114" height="16" rx="4" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/><text x="485" y="77.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">部分 · 包体表</text>
+    <rect x="542" y="69.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="599" y="77.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <!-- 行 2 -->
+    <text x="32" y="96.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.29 Lottie</text>
+    <rect x="200" y="88.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="96.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="88.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="371" y="96.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="428" y="88.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="485" y="96.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无 · TODO 表为空</text>
+    <rect x="542" y="88.5" width="114" height="16" rx="4" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/><text x="599" y="96.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">部分 · 属性支持表</text>
+    <!-- 行 3 -->
+    <text x="32" y="115.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.30 字体路径</text>
+    <rect x="200" y="107.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="115.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="107.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="371" y="115.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="428" y="107.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="485" y="115.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无 · 写 todo 待定</text>
+    <rect x="542" y="107.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="599" y="115.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <!-- 行 4 -->
+    <text x="32" y="134.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.31 图片重构</text>
+    <rect x="200" y="126.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="134.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="126.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="134.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 原生逻辑对照</text>
+    <rect x="428" y="126.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="485" y="134.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="542" y="126.5" width="114" height="16" rx="4" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/><text x="599" y="134.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">部分 · 修复表</text>
+    <!-- 行 5 -->
+    <text x="32" y="153.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.31 Android 升 yoga</text>
+    <rect x="200" y="145.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="257" y="153.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 包体明细</text>
+    <rect x="314" y="145.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="153.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 新旧体积对照</text>
+    <rect x="428" y="145.5" width="114" height="16" rx="4" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/><text x="485" y="153.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">部分 · 风险列</text>
+    <rect x="542" y="145.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="599" y="153.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <!-- 行 6 -->
+    <text x="32" y="172.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.31 鸿蒙升 yoga</text>
+    <rect x="200" y="164.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="172.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="164.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="371" y="172.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="428" y="164.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="485" y="172.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无 · 只写重点关注</text>
+    <rect x="542" y="164.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="599" y="172.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 测试重点</text>
+    <!-- 行 7 -->
+    <text x="32" y="191.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.32 SVG</text>
+    <rect x="200" y="183.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="257" y="191.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 耗时与包体</text>
+    <rect x="314" y="183.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="191.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 五方案横向</text>
+    <rect x="428" y="183.5" width="114" height="16" rx="4" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/><text x="485" y="191.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">部分 · 包体明细</text>
+    <rect x="542" y="183.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="599" y="191.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 用例与路径</text>
+    <!-- 行 8 -->
+    <text x="32" y="210.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.32 Image 二期</text>
+    <rect x="200" y="202.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="210.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="202.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="210.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 三端现状表</text>
+    <rect x="428" y="202.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="485" y="210.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="542" y="202.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="599" y="210.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 修复逐条</text>
+    <!-- 行 9 -->
+    <text x="32" y="229.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.33 字体加载</text>
+    <rect x="200" y="221.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="257" y="229.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 缓存耗时</text>
+    <rect x="314" y="221.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="229.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 缓存前后</text>
+    <rect x="428" y="221.5" width="114" height="16" rx="4" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/><text x="485" y="229.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">部分 · 缓存清理时机</text>
+    <rect x="542" y="221.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="599" y="229.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <!-- 行 10 -->
+    <text x="32" y="248.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.33 文本渐变</text>
+    <rect x="200" y="240.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="248.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="240.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="248.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 两方案对照</text>
+    <rect x="428" y="240.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="485" y="248.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="542" y="240.5" width="114" height="16" rx="4" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/><text x="599" y="248.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">部分 · todo 一项</text>
+    <!-- 行 11 -->
+    <text x="32" y="267.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.33 安全区域</text>
+    <rect x="200" y="259.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="267.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="259.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="267.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 四候选触发时机</text>
+    <rect x="428" y="259.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="485" y="267.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="542" y="259.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="599" y="267.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <!-- 行 12 -->
+    <text x="32" y="286.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.34 背景重构</text>
+    <rect x="200" y="278.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="286.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="278.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="286.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · RN 架构＋对照机</text>
+    <rect x="428" y="278.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="485" y="286.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 影响范围表</text>
+    <rect x="542" y="278.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="599" y="286.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 属性与组件表</text>
+    <!-- 行 13 -->
+    <text x="32" y="305.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.34 Touch 指针</text>
+    <rect x="200" y="297.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="305.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="297.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="305.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · RN nativeEvent</text>
+    <rect x="428" y="297.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="485" y="305.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 边界条件表</text>
+    <rect x="542" y="297.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="599" y="305.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 8 条</text>
+    <!-- 行 14 -->
+    <text x="32" y="324.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.35 Android 17 适配</text>
+    <rect x="200" y="316.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="257" y="324.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · DAU 口径</text>
+    <rect x="314" y="316.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="324.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 被删 API 表</text>
+    <rect x="428" y="316.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="485" y="324.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 判定与备注</text>
+    <rect x="542" y="316.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="599" y="324.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <!-- 行 15 -->
+    <text x="32" y="343.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.35 补属性</text>
+    <rect x="200" y="335.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="343.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="335.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="343.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 实现原理对照</text>
+    <rect x="428" y="335.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="485" y="343.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 测试重点</text>
+    <rect x="542" y="335.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="599" y="343.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 测试重点</text>
+    <!-- 行 16 -->
+    <text x="32" y="362.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.35 触摸新架构</text>
+    <rect x="200" y="354.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="362.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="354.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="362.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · RN 机制对照</text>
+    <rect x="428" y="354.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="485" y="362.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 风险与 TODO</text>
+    <rect x="542" y="354.5" width="114" height="16" rx="4" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/><text x="599" y="362.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">部分 · TODO 列 P0</text>
+    <!-- 行 17 -->
+    <text x="32" y="381.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.35 实名调研</text>
+    <rect x="200" y="373.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="381.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="373.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="371" y="381.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="428" y="373.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="485" y="381.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 6 条风险</text>
+    <rect x="542" y="373.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="599" y="381.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无 · 缺可跑样例</text>
+    <!-- 行 18 -->
+    <text x="32" y="400.5" font-size="9" fill="#5b6470" dominant-baseline="central">1.35 差异扫描</text>
+    <rect x="200" y="392.5" width="114" height="16" rx="4" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/><text x="257" y="400.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">无</text>
+    <rect x="314" y="392.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="371" y="400.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 行号级对照</text>
+    <rect x="428" y="392.5" width="114" height="16" rx="4" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/><text x="485" y="400.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">部分 · 不在其范围</text>
+    <rect x="542" y="392.5" width="114" height="16" rx="4" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/><text x="599" y="400.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">有 · 影响与测试重点</text>
+  </g>
+
+  <line x1="24" y1="418" x2="656" y2="418" stroke="#e6e9ed" stroke-width="0.5"/>
+  <text x="24" y="430" font-size="8.5" fill="#8a929c" dominant-baseline="central">有可复核数字的只有五行；风险章节写 todo 或待定的集中在 1.29 到 1.33 早期几份。</text>
+  <text x="24" y="444" font-size="8.5" fill="#8a929c" dominant-baseline="central">背景重构、Touch 指针、补属性、差异扫描四份的验收项最完整，可当模板。</text>
+</svg>

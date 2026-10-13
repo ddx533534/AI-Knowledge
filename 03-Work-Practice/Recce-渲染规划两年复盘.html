@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recce 渲染规划两年复盘</title>
+<style>
+  :root {
+    --bg: #fbfbfc;
+    --panel: #ffffff;
+    --ink: #1c1f24;
+    --ink-soft: #4a5158;
+    --line: #e5e7eb;
+    --line-soft: #eef0f3;
+    --accent: #2f5d8a;
+    --accent-soft: #eef3f8;
+    --code-bg: #f4f5f7;
+    --quote-bg: #f7f8fa;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.8 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 40px 22px 96px; }
+  h1 { font-size: 30px; line-height: 1.35; margin: 0 0 18px; letter-spacing: .2px; }
+  h2 {
+    font-size: 22px; line-height: 1.45; margin: 52px 0 18px;
+    padding-top: 20px; border-top: 1px solid var(--line);
+  }
+  h3 { font-size: 18px; line-height: 1.5; margin: 34px 0 12px; color: #14171b; }
+  p { margin: 12px 0; }
+  strong { color: #10131a; font-weight: 600; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(47,93,138,.28); }
+  a:hover { border-bottom-color: var(--accent); }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+  blockquote {
+    margin: 0 0 8px; padding: 14px 18px; background: var(--quote-bg);
+    border-left: 3px solid #c9d4e0; border-radius: 4px;
+    color: var(--ink-soft); font-size: 15px;
+  }
+  code {
+    background: var(--code-bg); border: 1px solid var(--line-soft);
+    border-radius: 4px; padding: 1px 5px; font-size: 13.5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    word-break: break-word;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--line-soft);
+    border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 16px 0;
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: 13.5px; line-height: 1.7; }
+  ul, ol { margin: 12px 0; padding-left: 24px; }
+  li { margin: 8px 0; }
+  .tw { overflow-x: auto; margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; background: var(--panel); }
+  th, td { border: 1px solid var(--line); padding: 9px 11px; text-align: left; vertical-align: top; }
+  th { background: var(--accent-soft); color: #1b3a56; font-weight: 600; white-space: nowrap; }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  .fig { margin: 24px 0; }
+  .fig-box, .fig img { display: block; width: 100%; max-width: 680px; margin: 0 auto; }
+  .fig img { height: auto; }
+  .fig svg { display: block; width: 100%; height: auto; }
+  .fig figcaption {
+    margin-top: 9px; text-align: center; font-size: 13.5px; color: var(--ink-soft);
+  }
+  .fig-missing {
+    border: 1px dashed #d9a3a3; border-radius: 6px; padding: 12px; color: #a32d2d;
+  }
+  @media (max-width: 620px) {
+    body { font-size: 15.5px; }
+    .wrap { padding: 26px 16px 72px; }
+    h1 { font-size: 25px; }
+    h2 { font-size: 20px; }
+    th, td { padding: 7px 9px; font-size: 13.5px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Recce 渲染规划两年复盘</h1>
+<p>核实日期：2026-10-13。所有材料均在同日通过学城 CLI 直读原文核对，未引用二手转述。</p>
+<h2>写在开头：这两年真正长出来的是什么</h2>
+<p>读完两年规划与三十余份子文档，最值得带走的不是补齐了多少属性，而是这个团队<strong>两次给自己划边界，而第二次划的方式变了</strong>。</p>
+<p><strong>第一次，把模糊的问题变成可数的清单。</strong> 25 规划的起点是一句抱怨——「属性支持度不够，业务临时来要会排期紧张」——这句话里没有一个可执行项。它的落点却是两个都算过钱的方案：按业务方代码反推，缺 24 项、约 144PD；直接对齐 RN 全集，缺 178 项、600PD。选了前者，并把没选的那个留在表里。从「不够用」到「缺 24 项」，是整件事由模糊变清晰的临界点。</p>
+<p>这一步的手法值得单独记下来：<strong>当清单大到做不完时，不是更努力地做完它，而是换一个更锋利的参照物，把清单重新切一遍。</strong> 178 项是按「RN 文档列了什么」切的，24 项是按「业务方代码真的用了什么」切的；同一个问题，换参照物，规模差七倍。同一个动作在 26 规划里又出现一次——新增一列「RN 实现层」，把「RN 列了这个属性」与「这个属性需要原生实现」拆开，Image 专表里 14 个未支持项因此全部判「不需要支持」。</p>
+<p><strong>第二次，承认清单有尽头。</strong> 26 规划把口径从「补够用」改成「以 RN 为基线，补其短板，探其边界」，目标写成 157 项、各组件从 50%~62% 提到 100%。但真正的方法论进步不在这句口号里，而在于它同时承认：补完清单不等于没有问题了。背景重构那份需求结尾写得很直接：</p>
+<blockquote>这些问题是已知的，当然还有很多未知的问题，如何主动识别并解决这些问题才是更重要的。</blockquote>
+<p>这句话把目标从「清单清零」换成了「建一套能持续发现问题的机制」。前者有终点，后者没有。</p>
+<p><strong>这两件事不是二选一，是同一件事的先后。</strong> 不先把边界划清楚，就没有「已知清单」这个基数，也就无法定义什么是「未知」，顺序不能颠倒。反过来，只做第一步会掉进一个陷阱：把清单当成全部，清单之外的问题只能等 QA 来撞——背景重构那 14 条里，9 条是 QA 或开发在真实业务里撞出来才登记的，没有一条是靠属性清单推出来的。</p>
+<p>而「主动识别」的落点，材料里也已经给出了样板，只是被放进了暂停状态。差异扫描把 Recce 与 RN 的 Android 源码逐文件对读，一次捞出 14 条高置信 bug——其中 <code>snapToAlignment</code> 在属性表上是绿的（值收得到、三端都支持），但它在 <code>flingAndSnap</code> 里根本没参与计算，三种对齐方式全部失效。这类问题盯着 RN 的属性文档看一辈子也发现不了，因为<strong>它换的不是努力程度，是对照面：从「RN 的文档」换成了「RN 的源码」。</strong></p>
+<p>把两年合起来，可以带走一句话：</p>
+<blockquote>清单失控时，换参照物；清单做完时，换对照面。</blockquote>
+<p>前半句解决「不知道要做多少」，后半句解决「不知道还差多少」。</p>
+<h2>读了什么</h2>
+<p>两期规划正文：《Recce Native 渲染规划(2025)》（下称 <strong>25 规划</strong>，基线 Recce 1.25 / RN 0.72）、《Recce Native 渲染规划(2026)》（下称 <strong>26 规划</strong>，子文档已按 RN 0.86 / Recce 1.34）。</p>
+<ul><li><strong>25 侧 22 份子文档</strong>：《Yoga 引入方案调研》（<strong>选型调研</strong>）、《引入3.2.1版本 Yoga 需求和方案》（<strong>Yoga 方案</strong>）、《Recce 布局计算引擎(Yoga)升级 - B端上线》（<strong>上线记录</strong>）、《Recce - RN Changelog 同步机制》（<strong>Changelog 机制</strong>）、《其他框架的业务属性调研情况》（<strong>业务方调研</strong>）、《Recce VS RN 缺失属性对齐》（<strong>属性对齐总表</strong>）、三端逐组件的 0.72 对齐进展、1.29 / 1.30 / 1.32 三期技术方案。</li><li><strong>26 侧 6 份子文档</strong>：《1.3x Recce native 背景逻辑重构需求》（<strong>背景重构</strong>，下含《iOS 文本继承关系》）、《1.32 Image缺失能力完善（二期）》（<strong>Image 二期</strong>，下含《Recce SVG技术方案》即 <strong>SVG 方案</strong>、《自测用例》）、《组件渲染属性对齐RN0.86版本》（<strong>0.86 总表</strong>）。</li><li><strong>2026 年落地侧</strong>：《Recce 1.35版本需求》（<strong>1.35 需求</strong>）及其下 7 份组件 / 样式专表（View、ScrollView、Image、Shadow、Label、Layout、TextInput，统称<strong>组件专表</strong>）、《Recce 1.34 版本需求》、《Recce 与 React Native Android 组件实现差异扫描》（<strong>差异扫描</strong>）、《【iOS】1.35 渲染属性对齐》；另引《05-客户诉求池》（<strong>诉求池</strong>，密级，读不到原文）。</li></ul>
+<h2>词表</h2>
+<ul><li><strong>补齐 / 对齐</strong>：补齐＝新增 Recce 不支持的属性；对齐＝属性已支持但行为与 RN 不一致，把它改过来。成本结构与验收方式完全不同，两年里分在两张表里排期。</li><li><strong>口径一 / 口径二</strong>：25 规划里对「最终要支持多少属性」的两种定义。口径一按业务方代码反推（缺 24 项），口径二直接对齐 RN 全集（缺 178 项）。</li><li><strong>native prop / JS 层属性</strong>：RN 属性里一部分由原生侧实现，一部分只在 JS 层处理（吸顶、下拉刷新、键盘收起策略都是这一类）。只有前者才需要 Recce 原生侧补。</li><li><strong>放量（灰度）</strong>：按 uuid 比例分批放开新能力，观察一档稳定后再进下一档。</li><li><strong>存量异常归因</strong>：判断线上异常是新版本引入还是旧版本本来就有，避免把存量问题算到新改动头上。</li></ul>
+<h2>一、两年的问题定义变了</h2>
+<p>25 规划的起点是「属性支持度不够，业务临时来要会排期紧张，且影响 Recce 其他渲染工作进度」，落成三条目标：集中补齐新增属性、已有属性与 RN 对齐、制定 RN Changelog Fixed 同步机制。</p>
+<p>26 规划把起点换成一句自问自答：</p>
+<blockquote>Q：Recce 渲染要做成什么样子？对比现在缺少了哪些能力？怎么去更好地实现这些能力？<br>A：如果要完全对标 Web 那样的渲染能力，恐怕不是很现实……以 RN 为基线，补其短板，探其边界。即不追求 Web 全集，追求在 Native 约束下的最优解。后续进行自绘制开发时，再去打破这个约束。</blockquote>
+<p>从「补够用的属性」到「承认边界、只求 Native 约束下的最优解」，是这两年最大的一次口径变化。它有两个直接后果：补齐从「按业务代码反推、够用就行」改成「按需全部支持完」（157 项，各组件从 50%~62% 提到 100%）；「已有属性对齐」被升级成「三端渲染一致性」，验收对象从 RN 换成 iOS / Android / 鸿蒙三端。</p>
+<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 448" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>Recce 渲染规划的五个方向在 2025 与 2026 两年的状态对照</title>
+  <desc>五行三列的对照表。第一列是方向，共五个：基础属性补齐、已有属性对齐、布局引擎、高级表现力、Changelog 同步。第二列是 2025 规划里的状态，第三列是 2026 规划里的状态。基础属性补齐从按业务代码反推的口径一，扩到按需全部支持的 157 项，并新增 RN 实现层甄别；已有属性对齐从逐组件对 RN 0.72 做行为 diff，升级为三端一致性验收、对齐基线提到 RN 0.86；布局引擎在 2025 引入 Yoga 3.2.1 并用 horn 切双引擎放量，2026 只把 Taffy 留作备选、未给切换触发条件；高级表现力 2025 未立项，2026 立为独立方向并落地了 P0 三项；Changelog 同步在 2025 立了机制，2026 规划里没有这条。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">五个方向，两年各走到哪儿</text>
+
+  <rect x="24" y="30" width="632" height="26" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="43" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">方向</text>
+  <text x="172" y="43" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">2025 规划</text>
+  <text x="424" y="43" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">2026 规划</text>
+
+  <!-- 行 1 -->
+  <rect x="24" y="62" width="632" height="72" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="82" font-size="11" font-weight="500" fill="#1f2328" dominant-baseline="central">基础属性补齐</text>
+  <text x="36" y="100" font-size="9" fill="#8a929c" dominant-baseline="central">2025 的重头戏</text>
+  <text x="172" y="76" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">口径一：按业务方代码反推</text>
+  <text x="172" y="92" font-size="9.5" fill="#5b6470" dominant-baseline="central">调研 MRN 的酒店 / 到综 / 到餐与 MachPro</text>
+  <text x="172" y="106" font-size="9.5" fill="#5b6470" dominant-baseline="central">的 keeta / 外卖，得缺失 24 项、约 144PD</text>
+  <text x="172" y="120" font-size="9.5" fill="#5b6470" dominant-baseline="central">近期要用的布局与阴影定为 P0，全量对齐要 600PD</text>
+  <text x="424" y="76" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">按需全部支持，目标 157 项</text>
+  <text x="424" y="92" font-size="9.5" fill="#5b6470" dominant-baseline="central">各组件从 50%~62% 提到 100%，仍按优先级</text>
+  <text x="424" y="106" font-size="9.5" fill="#5b6470" dominant-baseline="central">逐个组件推进</text>
+  <text x="424" y="120" font-size="9.5" fill="#5b6470" dominant-baseline="central">新增「RN 实现层」一列，JS 层属性判为无需支持</text>
+
+  <!-- 行 2 -->
+  <rect x="24" y="142" width="632" height="72" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="162" font-size="11" font-weight="500" fill="#1f2328" dominant-baseline="central">已有属性对齐</text>
+  <text x="36" y="180" font-size="9" fill="#8a929c" dominant-baseline="central">行为对齐，非新增</text>
+  <text x="172" y="156" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">逐组件对 RN 0.72 做行为 diff</text>
+  <text x="172" y="172" font-size="9.5" fill="#5b6470" dominant-baseline="central">View / Image / Input / Label /</text>
+  <text x="172" y="186" font-size="9.5" fill="#5b6470" dominant-baseline="central">ScrollView 逐个属性判采纳与不采纳</text>
+  <text x="172" y="200" font-size="9.5" fill="#5b6470" dominant-baseline="central">并写下影响面；多数是机型兼容与性能优化</text>
+  <text x="424" y="156" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">升级为三端一致性验收</text>
+  <text x="424" y="172" font-size="9.5" fill="#5b6470" dominant-baseline="central">不再只对 RN，改以 iOS / Android / 鸿蒙表现</text>
+  <text x="424" y="186" font-size="9.5" fill="#5b6470" dominant-baseline="central">一致为准；把「无平台差异暴露给业务层」</text>
+  <text x="424" y="200" font-size="9.5" fill="#5b6470" dominant-baseline="central">写进验收标准，对齐基线提到 RN 0.86</text>
+
+  <!-- 行 3 -->
+  <rect x="24" y="222" width="632" height="72" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="242" font-size="11" font-weight="500" fill="#1f2328" dominant-baseline="central">布局引擎</text>
+  <text x="36" y="260" font-size="9" fill="#8a929c" dominant-baseline="central">两年里最重的一次改</text>
+  <text x="172" y="236" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">引入 Yoga 3.2.1，切双引擎</text>
+  <text x="172" y="252" font-size="9.5" fill="#5b6470" dominant-baseline="central">比过 Yoga / Taffy / Blink / Stylo</text>
+  <text x="172" y="266" font-size="9.5" fill="#5b6470" dominant-baseline="central">否掉新增组件与换 Taffy，选融合进已有组件</text>
+  <text x="172" y="280" font-size="9.5" fill="#5b6470" dominant-baseline="central">horn 按包名切新旧引擎，外卖商家端阶梯放量</text>
+  <text x="424" y="236" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">Taffy 只留作备选，本期未动</text>
+  <text x="424" y="252" font-size="9.5" fill="#5b6470" dominant-baseline="central">完整列出 Yoga 与 Taffy 的属性差异，Taffy 多</text>
+  <text x="424" y="266" font-size="9.5" fill="#5b6470" dominant-baseline="central">block 与 grid、值更丰富</text>
+  <text x="424" y="280" font-size="9.5" fill="#5b6470" dominant-baseline="central">但没写什么条件下值得换</text>
+
+  <!-- 行 4 -->
+  <rect x="24" y="302" width="632" height="72" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="322" font-size="11" font-weight="500" fill="#1f2328" dominant-baseline="central">高级表现力</text>
+  <text x="36" y="340" font-size="9" fill="#8a929c" dominant-baseline="central">2026 才立项</text>
+  <text x="172" y="316" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">未立项，只做到通用阴影</text>
+  <text x="172" y="332" font-size="9.5" fill="#5b6470" dominant-baseline="central">通用阴影从 0%（0/4）补到 100%（4/4）</text>
+  <text x="172" y="346" font-size="9.5" fill="#5b6470" dominant-baseline="central">BoxShadow 挂进 1.32 排期，标「待完成」</text>
+  <text x="172" y="360" font-size="9.5" fill="#5b6470" dominant-baseline="central">与全局的三条目标并列不上</text>
+  <text x="424" y="316" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">立为独立方向，P0 三项落地</text>
+  <text x="424" y="332" font-size="9.5" fill="#5b6470" dominant-baseline="central">SVG 图片、BoxShadow、蒙层-文本渐变为 P0，</text>
+  <text x="424" y="346" font-size="9.5" fill="#5b6470" dominant-baseline="central">基础点击能力为 P1，都已支持</text>
+  <text x="424" y="360" font-size="9.5" fill="#5b6470" dominant-baseline="central">复杂手势、高级动画、高性能列表仍空缺</text>
+
+  <!-- 行 5 -->
+  <rect x="24" y="382" width="632" height="56" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="402" font-size="11" font-weight="500" fill="#1f2328" dominant-baseline="central">Changelog 同步</text>
+  <text x="36" y="420" font-size="9" fill="#8a929c" dominant-baseline="central">跟上游的机制</text>
+  <text x="172" y="396" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">立了机制：只审 Changelog 的 Fixed</text>
+  <text x="172" y="412" font-size="9.5" fill="#5b6470" dominant-baseline="central">重点看 crash 与渲染两类；每迭代审 3 个大版本，</text>
+  <text x="172" y="426" font-size="9.5" fill="#5b6470" dominant-baseline="central">预计约 6 个月追上 RN 最新版</text>
+  <text x="424" y="396" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">2026 规划里没有这一条</text>
+  <text x="424" y="412" font-size="9.5" fill="#5b6470" dominant-baseline="central">对齐基线已从 0.72 换到 0.86，实际仍在追身位</text>
+  <text x="424" y="426" font-size="9.5" fill="#5b6470" dominant-baseline="central">机制本身没有沉淀成例行节奏</text>
+</svg></div><figcaption>图 1：五个方向在 2025 与 2026 两年的状态对照</figcaption></figure>
+<h2>二、逐个方向走了一遍</h2>
+<h3>2.1 基础属性补齐：口径从「业务反推」走到「按需全量」</h3>
+<p>这是 25 规划的主线，也是唯一一个两年都在做的方向。</p>
+<div class="tw"><table>
+<thead><tr>
+<th>组件</th>
+<th>2025 现状（RN 0.72 全集）</th>
+<th>2025 目标（口径一）</th>
+<th>2026 现状（仅 native prop）</th>
+<th>2026 目标</th>
+<th>26 规划标的状态</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>通用布局</td>
+<td>93%（52/56）</td>
+<td>100%（56/56）</td>
+<td>100%（56/56）</td>
+<td>—</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>通用阴影</td>
+<td>0%（0/4）</td>
+<td>100%（4/4）</td>
+<td>100%（4/4）</td>
+<td>—</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>ScrollView</td>
+<td>44%（27/61）</td>
+<td>52%（32/61）</td>
+<td>52%（38/59）</td>
+<td>80%（49/59）</td>
+<td>🚧</td>
+</tr>
+<tr>
+<td>Image</td>
+<td>48%（24/50）</td>
+<td>58%（29/50）</td>
+<td>53%（16/30）</td>
+<td>53%（16/30）</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Label</td>
+<td>46%（31/69）</td>
+<td>50%（34/69）</td>
+<td>40%（17/42）</td>
+<td>88%（37/42）</td>
+<td>🚧</td>
+</tr>
+<tr>
+<td>View</td>
+<td>48%（46/94）</td>
+<td>51%（48/94）</td>
+<td>未填</td>
+<td>未填</td>
+<td>🚧</td>
+</tr>
+<tr>
+<td>Input</td>
+<td>53%（41/67）</td>
+<td>62%（42/67）</td>
+<td>未填</td>
+<td>未填</td>
+<td>🚧</td>
+</tr>
+</tbody>
+</table></div>
+<p>25 规划给两个口径都算了成本：口径一缺 24 项、约 144PD；口径二缺 178 项、600PD、平均 200PD/端。选了口径一，理由（贴近具体业务、工作量小）与代价（不能百分百保证未来需要某些奇特属性）都写在正文里。优先级按业务紧急程度切，近期要用的通用布局与阴影定 P0、其余 P1，三端 owner 明确到人。</p>
+<p>分母这件事两年里都没定死，所以前后不能横着比。</p>
+<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 424" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>同一批组件在 2025 与 2026 两份规划里的属性支持数对照</title>
+  <desc>七行六列的对照表。列依次是组件、2025 的已支持数与总数、2025 的比例、2026 的已支持数与总数、2026 的比例、已支持数的变化。通用布局从 52/56 到 56/56，通用阴影从 0/4 到 4/4，ScrollView 从 27/61 到 38/59，Image 从 24/50 到 16/30，Label 从 31/69 到 17/42，View 与 Input 在 2026 那份表里留空。图下方的说明指出：Image 的比例从 48% 升到 53%，但已支持数从 24 掉到 16，Label 从 31 掉到 17，原因是 2026 按 RN 实现层把 JS 层属性从分母里剔掉了，而 2025 没有剔，因此两年的比例不能横向比较。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">分母换了，比值就没法横着比</text>
+
+  <rect x="24" y="30" width="608" height="30" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="32" y="45" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">组件</text>
+  <text x="136" y="38" font-size="9.5" font-weight="500" fill="#5b6470" dominant-baseline="central">2025 已支持/总</text>
+  <text x="136" y="52" font-size="8.5" fill="#8a929c" dominant-baseline="central">RN 0.72 文档全集</text>
+  <text x="240" y="45" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">比例</text>
+  <text x="308" y="38" font-size="9.5" font-weight="500" fill="#5b6470" dominant-baseline="central">2026 已支持/总</text>
+  <text x="308" y="52" font-size="8.5" fill="#8a929c" dominant-baseline="central">仅 native prop</text>
+  <text x="412" y="45" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">比例</text>
+  <text x="480" y="45" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">已支持数变化</text>
+
+  <line x1="128" y1="60" x2="128" y2="272" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="232" y1="60" x2="232" y2="272" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="300" y1="60" x2="300" y2="272" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="404" y1="60" x2="404" y2="272" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="472" y1="60" x2="472" y2="272" stroke="#e3e6ea" stroke-width="0.5"/>
+
+  <text x="32" y="77" font-size="10" fill="#1f2328" dominant-baseline="central">通用布局</text>
+  <text x="180" y="77" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">52 / 56</text>
+  <text x="266" y="77" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">93%</text>
+  <text x="352" y="77" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">56 / 56</text>
+  <text x="438" y="77" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">100%</text>
+  <rect x="484" y="68" width="46" height="18" rx="4" fill="#EAF7EE"/>
+  <text x="507" y="77" font-size="10" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">＋4</text>
+
+  <text x="32" y="107" font-size="10" fill="#1f2328" dominant-baseline="central">通用阴影</text>
+  <text x="180" y="107" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">0 / 4</text>
+  <text x="266" y="107" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">0%</text>
+  <text x="352" y="107" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">4 / 4</text>
+  <text x="438" y="107" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">100%</text>
+  <rect x="484" y="98" width="46" height="18" rx="4" fill="#EAF7EE"/>
+  <text x="507" y="107" font-size="10" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">＋4</text>
+
+  <text x="32" y="137" font-size="10" fill="#1f2328" dominant-baseline="central">ScrollView</text>
+  <text x="180" y="137" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">27 / 61</text>
+  <text x="266" y="137" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">44%</text>
+  <text x="352" y="137" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">38 / 59</text>
+  <text x="438" y="137" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">52%</text>
+  <rect x="484" y="128" width="46" height="18" rx="4" fill="#EAF7EE"/>
+  <text x="507" y="137" font-size="10" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">＋11</text>
+
+  <text x="32" y="167" font-size="10" fill="#1f2328" dominant-baseline="central">Image</text>
+  <text x="180" y="167" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">24 / 50</text>
+  <text x="266" y="167" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">48%</text>
+  <text x="352" y="167" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">16 / 30</text>
+  <text x="438" y="167" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">53%</text>
+  <rect x="484" y="158" width="46" height="18" rx="4" fill="#FCEBEB"/>
+  <text x="507" y="167" font-size="10" fill="#A32D2D" text-anchor="middle" dominant-baseline="central">−8</text>
+
+  <text x="32" y="197" font-size="10" fill="#1f2328" dominant-baseline="central">Label</text>
+  <text x="180" y="197" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">31 / 69</text>
+  <text x="266" y="197" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">46%</text>
+  <text x="352" y="197" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">17 / 42</text>
+  <text x="438" y="197" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">40%</text>
+  <rect x="484" y="188" width="46" height="18" rx="4" fill="#FCEBEB"/>
+  <text x="507" y="197" font-size="10" fill="#A32D2D" text-anchor="middle" dominant-baseline="central">−14</text>
+
+  <text x="32" y="227" font-size="10" fill="#8a929c" dominant-baseline="central">View</text>
+  <text x="180" y="227" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">46 / 94</text>
+  <text x="266" y="227" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">48%</text>
+  <text x="352" y="227" font-size="10" fill="#8a929c" text-anchor="middle" dominant-baseline="central">未填</text>
+  <text x="438" y="227" font-size="10" fill="#8a929c" text-anchor="middle" dominant-baseline="central">—</text>
+  <text x="484" y="227" font-size="9.5" fill="#8a929c" dominant-baseline="central">原文留空</text>
+
+  <text x="32" y="257" font-size="10" fill="#8a929c" dominant-baseline="central">Input</text>
+  <text x="180" y="257" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">41 / 67</text>
+  <text x="266" y="257" font-size="10" fill="#5b6470" text-anchor="middle" dominant-baseline="central">53%</text>
+  <text x="352" y="257" font-size="10" fill="#8a929c" text-anchor="middle" dominant-baseline="central">未填</text>
+  <text x="438" y="257" font-size="10" fill="#8a929c" text-anchor="middle" dominant-baseline="central">—</text>
+  <text x="484" y="257" font-size="9.5" fill="#8a929c" dominant-baseline="central">原文留空</text>
+
+  <rect x="24" y="288" width="632" height="120" rx="8" fill="#FFF8E8" stroke="#E0B84C" stroke-width="0.5"/>
+  <text x="40" y="310" font-size="10.5" font-weight="500" fill="#8A5A00" dominant-baseline="central">这张表真正要说的</text>
+  <text x="40" y="330" font-size="10" fill="#5b6470" dominant-baseline="central">Image 的比例从 48% 升到 53%，但已支持数从 24 掉到 16；Label 从 46% 掉到 40%，已支持数从 31 掉到 17。</text>
+  <text x="40" y="348" font-size="10" fill="#5b6470" dominant-baseline="central">原因是 2026 那份表多了一列「RN 实现层」，把只在 JS 层实现的属性从分母里剔掉了，2025 那份没有剔。</text>
+  <text x="40" y="366" font-size="10" fill="#5b6470" dominant-baseline="central">分母里还叠了第二个变量：RN 基线从 0.72 换到 0.86，组件本身的属性集合也变了。</text>
+  <text x="40" y="384" font-size="10" fill="#5b6470" dominant-baseline="central">所以「2026 的完成率比 2025 高」这句话在这张表上不成立；要先把分母连同 RN 版本一起定死，</text>
+  <text x="40" y="400" font-size="10" fill="#5b6470" dominant-baseline="central">并单独记一条「因升级新增/删除的属性数」，分子分母才都有解释。</text>
+</svg></div><figcaption>图 2：同一批组件在 2025 与 2026 两份规划里的属性支持数对照</figcaption></figure>
+<p>比分母更值钱的，是 26 规划新增的那一列「RN 实现层」——它把「RN 文档里列了这个属性」和「这个属性需要 native 实现」拆开了，于是大量条目判「否」，而不是继续往 native 侧堆工作量：</p>
+<ul><li>Image 专表 30 项里未支持的 14 项全部判「不需要支持」：<code>defaultSource</code>、<code>loadingIndicatorSource</code>、<code>onProgress</code> 是「属性鸡肋」，<code>src</code> 是「source 已有」，<code>crossOrigin</code>、<code>referrerPolicy</code> 可以走 headers，<code>resizeMethod</code> 一族因为「recce 用 picasso、rn 用 fresco，两套图片机制」。</li><li>ScrollView 专表把 11 个非 native prop 逐条写了 JS 层怎么实现：<code>stickyHeaderIndices</code> 是遍历 children 把子节点包成 <code>ScrollViewStickyHeader</code>；<code>refreshControl</code> 在 iOS 是当子节点放进去、在 Android 是包裹 ScrollView；<code>onContentSizeChange</code> 是转 <code>onLayout</code> 出来的。</li></ul>
+<p>这一列的价值超过补齐本身：它把「对齐 RN」从一个无底洞变成了一个有边界的清单，也是 2.2 里那些「不采纳」结论的方法基础。</p>
+<p>2026 年这条线换了组织形式——不再是规划里的一张总表，而是每个组件 / 样式一份专表，标题带状态前缀，统一挂在 1.35 需求下，共 7 份（View 那份含 Props 与 Style Props 两张表）。实际状态是 Image、Shadow 收口，<strong>View 与 ScrollView 今年也已经对齐</strong>，但这两份标题至今仍写【对齐中】。Label、Layout、TextInput 标【暂停】，其中 Label 那份只有标题、没有结论。</p>
+<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 534" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>1.35 那一批组件属性对齐专表的状态与卡点</title>
+  <desc>八行四列的状态板。列依次是专表名称、状态、属性清点、结论与卡点。ImageView 与 Shadow 标已对齐；View Props 与 View Style Props 与 ScrollView(Horizontal) 实际已对齐但标题仍写着对齐中；Label、Layout、TextInput 三张标暂停。行内给出各组件的属性总数、已支持数与未支持项的处置结论。图下方说明三类卡点解法不同：鸿蒙能力缺口、上游不是 native prop、依赖触摸事件重构。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">组件属性对齐专表：八张表、三种状态</text>
+
+  <rect x="24" y="30" width="632" height="26" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="32" y="43" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">专表</text>
+  <text x="170" y="43" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">状态</text>
+  <text x="258" y="43" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">属性清点</text>
+  <text x="400" y="43" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">结论与卡点</text>
+
+  <rect x="24" y="62" width="632" height="320" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <line x1="30" y1="102" x2="650" y2="102" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="142" x2="650" y2="142" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="182" x2="650" y2="182" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="222" x2="650" y2="222" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="262" x2="650" y2="262" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="302" x2="650" y2="302" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="342" x2="650" y2="342" stroke="#e3e6ea" stroke-width="0.5"/>
+
+  <!-- 行 1 Image -->
+  <text x="32" y="80" font-size="10" font-weight="500" fill="#1f2328" dominant-baseline="central">ImageView</text>
+  <text x="32" y="94" font-size="8.5" fill="#8a929c" dominant-baseline="central">Image 属性对齐</text>
+  <text x="170" y="80" font-size="9.5" font-weight="500" fill="#1a7f37" dominant-baseline="central">已对齐</text>
+  <text x="258" y="80" font-size="9" fill="#1f2328" dominant-baseline="central">30 项</text>
+  <text x="258" y="94" font-size="8.5" fill="#8a929c" dominant-baseline="central">未支持 14 项</text>
+  <text x="400" y="80" font-size="9" fill="#5b6470" dominant-baseline="central">14 项全部判「不需要支持」，理由逐条写明：</text>
+  <text x="400" y="94" font-size="9" fill="#5b6470" dominant-baseline="central">鸡肋 / source 已有 / 可走 headers / 图片库不同</text>
+
+  <!-- 行 2 Shadow -->
+  <text x="32" y="120" font-size="10" font-weight="500" fill="#1f2328" dominant-baseline="central">Shadow</text>
+  <text x="32" y="134" font-size="8.5" fill="#8a929c" dominant-baseline="central">阴影属性对齐</text>
+  <text x="170" y="120" font-size="9.5" font-weight="500" fill="#1a7f37" dominant-baseline="central">已对齐</text>
+  <text x="258" y="120" font-size="9" fill="#1f2328" dominant-baseline="central">6 项</text>
+  <text x="258" y="134" font-size="8.5" fill="#8a929c" dominant-baseline="central">已支持 5 项</text>
+  <text x="400" y="120" font-size="9" fill="#5b6470" dominant-baseline="central">唯一未支持的 dropShadow 判不需要，理由是有</text>
+  <text x="400" y="134" font-size="9" fill="#5b6470" dominant-baseline="central">View 的 filter 属性可以覆盖</text>
+
+  <!-- 行 3 View Props -->
+  <text x="32" y="160" font-size="10" font-weight="500" fill="#1f2328" dominant-baseline="central">View Props</text>
+  <text x="32" y="174" font-size="8.5" fill="#8a929c" dominant-baseline="central">View 基础属性</text>
+  <text x="170" y="160" font-size="9.5" font-weight="500" fill="#1a7f37" dominant-baseline="central">已对齐</text>
+  <text x="170" y="174" font-size="8.5" fill="#8a929c" dominant-baseline="central">标题仍写对齐中</text>
+  <text x="258" y="160" font-size="9" fill="#1f2328" dominant-baseline="central">61 项</text>
+  <text x="258" y="174" font-size="8.5" fill="#8a929c" dominant-baseline="central">已支持 8 项</text>
+  <text x="400" y="160" font-size="9" fill="#5b6470" dominant-baseline="central">19 项判没必要（有等价属性、框架已有能力）；</text>
+  <text x="400" y="174" font-size="9" fill="#5b6470" dominant-baseline="central">11 项卡在「鸿蒙不支持无障碍」；需支持 23</text>
+
+  <!-- 行 4 View Style Props -->
+  <text x="32" y="200" font-size="10" font-weight="500" fill="#1f2328" dominant-baseline="central">View Style Props</text>
+  <text x="32" y="214" font-size="8.5" fill="#8a929c" dominant-baseline="central">View 样式属性</text>
+  <text x="170" y="200" font-size="9.5" font-weight="500" fill="#1a7f37" dominant-baseline="central">已对齐</text>
+  <text x="170" y="214" font-size="8.5" fill="#8a929c" dominant-baseline="central">标题仍写对齐中</text>
+  <text x="258" y="200" font-size="9" fill="#1f2328" dominant-baseline="central">43 项</text>
+  <text x="258" y="214" font-size="8.5" fill="#8a929c" dominant-baseline="central">已支持 27 项</text>
+  <text x="400" y="200" font-size="9" fill="#5b6470" dominant-baseline="central">1 项没必要 + 15 项需支持，本期全部排入；</text>
+  <text x="400" y="214" font-size="9" fill="#5b6470" dominant-baseline="central">缺的多是 logical 简写与 outline / filter 这一族</text>
+
+  <!-- 行 5 ScrollView -->
+  <text x="32" y="240" font-size="10" font-weight="500" fill="#1f2328" dominant-baseline="central">ScrollView(Horizontal)</text>
+  <text x="170" y="240" font-size="9.5" font-weight="500" fill="#1a7f37" dominant-baseline="central">已对齐</text>
+  <text x="170" y="254" font-size="8.5" fill="#8a929c" dominant-baseline="central">标题仍写对齐中</text>
+  <text x="258" y="240" font-size="9" fill="#1f2328" dominant-baseline="central">59 项</text>
+  <text x="258" y="254" font-size="8.5" fill="#8a929c" dominant-baseline="central">已支持 38 项</text>
+  <text x="400" y="240" font-size="9" fill="#5b6470" dominant-baseline="central">10 项 native 可直接做、10 项需 recce-ui 配合，</text>
+  <text x="400" y="254" font-size="9" fill="#5b6470" dominant-baseline="central">1 项判没必要；本期 native 侧排 10 项</text>
+
+  <!-- 行 6 Label -->
+  <text x="32" y="280" font-size="10" font-weight="500" fill="#8a929c" dominant-baseline="central">Label</text>
+  <text x="32" y="294" font-size="8.5" fill="#8a929c" dominant-baseline="central">Label 属性对齐</text>
+  <text x="170" y="280" font-size="9.5" font-weight="500" fill="#8a929c" dominant-baseline="central">暂停</text>
+  <text x="258" y="280" font-size="9" fill="#8a929c" dominant-baseline="central">—</text>
+  <text x="400" y="280" font-size="9" fill="#8a929c" dominant-baseline="central">标题挂着暂停，文档里没有给结论</text>
+
+  <!-- 行 7 Layout -->
+  <text x="32" y="320" font-size="10" font-weight="500" fill="#8a929c" dominant-baseline="central">Layout</text>
+  <text x="32" y="334" font-size="8.5" fill="#8a929c" dominant-baseline="central">布局属性对齐</text>
+  <text x="170" y="320" font-size="9.5" font-weight="500" fill="#8a929c" dominant-baseline="central">暂停</text>
+  <text x="258" y="320" font-size="9" fill="#8a929c" dominant-baseline="central">21 项未支持</text>
+  <text x="258" y="334" font-size="8.5" fill="#8a929c" dominant-baseline="central">原文未给总数</text>
+  <text x="400" y="320" font-size="9" fill="#5b6470" dominant-baseline="central">20 项可支持、1 项不行（boxSizing 依赖底层布局）；</text>
+  <text x="400" y="334" font-size="9" fill="#5b6470" dominant-baseline="central">另有 3 个已支持属性缺了 RN 0.86 的取值</text>
+
+  <!-- 行 8 TextInput -->
+  <text x="32" y="360" font-size="10" font-weight="500" fill="#8a929c" dominant-baseline="central">TextInput</text>
+  <text x="32" y="374" font-size="8.5" fill="#8a929c" dominant-baseline="central">输入框属性对齐</text>
+  <text x="170" y="360" font-size="9.5" font-weight="500" fill="#8a929c" dominant-baseline="central">暂停</text>
+  <text x="258" y="360" font-size="9" fill="#1f2328" dominant-baseline="central">68 项</text>
+  <text x="258" y="374" font-size="8.5" fill="#8a929c" dominant-baseline="central">已支持 32 项</text>
+  <text x="400" y="360" font-size="9" fill="#5b6470" dominant-baseline="central">3 项没必要 + 33 项需支持，本期排 31 项；缺失</text>
+  <text x="400" y="374" font-size="9" fill="#5b6470" dominant-baseline="central">集中在 iOS only 与 Android only 两端专属属性</text>
+
+  <rect x="24" y="396" width="632" height="122" rx="8" fill="#FFF8E8" stroke="#E0B84C" stroke-width="0.5"/>
+  <text x="40" y="416" font-size="10.5" font-weight="500" fill="#8A5A00" dominant-baseline="central">三类卡点不是同一个问题，解法也不一样</text>
+
+  <rect x="40" y="430" width="7" height="7" rx="1.5" fill="#A32D2D"/>
+  <text x="56" y="434" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">鸿蒙能力缺口</tspan>：11 项无障碍属性在鸿蒙没有对应能力，只能持续记「不支持」并写清原因</text>
+
+  <rect x="40" y="452" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="456" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">上游不是 native prop</tspan>：这类判否靠「RN 实现层」一列，是两年里最省工作量的一次口径调整</text>
+
+  <rect x="40" y="474" width="7" height="7" rx="1.5" fill="#E8843C"/>
+  <text x="56" y="478" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">依赖触摸事件重构</tspan>：hitSlop / pointerEvents / focusable / tabIndex 与 10 个 onResponder*</text>
+  <text x="56" y="492" font-size="9.5" fill="#5b6470" dominant-baseline="central">全部押在触摸事件重构上，这就是 1.35 里触摸事件重构是 P0、属性对齐是 P1 的原因</text>
+</svg></div><figcaption>图 3：1.35 那一批组件属性专表的状态、属性数与卡点</figcaption></figure>
+<p>专表比总表更有用的地方，是它把「不支持」拆成了性质不同的几类，而这几类的解法完全不一样：</p>
+<ul><li><strong>上游压根不是 native prop</strong>——判否的主要依据，也是省下工作量最多的一类。<code>aria-*</code> 全系 11 项判「没必要，有等价属性」，<code>collapsable</code>、<code>testID</code>、<code>id</code>、<code>nativeID</code> 判「框架已有能力支持」。</li><li><strong>目标平台没这个能力</strong>——View 的 11 项无障碍属性全部判否，理由都是同一条「鸿蒙不支持无障碍」。这类不是「不做」，是做了也没有落点。</li><li><strong>依赖别的工作</strong>——<code>hitSlop</code>、<code>pointerEvents</code>、<code>focusable</code>、<code>tabIndex</code> 与 10 个 <code>onResponder*</code> 都判「需要，但依赖触摸事件重构，本期不支持」。这解释了 1.35 里为什么触摸事件重构排 P0、属性对齐只排 P1——属性对齐有一截排在触摸事件重构后面。</li><li><strong>剩下才是真工作量</strong>——View 侧 23＋15 项、ScrollView 侧 10 项 native 加 10 项待 recce-ui 配合、TextInput 侧 33 项、Layout 侧 20 项。</li></ul>
+<p>这批专表也顺带补上了 26 规划总表里 View、Input 两行留空的问题。</p>
+<h3>2.2 已有属性对齐：逐属性 diff，对的是 RN 的语义而非实现细节</h3>
+<p>25 规划把这件事排进了月表：2 月 View 与 Image、3 月 Input 与 Label、4 月 ScrollView 与 HorizontalScrollView，基线 RN 0.72.0。做法是逐属性 diff，每条给「采纳 / 不采纳」加影响面，不采纳的也给理由。判例最能说明这套方法：</p>
+<div class="tw"><table>
+<thead><tr>
+<th>属性</th>
+<th>差异</th>
+<th>结论</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>caretHidden</code> / <code>keyboardType</code></td>
+<td>新版修了小米 Android 10 上的 crash</td>
+<td>机型兼容性修复，采纳</td>
+</tr>
+<tr>
+<td><code>secureTextEntry</code></td>
+<td>value 为 true 时只清 <code>TYPE_TEXT_VARIATION_VISIBLE_PASSWORD</code> 一个标志位，而不是清掉全部</td>
+<td>功能优化，采纳</td>
+</tr>
+<tr>
+<td><code>fontWeight</code></td>
+<td>新版用 <code>TypefaceStyle</code> 支持 100–900 字重，Recce 只有 bold 与 normal</td>
+<td>重要能力，需要支持</td>
+</tr>
+<tr>
+<td><code>textDecorationLine</code></td>
+<td>新版支持 <code>underline line-through</code> 组合值</td>
+<td>重要能力，需要支持</td>
+</tr>
+<tr>
+<td><code>cursorColor</code></td>
+<td>采纳后会导致 Android 8.1 以下设备光标异常</td>
+<td>不采纳</td>
+</tr>
+<tr>
+<td><code>ellipsizeMode</code> / <code>textTransform</code></td>
+<td>新版加了兜底默认值；Recce 写不存在的值上层直接编译报错</td>
+<td>不采纳，保持现状</td>
+</tr>
+<tr>
+<td><code>adjustsFontSizeToFit</code></td>
+<td>改动量大，且 Recce 本来就没真正实现</td>
+<td>暂时不采纳</td>
+</tr>
+</tbody>
+</table></div>
+<p>注意后面几条不采纳的理由：都不是「做不了」，而是「采纳后比现在差」或「Recce 的编译期约束已经把它挡在前面了」。<strong>对齐的目标是 RN 的语义，不是 RN 的实现细节</strong>——这一点两年材料里没被显式写出来，但所有判例都按这个口径判，值得补成一条原则。</p>
+<p><strong>第三种做法：直接对源码。</strong> 属性清单那条路是在文档层面做对照，2026 年多了一条更硬的路——差异扫描把 Recce 的 <code>android/recce/views</code> 与 RN 的 <code>ReactAndroid/.../views</code> 逐文件对读，只收高置信的行为差异，一次得到 14 条，4 条已修、10 条待修。它回答的是「做得对不对」，而属性矩阵只回答「有没有」：<code>snapToAlignment</code> 在属性表里是绿的（值收得到、三端都支持），但它在 <code>flingAndSnap</code> 里根本没参与计算，<code>pagingEnabled</code> 下 start / center / end 三种对齐全部退化成普通分页。这种问题盯着 RN 的属性文档看一辈子也发现不了。</p>
+<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 424" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>Recce 与 RN 的 Android 源码级差异扫描结果</title>
+  <desc>左半部分是 14 条差异按组件的分布：ScrollView 5 条、TextInput 5 条、Modal 2 条、Text 1 条、ViewGroup 1 条。右半部分是修复进展：4 条已修，分别是 snapToAlignment 未参与 flingAndSnap、纵向 snapToOffsets 空数组崩溃、scrollTo 与 scrollToEnd 未先中止动画、TextInput selection 未做 clamp；其余 10 条待修。图下方说明这份扫描与属性矩阵是两条不同的路，并指出它只能识别与对照物不同、识别不了两边都错，且它在版本需求里被标为 P2 暂停。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">源码级差异扫描：一次拿到 14 条高置信 bug</text>
+  <text x="24" y="38" font-size="9.5" fill="#5b6470" dominant-baseline="central">把 Recce 的 android/recce/views 与 RN 的 ReactAndroid/.../views 逐文件对读，只收高置信的行为差异</text>
+
+  <text x="24" y="66" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">按组件分布</text>
+
+  <text x="24" y="90" font-size="9.5" fill="#1f2328" dominant-baseline="central">ScrollView</text>
+  <rect x="180" y="83" width="150" height="14" rx="2" fill="#E8843C"/>
+  <text x="336" y="90" font-size="9.5" fill="#5b6470" dominant-baseline="central">5</text>
+
+  <text x="24" y="114" font-size="9.5" fill="#1f2328" dominant-baseline="central">TextInput</text>
+  <rect x="180" y="107" width="150" height="14" rx="2" fill="#E8843C"/>
+  <text x="336" y="114" font-size="9.5" fill="#5b6470" dominant-baseline="central">5</text>
+
+  <text x="24" y="138" font-size="9.5" fill="#1f2328" dominant-baseline="central">Modal</text>
+  <rect x="180" y="131" width="60" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="246" y="138" font-size="9.5" fill="#5b6470" dominant-baseline="central">2</text>
+
+  <text x="24" y="162" font-size="9.5" fill="#1f2328" dominant-baseline="central">Text</text>
+  <rect x="180" y="155" width="30" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="216" y="162" font-size="9.5" fill="#5b6470" dominant-baseline="central">1</text>
+
+  <text x="24" y="186" font-size="9.5" fill="#1f2328" dominant-baseline="central">ViewGroup</text>
+  <rect x="180" y="179" width="30" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="216" y="186" font-size="9.5" fill="#5b6470" dominant-baseline="central">1</text>
+
+  <text x="24" y="210" font-size="9" fill="#8a929c" dominant-baseline="central">14 条全部集中在滚动与输入两条链路上，没有一条来自</text>
+  <text x="24" y="224" font-size="9" fill="#8a929c" dominant-baseline="central">Image、Switch、RawText 这些更简单的组件</text>
+
+  <line x1="360" y1="58" x2="360" y2="232" stroke="#e3e6ea" stroke-width="0.5"/>
+
+  <text x="380" y="66" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">修复进展</text>
+
+  <rect x="380" y="80" width="120" height="22" rx="4" fill="#EAF7EE"/>
+  <text x="440" y="91" font-size="9.5" font-weight="500" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">4 条已修</text>
+  <rect x="510" y="80" width="120" height="22" rx="4" fill="#FCEBEB"/>
+  <text x="570" y="91" font-size="9.5" font-weight="500" fill="#A32D2D" text-anchor="middle" dominant-baseline="central">10 条待修</text>
+
+  <rect x="380" y="116" width="6" height="6" rx="1.5" fill="#1a7f37"/>
+  <text x="394" y="119" font-size="9" fill="#5b6470" dominant-baseline="central">snapToAlignment 没有参与 flingAndSnap</text>
+
+  <rect x="380" y="136" width="6" height="6" rx="1.5" fill="#1a7f37"/>
+  <text x="394" y="139" font-size="9" fill="#5b6470" dominant-baseline="central">纵向 snapToOffsets 传空数组会崩溃</text>
+
+  <rect x="380" y="156" width="6" height="6" rx="1.5" fill="#1a7f37"/>
+  <text x="394" y="159" font-size="9" fill="#5b6470" dominant-baseline="central">scrollTo / scrollToEnd 没有先中止动画</text>
+
+  <rect x="380" y="176" width="6" height="6" rx="1.5" fill="#1a7f37"/>
+  <text x="394" y="179" font-size="9" fill="#5b6470" dominant-baseline="central">TextInput selection 没有做越界 clamp</text>
+
+  <text x="380" y="202" font-size="9" fill="#8a929c" dominant-baseline="central">待修的 10 条里有 5 条在 TextInput：</text>
+  <text x="380" y="216" font-size="9" fill="#8a929c" dominant-baseline="central">缺 eventCounter、multiline 切回不完整、</text>
+  <text x="380" y="230" font-size="9" fill="#8a929c" dominant-baseline="central">同父级抢事件、maxLength 崩溃</text>
+
+  <rect x="24" y="248" width="632" height="160" rx="8" fill="#FFF8E8" stroke="#E0B84C" stroke-width="0.5"/>
+  <text x="40" y="268" font-size="10.5" font-weight="500" fill="#8A5A00" dominant-baseline="central">它和属性矩阵是两条不同的路，可以一起用</text>
+
+  <text x="40" y="290" font-size="9.5" fill="#5b6470" dominant-baseline="central">属性矩阵是文档级对照，回答「有没有这个属性」；差异扫描是代码级对照，回答「这个属性做得对不对」。</text>
+  <text x="40" y="306" font-size="9.5" fill="#5b6470" dominant-baseline="central">每条都写了 Recce 与 RN 两侧的文件与行号，别人能复核——这是它比一份「疑似问题清单」值钱的地方。</text>
+
+  <text x="40" y="328" font-size="9.5" fill="#5b6470" dominant-baseline="central">另一条口径值得抄走：maxLength 追加 LengthFilter 的数组越界，作者注明 RN main 同位置也有同样写法，</text>
+  <text x="40" y="344" font-size="9.5" fill="#5b6470" dominant-baseline="central">所以「不是相对 RN 的差异」，但仍建议顺手修。也就是说，diff 只能识别「与对照物不同」，</text>
+  <text x="40" y="360" font-size="9.5" fill="#5b6470" dominant-baseline="central">识别不了「两边都错」——上游自带的 bug 不会被这类扫描捞出来。</text>
+
+  <text x="40" y="382" font-size="9.5" fill="#5b6470" dominant-baseline="central">它在 1.35 需求表里挂 P2，并标着（暂停）。属性对齐在往前推，主动识别这一路被放下了。</text>
+</svg></div><figcaption>图 4：源码级差异扫描拿到 14 条高置信 bug，4 条已修、10 条待修</figcaption></figure>
+<p>它还留了一条别处没写过的口径：第 10 条 <code>maxLength</code> 追加 <code>LengthFilter</code> 时数组下标写错、会抛 <code>ArrayIndexOutOfBoundsException</code>，作者注明「react-native-main 同位置仍能看到类似写法，因此这条不是 Recce 相对 RN main 的差异」，但仍建议顺手修。也就是说这类扫描只能识别「与对照物不同」，识别不了「两边都错」。</p>
+<p>25 规划的最后一条目标是 Changelog 机制。背景写得很直白：Platform 层的实现对标的是 RN 0.63.x，而 RN 平均 2~3 个月发一个大版本，那两个已暴露的问题在 0.78.0 就修了、Recce 没跟，「实际上可能还有很多新版本中已经解决但我们未能察觉的潜在问题」。机制只审 Changelog 的 Fixed 部分，重点是 crash 相关的稳定性修复与组件样式渲染修复；节奏给了两套，选了简单那套（从 0.64.0 起每个迭代审 3 个大版本、约 6 个月追上），双线并行那套 5 个月能追上但被否，理由是「跟进压力较大、可能出现重复更新」。</p>
+<h3>2.3 布局引擎：Yoga 3.2.1，唯一跑完全程的一件</h3>
+<p>这是 25 规划里动作最完整的一件，也是唯一把「调研 → 选型 → 方案 → 集成 → 分档放量 → 数据验收 → 回滚预案」跑完的。</p>
+<p>选型先把四个候选（yoga / taffy / blink / stylo）的工程规模与 issue 数摊开，再逐项对照属性支持，结论是「核心属性支持程度 taffy 和 yoga 持平，属性支持的值 taffy 比 yoga 多」，但 taffy 当时不支持 <code>position: static</code> 与 RTL。三个方案里否掉「新增组件引入」（要过平台审批），选定「融合进 Recce 已有组件」，把「换成 Taffy」留作长期备选，原话是「这个事情可以等到布局计算迁移之后」。</p>
+<p>落地上有几个细节值得记：三端各自引入 <code>release/3.2.1</code> 分支；Android 必须改包名（yoga 编译时用的包名是 <code>com.facebook.yoga</code>，<code>mrn:yoga</code> 也是，不改会冲突，改成 <code>com.meituan.android.recce.yoga</code>）；so 引入选「脚本拉仓库编译后取中间产物」而不是「把文件复制进工程」，理由是更新成本低、源码分离，代价是构建时间长；先保留 <code>mrn:yoga</code> 依赖做兜底；horn 开关默认 false，按 bundleName 白名单放量；双端所有埋点加通用字段 <code>use_new_yoga</code>。</p>
+<p>上线载体选外卖商家端 7.16——C / Keeta 对稳定性与性能要求都高、不好做实验，所以找流量小的 B 端做验证。放量与观测结果见图 5。两个需要留意的数字口径：包体增量在两年里出现过两种说法（见待核实第 2 条）；benchmark 只在华为 Mate 30 上跑过，结论是「耗时上没有明显差距」，样本很薄，不能当性能结论用。</p>
+<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 452" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>Yoga 3.2.1 在外卖商家端 7.16 上线验证的五档放量节奏</title>
+  <desc>竖向时间轴。左侧是日期与放量档位，右侧是该档位的观测结论。6 月 30 日按 uuid 放 1%，因为叠加 App 自带灰度后基本没量、收数太慢，当天改到 30%；7 月 3 日放 30%，无 crash，Android 新 yoga 异常比例 0.044%、老版 0.0032%，iOS 新 0.08%、老版 0.14%，都没有新类型异常；7 月 8 日放 50%，截至 7 月 13 日 TTI 稳定，Android 的异常都是存量 subview_empty，iOS 的都是离线包降级；7 月 16 日放 80%，截至 7 月 21 日确认支付转化率双端稳定、无线上 crash；7 月 21 日全量。图底说明验证载体是外卖商家端 7.16，埋点带 use_new_yoga 字段形成对照，benchmark 显示新旧 yoga 耗时无明显差距，以及三端包体增量。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">低流量 B 端验证：1% → 30% → 50% → 80% → 全量</text>
+
+  <line x1="112" y1="40" x2="112" y2="256" stroke="#d9dde3" stroke-width="1.2"/>
+
+  <circle cx="112" cy="56" r="4.5" fill="#E8843C" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="100" y="46" font-size="10" font-weight="500" fill="#1f2328" text-anchor="end" dominant-baseline="central">6.30</text>
+  <text x="100" y="62" font-size="9.5" fill="#A05A00" text-anchor="end" dominant-baseline="central">uuid 1%</text>
+  <text x="128" y="56" font-size="9.5" fill="#5b6470" dominant-baseline="central">叠加 App 自带灰度后基本没量，收数太慢也看不出问题；当天决定先放到 30%，收三天数</text>
+
+  <circle cx="112" cy="100" r="4.5" fill="#E8843C" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="100" y="90" font-size="10" font-weight="500" fill="#1f2328" text-anchor="end" dominant-baseline="central">7.3</text>
+  <text x="100" y="106" font-size="9.5" fill="#A05A00" text-anchor="end" dominant-baseline="central">uuid 30%</text>
+  <text x="128" y="94" font-size="9.5" fill="#5b6470" dominant-baseline="central">无 crash。Android 新 yoga 异常比例 0.044%、老版 0.0032%；iOS 新 0.08%、老 0.14%；</text>
+  <text x="128" y="108" font-size="9.5" fill="#5b6470" dominant-baseline="central">两端都无新类型异常</text>
+
+  <circle cx="112" cy="144" r="4.5" fill="#E8843C" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="100" y="134" font-size="10" font-weight="500" fill="#1f2328" text-anchor="end" dominant-baseline="central">7.8</text>
+  <text x="100" y="150" font-size="9.5" fill="#A05A00" text-anchor="end" dominant-baseline="central">uuid 50%</text>
+  <text x="128" y="138" font-size="9.5" fill="#5b6470" dominant-baseline="central">截至 7.13 TTI 稳定。Android 异常都是存量 subview_empty，iOS 异常都是离线包降级，</text>
+  <text x="128" y="152" font-size="9.5" fill="#5b6470" dominant-baseline="central">与新 yoga 无关</text>
+
+  <circle cx="112" cy="188" r="4.5" fill="#E8843C" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="100" y="178" font-size="10" font-weight="500" fill="#1f2328" text-anchor="end" dominant-baseline="central">7.16</text>
+  <text x="100" y="194" font-size="9.5" fill="#A05A00" text-anchor="end" dominant-baseline="central">uuid 80%</text>
+  <text x="128" y="182" font-size="9.5" fill="#5b6470" dominant-baseline="central">截至 7.21 确认支付转化率双端稳定，TTI 与抵达率稳定，无线上 crash</text>
+
+  <circle cx="112" cy="232" r="4.5" fill="#1a7f37" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="100" y="222" font-size="10" font-weight="500" fill="#1f2328" text-anchor="end" dominant-baseline="central">7.21</text>
+  <text x="100" y="238" font-size="9.5" fill="#1a7f37" text-anchor="end" dominant-baseline="central">全量</text>
+  <text x="128" y="226" font-size="9.5" fill="#5b6470" dominant-baseline="central">技术指标与业务指标都稳。50% 放量区间里，新 yoga 的业务指标反而略好</text>
+
+  <rect x="24" y="272" width="632" height="164" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="40" y="292" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">这次验证里值得抄走的四个动作</text>
+
+  <rect x="40" y="306" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="310" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">载体选低流量 B 端</tspan>：C / Keeta 对稳定性与性能要求高、不好做实验，改用外卖商家端 7.16</text>
+
+  <rect x="40" y="328" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="332" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">埋点带维度而不是靠时间断点</tspan>：双端所有事件加通用字段 use_new_yoga，同一天就能对照</text>
+
+  <rect x="40" y="350" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="354" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">技术指标与业务指标一起看</tspan>：抵达率、TTI 分位，以及按 trade_no 关联的确认支付转化率</text>
+
+  <rect x="40" y="372" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="376" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">对存量异常先归因再下结论</tspan>：subview_empty 新老版本都有、iOS 是离线包降级，不算新引入</text>
+
+  <text x="40" y="400" font-size="9" fill="#8a929c" dominant-baseline="central">benchmark：华为 Mate 30 上老 yoga 平均 14.2ms、新 yoga 13.8ms，「耗时上没有明显差距」。</text>
+  <text x="40" y="414" font-size="9" fill="#8a929c" dominant-baseline="central">包体：iOS 压缩前 +150.52KB / 压缩后 +34KB，Android 压缩前 +489.52KB / 压缩后 +194KB，</text>
+  <text x="40" y="428" font-size="9" fill="#8a929c" dominant-baseline="central">鸿蒙压缩后 +1047KB（无包体管控）。benchmark 只在一台机型上跑过，不能当性能结论用。</text>
+</svg></div><figcaption>图 5：Yoga 3.2.1 在外卖商家端 7.16 上线验证的五档放量节奏</figcaption></figure>
+<h3>2.4 高级表现力：2026 新开的方向，P0 三项已落地</h3>
+<p>25 规划里这件事还不成方向，只是通用阴影从 0%（0/4）补到 100%（4/4），BoxShadow 挂在 1.32 排期上标「待完成」。26 规划把它单列为一条，理由是「全球化拉高 UI 水平」。</p>
+<p>七项能力的支持情况：</p>
+<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 408" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>2026 规划里高级表现力七项能力在 Recce、MRN、RN 三侧的支持情况</title>
+  <desc>七行五列的矩阵。列依次是优先级、能力、Recce 是否支持、MRN 是否支持、RN 是否支持。P0 的 SVG 图片、BoxShadow 阴影、蒙层-文本渐变三项 Recce 已支持，MRN 与 RN 也支持；P1 的基础点击能力 Recce 已支持，复杂手势能力 Recce 未支持而 MRN 与 RN 支持；P2 的高级动画能力只有 RN 支持；P3 的高性能列表只有 RN 支持，且原文注明 RN 没有原生实现、只有 JS 侧封装。Recce 一列用橙色底表示自研。图底说明剩下的三项在 RN 侧分别由 gesture-handler、reanimated 和 FlatList / SectionList 承担，要补的不是属性而是一整套运行时。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">从 Recce 视角看：先问 RN 有没有，再问自己差多少</text>
+
+  <rect x="24" y="30" width="602" height="28" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="32" y="44" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">优先级</text>
+  <text x="88" y="44" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">能力</text>
+  <rect x="310" y="32" width="96" height="24" rx="4" fill="#FDEDE0"/>
+  <text x="358" y="44" font-size="10" font-weight="500" fill="#A05A00" text-anchor="middle" dominant-baseline="central">Recce</text>
+  <text x="454" y="44" font-size="10" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">MRN</text>
+  <text x="552" y="44" font-size="10" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">RN</text>
+
+  <line x1="80" y1="58" x2="80" y2="290" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="310" y1="58" x2="310" y2="290" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="406" y1="58" x2="406" y2="290" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="502" y1="58" x2="502" y2="290" stroke="#e3e6ea" stroke-width="0.5"/>
+
+  <rect x="310" y="58" width="96" height="232" fill="#FDF7F0" opacity="0.55"/>
+
+  <rect x="30" y="62" width="34" height="16" rx="4" fill="#FDEDE0"/>
+  <text x="47" y="70" font-size="9.5" font-weight="500" fill="#A05A00" text-anchor="middle" dominant-baseline="central">P0</text>
+  <text x="88" y="70" font-size="10" fill="#1f2328" dominant-baseline="central">SVG 图片能力</text>
+  <text x="358" y="70" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+  <text x="454" y="70" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+  <text x="552" y="70" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+
+  <rect x="30" y="95" width="34" height="16" rx="4" fill="#FDEDE0"/>
+  <text x="47" y="103" font-size="9.5" font-weight="500" fill="#A05A00" text-anchor="middle" dominant-baseline="central">P0</text>
+  <text x="88" y="103" font-size="10" fill="#1f2328" dominant-baseline="central">BoxShadow 阴影</text>
+  <text x="358" y="103" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+  <text x="454" y="103" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+  <text x="552" y="103" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+
+  <rect x="30" y="128" width="34" height="16" rx="4" fill="#FDEDE0"/>
+  <text x="47" y="136" font-size="9.5" font-weight="500" fill="#A05A00" text-anchor="middle" dominant-baseline="central">P0</text>
+  <text x="88" y="136" font-size="10" fill="#1f2328" dominant-baseline="central">蒙层 - 文本渐变</text>
+  <text x="358" y="136" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+  <text x="454" y="136" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+  <text x="552" y="136" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+
+  <rect x="30" y="161" width="34" height="16" rx="4" fill="#FDEDE0"/>
+  <text x="47" y="169" font-size="9.5" font-weight="500" fill="#A05A00" text-anchor="middle" dominant-baseline="central">P1</text>
+  <text x="88" y="169" font-size="10" fill="#1f2328" dominant-baseline="central">基础点击能力</text>
+  <text x="358" y="169" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+  <text x="454" y="169" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+  <text x="552" y="169" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+
+  <rect x="30" y="194" width="34" height="16" rx="4" fill="#f2f4f7"/>
+  <text x="47" y="202" font-size="9.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">P1</text>
+  <text x="88" y="202" font-size="10" fill="#1f2328" dominant-baseline="central">复杂手势能力</text>
+  <text x="358" y="202" font-size="11" fill="#C0392B" text-anchor="middle" dominant-baseline="central">✗</text>
+  <text x="454" y="202" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+  <text x="552" y="202" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+
+  <rect x="30" y="227" width="34" height="16" rx="4" fill="#f2f4f7"/>
+  <text x="47" y="235" font-size="9.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">P2</text>
+  <text x="88" y="235" font-size="10" fill="#1f2328" dominant-baseline="central">高级动画能力</text>
+  <text x="358" y="235" font-size="11" fill="#C0392B" text-anchor="middle" dominant-baseline="central">✗</text>
+  <text x="454" y="235" font-size="11" fill="#C0392B" text-anchor="middle" dominant-baseline="central">✗</text>
+  <text x="552" y="235" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+
+  <rect x="30" y="260" width="34" height="16" rx="4" fill="#f2f4f7"/>
+  <text x="47" y="268" font-size="9.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">P3</text>
+  <text x="88" y="265" font-size="10" fill="#1f2328" dominant-baseline="central">高性能列表</text>
+  <text x="358" y="268" font-size="11" fill="#C0392B" text-anchor="middle" dominant-baseline="central">✗</text>
+  <text x="454" y="268" font-size="11" fill="#C0392B" text-anchor="middle" dominant-baseline="central">✗</text>
+  <rect x="522" y="259" width="34" height="18" rx="4" fill="#EAF7EE"/>
+  <text x="539" y="268" font-size="11" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">✓</text>
+
+  <rect x="24" y="304" width="632" height="88" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="40" y="324" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">前四行和后三行不是一类东西</text>
+  <text x="40" y="344" font-size="9.5" fill="#5b6470" dominant-baseline="central">前四项补的是属性或系统级能力，落地路径清楚：定义属性、三端各实现一遍、写用例回归。</text>
+  <text x="40" y="362" font-size="9.5" fill="#5b6470" dominant-baseline="central">后三项在 RN 侧分别由 react-native-gesture-handler、react-native-reanimated 和 FlatList / SectionList 承担，</text>
+  <text x="40" y="380" font-size="9.5" fill="#5b6470" dominant-baseline="central">原文还写明高性能列表「没有原生实现，只有 js 侧封装，这块 React Native 是个短板」。</text>
+</svg></div><figcaption>图 6：2026 规划里高级表现力七项能力在 Recce、MRN、RN 三侧的支持情况</figcaption></figure>
+<p>其中 SVG 的选型过程值得单独看，五个方案的取舍依据很清楚：</p>
+<div class="tw"><table>
+<thead><tr>
+<th>方案</th>
+<th>优点</th>
+<th>缺点</th>
+<th>结果</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>RN-SVG</td>
+<td>三端一致性高，解析逻辑集中在 recce-ui</td>
+<td>总体开发成本高；子标签多时 native 视图多，性能存疑</td>
+<td>未选</td>
+</tr>
+<tr>
+<td>androidsvg 纯原生</td>
+<td>性能好（渲染出来是一个视图）；包体可控</td>
+<td>三端一致性不是完全一致；维护成本较高</td>
+<td><strong>最终采用</strong></td>
+</tr>
+<tr>
+<td>rust-resvg</td>
+<td>三端像素级一致；三端开发成本低</td>
+<td>包体预估 +2.5MB；复杂 svg 下开销直线飙升</td>
+<td>初选，后放弃</td>
+</tr>
+<tr>
+<td>rust 解析 + native 渲染</td>
+<td>—</td>
+<td>三端开发成本高；包体压力</td>
+<td>未选</td>
+</tr>
+<tr>
+<td>thorvg</td>
+<td>三端像素级一致；性能高</td>
+<td>三端开发成本较高；包体约 +600KB</td>
+<td>备选</td>
+</tr>
+</tbody>
+</table></div>
+<p>benchmark 数据（Android）：复杂图 thorvg 52ms、native 70ms、rust &gt;1000ms 且无法稳定加载；包体 native 最小 &lt; thorvg 约 600KB &lt; rust（优化 feature 后 Android release 增量 2.0MB，再去掉文本支持降到 1.0MB）。最终结论是从「像素级一致」退到了「性能与包体可控」。</p>
+<p>source 上有一条硬约束：只支持 utf8 与 base64 两种带前缀的字符串，不支持本地文件和远程图片；recce-ui 的宽高与其他样式都不作用到 svg 上。两条都是被业务实际用法顶出来的边界，写清楚比不写强。</p>
+<p>BoxShadow 的调研侧做得比较足：对齐 RN 0.83，把 Recce 的 elevation 方案、MRN 的 <code>shadow*</code> 方案、社区的 <code>@mrn/react-native-shadow-view</code>、Web CSS 的 <code>box-shadow</code> 摆在一起对照，兼容性写了 Android 9+（外阴影）/ 10+（内阴影）、iOS 13+，性能风险写了「低端 Android 设备上帧率可能从 60 FPS 下降到 15-20 FPS」。但「三、方案」的三端小节是空的。</p>
+<h3>2.5 背景与边框逻辑重构：三端一致性从口号变成了清单</h3>
+<p>26 侧真正的工程量在这里，但它在规划正文里没有独立条目，藏在子文档里。两个动因是「Recce 需要支持 BoxShadow」和「Recce 目前的背景渲染存在很多与 RN 不一致的问题，其中有开发梳理发现的，也有 QA 测试发现的」，一口气列了 14 条：</p>
+<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 372" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>背景与边框重构需求里 14 条已知三端不一致问题的分布</title>
+  <desc>左右两组横向条形图，统计同一批 14 条问题。左图按影响的端来分：Android 单端 4 条、三端 4 条、iOS 单端 3 条、Android 与 iOS 3 条。右图按问题类型来分：边框 5 条、圆角 4 条、borderStyle 相关 2 条、overflow 1 条、阴影能力 1 条、单边 borderStyle 1 条。图底注明这份清单来自背景逻辑重构需求文档，原文结尾写着已知问题之外还有很多未知问题、如何主动识别并解决它们才更重要。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">三端渲染不一致的已知问题：14 条</text>
+
+  <text x="24" y="42" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">按影响的端来分</text>
+
+  <text x="24" y="66" font-size="9.5" fill="#1f2328" dominant-baseline="central">Android 单端</text>
+  <rect x="126" y="59" width="120" height="14" rx="2" fill="#E8843C"/>
+  <text x="252" y="66" font-size="9.5" fill="#5b6470" dominant-baseline="central">4</text>
+
+  <text x="24" y="90" font-size="9.5" fill="#1f2328" dominant-baseline="central">三端</text>
+  <rect x="126" y="83" width="120" height="14" rx="2" fill="#E8843C"/>
+  <text x="252" y="90" font-size="9.5" fill="#5b6470" dominant-baseline="central">4</text>
+
+  <text x="24" y="114" font-size="9.5" fill="#1f2328" dominant-baseline="central">iOS 单端</text>
+  <rect x="126" y="107" width="90" height="14" rx="2" fill="#E8843C"/>
+  <text x="222" y="114" font-size="9.5" fill="#5b6470" dominant-baseline="central">3</text>
+
+  <text x="24" y="138" font-size="9.5" fill="#1f2328" dominant-baseline="central">Android + iOS</text>
+  <rect x="126" y="131" width="90" height="14" rx="2" fill="#E8843C"/>
+  <text x="222" y="138" font-size="9.5" fill="#5b6470" dominant-baseline="central">3</text>
+
+  <text x="24" y="166" font-size="9" fill="#8a929c" dominant-baseline="central">单端合计 7 条、跨端 7 条：三端统一渲染真不是</text>
+  <text x="24" y="180" font-size="9" fill="#8a929c" dominant-baseline="central">iOS 一条或 Android 一条就能改完的</text>
+
+  <line x1="344" y1="30" x2="344" y2="190" stroke="#e3e6ea" stroke-width="0.5"/>
+
+  <text x="364" y="42" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">按问题类型来分</text>
+
+  <text x="364" y="66" font-size="9.5" fill="#1f2328" dominant-baseline="central">边框</text>
+  <rect x="466" y="59" width="150" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="622" y="66" font-size="9.5" fill="#5b6470" dominant-baseline="central">5</text>
+
+  <text x="364" y="90" font-size="9.5" fill="#1f2328" dominant-baseline="central">圆角</text>
+  <rect x="466" y="83" width="120" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="592" y="90" font-size="9.5" fill="#5b6470" dominant-baseline="central">4</text>
+
+  <text x="364" y="114" font-size="9.5" fill="#1f2328" dominant-baseline="central">borderStyle</text>
+  <rect x="466" y="107" width="60" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="532" y="114" font-size="9.5" fill="#5b6470" dominant-baseline="central">2</text>
+
+  <text x="364" y="138" font-size="9.5" fill="#1f2328" dominant-baseline="central">overflow</text>
+  <rect x="466" y="131" width="30" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="502" y="138" font-size="9.5" fill="#5b6470" dominant-baseline="central">1</text>
+
+  <text x="364" y="162" font-size="9.5" fill="#1f2328" dominant-baseline="central">阴影能力</text>
+  <rect x="466" y="155" width="30" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="502" y="162" font-size="9.5" fill="#5b6470" dominant-baseline="central">1</text>
+
+  <text x="364" y="186" font-size="9.5" fill="#1f2328" dominant-baseline="central">单边 borderStyle</text>
+  <rect x="466" y="179" width="30" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="502" y="186" font-size="9.5" fill="#5b6470" dominant-baseline="central">1</text>
+
+  <rect x="24" y="206" width="632" height="150" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="40" y="228" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">清单是已知的，清单之外的才是大头</text>
+  <text x="40" y="250" font-size="9.5" fill="#5b6470" dominant-baseline="central">这份清单来自《1.3x Recce native 背景逻辑重构需求》。它的结尾只写了一句话：</text>
+  <text x="40" y="272" font-size="10" font-weight="500" fill="#8A5A00" dominant-baseline="central">「这些问题是已知的，当然还有很多未知的问题，如何主动识别并解决这些问题才是更重要的。」</text>
+  <text x="40" y="294" font-size="9.5" fill="#5b6470" dominant-baseline="central">这 14 条里有 7 条挂着缺陷单链接，都是 QA 或开发在真实业务里撞出来才登记的，没有一条是</text>
+  <text x="40" y="308" font-size="9.5" fill="#5b6470" dominant-baseline="central">靠属性清单推出来的。</text>
+  <text x="40" y="328" font-size="9.5" fill="#5b6470" dominant-baseline="central">2026 的关键结果里写了要「借助 AI 建立自动化测试，扩充测试用例，提前发现潜在的不一致性</text>
+  <text x="40" y="342" font-size="9.5" fill="#5b6470" dominant-baseline="central">问题」，但用例从哪来、判定标准是什么都还没落。这张清单本身就是现成的第一批用例来源。</text>
+</svg></div><figcaption>图 7：背景与边框重构需求里 14 条已知三端不一致问题的分布</figcaption></figure>
+<p>清单里两类特别值得记：一是<strong>同名不同义</strong>，比如 <code>borderStyle</code> 在非图片场景下，Recce-Android 是「有圆角时视图被 border 挤、没圆角时 border 盖在视图上」，而 RN 不管有没有圆角都是盖在视图上；到了图片场景，Android / iOS 是 border 盖在图上、鸿蒙是视图被 border 挤，而 RN 是被挤。二是<strong>属性互相干扰</strong>，比如图片设了圆角时 <code>resizeMode</code> 失效。</p>
+<p>结尾那句话是这两年材料里方法论价值最高的一句：</p>
+<blockquote>这些问题是已知的，当然还有很多未知的问题，如何主动识别并解决这些问题才是更重要的。</blockquote>
+<p>它和 26 规划关键结果里的「借助 AI 建立自动化测试，扩充测试用例，充分覆盖所有属性，提前发现潜在的不一致性问题」是同一件事的两面。到核实时，关键结果那一侧仍然只停在纸面上（用例从哪来、判定标准是什么都没写），但主动识别已经有一份样板做出来了，就是 2.2 里那份源码级差异扫描。</p>
+<p>同一批工作还有个连带产物：为了支持 label 的 border 能力，iOS 侧把 <code>RECTextView</code> 的继承链从 <code>UIView</code> 改成 <code>RECView</code>，文字绘制交给新增的 <code>RECTextContentView</code>，并给出 15 条影响面清单（P0 四条：纯文字渲染、padding 生效、嵌套 Text、onClick 点击命中）。这类改动的影响面写法是这两年文档质量最高的一处。</p>
+<h3>2.6 版本维度：1.34 与 1.35 这两期在做什么</h3>
+<p>规划是按方向写的，实际落地是按版本排的，两套口径之间没有总表。把两期需求表并起来看，2026 年后半年的形状比较清楚：</p>
+<div class="tw"><table>
+<thead><tr>
+<th>版本</th>
+<th>主要任务</th>
+<th>与属性对齐的关系</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1.34</td>
+<td>touch 事件回调支持指针坐标（三端）、View 背景重构（Android 重构，iOS 与鸿蒙修 bug）、支持 BoxShadow（三端）、图片 source 属性重构、iOS 图片迁移 SD、差分包、样式热重载</td>
+<td>BoxShadow 与背景重构是「已支持属性对齐」的地基；Image 专表在这一期收口</td>
+</tr>
+<tr>
+<td>1.35</td>
+<td>触摸事件重构（P0）、Android 17 适配（P0）、Android yoga 加载方式优化（P0）、View 与 ScrollView 属性对齐（P1）、差异扫描（P2，暂停）</td>
+<td>属性对齐这一批集中在这一期，且被排在触摸事件重构之后</td>
+</tr>
+</tbody>
+</table></div>
+<p>这张表也解释了一个读表时会困惑的点：<strong>属性对齐在需求表里只是 P1</strong>，P0 让给了触摸事件重构与平台适配。原因就在 2.1 里那 14 个 <code>onResponder*</code> 与 <code>hitSlop</code>、<code>pointerEvents</code> 一类属性——它们不是「没做」，是必须等触摸事件重构落地才能做。1.35 需求表的行序是有依赖依据的，只是这个依据没写在表里，得翻到专表才看得见。</p>
+<h2>三、值得抄走的七个动作</h2>
+<ol><li><strong>两个口径都算成本再选，并把没选的那个留在表里。</strong> 144PD 与 600PD 摆在一起，选了便宜的，理由与代价都写在正文。决策依据可复查——这是规划类文档里最先丢的东西。</li><li><strong>需求是扫业务方代码扫出来的，不是拍出来的。</strong> 业务方调研逐个给了调研对象与搜索方式（MRN 侧搜 <code>StyleSheet.create</code>、<code>remStyleSheet</code>、<code>.scss</code>，MachPro 侧搜 <code>index.css</code>），每处配截图与代码包附件。清单有出处，别人能复核。</li><li><strong>高风险改动选低流量载体，放量有明确节奏。</strong> Yoga 不在 C / Keeta 上做实验，改用外卖商家端 7.16，1% → 30% → 50% → 80% → 全量，每档给观察期与结论；第一档发现「叠加 App 自带灰度后基本没量」当天就调档，这个反应比节奏本身更有价值。</li><li><strong>数据三件套：埋点带维度、指标先定口径、存量先归因。</strong> 双端所有事件加 <code>use_new_yoga</code> 字段，同一天就能比新旧，不受大盘波动影响；技术指标与业务指标的 SQL、关联键（<code>trade_no</code>）、过滤条件（<code>isDevMode</code>、<code>isRebuild</code>）都写进文档，换个人跑得出的是一组数；<code>subview_empty</code> 与 <code>offline_downgrade</code> 两条异常都先确认是存量、给了排除依据，没有算到新改动头上。</li><li><strong>肯写「不采纳」与「暂时不实现」，也肯承认边界。</strong> 单边 <code>borderStyle</code> 明确判「暂时不需要支持，保证三端一致即可」；26 规划直接写明高性能列表「没有原生实现，只有 js 侧封装，这块 React Native 是个短板」，蒙层借鉴 <code>masked-view</code>、手势借鉴 <code>gesture-handler</code>。只列「要做什么」的规划没法判断边界，这份能。</li><li><strong>目标变得可度量了。</strong> 26 规划的 KR 写了具体数字与分期：高级表现力 0.7 达 75%（6/8）、1.0 达 100%（8/8），核心组件 0.7 达 70%、1.0 达 100%。比 25 规划的「完成补齐」可考核得多。</li><li><strong>方案与用例成对交付。</strong> Yoga 有集成测试计划、测试账号、测试重点；SVG 有《自测用例》8 组 source × 存在性组合；iOS 文本继承有 15 条影响面清单。这些是让改动可验收的前提。</li></ol>
+<h2>四、还能更好的地方</h2>
+<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 440" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>建议把属性矩阵、三端差异清单、自动化用例、回归与对账串成一条闭环</title>
+  <desc>五步闭环，沿左侧竖线从上到下排列，底部有一条回指第一步的箭头。第一步是属性矩阵：属性、冻结的 RN 版本、三端现状、是否 native prop 四列，分母不随版本悄悄变，RN 升级导致的属性增删单独记一列。第二步是三端差异清单：把背景重构那 14 条与源码扫描那 14 条合成常驻表，属性、端、现状、期望、发现来源、状态，以差异数为主指标。第三步是自动化用例：从差异清单与已有用例生成，先落语义断言与像素级截图 diff 两级判据。第四步是逐版本回归：每个 Recce 版本跑一遍，源码级扫描是现成的第一把工具，新撞到的不一致直接登记，不等 QA 提缺陷单。第五步是回填与对账：完成率与差异数同时更新，若完成率涨而差异数没降，说明分母在变。图底说明这条闭环要解决的是两年材料里最缺的一环：从补属性推进到先建可复现的差异检出能力，且起步不需要新工具。</desc>
+
+  <defs>
+    <marker id="ar-loop" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#8fa9c9" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">要补的不是更多属性，是一条能自己发现差异的闭环</text>
+
+  <path d="M44 40 L44 300 L36 300" fill="none" stroke="none"/>
+  <path d="M44 306 L44 48" fill="none" stroke="#8fa9c9" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#ar-loop)"/>
+  <text x="30" y="180" font-size="8.5" fill="#8a929c" text-anchor="middle" transform="rotate(-90 30 180)" dominant-baseline="central">对不上就回查分母</text>
+
+  <rect x="64" y="40" width="592" height="46" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="80" y="58" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">1　属性矩阵 · 单一真相</text>
+  <text x="80" y="74" font-size="9.5" fill="#5b6470" dominant-baseline="central">属性 × 冻结的 RN 版本 × 三端现状 × 是否 native prop。分母不随版本悄悄变；RN 升级带来的属性增删单独记一列</text>
+
+  <rect x="64" y="96" width="592" height="46" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="80" y="114" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">2　三端差异清单</text>
+  <text x="80" y="130" font-size="9.5" fill="#5b6470" dominant-baseline="central">把背景重构那 14 条与源码扫描那 14 条合成常驻表：属性 × 端 × 现状 × 期望 × 发现来源 × 状态。差异数为主指标</text>
+
+  <rect x="64" y="152" width="592" height="46" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="80" y="170" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">3　自动化用例</text>
+  <text x="80" y="186" font-size="9.5" fill="#5b6470" dominant-baseline="central">从差异清单与 Playground 已有用例生成。先落两级判据：语义断言（回调、默认值、属性是否生效）＋ 像素级截图 diff</text>
+
+  <rect x="64" y="208" width="592" height="46" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="80" y="226" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">4　逐版本回归</text>
+  <text x="80" y="242" font-size="9.5" fill="#5b6470" dominant-baseline="central">每个 Recce 版本跑一遍。源码级扫描是这一步现成的第一把工具，新撞到的不一致直接登记，不等 QA 提单</text>
+
+  <rect x="64" y="264" width="592" height="46" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="80" y="282" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">5　回填与对账</text>
+  <text x="80" y="298" font-size="9.5" fill="#5b6470" dominant-baseline="central">完成率与差异数同时更新。若完成率涨而差异数没降，先查分母，再看结论</text>
+
+  <rect x="64" y="330" width="592" height="94" rx="8" fill="#FFF8E8" stroke="#E0B84C" stroke-width="0.5"/>
+  <text x="80" y="350" font-size="10.5" font-weight="500" fill="#8A5A00" dominant-baseline="central">这条闭环补的是两年材料里最缺的一环</text>
+  <text x="80" y="370" font-size="9.5" fill="#5b6470" dominant-baseline="central">两年的做法都是「先列清单、再补属性、靠 QA 和业务撞出剩余问题」。清单本身是准的，但清单之外的部分</text>
+  <text x="80" y="386" font-size="9.5" fill="#5b6470" dominant-baseline="central">只能等。第 2 到第 4 步把「等」换成「扫」，第 5 步保证数字不会被分母偷换。</text>
+  <text x="80" y="406" font-size="9.5" fill="#5b6470" dominant-baseline="central">起步也不需要新工具：清单有 14 条三端不一致与 14 条源码差异，用例有《自测用例》8 组 source 组合。</text>
+</svg></div><figcaption>图 8：建议把属性矩阵、三端差异清单、自动化用例、回归与对账串成一条闭环</figcaption></figure>
+<p><strong>1. 分母要定死，并且和 RN 版本一起冻结。</strong> 这是本文最想指出的一条。同一个组件在两年里出现过三套分母（Image 从 50 到 30、Label 从 69 到 42、ScrollView 从 61 到专表的 59、而 26 规划总表那处又写 62），叠了「RN 基线从 0.72 升到 0.86」和「是否剔除 JS 层属性」两个变量，外界无法判断进度是真涨还是分母换了。更麻烦的是比例列看起来是手写的、没和分数联动：25 规划里 Input 写「53%（41/67）」，41/67 是 61.2%；Label 写「46%（31/69）」，是 44.9%；26 规划里 ScrollView 写「52%（38/59）」，是 64.4%。三处比例与分数对不上。建议把属性矩阵做成四列——属性 × 冻结的 RN 版本 × 三端现状 × 是否 native prop——并单独记一列「因 RN 升级新增 / 删除的属性数」，让分子分母都有解释。</p>
+<p><strong>2. 26 规划的 157 项要给出算法和成本。</strong> 25 规划给了 PD，26 规划只给完成率。0.7 达 70%、1.0 达 100% 这两个 KR 没有人力口径，就判断不了是否排得下，也没法在中期判断要不要调目标。</p>
+<p><strong>3. 三端差异清单要从一次性文档升格成常驻资产。</strong> 现在它躺在背景重构那份需求里，差异扫描那 14 条又是一份新的一次性清单。建议合成一份常驻表：属性 × 端 × 现状 × 期望 × 发现来源（业务反馈 / 属性矩阵 / 源码扫描）× 状态，并把它当作主指标（差异数）、完成率当辅指标——差异数不会因为分母变化而失真，完成率会。</p>
+<p><strong>4. 「借助 AI 建自动化测试」要落成第一批可执行用例，但性价比最高的第一步不是搭框架。</strong> 素材已经有三批：SVG 方案的 5 项用例（base64 / utf8 加载与回调、固定宽高、自适应宽高、resizeMode、错误加载）、《自测用例》的 8 组 source × 存在性组合、7 份专表里判「需支持」的条目（每一条都是一句可断言的行为）。建议先落两级判据——语义断言（回调触发次数与顺序、默认值、属性是否生效）加截图 diff，不要一上来追像素级，否则低端机与字体差异会淹掉真实缺陷。但如果只算一步，应该是<strong>把差异扫描从暂停里放出来</strong>：它不需要跑设备、不需要判定基线，只要对读源码，10 条待修里每条都写好了风险场景与测试重点。</p>
+<p><strong>5. Changelog 同步机制要分层，不能拿一条 6 个月的队列追到底。</strong> 从 0.63 追到 0.72 再追到 0.86，说明「每迭代审 3 个大版本」这个速度跟不上上游。建议把 Fixed 里的 crash 与渲染两类定为必须当期跟，其余按季度批量扫；否则永远在追身位，而这两类恰恰是线上最贵的。</p>
+<p><strong>6. 对齐基线的切换与备选方案都要带触发条件。</strong> 25 规划定 RN 0.72 的理由写得很清楚（「该版本是鸿蒙所能支持的最新版本」），26 规划的子文档已经在按 0.86 对齐，但两次切换只写了目标版本，没写「为什么现在可以升」和「鸿蒙跟不跟」；Taffy 那张完整的 Yoga vs Taffy 对照也没写什么情况下值得换。建议把基线当决策记录来写，给备选方案一个可观察的触发条件（例如「需要 grid 布局的业务方达到 N 个」或「RN 侧 grid 提案落地」），否则这张表每版重抄一遍而不产生决策。</p>
+<p><strong>7. 状态标签要从标题里挪出来，另设一张总表。</strong> 「1.29 补 View/Image/ScrollView」「1.30 补 Input/Label」「1.32 BoxShadow」「1.34 对齐 RN 0.86」现在散在各文档标题里，两年后的读者要从几十份文档里拼。一张版本 × 方向 × 状态的总表就能省掉这件事，也是上面第 1 条那张属性矩阵的天然入口。附带一个真实踩到的例子：View 与 ScrollView 的属性对齐今年已经完成，两份专表标题却还写着【对齐中】——状态写进标题就没有人负责更新它，本文第一次成稿正是照标题判的，把已完成的两项读成了在途。</p>
+<p><strong>8. 两个小约定：高百分位要标样本量，留空要标「待补」。</strong> Yoga 上线数据里 <code>recce_run_tp999</code> 在 1151 / 4053 / 8191 / 10239 之间跳，是样本不足的表现，建议这类数字直接标「样本不足，不参考」，或把长周期性能结论交给 C 端小流量、崩溃类结论留在 B 端；BoxShadow 的「三、方案」与背景重构的「3. 具体规划」都留空了，留空容易被后来人读成「已评估、无问题」。</p>
+<h2>五、待核实</h2>
+<ol><li><strong>成本对不上 10PD，排期表没写年份。</strong> 25 规划表里口径一写「总成本 144PD」，注释拆出来是研发 109PD 加测试 25PD＝134PD。分月表表头只有「1月～6月」，而 Yoga 实际是 2025-07 随 1.28 上线的，与表里「1月完成 yoga 引入」的对应关系无法从文档确认。</li><li><strong>Yoga 包体增量有两个口径。</strong> 选型调研与上线记录把 Android「489.52KB / 压缩后 194KB」写成增加量；Yoga 方案的包体表把这两行标成「老版本 yoga 的体积」，新版本是「428.52KB / 168.4KB」。</li><li><strong>26 规划的 157 项是怎么加出来的。</strong> 25 规划的全量口径是 178 项，两者差 21 项，中间 RN 基线还升过级，判断不了这个差额是「按需裁剪」还是「口径重整」。View 与 Input 原来留空的两行现在由专表补上了（View Props 61 项、Style Props 43 项，TextInput 68 项），但两处口径是否一致没交代。</li><li><strong>高级表现力的分母对不上，统计维度也不全。</strong> 表里列了 7 项能力，KR 写的是「6/8」与「8/8」；「Recce 是否支持」只有一列，没分端也没写落地版本；复杂手势、高级动画、高性能列表三项只有优先级，没有版本与跟进人。</li><li><strong>专表自身有几处对不上。</strong> TextInput 同节既写「3 项没必要 / 33 项需支持」又写「本期支持 31 / 5 项没必要」，差 2 项；ScrollView 专表写 59 项、26 规划总表写 62 项，分子分母都取自专表而总数列来源不明；Layout 专表没给总数（只写「未支持的 21 个中支持 20 个」），算不出完成率。</li><li><strong>对齐进展那份文档正文是空的。</strong> 《Recce现有属性对齐0.72版本 RN 进展》只有标题、下挂三份 Android 子文档，iOS 与鸿蒙侧的对应结论没找到。</li><li><strong>业务调研原文读不到。</strong> 26 规划引用的《业务调研》是密级文档，返回「当前内容含高密文档，需在安全屋环境中访问」。文中的业务诉求引用来自 26 规划转录的诉求分布图（基础属性 7、手势能力 3、文本渐变 1、高级动画 1、canvas 1、复杂列表 1，共 14 条）。</li><li><strong>平台层对标版本有两说。</strong> Changelog 机制写「Platform 层实现对标的是 RN 一个较老的版本 - 0.63.x」，25 规划写属性对齐基线是 0.72.0。语境不同但文档没点明，容易被读成矛盾。</li><li><strong>状态标签与标题不同步。</strong> View 与 ScrollView 的属性对齐今年已完成，两份专表标题仍写【对齐中】，判断状态的唯一依据是标题，容易读错。</li><li><strong>Label 专表只有标题。</strong> 暂停的原因（缺人力、缺业务需求，还是等别的前置重构）没有记录，后来人只能重新问。</li></ol>
+</div>
+</body>
+</html>

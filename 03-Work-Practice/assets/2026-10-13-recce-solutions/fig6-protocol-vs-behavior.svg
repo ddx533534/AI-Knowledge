@@ -1,0 +1,49 @@
+<svg viewBox="0 0 680 348" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>补属性方案里属性协议与属性行为的分层，以及它和触摸重构的依赖关系</title>
+  <desc>左侧分上下两层。上层是只补齐了属性定义、二进制读写与 visitor 入口的一批属性：focusable、tabIndex、hitSlop、pointerEvents、renderToHardwareTextureAndroid，Android 侧只预留实现点，iOS 与鸿蒙补默认空方法，属性收下了但暂时不生效。下层是真正补上了行为的三项：maintainVisibleContentPosition 由懒创建 helper 按锚点反向调整 offset，scrollsChildToFocus 在 requestChildFocus 里按开关决定是否滚动，removeClippedSubviews 按可视区域裁剪子节点。右侧是 1.35 的触摸事件新架构，标注为 P0，上层的 hitSlop 与 pointerEvents 两项的行为依赖这项改动，箭头表示它们的排期不能和它拆开。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">「补协议」和「补行为」是两层，中间隔着一项架构改动</text>
+
+  <text x="24" y="42" font-size="9" font-weight="500" fill="#A32A1C" dominant-baseline="central">上层：只补协议（属性收下了，暂时不生效）</text>
+  <rect x="24" y="50" width="340" height="122" rx="8" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <text x="36" y="72" font-size="9" fill="#5b6470" dominant-baseline="central">focusable</text>
+  <text x="352" y="72" font-size="8" fill="#C2604F" text-anchor="end" dominant-baseline="central">补定义 + 读写入口</text>
+  <text x="36" y="94" font-size="9" fill="#5b6470" dominant-baseline="central">tabIndex</text>
+  <text x="352" y="94" font-size="8" fill="#C2604F" text-anchor="end" dominant-baseline="central">补定义 + 读写入口</text>
+  <text x="36" y="116" font-size="9" font-weight="500" fill="#A32A1C" dominant-baseline="central">hitSlop</text>
+  <text x="352" y="116" font-size="8" fill="#C2604F" text-anchor="end" dominant-baseline="central">预留实现点</text>
+  <text x="36" y="138" font-size="9" font-weight="500" fill="#A32A1C" dominant-baseline="central">pointerEvents</text>
+  <text x="352" y="138" font-size="8" fill="#C2604F" text-anchor="end" dominant-baseline="central">预留实现点</text>
+  <text x="36" y="160" font-size="9" fill="#5b6470" dominant-baseline="central">renderToHardwareTextureAndroid</text>
+  <text x="352" y="160" font-size="8" fill="#C2604F" text-anchor="end" dominant-baseline="central">补定义 + 读写入口</text>
+  <line x1="24" y1="104" x2="364" y2="104" stroke="#f0dedb" stroke-width="0.5"/>
+
+  <text x="24" y="194" font-size="9" font-weight="500" fill="#1F6B3B" dominant-baseline="central">下层：真补行为（属性下发后按预期生效）</text>
+  <rect x="24" y="202" width="340" height="104" rx="8" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="36" y="224" font-size="9" fill="#5b6470" dominant-baseline="central">maintainVisibleContentPosition</text>
+  <text x="352" y="224" font-size="8" fill="#5C9575" text-anchor="end" dominant-baseline="central">锚点反向调 offset</text>
+  <text x="36" y="248" font-size="9" fill="#5b6470" dominant-baseline="central">scrollsChildToFocus</text>
+  <text x="352" y="248" font-size="8" fill="#5C9575" text-anchor="end" dominant-baseline="central">requestChildFocus 按开关</text>
+  <text x="36" y="272" font-size="9" fill="#5b6470" dominant-baseline="central">removeClippedSubviews</text>
+  <text x="352" y="272" font-size="8" fill="#5C9575" text-anchor="end" dominant-baseline="central">按可视区域裁剪子节点</text>
+  <line x1="24" y1="236" x2="364" y2="236" stroke="#d5eadc" stroke-width="0.5"/>
+
+  <rect x="384" y="94" width="272" height="150" rx="8" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="398" y="116" font-size="10" font-weight="500" fill="#1B5FA8" dominant-baseline="central">1.35 触摸事件新架构</text>
+  <text x="398" y="132" font-size="8" fill="#5A87BE" dominant-baseline="central">版本需求里列为 P0</text>
+  <text x="398" y="158" font-size="8.5" fill="#5b6470" dominant-baseline="central">· RootView 统一观察 touch 流</text>
+  <text x="398" y="174" font-size="8.5" fill="#5b6470" dominant-baseline="central">· ACTION_DOWN 锁定 target</text>
+  <text x="398" y="190" font-size="8.5" fill="#5b6470" dominant-baseline="central">· pointerEvents 决定 self 与</text>
+  <text x="398" y="204" font-size="8.5" fill="#5b6470" dominant-baseline="central">  children 能否命中</text>
+  <text x="398" y="220" font-size="8.5" fill="#5b6470" dominant-baseline="central">· 边界额外考虑 hitSlop</text>
+
+  <path d="M 366 116 L 380 116" stroke="#C0392B" stroke-width="0.8" fill="none"/>
+  <path d="M 380 116 L 375 113.5 M 380 116 L 375 118.5" stroke="#C0392B" stroke-width="0.8" fill="none"/>
+  <path d="M 366 138 L 374 138 L 374 184 L 380 184" stroke="#C0392B" stroke-width="0.8" fill="none"/>
+  <path d="M 380 184 L 375 181.5 M 380 184 L 375 186.5" stroke="#C0392B" stroke-width="0.8" fill="none"/>
+  <text x="374" y="252" font-size="8" fill="#C0392B" text-anchor="middle" dominant-baseline="central">两项的行为</text>
+  <text x="374" y="264" font-size="8" fill="#C0392B" text-anchor="middle" dominant-baseline="central">依赖这项改动</text>
+
+  <rect x="24" y="318" width="632" height="24" rx="6" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="36" y="330" font-size="8.5" fill="#5b6470" dominant-baseline="central">两层必须同批次排期：只按 P0 / P1 分开推进，上层会先交付一批注定返工的 no-op 属性。</text>
+</svg>

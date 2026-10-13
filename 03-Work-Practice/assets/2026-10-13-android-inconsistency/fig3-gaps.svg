@@ -1,0 +1,74 @@
+<svg viewBox="0 0 680 400" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>只有现象的问题：缺的是哪一步动作</title>
+  <desc>八行待认领清单。红的三行只有录屏、截图或单据外链，缺的是最小复现加源码定位；橙的一行根因已经写清，只缺解法；灰的三行缺陷在鸿蒙侧，Android 只是参照系。底部另有说明，三篇标着已解决、正文三节全空的文档缺的不是定位，是一次回写。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">只有现象的问题：缺的不是技术判断，是哪一步动作</text>
+  <text x="24" y="32" font-size="9" fill="#8a929c" dominant-baseline="central">红＝缺复现与定位，橙＝只缺解法，灰＝缺陷在鸿蒙侧</text>
+
+  <rect x="24" y="46" width="204" height="22" rx="4" fill="#F2F4F7"/>
+  <text x="36" y="57" font-size="8.5" font-weight="500" fill="#5b6470" dominant-baseline="central">问题</text>
+  <rect x="236" y="46" width="180" height="22" rx="4" fill="#F2F4F7"/>
+  <text x="248" y="57" font-size="8.5" font-weight="500" fill="#5b6470" dominant-baseline="central">文档里现在有什么</text>
+  <rect x="424" y="46" width="232" height="22" rx="4" fill="#F2F4F7"/>
+  <text x="436" y="57" font-size="8.5" font-weight="500" fill="#5b6470" dominant-baseline="central">要出解法，还缺哪一步</text>
+
+  <!-- 1 -->
+  <rect x="24" y="74" width="632" height="30" rx="5" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <rect x="24" y="74" width="2.5" height="30" rx="1.25" fill="#C0625A"/>
+  <text x="36" y="89" font-size="8.5" fill="#1f2328" dominant-baseline="central">Android 的滚动事件穿透</text>
+  <text x="248" y="89" font-size="8" fill="#5b6470" dominant-baseline="central">一段录屏</text>
+  <text x="436" y="89" font-size="8" fill="#A32A1C" dominant-baseline="central">做最小复现，顺触摸链路看事件在哪一层漏出去</text>
+
+  <!-- 2 -->
+  <rect x="24" y="108" width="632" height="30" rx="5" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <rect x="24" y="108" width="2.5" height="30" rx="1.25" fill="#C0625A"/>
+  <text x="36" y="123" font-size="8.5" fill="#1f2328" dominant-baseline="central">label 嵌套 view 展示不一致</text>
+  <text x="248" y="123" font-size="8" fill="#5b6470" dominant-baseline="central">三端截图 ＋ 最小复现</text>
+  <text x="436" y="123" font-size="8" fill="#A32A1C" dominant-baseline="central">读三端量文本尺寸的代码，确认谁把行高或宽度算错</text>
+
+  <!-- 3 -->
+  <rect x="24" y="142" width="632" height="30" rx="5" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <rect x="24" y="142" width="2.5" height="30" rx="1.25" fill="#C0625A"/>
+  <text x="36" y="157" font-size="8.5" fill="#1f2328" dominant-baseline="central">on_touch 事件不一致</text>
+  <text x="248" y="157" font-size="8" fill="#5b6470" dominant-baseline="central">现象描述 ＋ 两条单据外链</text>
+  <text x="436" y="157" font-size="8" fill="#A32A1C" dominant-baseline="central">先展开单据看结论有没有回写，再补源码级定位</text>
+
+  <!-- 4 -->
+  <rect x="24" y="176" width="632" height="30" rx="5" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <rect x="24" y="176" width="2.5" height="30" rx="1.25" fill="#C0625A"/>
+  <text x="36" y="191" font-size="8.5" fill="#1f2328" dominant-baseline="central">image 单边 BorderWidth 不一致</text>
+  <text x="248" y="191" font-size="8" fill="#5b6470" dominant-baseline="central">一条单据外链</text>
+  <text x="436" y="191" font-size="8" fill="#A32A1C" dominant-baseline="central">同上，先把外链单据读出来再说</text>
+
+  <!-- 5 -->
+  <rect x="24" y="210" width="632" height="30" rx="5" fill="#FDF7F0" stroke="#EFDCC2" stroke-width="0.5"/>
+  <rect x="24" y="210" width="2.5" height="30" rx="1.25" fill="#D9A45C"/>
+  <text x="36" y="225" font-size="8.5" fill="#1f2328" dominant-baseline="central">iOS 多行 Label 嵌套图片行高膨胀</text>
+  <text x="248" y="225" font-size="8" fill="#5b6470" dominant-baseline="central">根因已写清，也对比了另两端</text>
+  <text x="436" y="225" font-size="8" fill="#8A4B00" dominant-baseline="central">只缺解法：按 Android 的「替换度量」思路重排 iOS 附件度量</text>
+
+  <!-- 6 -->
+  <rect x="24" y="244" width="632" height="30" rx="5" fill="#F9FAFB" stroke="#E3E6EA" stroke-width="0.5"/>
+  <rect x="24" y="244" width="2.5" height="30" rx="1.25" fill="#98A2B3"/>
+  <text x="36" y="259" font-size="8.5" fill="#1f2328" dominant-baseline="central">鸿蒙下划线间距比另外两端大</text>
+  <text x="248" y="259" font-size="8" fill="#5b6470" dominant-baseline="central">三端截图</text>
+  <text x="436" y="259" font-size="8" fill="#5b6470" dominant-baseline="central">缺陷在鸿蒙侧；Android 只是参照系，不必排进 Android 计划</text>
+
+  <!-- 7 -->
+  <rect x="24" y="278" width="632" height="30" rx="5" fill="#F9FAFB" stroke="#E3E6EA" stroke-width="0.5"/>
+  <rect x="24" y="278" width="2.5" height="30" rx="1.25" fill="#98A2B3"/>
+  <text x="36" y="293" font-size="8.5" fill="#1f2328" dominant-baseline="central">鸿蒙 borderStyle = Dotted 是圆点</text>
+  <text x="248" y="293" font-size="8" fill="#5b6470" dominant-baseline="central">一张截图</text>
+  <text x="436" y="293" font-size="8" fill="#5b6470" dominant-baseline="central">同上</text>
+
+  <!-- 8 -->
+  <rect x="24" y="312" width="632" height="30" rx="5" fill="#F9FAFB" stroke="#E3E6EA" stroke-width="0.5"/>
+  <rect x="24" y="312" width="2.5" height="30" rx="1.25" fill="#98A2B3"/>
+  <text x="36" y="327" font-size="8.5" fill="#1f2328" dominant-baseline="central">鸿蒙圆角压缩不一致</text>
+  <text x="248" y="327" font-size="8" fill="#5b6470" dominant-baseline="central">一张截图 ＋ 复现代码</text>
+  <text x="436" y="327" font-size="8" fill="#5b6470" dominant-baseline="central">同上</text>
+
+  <line x1="24" y1="354" x2="656" y2="354" stroke="#e6e9ed" stroke-width="0.5"/>
+  <text x="24" y="370" font-size="8.5" fill="#5b6470" dominant-baseline="central">另有 3 篇标着【已解决】而正文三节全空：EllipsizeMode 截断省略号、图片重载闪白、Image ResizeMode 三端不一致。</text>
+  <text x="24" y="386" font-size="8.5" fill="#8a929c" dominant-baseline="central">它们缺的不是定位，是一次回写；在补上之前，「已解决」只能当文档状态看，不能当线上状态看。</text>
+</svg>

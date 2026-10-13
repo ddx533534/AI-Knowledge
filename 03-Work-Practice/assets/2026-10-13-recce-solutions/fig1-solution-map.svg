@@ -1,0 +1,86 @@
+<svg viewBox="0 0 680 348" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>Recce 1.28 到 1.35 的技术方案按版本与类别分布</title>
+  <desc>五行八列的矩阵。行是五类工作：换依赖、新增能力、重构、对齐与适配、机制与扫描；列是 1.28 到 1.35 八个版本。换依赖出现在 1.28（Yoga 引入）与 1.31（Android 升 yoga、鸿蒙升 yoga）。新增能力从 1.29 的 Lottie 起，1.32 加 SVG，1.33 加字体加载与文本渐变，1.34 加 Touch 指针，1.35 加补充缺失属性。重构出现在 1.31（图片重构）、1.34（背景重构）、1.35（触摸事件新架构）。对齐与适配出现在 1.30（字体路径）、1.32（Image 二期）、1.35（Android 17 适配）。机制与扫描只在 1.35（实名认证方案调研、RN 差异扫描）。格子颜色只表示类别，不表示评价。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">18 份方案按版本与类别排开</text>
+
+  <rect x="24" y="32" width="632" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="32" y="44" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">类别</text>
+  <text x="163.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.28</text>
+  <text x="229" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.29</text>
+  <text x="294.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.30</text>
+  <text x="360" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.31</text>
+  <text x="425.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.32</text>
+  <text x="491" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.33</text>
+  <text x="556.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.34</text>
+  <text x="622" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.35</text>
+
+  <!-- 行 1 换依赖 -->
+  <text x="32" y="74" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">换依赖</text>
+  <text x="32" y="89" font-size="8.5" fill="#8a929c" dominant-baseline="central">借来的引擎收回自己手里</text>
+  <rect x="132" y="58" width="63" height="50" rx="5" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
+  <text x="163.5" y="78" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">Yoga 引入</text>
+  <text x="163.5" y="90" font-size="8" fill="#A9743A" text-anchor="middle" dominant-baseline="central">3.2.1 自打包</text>
+  <rect x="328.5" y="58" width="63" height="50" rx="5" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
+  <text x="360" y="73" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">Android 升</text>
+  <text x="360" y="84" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">yoga</text>
+  <text x="360" y="96" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">鸿蒙升 yoga</text>
+
+  <!-- 行 2 新增能力 -->
+  <text x="32" y="128" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">新增能力</text>
+  <text x="32" y="143" font-size="8.5" fill="#8a929c" dominant-baseline="central">各定一套资源来源规则</text>
+  <rect x="197.5" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="229" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">Lottie</text>
+  <text x="229" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">dist/lottie</text>
+  <rect x="394" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="425.5" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">SVG</text>
+  <text x="425.5" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">data: 前缀</text>
+  <rect x="459.5" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="491" y="127" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">字体加载</text>
+  <text x="491" y="138" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">文本渐变</text>
+  <text x="491" y="150" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">bundle 内字体</text>
+  <rect x="525" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="556.5" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">Touch 指针</text>
+  <text x="556.5" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">协议先行</text>
+  <rect x="590.5" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="622" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">补属性</text>
+  <text x="622" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">协议 + 行为</text>
+
+  <!-- 行 3 重构 -->
+  <text x="32" y="182" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">重构</text>
+  <text x="32" y="197" font-size="8.5" fill="#8a929c" dominant-baseline="central">收益大头在清历史债</text>
+  <rect x="328.5" y="166" width="63" height="50" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="360" y="186" font-size="8.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">图片重构</text>
+  <text x="360" y="198" font-size="8" fill="#5C9575" text-anchor="middle" dominant-baseline="central">拆父子关系</text>
+  <rect x="525" y="166" width="63" height="50" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="556.5" y="186" font-size="8.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">背景重构</text>
+  <text x="556.5" y="198" font-size="8" fill="#5C9575" text-anchor="middle" dominant-baseline="central">收口到一个类</text>
+  <rect x="590.5" y="166" width="63" height="50" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="622" y="186" font-size="8.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">触摸新架构</text>
+  <text x="622" y="198" font-size="8" fill="#5C9575" text-anchor="middle" dominant-baseline="central">绕开原生分发</text>
+
+  <!-- 行 4 对齐与适配 -->
+  <text x="32" y="236" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">对齐与适配</text>
+  <text x="32" y="251" font-size="8.5" fill="#8a929c" dominant-baseline="central">判据换成线上有没有流量</text>
+  <rect x="263" y="220" width="63" height="50" rx="5" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="294.5" y="240" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">字体路径</text>
+  <text x="294.5" y="252" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">资源目录变更</text>
+  <rect x="394" y="220" width="63" height="50" rx="5" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="425.5" y="240" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">Image 二期</text>
+  <text x="425.5" y="252" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">属性逐项对齐</text>
+  <rect x="590.5" y="220" width="63" height="50" rx="5" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="622" y="236" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">Android 17</text>
+  <text x="622" y="248" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">适配</text>
+  <text x="622" y="260" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">被删 API 梳理</text>
+
+  <!-- 行 5 机制与扫描 -->
+  <text x="32" y="290" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">机制与扫描</text>
+  <text x="32" y="305" font-size="8.5" fill="#8a929c" dominant-baseline="central">交的是能力不是特性</text>
+  <rect x="590.5" y="274" width="63" height="50" rx="5" fill="#EEF5FC" stroke="#C9DFF2" stroke-width="0.5"/>
+  <text x="622" y="289" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">实名调研</text>
+  <text x="622" y="300" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">差异扫描</text>
+  <text x="622" y="312" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">pdef / 对读</text>
+
+  <line x1="24" y1="332" x2="656" y2="332" stroke="#e6e9ed" stroke-width="0.5"/>
+  <text x="24" y="342" font-size="8.5" fill="#8a929c" dominant-baseline="central">颜色只区分类别：橙＝换依赖，蓝＝新增能力与机制，绿＝重构，灰＝对齐与适配。</text>
+</svg>

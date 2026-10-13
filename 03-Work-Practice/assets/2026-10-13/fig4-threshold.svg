@@ -1,0 +1,68 @@
+<svg viewBox="0 0 680 380" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>阈值判定：RN 状态机与 Recce 手工比较，同一段比例变化通知次数不同</title>
+  <desc>上半是 RN 的三种状态：Initial、NotIntersecting、Intersecting 带当前阈值，只有跨过的最高阈值变化才产生 entry。下半是同一段比例从 0.4 到 0.5 再到 0.6 的两条对照：RN 官方只通知一次，Recce 手工的半开半闭比较会通知两次，而且阈值 0 和 1 还要单独写特判。</desc>
+
+  <text x="24" y="18" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">阈值怎么判：RN 用状态机，Recce 用逐次比较</text>
+
+  <rect x="270" y="36" width="140" height="36" rx="8" fill="#F7F6F3" stroke="#888780" stroke-width="0.5"/>
+  <text x="340" y="54" text-anchor="middle" font-size="11.5" fill="#4a5158" dominant-baseline="central">Initial</text>
+
+  <line x1="330" y1="72" x2="188" y2="128" stroke="#185FA5" stroke-width="1.2" marker-end="url(#ar4a)"/>
+  <text x="238" y="90" text-anchor="middle" font-size="9" fill="#4a5158" dominant-baseline="central">比例小于所有阈值</text>
+
+  <line x1="350" y1="72" x2="493" y2="128" stroke="#0F6E56" stroke-width="1.2" marker-end="url(#ar4b)"/>
+  <text x="455" y="90" text-anchor="middle" font-size="9" fill="#4a5158" dominant-baseline="central">比例跨过某个阈值</text>
+
+  <rect x="90" y="132" width="170" height="40" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="175" y="152" text-anchor="middle" font-size="11.5" fill="#0C447C" dominant-baseline="central">NotIntersecting</text>
+
+  <rect x="420" y="132" width="190" height="40" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="515" y="152" text-anchor="middle" font-size="11.5" fill="#085041" dominant-baseline="central">Intersecting(0.5)</text>
+
+  <line x1="266" y1="152" x2="414" y2="152" stroke="#888780" stroke-width="1" marker-start="url(#ar4c)" marker-end="url(#ar4c)"/>
+  <text x="340" y="136" text-anchor="middle" font-size="8.5" fill="#4a5158" dominant-baseline="central">跨过阈值</text>
+  <text x="340" y="170" text-anchor="middle" font-size="8.5" fill="#4a5158" dominant-baseline="central">掉回阈值以下</text>
+
+  <text x="340" y="196" text-anchor="middle" font-size="9.5" fill="#4a5158" dominant-baseline="central">状态没变就不产生 entry。完全不相交由求交返回空来表达，不是靠比例等于 0 推的</text>
+
+  <line x1="24" y1="212" x2="656" y2="212" stroke="#e6e8ea" stroke-width="1"/>
+
+  <text x="24" y="246" font-size="11" fill="#0C447C" dominant-baseline="central">RN 官方</text>
+  <line x1="110" y1="246" x2="600" y2="246" stroke="#d9dde3" stroke-width="1.5"/>
+  <line x1="240" y1="241" x2="240" y2="251" stroke="#c8ccd2" stroke-width="1"/>
+  <line x1="380" y1="241" x2="380" y2="251" stroke="#c8ccd2" stroke-width="1"/>
+  <line x1="520" y1="241" x2="520" y2="251" stroke="#c8ccd2" stroke-width="1"/>
+  <text x="240" y="262" text-anchor="middle" font-size="9" fill="#5b6470" dominant-baseline="central">0.4</text>
+  <text x="380" y="262" text-anchor="middle" font-size="9" fill="#5b6470" dominant-baseline="central">0.5</text>
+  <text x="520" y="262" text-anchor="middle" font-size="9" fill="#5b6470" dominant-baseline="central">0.6</text>
+  <circle cx="380" cy="246" r="6.5" fill="#0F6E56"/>
+  <text x="380" y="226" text-anchor="middle" font-size="9" fill="#085041" dominant-baseline="central">从 0.4 到 0.5 通知一次；再到 0.6，跨过的最高阈值还是 0.5</text>
+  <text x="656" y="246" text-anchor="end" font-size="14" font-weight="500" fill="#0F6E56" dominant-baseline="central">1 次</text>
+
+  <text x="24" y="320" font-size="11" fill="#7A4E0C" dominant-baseline="central">Recce 1.24</text>
+  <line x1="110" y1="320" x2="600" y2="320" stroke="#d9dde3" stroke-width="1.5"/>
+  <line x1="240" y1="315" x2="240" y2="325" stroke="#c8ccd2" stroke-width="1"/>
+  <line x1="380" y1="315" x2="380" y2="325" stroke="#c8ccd2" stroke-width="1"/>
+  <line x1="520" y1="315" x2="520" y2="325" stroke="#c8ccd2" stroke-width="1"/>
+  <text x="240" y="336" text-anchor="middle" font-size="9" fill="#5b6470" dominant-baseline="central">0.4</text>
+  <text x="380" y="336" text-anchor="middle" font-size="9" fill="#5b6470" dominant-baseline="central">0.5</text>
+  <text x="520" y="336" text-anchor="middle" font-size="9" fill="#5b6470" dominant-baseline="central">0.6</text>
+  <circle cx="310" cy="320" r="6.5" fill="#B4761D"/>
+  <circle cx="450" cy="320" r="6.5" fill="#B4761D"/>
+  <text x="380" y="300" text-anchor="middle" font-size="9" fill="#7A4E0C" dominant-baseline="central">左开右闭与左闭右开各判一次，两次变化都算跨过</text>
+  <text x="656" y="320" text-anchor="end" font-size="14" font-weight="500" fill="#A32D2D" dominant-baseline="central">2 次</text>
+
+  <text x="110" y="362" font-size="9" fill="#5b6470" dominant-baseline="central">阈值 0 和 1 还要各写一条边界特判，RN 不需要这一步</text>
+
+  <defs>
+    <marker id="ar4a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ar4b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ar4c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+</svg>

@@ -47,20 +47,25 @@ class KnowledgeTests(unittest.TestCase):
         self.assertEqual(artifact.stat().st_mtime_ns, mtime)
         self.assertEqual(before, (self.source.read_bytes(), self.source.stat().st_mtime_ns))
 
-    def test_archive_path_has_readable_name_and_short_version(self):
+    def test_archive_path_is_flat_and_keeps_the_document_name(self):
         archived = self.archive()
-        path = Path(archived['artifact'])
-        self.assertEqual(path.parent.name, '研究--' + archived['id'][:12])
-        self.assertEqual(path.name, '原文-研究.md')
-        self.assertEqual(k.manifests(self.root)[archived['id']]['id'], archived['id'])
+        self.assertEqual(archived['artifact'], '05-Research/研究.md')
+        self.assertTrue((self.root / archived['artifact']).is_file())
+        self.assertEqual(k.documents(self.root)[archived['id']]['id'], archived['id'])
+        self.assertFalse(any(p.is_dir() for p in (self.root / '05-Research').iterdir()))
+        self.assertEqual(sorted(p.name for p in (self.root / '05-Research').iterdir()),
+                         ['manifest.json', '研究.md'])
 
     def test_new_version_keeps_previous_original(self):
         first = self.archive()
         self.source.write_text("新的 synthetic fixture", encoding="utf-8")
         second = self.archive()
         self.assertNotEqual(first["id"], second["id"])
-        self.assertEqual(k.manifests(self.root)[second["id"]]["previous_version"], first["id"])
-        self.assertTrue((self.root / first["artifact"]).exists())
+        records = k.documents(self.root)
+        self.assertEqual(second["artifact"], "05-Research/研究.md")
+        self.assertEqual(records[second["id"]]["previous_version"], first["id"])
+        self.assertEqual(records[first["id"]]["artifact"], "05-Research/研究-" + first["id"][:8] + ".md")
+        self.assertTrue((self.root / records[first["id"]]["artifact"]).is_file())
         self.assertEqual(k.validate(self.root), [])
 
     def test_document_graph_and_evidence_open_byte_exact_original(self):
@@ -71,11 +76,11 @@ class KnowledgeTests(unittest.TestCase):
         doc = next(n for n in graph['nodes'] if n['kind'] == 'document')
         self.assertEqual(doc['path'], archived['artifact'])
         self.assertEqual((self.root / doc['path']).read_bytes(), self.source.read_bytes())
-        self.assertNotEqual(doc['path'], doc['note'])
-        index = (self.root / '99-System/文档索引.md').read_text(encoding='utf-8')
+        self.assertNotIn('note', doc)
+        index = (self.root / '99-System/索引.md').read_text(encoding='utf-8')
         self.assertIn('[[' + archived['artifact'] + '|', index)
         note = (self.root / '01-Knowledge/test-concept.md').read_text(encoding='utf-8')
-        self.assertIn('[[' + archived['artifact'] + '|原文证据]]', note)
+        self.assertIn('[[' + archived['artifact'] + '|研究]]', note)
 
     def test_same_name_in_distinct_projects_does_not_collide(self):
         first = self.archive()
@@ -85,7 +90,9 @@ class KnowledgeTests(unittest.TestCase):
         source.write_bytes(self.source.read_bytes())
         second = self.archive(source, project)
         self.assertNotEqual(first["id"], second["id"])
-        self.assertEqual(len(k.manifests(self.root)), 2)
+        self.assertEqual(len(k.documents(self.root)), 2)
+        self.assertEqual(second["artifact"], "05-Research/研究-" + second["id"][:8] + ".md")
+        self.assertEqual(k.validate(self.root), [])
 
     def test_rapid_changes_keep_the_latest_version_in_chain(self):
         first = self.archive()
@@ -93,9 +100,11 @@ class KnowledgeTests(unittest.TestCase):
         second = self.archive()
         self.source.write_text("synthetic third version", encoding="utf-8")
         third = self.archive()
-        records = k.manifests(self.root)
+        records = k.documents(self.root)
         self.assertEqual(records[third["id"]]["previous_version"], second["id"])
         self.assertEqual(records[second["id"]]["previous_version"], first["id"])
+        self.assertEqual(third["artifact"], "05-Research/研究.md")
+        self.assertEqual(k.validate(self.root), [])
 
     def test_binary_copy_is_not_decoded(self):
         source = self.project / "fixture.pdf"
@@ -182,11 +191,10 @@ class KnowledgeTests(unittest.TestCase):
 
     def test_manifest_cannot_point_outside_vault(self):
         doc_id = self.archive()["id"]
-        records = k.manifests(self.root)
-        path = self.root / records[doc_id]["_manifest"]
-        record = k.read_json(path)
-        record["artifact"] = "../source-project/研究.md"
-        k.write(path, k.dump(record))
+        path = self.root / k.MANIFEST
+        data = k.read_json(path)
+        data["documents"][doc_id]["artifact"] = "../source-project/研究.md"
+        k.write(path, k.dump(data))
         self.assertTrue(k.validate(self.root))
         with self.assertRaises(ValueError):
             k.build(self.root)
@@ -243,7 +251,8 @@ class KnowledgeTests(unittest.TestCase):
         codex.mkdir(parents=True)
         (codex / "AGENTS.override.md").write_text("覆盖规则。\n", encoding="utf-8")
         result = installer.install(self.root, home, codex)
-        self.assertEqual(result["global_rule"], str(codex / "AGENTS.override.md"))
+        # macOS 的临时目录是 /var → /private/var 符号链接，只比较解析后的真实路径
+        self.assertEqual(Path(result["global_rule"]).resolve(), (codex / "AGENTS.override.md").resolve())
         self.assertFalse((codex / "AGENTS.md").exists())
 
 

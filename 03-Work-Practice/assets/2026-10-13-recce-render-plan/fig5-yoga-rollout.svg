@@ -1,0 +1,54 @@
+<svg viewBox="0 0 680 452" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>Yoga 3.2.1 在外卖商家端 7.16 上线验证的五档放量节奏</title>
+  <desc>竖向时间轴。左侧是日期与放量档位，右侧是该档位的观测结论。6 月 30 日按 uuid 放 1%，因为叠加 App 自带灰度后基本没量、收数太慢，当天改到 30%；7 月 3 日放 30%，无 crash，Android 新 yoga 异常比例 0.044%、老版 0.0032%，iOS 新 0.08%、老版 0.14%，都没有新类型异常；7 月 8 日放 50%，截至 7 月 13 日 TTI 稳定，Android 的异常都是存量 subview_empty，iOS 的都是离线包降级；7 月 16 日放 80%，截至 7 月 21 日确认支付转化率双端稳定、无线上 crash；7 月 21 日全量。图底说明验证载体是外卖商家端 7.16，埋点带 use_new_yoga 字段形成对照，benchmark 显示新旧 yoga 耗时无明显差距，以及三端包体增量。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">低流量 B 端验证：1% → 30% → 50% → 80% → 全量</text>
+
+  <line x1="112" y1="40" x2="112" y2="256" stroke="#d9dde3" stroke-width="1.2"/>
+
+  <circle cx="112" cy="56" r="4.5" fill="#E8843C" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="100" y="46" font-size="10" font-weight="500" fill="#1f2328" text-anchor="end" dominant-baseline="central">6.30</text>
+  <text x="100" y="62" font-size="9.5" fill="#A05A00" text-anchor="end" dominant-baseline="central">uuid 1%</text>
+  <text x="128" y="56" font-size="9.5" fill="#5b6470" dominant-baseline="central">叠加 App 自带灰度后基本没量，收数太慢也看不出问题；当天决定先放到 30%，收三天数</text>
+
+  <circle cx="112" cy="100" r="4.5" fill="#E8843C" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="100" y="90" font-size="10" font-weight="500" fill="#1f2328" text-anchor="end" dominant-baseline="central">7.3</text>
+  <text x="100" y="106" font-size="9.5" fill="#A05A00" text-anchor="end" dominant-baseline="central">uuid 30%</text>
+  <text x="128" y="94" font-size="9.5" fill="#5b6470" dominant-baseline="central">无 crash。Android 新 yoga 异常比例 0.044%、老版 0.0032%；iOS 新 0.08%、老 0.14%；</text>
+  <text x="128" y="108" font-size="9.5" fill="#5b6470" dominant-baseline="central">两端都无新类型异常</text>
+
+  <circle cx="112" cy="144" r="4.5" fill="#E8843C" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="100" y="134" font-size="10" font-weight="500" fill="#1f2328" text-anchor="end" dominant-baseline="central">7.8</text>
+  <text x="100" y="150" font-size="9.5" fill="#A05A00" text-anchor="end" dominant-baseline="central">uuid 50%</text>
+  <text x="128" y="138" font-size="9.5" fill="#5b6470" dominant-baseline="central">截至 7.13 TTI 稳定。Android 异常都是存量 subview_empty，iOS 异常都是离线包降级，</text>
+  <text x="128" y="152" font-size="9.5" fill="#5b6470" dominant-baseline="central">与新 yoga 无关</text>
+
+  <circle cx="112" cy="188" r="4.5" fill="#E8843C" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="100" y="178" font-size="10" font-weight="500" fill="#1f2328" text-anchor="end" dominant-baseline="central">7.16</text>
+  <text x="100" y="194" font-size="9.5" fill="#A05A00" text-anchor="end" dominant-baseline="central">uuid 80%</text>
+  <text x="128" y="182" font-size="9.5" fill="#5b6470" dominant-baseline="central">截至 7.21 确认支付转化率双端稳定，TTI 与抵达率稳定，无线上 crash</text>
+
+  <circle cx="112" cy="232" r="4.5" fill="#1a7f37" stroke="#ffffff" stroke-width="1.2"/>
+  <text x="100" y="222" font-size="10" font-weight="500" fill="#1f2328" text-anchor="end" dominant-baseline="central">7.21</text>
+  <text x="100" y="238" font-size="9.5" fill="#1a7f37" text-anchor="end" dominant-baseline="central">全量</text>
+  <text x="128" y="226" font-size="9.5" fill="#5b6470" dominant-baseline="central">技术指标与业务指标都稳。50% 放量区间里，新 yoga 的业务指标反而略好</text>
+
+  <rect x="24" y="272" width="632" height="164" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="40" y="292" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">这次验证里值得抄走的四个动作</text>
+
+  <rect x="40" y="306" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="310" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">载体选低流量 B 端</tspan>：C / Keeta 对稳定性与性能要求高、不好做实验，改用外卖商家端 7.16</text>
+
+  <rect x="40" y="328" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="332" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">埋点带维度而不是靠时间断点</tspan>：双端所有事件加通用字段 use_new_yoga，同一天就能对照</text>
+
+  <rect x="40" y="350" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="354" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">技术指标与业务指标一起看</tspan>：抵达率、TTI 分位，以及按 trade_no 关联的确认支付转化率</text>
+
+  <rect x="40" y="372" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="376" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">对存量异常先归因再下结论</tspan>：subview_empty 新老版本都有、iOS 是离线包降级，不算新引入</text>
+
+  <text x="40" y="400" font-size="9" fill="#8a929c" dominant-baseline="central">benchmark：华为 Mate 30 上老 yoga 平均 14.2ms、新 yoga 13.8ms，「耗时上没有明显差距」。</text>
+  <text x="40" y="414" font-size="9" fill="#8a929c" dominant-baseline="central">包体：iOS 压缩前 +150.52KB / 压缩后 +34KB，Android 压缩前 +489.52KB / 压缩后 +194KB，</text>
+  <text x="40" y="428" font-size="9" fill="#8a929c" dominant-baseline="central">鸿蒙压缩后 +1047KB（无包体管控）。benchmark 只在一台机型上跑过，不能当性能结论用。</text>
+</svg>

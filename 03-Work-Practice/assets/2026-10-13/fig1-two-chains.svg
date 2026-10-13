@@ -1,0 +1,85 @@
+<svg viewBox="0 0 680 400" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>两条调用链并排：RN 官方 IntersectionObserver 与 Recce 1.24 原生监听</title>
+  <desc>左列是 RN 官方链路：JS 的 IntersectionObserver 类经 JS 注册表、TurboModule 到 C++ 管理器，几何计算在 Fabric shadow tree 上，触发靠挂载钩子，一次挂载把该 surface 上所有 observer 合并成一次通知。右列是 Recce 1.24 链路：业务只设一个属性，layout 时找到父级 ScrollView 并注册滚动回调，主线程用 Android Rect 求交，算完单向上报。</desc>
+
+  <text x="24" y="20" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">RN 官方 IntersectionObserver</text>
+  <text x="216" y="20" font-size="11" fill="#185FA5" dominant-baseline="central">状态：Canary</text>
+  <line x1="24" y1="34" x2="324" y2="34" stroke="#185FA5" stroke-width="1"/>
+
+  <text x="356" y="20" font-size="13" font-weight="500" fill="#7A4E0C" dominant-baseline="central">Recce 1.24 原生监听</text>
+  <text x="556" y="20" font-size="11" fill="#B4761D" dominant-baseline="central">随 1.24 上线</text>
+  <line x1="356" y1="34" x2="656" y2="34" stroke="#B4761D" stroke-width="1"/>
+
+  <rect x="24" y="46" width="300" height="42" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="174" y="62" text-anchor="middle" font-size="11.5" fill="#0C447C" dominant-baseline="central">业务代码，标准 API</text>
+  <text x="174" y="77" text-anchor="middle" font-size="9.5" fill="#185FA5" dominant-baseline="central">new IntersectionObserver(cb, { threshold })</text>
+
+  <line x1="174" y1="88" x2="174" y2="102" stroke="#185FA5" stroke-width="1.2" marker-end="url(#ar1)"/>
+
+  <rect x="24" y="104" width="300" height="42" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="174" y="120" text-anchor="middle" font-size="11.5" fill="#0C447C" dominant-baseline="central">JS 侧注册表</text>
+  <text x="174" y="135" text-anchor="middle" font-size="9" fill="#185FA5" dominant-baseline="central">IntersectionObserverManager 分配 observerId</text>
+
+  <line x1="174" y1="146" x2="174" y2="160" stroke="#185FA5" stroke-width="1.2" marker-end="url(#ar1)"/>
+
+  <rect x="24" y="162" width="300" height="42" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="174" y="178" text-anchor="middle" font-size="11.5" fill="#0C447C" dominant-baseline="central">TurboModule</text>
+  <text x="174" y="193" text-anchor="middle" font-size="9.5" fill="#185FA5" dominant-baseline="central">observeV2 · connect · takeRecords</text>
+
+  <line x1="174" y1="204" x2="174" y2="218" stroke="#185FA5" stroke-width="1.2" marker-end="url(#ar1)"/>
+
+  <rect x="24" y="220" width="300" height="42" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="174" y="236" text-anchor="middle" font-size="11.5" fill="#0C447C" dominant-baseline="central">C++ IntersectionObserverManager</text>
+  <text x="174" y="251" text-anchor="middle" font-size="9.5" fill="#185FA5" dominant-baseline="central">实现 UIManagerMountHook，计算从这里发起</text>
+
+  <line x1="174" y1="262" x2="174" y2="276" stroke="#185FA5" stroke-width="1.2" marker-end="url(#ar1)"/>
+
+  <rect x="24" y="278" width="300" height="46" rx="8" fill="#B5D4F4" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="174" y="294" text-anchor="middle" font-size="11.5" fill="#0C447C" dominant-baseline="central">C++ IntersectionObserver</text>
+  <text x="174" y="309" text-anchor="middle" font-size="9.5" fill="#0C447C" dominant-baseline="central">在 Fabric shadow tree 上算几何</text>
+
+  <rect x="356" y="46" width="300" height="42" rx="8" fill="#FAEEDA" stroke="#B4761D" stroke-width="0.5"/>
+  <text x="506" y="62" text-anchor="middle" font-size="11.5" fill="#7A4E0C" dominant-baseline="central">业务代码，设一个属性</text>
+  <text x="506" y="77" text-anchor="middle" font-size="9" fill="#B4761D" dominant-baseline="central">isVisibleAreaChange + rootMargin + threshold</text>
+
+  <line x1="506" y1="88" x2="506" y2="102" stroke="#B4761D" stroke-width="1.2" marker-end="url(#ar2)"/>
+
+  <rect x="356" y="104" width="300" height="42" rx="8" fill="#FAEEDA" stroke="#B4761D" stroke-width="0.5"/>
+  <text x="506" y="120" text-anchor="middle" font-size="11.5" fill="#7A4E0C" dominant-baseline="central">layout 时找父级 ScrollView</text>
+  <text x="506" y="135" text-anchor="middle" font-size="9.5" fill="#B4761D" dominant-baseline="central">OnGlobalLayoutListener 只遍历到 RecceRootView</text>
+
+  <line x1="506" y1="146" x2="506" y2="160" stroke="#B4761D" stroke-width="1.2" marker-end="url(#ar2)"/>
+
+  <rect x="356" y="162" width="300" height="42" rx="8" fill="#FAEEDA" stroke="#B4761D" stroke-width="0.5"/>
+  <text x="506" y="178" text-anchor="middle" font-size="11.5" fill="#7A4E0C" dominant-baseline="central">挂滚动回调</text>
+  <text x="506" y="193" text-anchor="middle" font-size="9.5" fill="#B4761D" dominant-baseline="central">OnRecceScrollChangeListener，16ms 节流</text>
+
+  <line x1="506" y1="204" x2="506" y2="218" stroke="#B4761D" stroke-width="1.2" marker-end="url(#ar2)"/>
+
+  <rect x="356" y="220" width="300" height="42" rx="8" fill="#FAEEDA" stroke="#B4761D" stroke-width="0.5"/>
+  <text x="506" y="236" text-anchor="middle" font-size="11.5" fill="#7A4E0C" dominant-baseline="central">主线程直接算</text>
+  <text x="506" y="251" text-anchor="middle" font-size="9.5" fill="#B4761D" dominant-baseline="central">Android Rect 的 setIntersect，不入队</text>
+
+  <line x1="506" y1="262" x2="506" y2="276" stroke="#B4761D" stroke-width="1.2" marker-end="url(#ar2)"/>
+
+  <rect x="356" y="278" width="300" height="46" rx="8" fill="#F5CFA4" stroke="#B4761D" stroke-width="0.5"/>
+  <text x="506" y="294" text-anchor="middle" font-size="11.5" fill="#7A4E0C" dominant-baseline="central">算完单向上报</text>
+  <text x="506" y="309" text-anchor="middle" font-size="9.5" fill="#7A4E0C" dominant-baseline="central">结果推给 recce-ui，JS 不主动查询</text>
+
+  <rect x="24" y="342" width="300" height="46" rx="8" fill="#F7F6F3" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="358" font-size="9.5" fill="#4a5158" dominant-baseline="central">滚动全程只有渲染层内部计算。一次挂载</text>
+  <text x="40" y="374" font-size="9.5" fill="#4a5158" dominant-baseline="central">把该 surface 上所有 observer 合并成一次通知。</text>
+
+  <rect x="356" y="342" width="300" height="46" rx="8" fill="#F7F6F3" stroke="#888780" stroke-width="0.5"/>
+  <text x="372" y="358" font-size="9.5" fill="#4a5158" dominant-baseline="central">每个被监听的 view 各自上报一趟，省掉</text>
+  <text x="372" y="374" font-size="9.5" fill="#4a5158" dominant-baseline="central">JS 发起查询的往返。</text>
+
+  <defs>
+    <marker id="ar1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#B4761D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+</svg>

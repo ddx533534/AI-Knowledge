@@ -23,3 +23,7 @@ __pycache__/
 99-System/Backups/*.zip
 !99-System/Backups/2026-10-10-before-rebuild.zip
 *.bin
+
+# macOS 与 Obsidian 的本地产物
+.DS_Store
+未命名.canvas

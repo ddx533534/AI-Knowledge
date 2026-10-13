@@ -1,0 +1,40 @@
+<svg viewBox="0 0 680 440" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>Yoga 3.2.1 升级方案的五步决策链</title>
+  <desc>五步单列决策链。第一步起点是补齐通用布局缺失属性。第二步发现做不到，因为 Recce 不实现布局计算、全部委托从 MRN 借来的 Yoga 1.18.0。第三步把问题重定义为依赖形态问题，一个动作绑上三条诉求：gap 能力、MRN 静默升级的隐性耦合、absolute 元素 visible 失效，这一格标红表示风险。第四步在三条候选路里选了融合进已有组件，否掉新增组件与 Taffy，代价是两份 so 共存、包名必须改。第五步落地与验证：horn 按包名切双引擎，埋点带 use_new_yoga，在外卖商家端按 uuid 阶梯放量。</desc>
+
+  <defs>
+    <marker id="ar-yg" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#5b6470" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="18" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">当时是从哪儿走到哪儿</text>
+
+  <rect x="24" y="34" width="616" height="58" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="40" y="54" font-size="11.5" fill="#1f2328" dominant-baseline="central">一、起点：补齐通用布局缺失属性</text>
+  <text x="40" y="74" font-size="10" fill="#5b6470" dominant-baseline="central">通用布局支持度 93%（52/56），缺 gap 系列；keeta 与前置组件近期要用，定为 P0</text>
+
+  <line x1="332" y1="92" x2="332" y2="112" stroke="#5b6470" stroke-width="1.2" marker-end="url(#ar-yg)"/>
+
+  <rect x="24" y="116" width="616" height="58" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="40" y="136" font-size="11.5" fill="#1f2328" dominant-baseline="central">二、做不到：属性不在自己手里</text>
+  <text x="40" y="156" font-size="10" fill="#5b6470" dominant-baseline="central">Recce 不实现布局计算，全部委托外部 Yoga，而这份 Yoga 是从 MRN 借来的，停在 1.18.0</text>
+
+  <line x1="332" y1="174" x2="332" y2="194" stroke="#5b6470" stroke-width="1.2" marker-end="url(#ar-yg)"/>
+
+  <rect x="24" y="198" width="616" height="58" rx="8" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+  <text x="40" y="218" font-size="11.5" fill="#791F1F" dominant-baseline="central">三、重定义：这是依赖形态问题，一个动作绑上三条诉求</text>
+  <text x="40" y="238" font-size="10" fill="#A32D2D" dominant-baseline="central">gap 能力（功能）＋ MRN 静默升级不周知的隐性耦合（稳定）＋ absolute 元素 visible 失效（既有 bug）</text>
+
+  <line x1="332" y1="256" x2="332" y2="276" stroke="#5b6470" stroke-width="1.2" marker-end="url(#ar-yg)"/>
+
+  <rect x="24" y="280" width="616" height="58" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="40" y="300" font-size="11.5" fill="#1f2328" dominant-baseline="central">四、选型：融合进已有组件</text>
+  <text x="40" y="320" font-size="10" fill="#5b6470" dominant-baseline="central">否掉新增组件（要过平台审批）与 Taffy（缺 RTL 与 Position::Static）；代价是两份 so 共存，包名必须改</text>
+
+  <line x1="332" y1="338" x2="332" y2="358" stroke="#5b6470" stroke-width="1.2" marker-end="url(#ar-yg)"/>
+
+  <rect x="24" y="362" width="616" height="58" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="40" y="382" font-size="11.5" fill="#1f2328" dominant-baseline="central">五、落地与验证</text>
+  <text x="40" y="402" font-size="10" fill="#5b6470" dominant-baseline="central">horn 按包名切双引擎，埋点带 use_new_yoga 形成对照；外卖商家端按 uuid 阶梯放量，稳定后合主分支</text>
+</svg>

@@ -1,0 +1,68 @@
+<svg viewBox="0 0 680 396" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>按现象找解法：先查什么、动作落在哪里</title>
+  <desc>六行映射。左列是看到的现象，中列是定位第一步，右列是具体解法动作与落点。涵盖宽高不对、隐藏后状态丢失、两端同名属性相反、点不到、只在小数机型出现、事件数据与单位不对六种形态。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">按现象找解法：先查什么，动作落在哪里</text>
+  <text x="24" y="32" font-size="9" fill="#8a929c" dominant-baseline="central">左列是现象，中列是定位第一步，右列是解法动作与落点</text>
+
+  <rect x="24" y="46" width="196" height="24" rx="4" fill="#F2F4F7"/>
+  <text x="36" y="58" font-size="8.5" font-weight="500" fill="#5b6470" dominant-baseline="central">你看到的现象</text>
+  <rect x="228" y="46" width="176" height="24" rx="4" fill="#F2F4F7"/>
+  <text x="240" y="58" font-size="8.5" font-weight="500" fill="#5b6470" dominant-baseline="central">先查什么</text>
+  <rect x="412" y="46" width="244" height="24" rx="4" fill="#F2F4F7"/>
+  <text x="424" y="58" font-size="8.5" font-weight="500" fill="#5b6470" dominant-baseline="central">解法动作与落点</text>
+
+  <!-- 行 1 -->
+  <rect x="24" y="76" width="632" height="46" rx="6" fill="#F7FAF8" stroke="#DCE7E0" stroke-width="0.5"/>
+  <text x="36" y="92" font-size="8.5" fill="#1f2328" dominant-baseline="central">宽高不对、撑不起来、</text>
+  <text x="36" y="106" font-size="8.5" fill="#1f2328" dominant-baseline="central">该隐的没隐掉</text>
+  <text x="240" y="99" font-size="8" fill="#5b6470" dominant-baseline="central">同一版本引擎的原生 demo</text>
+  <text x="240" y="113" font-size="8" fill="#5b6470" dominant-baseline="central">上能不能复现</text>
+  <text x="424" y="92" font-size="8" fill="#1F6B3B" dominant-baseline="central">补属性写入（borderWidth 三边）＋升引擎</text>
+  <text x="424" y="106" font-size="8" fill="#5b6470" dominant-baseline="central">1.31 落 Yoga 3.2.1；undefined 变 0 那处靠 recce_ui 兜底</text>
+
+  <!-- 行 2 -->
+  <rect x="24" y="128" width="632" height="46" rx="6" fill="#F7FAF8" stroke="#DCE7E0" stroke-width="0.5"/>
+  <text x="36" y="144" font-size="8.5" fill="#1f2328" dominant-baseline="central">隐藏之后再显示，</text>
+  <text x="36" y="158" font-size="8.5" fill="#1f2328" dominant-baseline="central">状态丢了或白屏抖动</text>
+  <text x="240" y="151" font-size="8" fill="#5b6470" dominant-baseline="central">display:none 链上有没有</text>
+  <text x="240" y="165" font-size="8" fill="#5b6470" dominant-baseline="central">被置 0 的尺寸派生量</text>
+  <text x="424" y="144" font-size="8" fill="#1F6B3B" dominant-baseline="central">改框架保存逻辑（内容尺寸为 0 就跳过）</text>
+  <text x="424" y="158" font-size="8" fill="#5b6470" dominant-baseline="central">过渡期用「高度归零＋全透明」；父级隐藏改共享态存 offset</text>
+
+  <!-- 行 3 -->
+  <rect x="24" y="180" width="632" height="46" rx="6" fill="#F7FAF8" stroke="#DCE7E0" stroke-width="0.5"/>
+  <text x="36" y="196" font-size="8.5" fill="#1f2328" dominant-baseline="central">两端同名属性</text>
+  <text x="36" y="210" font-size="8.5" fill="#1f2328" dominant-baseline="central">表现正好相反</text>
+  <text x="240" y="203" font-size="8" fill="#5b6470" dominant-baseline="central">拿 RN 当第三参照，</text>
+  <text x="240" y="217" font-size="8" fill="#5b6470" dominant-baseline="central">别在两端之间二选一</text>
+  <text x="424" y="196" font-size="8" fill="#1F6B3B" dominant-baseline="central">修共享的那次解析，不是修错的那一端</text>
+  <text x="424" y="210" font-size="8" fill="#5b6470" dominant-baseline="central">AlignSelf 抵消 → 1.32 修；ResizeMode 默认值 1.32 对齐</text>
+
+  <!-- 行 4 -->
+  <rect x="24" y="232" width="632" height="46" rx="6" fill="#FDF7F0" stroke="#EFDCC2" stroke-width="0.5"/>
+  <text x="36" y="248" font-size="8.5" fill="#1f2328" dominant-baseline="central">点不到、点击被拦截、</text>
+  <text x="36" y="262" font-size="8.5" fill="#1f2328" dominant-baseline="central">事件不冒泡</text>
+  <text x="240" y="255" font-size="8" fill="#5b6470" dominant-baseline="central">这层的命中由谁决定：</text>
+  <text x="240" y="269" font-size="8" fill="#5b6470" dominant-baseline="central">原生层级，还是框架规则</text>
+  <text x="424" y="248" font-size="8" fill="#8A4B00" dominant-baseline="central">两条路：TouchDelegate 扩热区，或重写分发</text>
+  <text x="424" y="262" font-size="8" fill="#5b6470" dominant-baseline="central">升级到 1.22+ 用 on_touch_end，绕过原生手势识别</text>
+
+  <!-- 行 5 -->
+  <rect x="24" y="284" width="632" height="46" rx="6" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <text x="36" y="300" font-size="8.5" fill="#1f2328" dominant-baseline="central">只在某机型、某像素密度</text>
+  <text x="36" y="314" font-size="8.5" fill="#1f2328" dominant-baseline="central">才出现（差 1px、裁字）</text>
+  <text x="240" y="307" font-size="8" fill="#5b6470" dominant-baseline="central">把机型名单换成</text>
+  <text x="240" y="321" font-size="8" fill="#5b6470" dominant-baseline="central">结构性条件</text>
+  <text x="424" y="300" font-size="8" fill="#A32A1C" dominant-baseline="central">显式声明字体尺寸、或清缓存；两次 round 作差只能 hack</text>
+  <text x="424" y="314" font-size="8" fill="#5b6470" dominant-baseline="central">1px 差已向 RN 提 issue 与 PR，等上游或业务自己绕</text>
+
+  <!-- 行 6 -->
+  <rect x="24" y="336" width="632" height="46" rx="6" fill="#FDF7F0" stroke="#EFDCC2" stroke-width="0.5"/>
+  <text x="36" y="352" font-size="8.5" fill="#1f2328" dominant-baseline="central">事件数据不对、单位不对、</text>
+  <text x="36" y="366" font-size="8.5" fill="#1f2328" dominant-baseline="central">取不到想要的量</text>
+  <text x="240" y="359" font-size="8" fill="#5b6470" dominant-baseline="central">默认值、取值域、单位、</text>
+  <text x="240" y="373" font-size="8" fill="#5b6470" dominant-baseline="central">参照系这四件事</text>
+  <text x="424" y="352" font-size="8" fill="#8A4B00" dominant-baseline="central">两个 rect 互补算，手动除 pixel_ratio 换 dp</text>
+  <text x="424" y="366" font-size="8" fill="#5b6470" dominant-baseline="central">1.32 起统一；env 缺 window 尺寸则用 MSI 桥自己取</text>
+</svg>

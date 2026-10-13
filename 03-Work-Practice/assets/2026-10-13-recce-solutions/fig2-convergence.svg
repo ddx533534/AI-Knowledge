@@ -1,0 +1,77 @@
+<svg viewBox="0 0 680 400" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>三类多端不一致问题的收敛点，以及一处没收口的反例</title>
+  <desc>四行对照。前三行是已经收口的：背景渲染原来的形态是三端各自绘制边框、圆角与背景色，收口后所有 View 只设置一个 CompositeBackgroundDrawable；触摸分发原来三端各写一套命中与冒泡，收口后由 RecceTouchTargetHelper 统一按 pointerEvents、hitSlop、overflow、transform 判定；属性协议原来三端手写属性定义与读写，收口后由 pdef 单一源头生成 native 与 Rust 产物。第四行是反例：资源来源至今没收口，Lottie 用 dist/lottie 目录、SVG 用 data 前缀、字体加载用 bundle 内字体各定一套规则，缺的是统一的资源来源接口。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">三个收口点，一处还没收</text>
+  <text x="24" y="33" font-size="9" fill="#8a929c" dominant-baseline="central">左＝收口前的形态，右＝收口后的唯一入口</text>
+
+  <!-- 行 1 -->
+  <rect x="24" y="48" width="632" height="76" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="38" y="64" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">背景渲染</text>
+  <rect x="38" y="76" width="78" height="38" rx="5" fill="#F7F8FA" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="77" y="89" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">Android 各画</text>
+  <text x="77" y="102" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">border / radius / color</text>
+  <rect x="123" y="76" width="78" height="38" rx="5" fill="#F7F8FA" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="162" y="89" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">iOS 各画</text>
+  <text x="162" y="102" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">逻辑与 Android 不同</text>
+  <rect x="208" y="76" width="78" height="38" rx="5" fill="#F7F8FA" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="247" y="89" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">鸿蒙各画</text>
+  <text x="247" y="102" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">又一套取值</text>
+  <text x="296" y="95" font-size="13" fill="#8a929c" text-anchor="middle" dominant-baseline="central">→</text>
+  <rect x="322" y="76" width="320" height="38" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="334" y="89" font-size="9" font-weight="500" fill="#1F6B3B" dominant-baseline="central">CompositeBackgroundDrawable</text>
+  <text x="334" y="102" font-size="8" fill="#5C9575" dominant-baseline="central">背景色 / 边框 / 内外阴影各由一个 Drawable 负责，View 只 set 一个组合对象</text>
+
+  <!-- 行 2 -->
+  <rect x="24" y="134" width="632" height="76" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="38" y="150" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">触摸分发</text>
+  <rect x="38" y="162" width="78" height="38" rx="5" fill="#F7F8FA" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="77" y="175" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">Android 各写</text>
+  <text x="77" y="188" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">依托原生分发</text>
+  <rect x="123" y="162" width="78" height="38" rx="5" fill="#F7F8FA" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="162" y="175" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">iOS 各写</text>
+  <text x="162" y="188" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">自带 responder</text>
+  <rect x="208" y="162" width="78" height="38" rx="5" fill="#F7F8FA" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="247" y="175" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">鸿蒙各写</text>
+  <text x="247" y="188" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">第三套命中规则</text>
+  <text x="296" y="181" font-size="13" fill="#8a929c" text-anchor="middle" dominant-baseline="central">→</text>
+  <rect x="322" y="162" width="320" height="38" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="334" y="175" font-size="9" font-weight="500" fill="#1F6B3B" dominant-baseline="central">RecceTouchTargetHelper</text>
+  <text x="334" y="188" font-size="8" fill="#5C9575" dominant-baseline="central">RootView 锁 target，pointerEvents / hitSlop / overflow / transform 统一判定</text>
+
+  <!-- 行 3 -->
+  <rect x="24" y="220" width="632" height="76" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="38" y="236" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">属性协议</text>
+  <rect x="38" y="248" width="78" height="38" rx="5" fill="#F7F8FA" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="77" y="261" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">Android 手写</text>
+  <text x="77" y="274" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">属性定义与读写</text>
+  <rect x="123" y="248" width="78" height="38" rx="5" fill="#F7F8FA" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="162" y="261" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">iOS 手写</text>
+  <text x="162" y="274" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">同名不同拼写</text>
+  <rect x="208" y="248" width="78" height="38" rx="5" fill="#F7F8FA" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="247" y="261" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">鸿蒙手写</text>
+  <text x="247" y="274" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">再加一遍默认实现</text>
+  <text x="296" y="267" font-size="13" fill="#8a929c" text-anchor="middle" dominant-baseline="central">→</text>
+  <rect x="322" y="248" width="320" height="38" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="334" y="261" font-size="9" font-weight="500" fill="#1F6B3B" dominant-baseline="central">pdef 单一源头</text>
+  <text x="334" y="274" font-size="8" fill="#5C9575" dominant-baseline="central">组件名 / 属性 / 事件声明一次，生成 native 与 Rust 产物，不手改生成文件</text>
+
+  <!-- 行 4 反例 -->
+  <rect x="24" y="306" width="632" height="76" rx="8" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5"/>
+  <text x="38" y="322" font-size="10.5" font-weight="500" fill="#A32A1C" dominant-baseline="central">资源来源（未收口）</text>
+  <rect x="38" y="334" width="78" height="38" rx="5" fill="#FBF0EE" stroke="#E9C0BA" stroke-width="0.5"/>
+  <text x="77" y="347" font-size="8.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">Lottie</text>
+  <text x="77" y="360" font-size="8" fill="#C2604F" text-anchor="middle" dominant-baseline="central">/dist/lottie 目录</text>
+  <rect x="123" y="334" width="78" height="38" rx="5" fill="#FBF0EE" stroke="#E9C0BA" stroke-width="0.5"/>
+  <text x="162" y="347" font-size="8.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">SVG</text>
+  <text x="162" y="360" font-size="8" fill="#C2604F" text-anchor="middle" dominant-baseline="central">只认 data: 前缀</text>
+  <rect x="208" y="334" width="78" height="38" rx="5" fill="#FBF0EE" stroke="#E9C0BA" stroke-width="0.5"/>
+  <text x="247" y="347" font-size="8.5" fill="#A32A1C" text-anchor="middle" dominant-baseline="central">字体加载</text>
+  <text x="247" y="360" font-size="8" fill="#C2604F" text-anchor="middle" dominant-baseline="central">bundle- 前缀标识</text>
+  <text x="296" y="353" font-size="13" fill="#C2604F" text-anchor="middle" dominant-baseline="central">→</text>
+  <rect x="322" y="334" width="320" height="38" rx="5" fill="#FDF5F4" stroke="#E9C0BA" stroke-width="0.5" stroke-dasharray="3 2"/>
+  <text x="334" y="347" font-size="9" font-weight="500" fill="#A32A1C" dominant-baseline="central">缺一层：资源来源接口</text>
+  <text x="334" y="360" font-size="8" fill="#C2604F" dominant-baseline="central">bundle 内 / data URI / 远端 URL / 宿主 assets 四类来源各一个实现</text>
+
+  <text x="24" y="394" font-size="8.5" fill="#8a929c" dominant-baseline="central">三份方案各定一套资源规则，是同一个抽象缺失被付了三次成本。</text>
+</svg>

@@ -1,0 +1,42 @@
+<svg viewBox="0 0 680 440" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>建议把属性矩阵、三端差异清单、自动化用例、回归与对账串成一条闭环</title>
+  <desc>五步闭环，沿左侧竖线从上到下排列，底部有一条回指第一步的箭头。第一步是属性矩阵：属性、冻结的 RN 版本、三端现状、是否 native prop 四列，分母不随版本悄悄变，RN 升级导致的属性增删单独记一列。第二步是三端差异清单：把背景重构那 14 条与源码扫描那 14 条合成常驻表，属性、端、现状、期望、发现来源、状态，以差异数为主指标。第三步是自动化用例：从差异清单与已有用例生成，先落语义断言与像素级截图 diff 两级判据。第四步是逐版本回归：每个 Recce 版本跑一遍，源码级扫描是现成的第一把工具，新撞到的不一致直接登记，不等 QA 提缺陷单。第五步是回填与对账：完成率与差异数同时更新，若完成率涨而差异数没降，说明分母在变。图底说明这条闭环要解决的是两年材料里最缺的一环：从补属性推进到先建可复现的差异检出能力，且起步不需要新工具。</desc>
+
+  <defs>
+    <marker id="ar-loop" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#8fa9c9" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">要补的不是更多属性，是一条能自己发现差异的闭环</text>
+
+  <path d="M44 40 L44 300 L36 300" fill="none" stroke="none"/>
+  <path d="M44 306 L44 48" fill="none" stroke="#8fa9c9" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#ar-loop)"/>
+  <text x="30" y="180" font-size="8.5" fill="#8a929c" text-anchor="middle" transform="rotate(-90 30 180)" dominant-baseline="central">对不上就回查分母</text>
+
+  <rect x="64" y="40" width="592" height="46" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="80" y="58" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">1　属性矩阵 · 单一真相</text>
+  <text x="80" y="74" font-size="9.5" fill="#5b6470" dominant-baseline="central">属性 × 冻结的 RN 版本 × 三端现状 × 是否 native prop。分母不随版本悄悄变；RN 升级带来的属性增删单独记一列</text>
+
+  <rect x="64" y="96" width="592" height="46" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="80" y="114" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">2　三端差异清单</text>
+  <text x="80" y="130" font-size="9.5" fill="#5b6470" dominant-baseline="central">把背景重构那 14 条与源码扫描那 14 条合成常驻表：属性 × 端 × 现状 × 期望 × 发现来源 × 状态。差异数为主指标</text>
+
+  <rect x="64" y="152" width="592" height="46" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="80" y="170" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">3　自动化用例</text>
+  <text x="80" y="186" font-size="9.5" fill="#5b6470" dominant-baseline="central">从差异清单与 Playground 已有用例生成。先落两级判据：语义断言（回调、默认值、属性是否生效）＋ 像素级截图 diff</text>
+
+  <rect x="64" y="208" width="592" height="46" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="80" y="226" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">4　逐版本回归</text>
+  <text x="80" y="242" font-size="9.5" fill="#5b6470" dominant-baseline="central">每个 Recce 版本跑一遍。源码级扫描是这一步现成的第一把工具，新撞到的不一致直接登记，不等 QA 提单</text>
+
+  <rect x="64" y="264" width="592" height="46" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="80" y="282" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">5　回填与对账</text>
+  <text x="80" y="298" font-size="9.5" fill="#5b6470" dominant-baseline="central">完成率与差异数同时更新。若完成率涨而差异数没降，先查分母，再看结论</text>
+
+  <rect x="64" y="330" width="592" height="94" rx="8" fill="#FFF8E8" stroke="#E0B84C" stroke-width="0.5"/>
+  <text x="80" y="350" font-size="10.5" font-weight="500" fill="#8A5A00" dominant-baseline="central">这条闭环补的是两年材料里最缺的一环</text>
+  <text x="80" y="370" font-size="9.5" fill="#5b6470" dominant-baseline="central">两年的做法都是「先列清单、再补属性、靠 QA 和业务撞出剩余问题」。清单本身是准的，但清单之外的部分</text>
+  <text x="80" y="386" font-size="9.5" fill="#5b6470" dominant-baseline="central">只能等。第 2 到第 4 步把「等」换成「扫」，第 5 步保证数字不会被分母偷换。</text>
+  <text x="80" y="406" font-size="9.5" fill="#5b6470" dominant-baseline="central">起步也不需要新工具：清单有 14 条三端不一致与 14 条源码差异，用例有《自测用例》8 组 source 组合。</text>
+</svg>

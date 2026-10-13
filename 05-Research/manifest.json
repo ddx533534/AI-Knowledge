@@ -1,0 +1,73 @@
+{
+  "schema_version": 3,
+  "documents": {
+    "048761078703df428c11e84444165da8d55e2b2e56502e5d3f72b754365300ed": {
+      "schema_version": 3,
+      "id": "048761078703df428c11e84444165da8d55e2b2e56502e5d3f72b754365300ed",
+      "title": "Wasm 虚拟机现状·基础对比表（放大截图）",
+      "kind": "analysis",
+      "source_key": "63f7c11bd4a4bc1794a3a27c7c77f8d1f36340b93d0a8e6ba4fb01bab3e15048",
+      "source_project": "/Users/dudongxu/Desktop/codex/AI-Knowledge",
+      "source_path": "/Users/dudongxu/Desktop/codex/AI-Knowledge/00-Inbox/Wasm-虚拟机现状-基础对比表截图.png",
+      "source_relative_path": "00-Inbox/Wasm-虚拟机现状-基础对比表截图.png",
+      "source_commit": "2c03d287e66dc5351fc6490366082867e665ad1d",
+      "source_worktree_dirty": true,
+      "captured_at": "2026-10-12T17:14:23.019295+08:00",
+      "sha256": "fe9489dfcadddeda7bc13a716efb29c1b621d7ec4d698de3b9ecdf0512e15a6b",
+      "size": 241162,
+      "artifact": "05-Research/Wasm-虚拟机现状-基础对比表截图.png",
+      "previous_version": null
+    },
+    "add72e7c471d2bd1e95bad1dadf025d52884f037c1c7c9e4e2249d9f5f6e3f25": {
+      "schema_version": 3,
+      "id": "add72e7c471d2bd1e95bad1dadf025d52884f037c1c7c9e4e2249d9f5f6e3f25",
+      "title": "Strands Box 设计与架构调研",
+      "kind": "research",
+      "source_key": "9674ecab72d3333e64b184acdab79f611e2eaa2d6f9706eb63f4b1f6d1392070",
+      "source_project": "E:\\AI-Knowledge",
+      "source_path": "E:\\AI-Knowledge\\05-Research\\Strands Box 设计与架构调研.md",
+      "source_relative_path": "05-Research/Strands Box 设计与架构调研.md",
+      "source_commit": "2cf4add1c62f6bc61befe3a4f4f119abc99022eb",
+      "source_worktree_dirty": true,
+      "captured_at": "2026-10-10T10:19:27+08:00",
+      "sha256": "4013a5177cb7d921456a0c72f51b5f0445e3b89a253f210f14308b4053d4d780",
+      "size": 33187,
+      "artifact": "05-Research/Strands-Box-设计与架构调研.md",
+      "previous_version": null
+    },
+    "d54d1158136448f8d6f773d2e31464a3f8008336bc091ccdc16db1c6ea9d5a98": {
+      "schema_version": 3,
+      "id": "d54d1158136448f8d6f773d2e31464a3f8008336bc091ccdc16db1c6ea9d5a98",
+      "title": "Wasm 虚拟机现状（整页截图）",
+      "kind": "analysis",
+      "source_key": "54e0eb740f4d24d065b233aefb96387ea12a7019e632b7808448f43ffe757413",
+      "source_project": "/Users/dudongxu/Desktop/codex/AI-Knowledge",
+      "source_path": "/Users/dudongxu/Desktop/codex/AI-Knowledge/00-Inbox/Wasm-虚拟机现状-移动端截图.jpg",
+      "source_relative_path": "00-Inbox/Wasm-虚拟机现状-移动端截图.jpg",
+      "source_commit": "2c03d287e66dc5351fc6490366082867e665ad1d",
+      "source_worktree_dirty": true,
+      "captured_at": "2026-10-12T17:13:53.036910+08:00",
+      "sha256": "6df8c6c87389b3e01168155bf604df01ad83af3bd3a01c5f0f4825737dfb1eb1",
+      "size": 67003,
+      "artifact": "05-Research/Wasm-虚拟机现状-移动端截图.jpg",
+      "previous_version": null
+    },
+    "ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7": {
+      "schema_version": 3,
+      "id": "ed977e613aad6e2e4ba89871142fa79b616515629b33c33f87a100599c8538a7",
+      "title": "recce-runtime-selection",
+      "kind": "analysis",
+      "source_key": "48359d4fb39817518148be0c93cae5843b98dec9a9fc6d375d284758730a8738",
+      "source_project": "E:\\algorithms",
+      "source_path": "E:\\algorithms\\doc\\recce-runtime-selection.md",
+      "source_relative_path": "doc/recce-runtime-selection.md",
+      "source_commit": "0de585333295d8cce5f353ea7d311632b44f17ae",
+      "source_worktree_dirty": true,
+      "captured_at": "2026-10-11T22:21:28.002173+08:00",
+      "sha256": "b9b181d7553745ac4b9044e1a8836f8f0a536c6d83b56e9c57b7dc6f9eb4dbec",
+      "size": 11032,
+      "artifact": "05-Research/recce-runtime-selection.md",
+      "previous_version": null
+    }
+  }
+}

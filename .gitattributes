@@ -4,7 +4,8 @@
 *.html text eol=lf
 *.yaml text eol=lf
 *.py text eol=lf
-05-Research/**/原文.* -text
-05-Research/**/原文-* -text
+# 归档文档必须逐字节一致：禁止任何换行转换；清单本身仍是文本
+05-Research/* -text
+05-Research/manifest.json text eol=lf
 *.zip -text
 *.bin -text

@@ -1,0 +1,45 @@
+<svg viewBox="0 0 680 440" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>RN 官方 IntersectionObserver 一次滚动的处理顺序</title>
+  <desc>从用户滚动开始，先由 Fabric 更新 shadow tree，挂载完成触发挂载钩子，钩子按 surfaceId 取出该 surface 上所有 observer，逐个算几何并过阈值状态机，状态没变就丢掉，产生的 entry 攒起来后本周期只向 JS 调度一次，JS 侧 takeRecords 一次取走再分组回调。底部说明另一条只负责初始通知的事件循环路径。</desc>
+
+  <text x="24" y="18" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">一次滚动，从触发到业务回调</text>
+  <circle cx="496" cy="18" r="4" fill="#185FA5"/>
+  <text x="506" y="18" font-size="9.5" fill="#4a5158" dominant-baseline="central">C++ 渲染层</text>
+  <circle cx="590" cy="18" r="4" fill="#0F6E56"/>
+  <text x="600" y="18" font-size="9.5" fill="#4a5158" dominant-baseline="central">JS 层</text>
+
+  <line x1="64" y1="60" x2="64" y2="340" stroke="#d9dde3" stroke-width="1.5"/>
+
+  <circle cx="64" cy="64" r="6" fill="#185FA5"/>
+  <text x="84" y="56" font-size="11.5" fill="#0C447C" dominant-baseline="central">用户滚动</text>
+  <text x="84" y="72" font-size="9.5" fill="#5b6470" dominant-baseline="central">Fabric 把新的布局写进 shadow tree</text>
+
+  <circle cx="64" cy="110" r="6" fill="#185FA5"/>
+  <text x="84" y="102" font-size="11.5" fill="#0C447C" dominant-baseline="central">挂载完成</text>
+  <text x="84" y="118" font-size="9.5" fill="#5b6470" dominant-baseline="central">触发 shadowTreeDidMount</text>
+
+  <circle cx="64" cy="156" r="6" fill="#185FA5"/>
+  <text x="84" y="148" font-size="11.5" fill="#0C447C" dominant-baseline="central">挂载钩子回调</text>
+  <text x="84" y="164" font-size="9.5" fill="#5b6470" dominant-baseline="central">按 surfaceId 取出这个 surface 上注册的所有 observer</text>
+
+  <circle cx="64" cy="202" r="6" fill="#185FA5"/>
+  <text x="84" y="194" font-size="11.5" fill="#0C447C" dominant-baseline="central">逐个算几何</text>
+  <text x="84" y="210" font-size="9.5" fill="#5b6470" dominant-baseline="central">root 矩形、rootMargin 外扩、target 矩形、祖先 overflow 裁剪、求交、比例</text>
+
+  <circle cx="64" cy="248" r="6" fill="#185FA5"/>
+  <text x="84" y="240" font-size="11.5" fill="#0C447C" dominant-baseline="central">过阈值状态机</text>
+  <text x="84" y="256" font-size="9.5" fill="#5b6470" dominant-baseline="central">跨过的最高阈值没变，这条就丢掉，不产生 entry</text>
+
+  <circle cx="64" cy="294" r="6" fill="#185FA5"/>
+  <text x="84" y="286" font-size="11.5" fill="#0C447C" dominant-baseline="central">攒进 pendingEntries_</text>
+  <text x="84" y="302" font-size="9.5" fill="#5b6470" dominant-baseline="central">本周期只向 JS 调度一次回调，observer 再多也合并</text>
+
+  <circle cx="64" cy="340" r="6" fill="#0F6E56"/>
+  <text x="84" y="332" font-size="11.5" fill="#085041" dominant-baseline="central">JS 侧一次取走</text>
+  <text x="84" y="348" font-size="9.5" fill="#5b6470" dominant-baseline="central">takeRecords() 批量取，按 observerId 分组，再逐个回调业务</text>
+
+  <rect x="24" y="366" width="632" height="58" rx="8" fill="#F7F6F3" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="382" font-size="9.5" fill="#4a5158" dominant-baseline="central">另一条路径只管初始通知：connect() 时同时挂上 RuntimeScheduler 的事件循环委托，处理刚建立、还没有</text>
+  <text x="40" y="398" font-size="9.5" fill="#4a5158" dominant-baseline="central">pending 事务的观察关系。有 pending rendering update 就等挂载钩子，没有就当场算。官方注释解释了为什么不</text>
+  <text x="40" y="414" font-size="9.5" fill="#4a5158" dominant-baseline="central">照 Web 规范在这一步算：那样会漏掉事务处理与挂载耗时，算出来的 paint 时间不准。</text>
+</svg>

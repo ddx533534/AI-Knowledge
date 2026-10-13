@@ -1,0 +1,74 @@
+<svg viewBox="0 0 680 448" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>Recce 渲染规划的五个方向在 2025 与 2026 两年的状态对照</title>
+  <desc>五行三列的对照表。第一列是方向，共五个：基础属性补齐、已有属性对齐、布局引擎、高级表现力、Changelog 同步。第二列是 2025 规划里的状态，第三列是 2026 规划里的状态。基础属性补齐从按业务代码反推的口径一，扩到按需全部支持的 157 项，并新增 RN 实现层甄别；已有属性对齐从逐组件对 RN 0.72 做行为 diff，升级为三端一致性验收、对齐基线提到 RN 0.86；布局引擎在 2025 引入 Yoga 3.2.1 并用 horn 切双引擎放量，2026 只把 Taffy 留作备选、未给切换触发条件；高级表现力 2025 未立项，2026 立为独立方向并落地了 P0 三项；Changelog 同步在 2025 立了机制，2026 规划里没有这条。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">五个方向，两年各走到哪儿</text>
+
+  <rect x="24" y="30" width="632" height="26" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="43" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">方向</text>
+  <text x="172" y="43" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">2025 规划</text>
+  <text x="424" y="43" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">2026 规划</text>
+
+  <!-- 行 1 -->
+  <rect x="24" y="62" width="632" height="72" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="82" font-size="11" font-weight="500" fill="#1f2328" dominant-baseline="central">基础属性补齐</text>
+  <text x="36" y="100" font-size="9" fill="#8a929c" dominant-baseline="central">2025 的重头戏</text>
+  <text x="172" y="76" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">口径一：按业务方代码反推</text>
+  <text x="172" y="92" font-size="9.5" fill="#5b6470" dominant-baseline="central">调研 MRN 的酒店 / 到综 / 到餐与 MachPro</text>
+  <text x="172" y="106" font-size="9.5" fill="#5b6470" dominant-baseline="central">的 keeta / 外卖，得缺失 24 项、约 144PD</text>
+  <text x="172" y="120" font-size="9.5" fill="#5b6470" dominant-baseline="central">近期要用的布局与阴影定为 P0，全量对齐要 600PD</text>
+  <text x="424" y="76" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">按需全部支持，目标 157 项</text>
+  <text x="424" y="92" font-size="9.5" fill="#5b6470" dominant-baseline="central">各组件从 50%~62% 提到 100%，仍按优先级</text>
+  <text x="424" y="106" font-size="9.5" fill="#5b6470" dominant-baseline="central">逐个组件推进</text>
+  <text x="424" y="120" font-size="9.5" fill="#5b6470" dominant-baseline="central">新增「RN 实现层」一列，JS 层属性判为无需支持</text>
+
+  <!-- 行 2 -->
+  <rect x="24" y="142" width="632" height="72" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="162" font-size="11" font-weight="500" fill="#1f2328" dominant-baseline="central">已有属性对齐</text>
+  <text x="36" y="180" font-size="9" fill="#8a929c" dominant-baseline="central">行为对齐，非新增</text>
+  <text x="172" y="156" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">逐组件对 RN 0.72 做行为 diff</text>
+  <text x="172" y="172" font-size="9.5" fill="#5b6470" dominant-baseline="central">View / Image / Input / Label /</text>
+  <text x="172" y="186" font-size="9.5" fill="#5b6470" dominant-baseline="central">ScrollView 逐个属性判采纳与不采纳</text>
+  <text x="172" y="200" font-size="9.5" fill="#5b6470" dominant-baseline="central">并写下影响面；多数是机型兼容与性能优化</text>
+  <text x="424" y="156" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">升级为三端一致性验收</text>
+  <text x="424" y="172" font-size="9.5" fill="#5b6470" dominant-baseline="central">不再只对 RN，改以 iOS / Android / 鸿蒙表现</text>
+  <text x="424" y="186" font-size="9.5" fill="#5b6470" dominant-baseline="central">一致为准；把「无平台差异暴露给业务层」</text>
+  <text x="424" y="200" font-size="9.5" fill="#5b6470" dominant-baseline="central">写进验收标准，对齐基线提到 RN 0.86</text>
+
+  <!-- 行 3 -->
+  <rect x="24" y="222" width="632" height="72" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="242" font-size="11" font-weight="500" fill="#1f2328" dominant-baseline="central">布局引擎</text>
+  <text x="36" y="260" font-size="9" fill="#8a929c" dominant-baseline="central">两年里最重的一次改</text>
+  <text x="172" y="236" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">引入 Yoga 3.2.1，切双引擎</text>
+  <text x="172" y="252" font-size="9.5" fill="#5b6470" dominant-baseline="central">比过 Yoga / Taffy / Blink / Stylo</text>
+  <text x="172" y="266" font-size="9.5" fill="#5b6470" dominant-baseline="central">否掉新增组件与换 Taffy，选融合进已有组件</text>
+  <text x="172" y="280" font-size="9.5" fill="#5b6470" dominant-baseline="central">horn 按包名切新旧引擎，外卖商家端阶梯放量</text>
+  <text x="424" y="236" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">Taffy 只留作备选，本期未动</text>
+  <text x="424" y="252" font-size="9.5" fill="#5b6470" dominant-baseline="central">完整列出 Yoga 与 Taffy 的属性差异，Taffy 多</text>
+  <text x="424" y="266" font-size="9.5" fill="#5b6470" dominant-baseline="central">block 与 grid、值更丰富</text>
+  <text x="424" y="280" font-size="9.5" fill="#5b6470" dominant-baseline="central">但没写什么条件下值得换</text>
+
+  <!-- 行 4 -->
+  <rect x="24" y="302" width="632" height="72" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="322" font-size="11" font-weight="500" fill="#1f2328" dominant-baseline="central">高级表现力</text>
+  <text x="36" y="340" font-size="9" fill="#8a929c" dominant-baseline="central">2026 才立项</text>
+  <text x="172" y="316" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">未立项，只做到通用阴影</text>
+  <text x="172" y="332" font-size="9.5" fill="#5b6470" dominant-baseline="central">通用阴影从 0%（0/4）补到 100%（4/4）</text>
+  <text x="172" y="346" font-size="9.5" fill="#5b6470" dominant-baseline="central">BoxShadow 挂进 1.32 排期，标「待完成」</text>
+  <text x="172" y="360" font-size="9.5" fill="#5b6470" dominant-baseline="central">与全局的三条目标并列不上</text>
+  <text x="424" y="316" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">立为独立方向，P0 三项落地</text>
+  <text x="424" y="332" font-size="9.5" fill="#5b6470" dominant-baseline="central">SVG 图片、BoxShadow、蒙层-文本渐变为 P0，</text>
+  <text x="424" y="346" font-size="9.5" fill="#5b6470" dominant-baseline="central">基础点击能力为 P1，都已支持</text>
+  <text x="424" y="360" font-size="9.5" fill="#5b6470" dominant-baseline="central">复杂手势、高级动画、高性能列表仍空缺</text>
+
+  <!-- 行 5 -->
+  <rect x="24" y="382" width="632" height="56" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="36" y="402" font-size="11" font-weight="500" fill="#1f2328" dominant-baseline="central">Changelog 同步</text>
+  <text x="36" y="420" font-size="9" fill="#8a929c" dominant-baseline="central">跟上游的机制</text>
+  <text x="172" y="396" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">立了机制：只审 Changelog 的 Fixed</text>
+  <text x="172" y="412" font-size="9.5" fill="#5b6470" dominant-baseline="central">重点看 crash 与渲染两类；每迭代审 3 个大版本，</text>
+  <text x="172" y="426" font-size="9.5" fill="#5b6470" dominant-baseline="central">预计约 6 个月追上 RN 最新版</text>
+  <text x="424" y="396" font-size="9.5" font-weight="500" fill="#A05A00" dominant-baseline="central">2026 规划里没有这一条</text>
+  <text x="424" y="412" font-size="9.5" fill="#5b6470" dominant-baseline="central">对齐基线已从 0.72 换到 0.86，实际仍在追身位</text>
+  <text x="424" y="426" font-size="9.5" fill="#5b6470" dominant-baseline="central">机制本身没有沉淀成例行节奏</text>
+</svg>

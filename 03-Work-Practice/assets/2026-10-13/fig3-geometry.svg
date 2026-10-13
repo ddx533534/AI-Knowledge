@@ -1,0 +1,62 @@
+<svg viewBox="0 0 680 400" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>RN 官方算一个交集要走的六步</title>
+  <desc>六格依次展示：先取 root 矩形，再按 rootMargin 外扩，再算 target 矩形，再减去 target 到 root 之间所有祖先的 overflow 裁剪，然后求交，最后用交集面积除以 target 面积得到比例。第五格说明面积为 0 时靠交点位置判断贴边还是分离，第六格说明 target 面积为 0 时比例为 0。</desc>
+
+  <text x="24" y="18" font-size="11.5" font-weight="500" fill="#0C447C" dominant-baseline="central">① root 矩形</text>
+  <rect x="24" y="34" width="200" height="130" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <rect x="46" y="54" width="156" height="88" rx="4" fill="none" stroke="#c8ccd2" stroke-width="0.5" stroke-dasharray="4 3"/>
+  <rect x="64" y="70" width="120" height="56" rx="4" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="124" y="98" text-anchor="middle" font-size="11" fill="#0C447C" dominant-baseline="central">root</text>
+  <text x="24" y="178" font-size="8.5" fill="#5b6470" dominant-baseline="central">有显式 root 就用它算，没有就用根节点的</text>
+  <text x="24" y="192" font-size="8.5" fill="#5b6470" dominant-baseline="central">layoutMetrics 乘 transform</text>
+
+  <text x="240" y="18" font-size="11.5" font-weight="500" fill="#7A4E0C" dominant-baseline="central">② 加上 rootMargin</text>
+  <rect x="240" y="34" width="200" height="130" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <rect x="268" y="62" width="144" height="80" rx="4" fill="none" stroke="#B4761D" stroke-width="0.5" stroke-dasharray="4 3"/>
+  <rect x="280" y="74" width="120" height="56" rx="4" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="340" y="102" text-anchor="middle" font-size="10" fill="#0C447C" dominant-baseline="central">root</text>
+  <text x="272" y="54" font-size="8.5" fill="#B4761D" dominant-baseline="central">rootMargin 外扩</text>
+  <text x="240" y="178" font-size="8.5" fill="#5b6470" dominant-baseline="central">以 root 尺寸为基准换算：上下取 root 高、</text>
+  <text x="240" y="192" font-size="8.5" fill="#5b6470" dominant-baseline="central">左右取 root 宽。正数扩大，负数缩小</text>
+
+  <text x="456" y="18" font-size="11.5" font-weight="500" fill="#7A4E0C" dominant-baseline="central">③ 算 target 矩形</text>
+  <rect x="456" y="34" width="200" height="130" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <rect x="496" y="70" width="120" height="56" rx="4" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <rect x="520" y="88" width="110" height="58" rx="4" fill="#FAEEDA" stroke="#B4761D" stroke-width="0.5" transform="rotate(-8 575 117)"/>
+  <text x="566" y="115" text-anchor="middle" font-size="10" fill="#7A4E0C" dominant-baseline="central">target</text>
+  <text x="456" y="178" font-size="8.5" fill="#5b6470" dominant-baseline="central">同样算相对布局，打开 includeTransform</text>
+  <text x="456" y="192" font-size="8.5" fill="#5b6470" dominant-baseline="central">与 includeViewportOffset</text>
+
+  <text x="24" y="216" font-size="11.5" font-weight="500" fill="#7A1F1F" dominant-baseline="central">④ 减去祖先 overflow 裁剪</text>
+  <rect x="24" y="230" width="200" height="130" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <rect x="46" y="250" width="156" height="88" rx="4" fill="none" stroke="#c8ccd2" stroke-width="0.5" stroke-dasharray="4 3"/>
+  <rect x="64" y="266" width="120" height="56" rx="4" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <rect x="88" y="276" width="110" height="58" rx="4" fill="#FAEEDA" stroke="#B4761D" stroke-width="0.5"/>
+  <rect x="88" y="276" width="16" height="58" fill="#F1EFE8" stroke="#888780" stroke-width="0.5" stroke-dasharray="3 2"/>
+  <line x1="104" y1="270" x2="104" y2="338" stroke="#888780" stroke-width="0.8" stroke-dasharray="3 3"/>
+  <line x1="88" y1="334" x2="104" y2="276" stroke="#888780" stroke-width="0.6"/>
+  <text x="110" y="258" font-size="8.5" fill="#4a5158" dominant-baseline="central">祖先的 overflow 边界</text>
+  <text x="24" y="374" font-size="8.5" fill="#5b6470" dominant-baseline="central">把 target 到 root 之间所有祖先的</text>
+  <text x="24" y="388" font-size="8.5" fill="#5b6470" dominant-baseline="central">overflow 裁剪都算进去，这是多出来的一层</text>
+
+  <text x="240" y="216" font-size="11.5" font-weight="500" fill="#085041" dominant-baseline="central">⑤ 求交</text>
+  <rect x="240" y="230" width="200" height="130" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <rect x="304" y="278" width="110" height="62" rx="4" fill="#FAEEDA" stroke="#B4761D" stroke-width="0.5"/>
+  <rect x="304" y="278" width="96" height="44" rx="2" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <rect x="304" y="278" width="110" height="62" rx="4" fill="none" stroke="#B4761D" stroke-width="0.5"/>
+  <rect x="280" y="266" width="120" height="56" rx="4" fill="none" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="352" y="300" text-anchor="middle" font-size="9.5" fill="#085041" dominant-baseline="central">交集</text>
+  <text x="240" y="374" font-size="8.5" fill="#5b6470" dominant-baseline="central">面积不为 0 就是普通求交。面积为 0 时再看</text>
+  <text x="240" y="388" font-size="8.5" fill="#5b6470" dominant-baseline="central">交点落在谁里面：贴边算相交，外面算分离</text>
+
+  <text x="456" y="216" font-size="11.5" font-weight="500" fill="#1f2328" dominant-baseline="central">⑥ 算比例</text>
+  <rect x="456" y="230" width="200" height="130" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="498" y="262" text-anchor="end" font-size="8.5" fill="#4a5158" dominant-baseline="central">交集面积</text>
+  <rect x="504" y="255" width="64" height="13" rx="3" fill="#0F6E56"/>
+  <text x="498" y="284" text-anchor="end" font-size="8.5" fill="#4a5158" dominant-baseline="central">target 面积</text>
+  <rect x="504" y="277" width="124" height="13" rx="3" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="552" y="316" text-anchor="middle" font-size="10.5" fill="#1f2328" dominant-baseline="central">交集面积 ÷ target 面积</text>
+  <text x="552" y="336" text-anchor="middle" font-size="8.5" fill="#5b6470" dominant-baseline="central">target 面积为 0 时记 0</text>
+  <text x="456" y="374" font-size="8.5" fill="#5b6470" dominant-baseline="central">得到的就是 intersectionRatio，</text>
+  <text x="456" y="388" font-size="8.5" fill="#5b6470" dominant-baseline="central">交给下一步的阈值状态机</text>
+</svg>

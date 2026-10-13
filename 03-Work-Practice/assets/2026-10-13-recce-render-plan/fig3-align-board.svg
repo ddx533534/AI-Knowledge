@@ -1,0 +1,106 @@
+<svg viewBox="0 0 680 534" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>1.35 那一批组件属性对齐专表的状态与卡点</title>
+  <desc>八行四列的状态板。列依次是专表名称、状态、属性清点、结论与卡点。ImageView 与 Shadow 标已对齐；View Props 与 View Style Props 与 ScrollView(Horizontal) 实际已对齐但标题仍写着对齐中；Label、Layout、TextInput 三张标暂停。行内给出各组件的属性总数、已支持数与未支持项的处置结论。图下方说明三类卡点解法不同：鸿蒙能力缺口、上游不是 native prop、依赖触摸事件重构。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">组件属性对齐专表：八张表、三种状态</text>
+
+  <rect x="24" y="30" width="632" height="26" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="32" y="43" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">专表</text>
+  <text x="170" y="43" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">状态</text>
+  <text x="258" y="43" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">属性清点</text>
+  <text x="400" y="43" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">结论与卡点</text>
+
+  <rect x="24" y="62" width="632" height="320" rx="8" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <line x1="30" y1="102" x2="650" y2="102" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="142" x2="650" y2="142" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="182" x2="650" y2="182" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="222" x2="650" y2="222" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="262" x2="650" y2="262" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="302" x2="650" y2="302" stroke="#e3e6ea" stroke-width="0.5"/>
+  <line x1="30" y1="342" x2="650" y2="342" stroke="#e3e6ea" stroke-width="0.5"/>
+
+  <!-- 行 1 Image -->
+  <text x="32" y="80" font-size="10" font-weight="500" fill="#1f2328" dominant-baseline="central">ImageView</text>
+  <text x="32" y="94" font-size="8.5" fill="#8a929c" dominant-baseline="central">Image 属性对齐</text>
+  <text x="170" y="80" font-size="9.5" font-weight="500" fill="#1a7f37" dominant-baseline="central">已对齐</text>
+  <text x="258" y="80" font-size="9" fill="#1f2328" dominant-baseline="central">30 项</text>
+  <text x="258" y="94" font-size="8.5" fill="#8a929c" dominant-baseline="central">未支持 14 项</text>
+  <text x="400" y="80" font-size="9" fill="#5b6470" dominant-baseline="central">14 项全部判「不需要支持」，理由逐条写明：</text>
+  <text x="400" y="94" font-size="9" fill="#5b6470" dominant-baseline="central">鸡肋 / source 已有 / 可走 headers / 图片库不同</text>
+
+  <!-- 行 2 Shadow -->
+  <text x="32" y="120" font-size="10" font-weight="500" fill="#1f2328" dominant-baseline="central">Shadow</text>
+  <text x="32" y="134" font-size="8.5" fill="#8a929c" dominant-baseline="central">阴影属性对齐</text>
+  <text x="170" y="120" font-size="9.5" font-weight="500" fill="#1a7f37" dominant-baseline="central">已对齐</text>
+  <text x="258" y="120" font-size="9" fill="#1f2328" dominant-baseline="central">6 项</text>
+  <text x="258" y="134" font-size="8.5" fill="#8a929c" dominant-baseline="central">已支持 5 项</text>
+  <text x="400" y="120" font-size="9" fill="#5b6470" dominant-baseline="central">唯一未支持的 dropShadow 判不需要，理由是有</text>
+  <text x="400" y="134" font-size="9" fill="#5b6470" dominant-baseline="central">View 的 filter 属性可以覆盖</text>
+
+  <!-- 行 3 View Props -->
+  <text x="32" y="160" font-size="10" font-weight="500" fill="#1f2328" dominant-baseline="central">View Props</text>
+  <text x="32" y="174" font-size="8.5" fill="#8a929c" dominant-baseline="central">View 基础属性</text>
+  <text x="170" y="160" font-size="9.5" font-weight="500" fill="#1a7f37" dominant-baseline="central">已对齐</text>
+  <text x="170" y="174" font-size="8.5" fill="#8a929c" dominant-baseline="central">标题仍写对齐中</text>
+  <text x="258" y="160" font-size="9" fill="#1f2328" dominant-baseline="central">61 项</text>
+  <text x="258" y="174" font-size="8.5" fill="#8a929c" dominant-baseline="central">已支持 8 项</text>
+  <text x="400" y="160" font-size="9" fill="#5b6470" dominant-baseline="central">19 项判没必要（有等价属性、框架已有能力）；</text>
+  <text x="400" y="174" font-size="9" fill="#5b6470" dominant-baseline="central">11 项卡在「鸿蒙不支持无障碍」；需支持 23</text>
+
+  <!-- 行 4 View Style Props -->
+  <text x="32" y="200" font-size="10" font-weight="500" fill="#1f2328" dominant-baseline="central">View Style Props</text>
+  <text x="32" y="214" font-size="8.5" fill="#8a929c" dominant-baseline="central">View 样式属性</text>
+  <text x="170" y="200" font-size="9.5" font-weight="500" fill="#1a7f37" dominant-baseline="central">已对齐</text>
+  <text x="170" y="214" font-size="8.5" fill="#8a929c" dominant-baseline="central">标题仍写对齐中</text>
+  <text x="258" y="200" font-size="9" fill="#1f2328" dominant-baseline="central">43 项</text>
+  <text x="258" y="214" font-size="8.5" fill="#8a929c" dominant-baseline="central">已支持 27 项</text>
+  <text x="400" y="200" font-size="9" fill="#5b6470" dominant-baseline="central">1 项没必要 + 15 项需支持，本期全部排入；</text>
+  <text x="400" y="214" font-size="9" fill="#5b6470" dominant-baseline="central">缺的多是 logical 简写与 outline / filter 这一族</text>
+
+  <!-- 行 5 ScrollView -->
+  <text x="32" y="240" font-size="10" font-weight="500" fill="#1f2328" dominant-baseline="central">ScrollView(Horizontal)</text>
+  <text x="170" y="240" font-size="9.5" font-weight="500" fill="#1a7f37" dominant-baseline="central">已对齐</text>
+  <text x="170" y="254" font-size="8.5" fill="#8a929c" dominant-baseline="central">标题仍写对齐中</text>
+  <text x="258" y="240" font-size="9" fill="#1f2328" dominant-baseline="central">59 项</text>
+  <text x="258" y="254" font-size="8.5" fill="#8a929c" dominant-baseline="central">已支持 38 项</text>
+  <text x="400" y="240" font-size="9" fill="#5b6470" dominant-baseline="central">10 项 native 可直接做、10 项需 recce-ui 配合，</text>
+  <text x="400" y="254" font-size="9" fill="#5b6470" dominant-baseline="central">1 项判没必要；本期 native 侧排 10 项</text>
+
+  <!-- 行 6 Label -->
+  <text x="32" y="280" font-size="10" font-weight="500" fill="#8a929c" dominant-baseline="central">Label</text>
+  <text x="32" y="294" font-size="8.5" fill="#8a929c" dominant-baseline="central">Label 属性对齐</text>
+  <text x="170" y="280" font-size="9.5" font-weight="500" fill="#8a929c" dominant-baseline="central">暂停</text>
+  <text x="258" y="280" font-size="9" fill="#8a929c" dominant-baseline="central">—</text>
+  <text x="400" y="280" font-size="9" fill="#8a929c" dominant-baseline="central">标题挂着暂停，文档里没有给结论</text>
+
+  <!-- 行 7 Layout -->
+  <text x="32" y="320" font-size="10" font-weight="500" fill="#8a929c" dominant-baseline="central">Layout</text>
+  <text x="32" y="334" font-size="8.5" fill="#8a929c" dominant-baseline="central">布局属性对齐</text>
+  <text x="170" y="320" font-size="9.5" font-weight="500" fill="#8a929c" dominant-baseline="central">暂停</text>
+  <text x="258" y="320" font-size="9" fill="#8a929c" dominant-baseline="central">21 项未支持</text>
+  <text x="258" y="334" font-size="8.5" fill="#8a929c" dominant-baseline="central">原文未给总数</text>
+  <text x="400" y="320" font-size="9" fill="#5b6470" dominant-baseline="central">20 项可支持、1 项不行（boxSizing 依赖底层布局）；</text>
+  <text x="400" y="334" font-size="9" fill="#5b6470" dominant-baseline="central">另有 3 个已支持属性缺了 RN 0.86 的取值</text>
+
+  <!-- 行 8 TextInput -->
+  <text x="32" y="360" font-size="10" font-weight="500" fill="#8a929c" dominant-baseline="central">TextInput</text>
+  <text x="32" y="374" font-size="8.5" fill="#8a929c" dominant-baseline="central">输入框属性对齐</text>
+  <text x="170" y="360" font-size="9.5" font-weight="500" fill="#8a929c" dominant-baseline="central">暂停</text>
+  <text x="258" y="360" font-size="9" fill="#1f2328" dominant-baseline="central">68 项</text>
+  <text x="258" y="374" font-size="8.5" fill="#8a929c" dominant-baseline="central">已支持 32 项</text>
+  <text x="400" y="360" font-size="9" fill="#5b6470" dominant-baseline="central">3 项没必要 + 33 项需支持，本期排 31 项；缺失</text>
+  <text x="400" y="374" font-size="9" fill="#5b6470" dominant-baseline="central">集中在 iOS only 与 Android only 两端专属属性</text>
+
+  <rect x="24" y="396" width="632" height="122" rx="8" fill="#FFF8E8" stroke="#E0B84C" stroke-width="0.5"/>
+  <text x="40" y="416" font-size="10.5" font-weight="500" fill="#8A5A00" dominant-baseline="central">三类卡点不是同一个问题，解法也不一样</text>
+
+  <rect x="40" y="430" width="7" height="7" rx="1.5" fill="#A32D2D"/>
+  <text x="56" y="434" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">鸿蒙能力缺口</tspan>：11 项无障碍属性在鸿蒙没有对应能力，只能持续记「不支持」并写清原因</text>
+
+  <rect x="40" y="452" width="7" height="7" rx="1.5" fill="#8fa9c9"/>
+  <text x="56" y="456" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">上游不是 native prop</tspan>：这类判否靠「RN 实现层」一列，是两年里最省工作量的一次口径调整</text>
+
+  <rect x="40" y="474" width="7" height="7" rx="1.5" fill="#E8843C"/>
+  <text x="56" y="478" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">依赖触摸事件重构</tspan>：hitSlop / pointerEvents / focusable / tabIndex 与 10 个 onResponder*</text>
+  <text x="56" y="492" font-size="9.5" fill="#5b6470" dominant-baseline="central">全部押在触摸事件重构上，这就是 1.35 里触摸事件重构是 P0、属性对齐是 P1 的原因</text>
+</svg>

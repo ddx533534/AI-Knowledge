@@ -1,0 +1,69 @@
+<svg viewBox="0 0 680 424" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>Recce 与 RN 的 Android 源码级差异扫描结果</title>
+  <desc>左半部分是 14 条差异按组件的分布：ScrollView 5 条、TextInput 5 条、Modal 2 条、Text 1 条、ViewGroup 1 条。右半部分是修复进展：4 条已修，分别是 snapToAlignment 未参与 flingAndSnap、纵向 snapToOffsets 空数组崩溃、scrollTo 与 scrollToEnd 未先中止动画、TextInput selection 未做 clamp；其余 10 条待修。图下方说明这份扫描与属性矩阵是两条不同的路，并指出它只能识别与对照物不同、识别不了两边都错，且它在版本需求里被标为 P2 暂停。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">源码级差异扫描：一次拿到 14 条高置信 bug</text>
+  <text x="24" y="38" font-size="9.5" fill="#5b6470" dominant-baseline="central">把 Recce 的 android/recce/views 与 RN 的 ReactAndroid/.../views 逐文件对读，只收高置信的行为差异</text>
+
+  <text x="24" y="66" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">按组件分布</text>
+
+  <text x="24" y="90" font-size="9.5" fill="#1f2328" dominant-baseline="central">ScrollView</text>
+  <rect x="180" y="83" width="150" height="14" rx="2" fill="#E8843C"/>
+  <text x="336" y="90" font-size="9.5" fill="#5b6470" dominant-baseline="central">5</text>
+
+  <text x="24" y="114" font-size="9.5" fill="#1f2328" dominant-baseline="central">TextInput</text>
+  <rect x="180" y="107" width="150" height="14" rx="2" fill="#E8843C"/>
+  <text x="336" y="114" font-size="9.5" fill="#5b6470" dominant-baseline="central">5</text>
+
+  <text x="24" y="138" font-size="9.5" fill="#1f2328" dominant-baseline="central">Modal</text>
+  <rect x="180" y="131" width="60" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="246" y="138" font-size="9.5" fill="#5b6470" dominant-baseline="central">2</text>
+
+  <text x="24" y="162" font-size="9.5" fill="#1f2328" dominant-baseline="central">Text</text>
+  <rect x="180" y="155" width="30" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="216" y="162" font-size="9.5" fill="#5b6470" dominant-baseline="central">1</text>
+
+  <text x="24" y="186" font-size="9.5" fill="#1f2328" dominant-baseline="central">ViewGroup</text>
+  <rect x="180" y="179" width="30" height="14" rx="2" fill="#8fa9c9"/>
+  <text x="216" y="186" font-size="9.5" fill="#5b6470" dominant-baseline="central">1</text>
+
+  <text x="24" y="210" font-size="9" fill="#8a929c" dominant-baseline="central">14 条全部集中在滚动与输入两条链路上，没有一条来自</text>
+  <text x="24" y="224" font-size="9" fill="#8a929c" dominant-baseline="central">Image、Switch、RawText 这些更简单的组件</text>
+
+  <line x1="360" y1="58" x2="360" y2="232" stroke="#e3e6ea" stroke-width="0.5"/>
+
+  <text x="380" y="66" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">修复进展</text>
+
+  <rect x="380" y="80" width="120" height="22" rx="4" fill="#EAF7EE"/>
+  <text x="440" y="91" font-size="9.5" font-weight="500" fill="#1a7f37" text-anchor="middle" dominant-baseline="central">4 条已修</text>
+  <rect x="510" y="80" width="120" height="22" rx="4" fill="#FCEBEB"/>
+  <text x="570" y="91" font-size="9.5" font-weight="500" fill="#A32D2D" text-anchor="middle" dominant-baseline="central">10 条待修</text>
+
+  <rect x="380" y="116" width="6" height="6" rx="1.5" fill="#1a7f37"/>
+  <text x="394" y="119" font-size="9" fill="#5b6470" dominant-baseline="central">snapToAlignment 没有参与 flingAndSnap</text>
+
+  <rect x="380" y="136" width="6" height="6" rx="1.5" fill="#1a7f37"/>
+  <text x="394" y="139" font-size="9" fill="#5b6470" dominant-baseline="central">纵向 snapToOffsets 传空数组会崩溃</text>
+
+  <rect x="380" y="156" width="6" height="6" rx="1.5" fill="#1a7f37"/>
+  <text x="394" y="159" font-size="9" fill="#5b6470" dominant-baseline="central">scrollTo / scrollToEnd 没有先中止动画</text>
+
+  <rect x="380" y="176" width="6" height="6" rx="1.5" fill="#1a7f37"/>
+  <text x="394" y="179" font-size="9" fill="#5b6470" dominant-baseline="central">TextInput selection 没有做越界 clamp</text>
+
+  <text x="380" y="202" font-size="9" fill="#8a929c" dominant-baseline="central">待修的 10 条里有 5 条在 TextInput：</text>
+  <text x="380" y="216" font-size="9" fill="#8a929c" dominant-baseline="central">缺 eventCounter、multiline 切回不完整、</text>
+  <text x="380" y="230" font-size="9" fill="#8a929c" dominant-baseline="central">同父级抢事件、maxLength 崩溃</text>
+
+  <rect x="24" y="248" width="632" height="160" rx="8" fill="#FFF8E8" stroke="#E0B84C" stroke-width="0.5"/>
+  <text x="40" y="268" font-size="10.5" font-weight="500" fill="#8A5A00" dominant-baseline="central">它和属性矩阵是两条不同的路，可以一起用</text>
+
+  <text x="40" y="290" font-size="9.5" fill="#5b6470" dominant-baseline="central">属性矩阵是文档级对照，回答「有没有这个属性」；差异扫描是代码级对照，回答「这个属性做得对不对」。</text>
+  <text x="40" y="306" font-size="9.5" fill="#5b6470" dominant-baseline="central">每条都写了 Recce 与 RN 两侧的文件与行号，别人能复核——这是它比一份「疑似问题清单」值钱的地方。</text>
+
+  <text x="40" y="328" font-size="9.5" fill="#5b6470" dominant-baseline="central">另一条口径值得抄走：maxLength 追加 LengthFilter 的数组越界，作者注明 RN main 同位置也有同样写法，</text>
+  <text x="40" y="344" font-size="9.5" fill="#5b6470" dominant-baseline="central">所以「不是相对 RN 的差异」，但仍建议顺手修。也就是说，diff 只能识别「与对照物不同」，</text>
+  <text x="40" y="360" font-size="9.5" fill="#5b6470" dominant-baseline="central">识别不了「两边都错」——上游自带的 bug 不会被这类扫描捞出来。</text>
+
+  <text x="40" y="382" font-size="9.5" fill="#5b6470" dominant-baseline="central">它在 1.35 需求表里挂 P2，并标着（暂停）。属性对齐在往前推，主动识别这一路被放下了。</text>
+</svg>
