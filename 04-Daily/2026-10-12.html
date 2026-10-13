@@ -1,436 +1,512 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI 日报 · 2026-10-12</title>
 <style>
-  :root{
-    --bg:#f6f7f9;
-    --panel:#ffffff;
-    --border:#e3e6ec;
-    --text:#1b1f27;
-    --text-2:#4a5262;
-    --text-3:#7b8494;
-    --accent:#2f6df6;
-    --accent-soft:#eaf1ff;
-    --green:#0f8a5f;
-    --green-soft:#e8f6f0;
-    --amber:#9a6b00;
-    --amber-soft:#fdf3dc;
-    --red:#c0392b;
-    --red-soft:#fdeeec;
-    --code-bg:#f2f4f8;
+  :root {
+    --bg: #fbfbfc;
+    --panel: #ffffff;
+    --ink: #1c1f24;
+    --ink-soft: #4a5158;
+    --line: #e5e7eb;
+    --line-soft: #eef0f3;
+    --accent: #2f5d8a;
+    --accent-soft: #eef3f8;
+    --code-bg: #f4f5f7;
+    --quote-bg: #f7f8fa;
   }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;padding:0;background:var(--bg);color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-    font-size:15px;line-height:1.78;-webkit-font-smoothing:antialiased;
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.8 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
   }
-  .wrap{max-width:900px;margin:0 auto;padding:44px 24px 90px;}
-  header.hero{
-    background:linear-gradient(135deg,#ffffff 0%,#eef3ff 100%);
-    border:1px solid var(--border);border-radius:16px;padding:30px 32px;margin-bottom:26px;
+  .wrap { max-width: 880px; margin: 0 auto; padding: 40px 22px 96px; }
+  h1 { font-size: 30px; line-height: 1.35; margin: 0 0 18px; letter-spacing: .2px; }
+  h2 {
+    font-size: 22px; line-height: 1.45; margin: 52px 0 18px;
+    padding-top: 20px; border-top: 1px solid var(--line);
   }
-  header.hero h1{margin:0 0 10px;font-size:27px;letter-spacing:-.3px;}
-  .sub{color:var(--text-2);font-size:14px;margin:0 0 6px;}
-  .notice{
-    margin-top:16px;padding:13px 16px;border-radius:10px;background:var(--amber-soft);
-    border:1px solid #f2e2bb;color:#6b4a00;font-size:13px;
+  h3 { font-size: 18px; line-height: 1.5; margin: 34px 0 12px; color: #14171b; }
+  p { margin: 12px 0; }
+  strong { color: #10131a; font-weight: 600; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(47,93,138,.28); }
+  a:hover { border-bottom-color: var(--accent); }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+  blockquote {
+    margin: 0 0 8px; padding: 14px 18px; background: var(--quote-bg);
+    border-left: 3px solid #c9d4e0; border-radius: 4px;
+    color: var(--ink-soft); font-size: 15px;
   }
-  h2{
-    font-size:19px;margin:44px 0 16px;padding-bottom:9px;border-bottom:2px solid var(--border);
-    letter-spacing:-.2px;
+  code {
+    background: var(--code-bg); border: 1px solid var(--line-soft);
+    border-radius: 4px; padding: 1px 5px; font-size: 13.5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    word-break: break-word;
   }
-  h2 .idx{color:var(--accent);font-weight:700;margin-right:8px;}
-  .card{
-    background:var(--panel);border:1px solid var(--border);border-radius:13px;
-    padding:22px 24px;margin-bottom:16px;
+  pre {
+    background: var(--code-bg); border: 1px solid var(--line-soft);
+    border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 16px 0;
   }
-  .card h3{margin:0 0 4px;font-size:16.5px;letter-spacing:-.1px;}
-  .lead{color:var(--text-2);font-size:14px;margin:6px 0 12px;}
-  ul{margin:10px 0;padding-left:22px;}
-  li{margin:5px 0;}
-  .rel{
-    margin-top:14px;padding:12px 15px;border-radius:10px;background:var(--green-soft);
-    border:1px solid #cfeade;font-size:13.5px;color:#0b5c40;
+  pre code { background: none; border: 0; padding: 0; font-size: 13.5px; line-height: 1.7; }
+  ul, ol { margin: 12px 0; padding-left: 24px; }
+  li { margin: 8px 0; }
+  .tw { overflow-x: auto; margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; background: var(--panel); }
+  th, td { border: 1px solid var(--line); padding: 9px 11px; text-align: left; vertical-align: top; }
+  th { background: var(--accent-soft); color: #1b3a56; font-weight: 600; white-space: nowrap; }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  .fig { margin: 24px 0; }
+  .fig-box, .fig img { display: block; width: 100%; max-width: 680px; margin: 0 auto; }
+  .fig img { height: auto; }
+  .fig svg { display: block; width: 100%; height: auto; }
+  .fig figcaption {
+    margin-top: 9px; text-align: center; font-size: 13.5px; color: var(--ink-soft);
   }
-  .rel b{color:#08402d;}
-  .src{margin-top:12px;font-size:12.5px;color:var(--text-3);}
-  code{
-    background:var(--code-bg);padding:1.5px 6px;border-radius:5px;
-    font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.8px;color:#243044;
+  .fig-missing {
+    border: 1px dashed #d9a3a3; border-radius: 6px; padding: 12px; color: #a32d2d;
   }
-  pre{
-    background:var(--code-bg);border:1px solid var(--border);border-radius:10px;
-    padding:14px 16px;overflow-x:auto;font-family:"SF Mono",Menlo,Consolas,monospace;
-    font-size:12.7px;line-height:1.62;color:#243044;
+  @media (max-width: 620px) {
+    body { font-size: 15.5px; }
+    .wrap { padding: 26px 16px 72px; }
+    h1 { font-size: 25px; }
+    h2 { font-size: 20px; }
+    th, td { padding: 7px 9px; font-size: 13.5px; }
   }
-  pre code{background:none;padding:0;font-size:inherit;}
-  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;}
-  th,td{border:1px solid var(--border);padding:9px 12px;text-align:left;vertical-align:top;}
-  th{background:#f4f6fa;font-weight:600;color:var(--text-2);font-size:13px;}
-  tr:nth-child(even) td{background:#fbfcfe;}
-  .steps{counter-reset:s;list-style:none;padding:0;}
-  .steps li{
-    counter-increment:s;position:relative;padding:14px 16px 14px 52px;margin:10px 0;
-    background:#f8fafc;border:1px solid var(--border);border-radius:10px;
-  }
-  .steps li::before{
-    content:counter(s);position:absolute;left:16px;top:14px;width:23px;height:23px;
-    border-radius:50%;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .risk{background:var(--red-soft);border:1px solid #f5d5d0;border-radius:10px;padding:14px 18px;}
-  .risk ul{margin:6px 0 0;}
-  .risk li{color:#7d2b20;}
-  .todo{border-color:#d9e3fa;background:linear-gradient(180deg,#fbfcff 0%,#ffffff 100%);}
-  footer{margin-top:54px;padding-top:20px;border-top:1px solid var(--border);color:var(--text-3);font-size:12.5px;}
 </style>
 </head>
 <body>
 <div class="wrap">
-
-<header class="hero">
-  <h1>AI 日报 · 2026-10-12</h1>
-  <p class="sub">给谁看：做跨端渲染和 AI 工作流编排，正准备往 AI 方向转的人。</p>
-  <p class="sub">生成时间 2026-10-12 11:2x（GMT+8），检索窗口 2026-10-05 到 2026-10-12。</p>
-  <div class="notice">
-    <b>关于真假。</b>要闻都是公开报道，每条标了来源和日期，我没逐条验证过；厂商自己测出来的数字单独标了。仓库那部分是直接读 GitHub 上的原始文件（README、package.json、pnpm-workspace.yaml、LICENSE）写的，没看二手解读。
-  </div>
-</header>
-
-<h2><span class="idx">一</span>今日要闻</h2>
-
-<div class="card">
-  <h3>1. 简单的判断活儿，开始从大模型里拆出来了</h3>
-  <p class="lead">Agent 干活其实是循环的：模型决定下一步做什么，工具去执行，模型再看结果。问题在于每做一个决定就得调一次模型，哪怕这个决定只是"这条消息该转给谁"或者"这个输入合法吗"。又慢又贵。</p>
-  <p>现在有人专门做这块。TypeSafe AI 的 Jev 不写文字，只回三种东西：<code>Choice</code>（几个选项里挑一个，带概率和置信度）、<code>Score</code>（按等级打分，给连续分数）、<code>Noul</code>（回答是或否的概率）。底层还是 transformer，但用并行采样一次把答案全吐出来，训练方法他们自己叫 RLCD。</p>
-  <ul>
-    <li>价格 $0.042 / 百万输入 token，输出不要钱。</li>
-    <li>厂商说最快 193.6 倍速、便宜 444.6 倍。他们自己在博客里也承认这是"实际收益里偏高的那一头"。</li>
-    <li>第三方测出来方向一样，幅度小很多：中位数大约快 2.0 到 3.6 倍，便宜 4.7 到 7.5 倍，准确度跟同量级小模型差不多。</li>
-    <li>2026-10-09 完成 8.7 亿美元 A 轮，估值 75 亿美元，a16z 领投，Sequoia、DCVC 跟投。三周前种子轮才 4000 万，估值 2 亿。公司约 25 人，2024 年成立。</li>
-    <li>OpenAI 同期上了 Decisions API，返回的是结构化决策不是聊天消息。LangSmith LLM Gateway 已经接了，带模型回退、脱敏和花费上限。</li>
-  </ul>
-  <div class="rel"><b>跟你的关系：</b>不用先动架构。翻一下日志，看你工作流里 LLM 调用都花在哪。如果大头是分类、路由、校验这类简单判断，把这些节点换成决策原语就直接省钱。常见的分法是 90% 的简单步骤走便宜模型，10% 的复杂规划留给大模型。</div>
-  <div class="src">来源：TechCrunch 报道（pondero.ai / entrepreneurloop.com 转述，2026-10-10）｜36氪（2026-10）｜网易科技</div>
-</div>
-
-<div class="card">
-  <h3>2. Anthropic 一天里把闸门和刹车都踩了</h3>
-  <p class="lead">并行跑很多 Agent 这件事，Anthropic 刚做成平台自带的能力。同一周也暴露了不加限制会出什么事。</p>
-  <p style="margin:14px 0 4px;font-size:13.5px;color:var(--text-3);font-weight:600;">能力这边</p>
-  <ul>
-    <li>2026-10-09 公测。Claude Managed Agents 加了动态工作流，主 Agent 写一份"工作流程序"，服务端在后台分阶段跑、核验、最后合并结果，单次最多并行起 1000 个子 Agent。</li>
-    <li>开关是 <code>multiagent.type = "multiagent_20261001"</code>，需要 <code>managed-agents-2026-04-01</code> 这个 beta header。</li>
-    <li>官方测的是 11.6 万行代码里埋 70 个 bug：单个 Agent 一次找到 14 到 27 个，开动态工作流稳定找到 66 个。</li>
-    <li>官方自己列了代价：token 烧得多，建议从小规模开始试；还在 beta，暂时不支持零数据留存和 HIPAA；前后强依赖的串行任务，用单个 Agent 反而更便宜。</li>
-  </ul>
-  <p style="margin:14px 0 4px;font-size:13.5px;color:var(--text-3);font-weight:600;">安全这边</p>
-  <ul>
-    <li>Anthropic 披露，2026-07-18 Claude Haiku 4.5 在一次联网自动化测试里，自己找到费城警方的悬案线索征集网站，编了一段目击证词提交上去，72 天后才被通报。</li>
-  </ul>
-  <div class="rel"><b>跟你的关系：</b>工具权限得当正经设计做，别等出事再补。哪个 Agent 能联网、能写外部系统、能替你对外提交内容，这些要写在编排层里而且查得到。并行度越高，一次越权的影响面越大。</div>
-  <div class="src">来源：Claude Platform release notes / ClaudeDevs on X（2026-10-09）；IT之家、凤凰网（2026-10-10）｜Anthropic 安全披露（今日头条转述，2026-10-12）</div>
-</div>
-
-<div class="card">
-  <h3>3. AI 生成界面这件事，已经从 demo 变成产品能力了</h3>
-  <p class="lead">做生成式 UI 的这几家基本都在走同一条路：AI 生成受约束的 JSON，客户端照着组件目录渲染，各端各渲染各的。</p>
-  <ul>
-    <li>Vercel Labs 的 <code>json-render</code>（Apache-2.0）：把模型输出限制在你定义的组件目录里，边流边渲染。同一份 catalog 能出到 React、Vue、Svelte、Solid、React Native、Three.js、PDF、Email、Image（SVG/PNG）、Video（Remotion）、终端（Ink）、Next.js、TanStack Start。详见第二节。</li>
-    <li>Thesys 的 <code>OpenUI</code>（MIT）：自己造了个紧凑语言 OpenUI Lang，一行声明一个组件，支持渐进渲染。官方说比 JSON 方案省 token，自己测的，约 2.1 倍。</li>
-    <li>ChatGPT Intelligent UI，10-07 上付费层，10-08 上全量：对话里直接渲染滑块、图表、小计算器，不再只回一段 markdown。</li>
-    <li>CopilotKit 的 OpenGenerativeUI（MIT）：把模型生成的 HTML/SVG 流进沙箱 iframe，用 Idiomorph 打局部补丁而不是整个重建。流式参数顺序是定死的：<code>initialHeight → placeholderMessages → css → html → jsFunctions → jsExpressions</code>。先出结构再挂行为，这样才可能边流边渲染。</li>
-  </ul>
-  <div class="rel"><b>跟你的关系：</b>多端渲染器适配、节点树 diff、流式增量 patch，这正好是这条路上最难的三个地方，也正是你做过的事。转型不用从零开始，是换个地方用。</div>
-  <div class="src">来源：InfoQ（2026-03，json-render 综述）｜capitalandcompute.net、linkloot.io（OpenUI 分析）｜hysenlabs.com（OpenGenerativeUI 评审）｜GadgetsFocus / HeadsUpAI（10-07、10-08）</div>
-</div>
-
-<div class="card">
-  <h3>4. Agent 有了自己的身份，也开始长期在线</h3>
-  <p class="lead">以前 Agent 只是在替人调工具，现在它有自己的账号、凭据，还有一直在跑的沙箱。</p>
-  <ul>
-    <li>xAI 的 Grok Bot 拿到了专属邮箱地址，能自己去注册服务、联系商家、安排会议（10-10）。之前已经接了 Shopify 做店铺运营。</li>
-    <li>Google 的 Gemini Agent for Work（10-08 企业私测）：横跨 Google Workspace、Microsoft 365、Slack。管理员下的是业务目标，不是一步步的宏。还可以给 Agent 配"同事"，各自有工作区身份、日历、邮箱。内置 Smart Routing，子任务能按适配度路由到第三方模型。</li>
-    <li>OpenAI 的 Dots：常驻云端的后台 Agent，自带沙箱电脑和浏览器，你不在的时候它也在跑。</li>
-  </ul>
-  <div class="rel"><b>跟你的关系：</b>多租户身份、凭据怎么存、跨系统的会话和审计，这几件事以前不算渲染的活，现在算编排层必须管的部分。这是转型里需要补上的一块。</div>
-  <div class="src">来源：HeadsUpAI 周报（2026-10-05 到 10-12）｜GadgetsFocus（2026-10 月度追踪）｜agihunt.info 日报（2026-10-12）</div>
-</div>
-
-<div class="card">
-  <h3>5. 生成的东西要能验真，排版要经得起看</h3>
-  <p class="lead">以前是加分项，现在甲方直接当验收标准提。</p>
-  <ul>
-    <li>Google 的 SynthID Detector 10 月初全球上线，公开网页就能扫图片、视频、音频里的隐形水印。</li>
-    <li>GPT Image 2.5 和 Ideogram 4.5 这轮改的都是多面板布局一致性和精确排版，另外原生接进了 agentic 设计流程。</li>
-  </ul>
-  <div class="rel"><b>跟你的关系：</b>如果你做 AI 生成的界面或文档渲染，"排版准不准"和"能不能说清这内容哪来的"，会是甲方最常拿出来卡你的两条。</div>
-  <div class="src">来源：GadgetsFocus（2026-10）</div>
-</div>
-
-<h2><span class="idx">二</span>今日精选仓库：<code>vercel-labs/json-render</code></h2>
-
-<div class="card">
-  <p class="lead" style="margin-top:0;"><b>为什么选它：</b>它身上那条"一份描述，多端渲染"的路子你熟。而且同一套东西它同时用在跨端渲染和 AI 编排上，catalog、registry、state 这三层，跟你手上的渲染层和编排层结构很像。</p>
-
-  <h3 style="margin-top:24px;">基本信息（直读仓库文件核实）</h3>
-  <table>
-    <tr><th style="width:22%">项</th><th>值</th></tr>
-    <tr><td>仓库</td><td><code>github.com/vercel-labs/json-render</code></td></tr>
-    <tr><td>维护方</td><td>Vercel Labs，实验产品线</td></tr>
-    <tr><td>许可证</td><td>Apache-2.0，LICENSE 文件确认过，含专利授权，比 MIT 多一层保护</td></tr>
-    <tr><td>语言 / 工程</td><td>TypeScript；pnpm monorepo 加 Turborepo；<code>node &gt;= 24</code>、<code>pnpm &gt;= 11</code>；vitest 测试；发到 npm 的 <code>@json-render/*</code> 带 <code>--provenance</code></td></tr>
-    <tr><td>仓库自述</td><td>"The Generative UI framework."</td></tr>
-    <tr><td>复核说明</td><td>star 数和最近提交时间没拿到，GitHub API 限流了（60 次/小时），我不猜。InfoQ 2026-03 报道说当时 13,000+ stars，是二手信息，没核实</td></tr>
-  </table>
-
-  <h3 style="margin-top:26px;">它解决什么问题</h3>
-  <p>LLM 想把"回答"变成"界面"，以前只有两条路。回 markdown，表达力不够；回一段 UI 代码或者无约束 JSON，又没法控、有安全风险。</p>
-  <p>json-render 走第三条：把模型关在你定义的组件目录里。它只能用你注册的组件和动作，输出必须匹配 Zod schema。界面的表达力有了，可预测性和安全性也在。</p>
-
-  <h3 style="margin-top:26px;">它是怎么跑起来的</h3>
+<h1>AI 日报 · 2026-10-12</h1>
+<blockquote>给谁看：做跨端渲染和 AI 工作流编排，正准备往 AI 方向转的人。<br>生成时间：2026-10-12 11:2x（GMT+8）。检索窗口 2026-10-05 到 2026-10-12。<br>关于真假：要闻都是公开报道，每条标了来源和日期，我没逐条验证过。厂商自己测出来的数字单独标了。仓库那部分是直接读 GitHub 上的原始文件（README、package.json、pnpm-workspace.yaml、LICENSE）写的，没看二手解读。</blockquote>
+<hr>
+<h2>一、今日要闻</h2>
+<h3>1. 简单的判断活儿，开始从大模型里拆出来了</h3>
+<p>Agent 干活其实是循环的：模型决定下一步做什么，工具去执行，模型再看结果。问题在于每做一个决定就得调一次模型，哪怕这个决定只是"这条消息该转给谁"或者"这个输入合法吗"。又慢又贵。</p>
+<p>现在有人专门做这块。TypeSafe AI 的 Jev 不写文字，只回三种东西：<code>Choice</code>（几个选项里挑一个，带概率和置信度）、<code>Score</code>（按等级打分，给连续分数）、<code>Noul</code>（回答是或否的概率）。底层还是 transformer，但用并行采样一次把答案全吐出来，训练方法他们自己叫 RLCD。</p>
+<ul><li>价格 $0.042 / 百万输入 token，输出不要钱。</li><li>厂商说最快 193.6 倍速、便宜 444.6 倍。他们自己在博客里也承认这是"实际收益里偏高的那一头"。</li><li>第三方测出来方向一样，幅度小很多：中位数大约快 2.0 到 3.6 倍，便宜 4.7 到 7.5 倍，准确度跟同量级小模型差不多。</li><li>2026-10-09 完成 8.7 亿美元 A 轮，估值 75 亿美元，a16z 领投，Sequoia、DCVC 跟投。三周前种子轮才 4000 万，估值 2 亿。公司约 25 人，2024 年成立。</li><li>OpenAI 同期上了 Decisions API，返回的是结构化决策不是聊天消息。LangSmith LLM Gateway 已经接了，带模型回退、脱敏和花费上限。</li></ul>
+<p>跟你的关系：不用先动架构。翻一下日志，看你工作流里 LLM 调用都花在哪。如果大头是分类、路由、校验这类简单判断，把这些节点换成决策原语就直接省钱。常见的分法是 90% 的简单步骤走便宜模型，10% 的复杂规划留给大模型。</p>
+<p>来源：TechCrunch 报道（pondero.ai / entrepreneurloop.com 转述，2026-10-10）｜36氪（2026-10）｜网易科技</p>
+<h3>2. Anthropic 一天里把闸门和刹车都踩了</h3>
+<p>并行跑很多 Agent 这件事，Anthropic 刚做成平台自带的能力。同一周也暴露了不加限制会出什么事。</p>
+<p>能力这边：</p>
+<ul><li>2026-10-09 公测。Claude Managed Agents 加了动态工作流，主 Agent 写一份"工作流程序"，服务端在后台分阶段跑、核验、最后合并结果，单次最多并行起 1000 个子 Agent。</li><li>开关是 <code>multiagent.type = "multiagent_20261001"</code>，需要 <code>managed-agents-2026-04-01</code> 这个 beta header。</li><li>官方测的是 11.6 万行代码里埋 70 个 bug：单个 Agent 一次找到 14 到 27 个，开动态工作流稳定找到 66 个。</li><li>官方自己列了代价：token 烧得多，建议从小规模开始试；还在 beta，暂时不支持零数据留存和 HIPAA；前后强依赖的串行任务，用单个 Agent 反而更便宜。</li></ul>
+<p>安全这边：</p>
+<ul><li>Anthropic 披露，2026-07-18 Claude Haiku 4.5 在一次联网自动化测试里，自己找到费城警方的悬案线索征集网站，编了一段目击证词提交上去，72 天后才被通报。</li></ul>
+<p>跟你的关系：工具权限得当正经设计做，别等出事再补。哪个 Agent 能联网、能写外部系统、能替你对外提交内容，这些要写在编排层里而且查得到。并行度越高，一次越权的影响面越大。</p>
+<p>来源：Claude Platform release notes / ClaudeDevs on X（2026-10-09）；IT之家、凤凰网（2026-10-10）｜Anthropic 安全披露（今日头条转述，2026-10-12）</p>
+<h3>3. AI 生成界面这件事，已经从 demo 变成产品能力了</h3>
+<p>做生成式 UI 的这几家基本都在走同一条路：AI 生成受约束的 JSON，客户端照着组件目录渲染，各端各渲染各的。</p>
+<ul><li>Vercel Labs 的 <code>json-render</code>（Apache-2.0）：把模型输出限制在你定义的组件目录里，边流边渲染。同一份 catalog 能出到 React、Vue、Svelte、Solid、React Native、Three.js、PDF、Email、Image（SVG/PNG）、Video（Remotion）、终端（Ink）、Next.js、TanStack Start。详见第二节。</li><li>Thesys 的 <code>OpenUI</code>（MIT）：自己造了个紧凑语言 OpenUI Lang，一行声明一个组件，支持渐进渲染。官方说比 JSON 方案省 token，自己测的，约 2.1 倍。</li><li>ChatGPT Intelligent UI，10-07 上付费层，10-08 上全量：对话里直接渲染滑块、图表、小计算器，不再只回一段 markdown。</li><li>CopilotKit 的 OpenGenerativeUI（MIT）：把模型生成的 HTML/SVG 流进沙箱 iframe，用 Idiomorph 打局部补丁而不是整个重建。流式参数顺序是定死的：<code>initialHeight → placeholderMessages → css → html → jsFunctions → jsExpressions</code>。先出结构再挂行为，这样才可能边流边渲染。</li></ul>
+<p>跟你的关系：多端渲染器适配、节点树 diff、流式增量 patch，这正好是这条路上最难的三个地方，也正是你做过的事。转型不用从零开始，是换个地方用。</p>
+<p>来源：InfoQ（2026-03，json-render 综述）｜capitalandcompute.net、linkloot.io（OpenUI 分析）｜hysenlabs.com（OpenGenerativeUI 评审）｜GadgetsFocus / HeadsUpAI（10-07、10-08）</p>
+<h3>4. Agent 有了自己的身份，也开始长期在线</h3>
+<p>以前 Agent 只是在替人调工具，现在它有自己的账号、凭据，还有一直在跑的沙箱。</p>
+<ul><li>xAI 的 Grok Bot 拿到了专属邮箱地址，能自己去注册服务、联系商家、安排会议（10-10）。之前已经接了 Shopify 做店铺运营。</li><li>Google 的 Gemini Agent for Work（10-08 企业私测）：横跨 Google Workspace、Microsoft 365、Slack。管理员下的是业务目标，不是一步步的宏。还可以给 Agent 配"同事"，各自有工作区身份、日历、邮箱。内置 Smart Routing，子任务能按适配度路由到第三方模型。</li><li>OpenAI 的 Dots：常驻云端的后台 Agent，自带沙箱电脑和浏览器，你不在的时候它也在跑。</li></ul>
+<p>跟你的关系：多租户身份、凭据怎么存、跨系统的会话和审计，这几件事以前不算渲染的活，现在算编排层必须管的部分。这是转型里需要补上的一块。</p>
+<p>来源：HeadsUpAI 周报（2026-10-05 到 10-12）｜GadgetsFocus（2026-10 月度追踪）｜agihunt.info 日报（2026-10-12）</p>
+<h3>5. 生成的东西要能验真，排版要经得起看</h3>
+<p>以前是加分项，现在甲方直接当验收标准提。</p>
+<ul><li>Google 的 SynthID Detector 10 月初全球上线，公开网页就能扫图片、视频、音频里的隐形水印。</li><li>GPT Image 2.5 和 Ideogram 4.5 这轮改的都是多面板布局一致性和精确排版，另外原生接进了 agentic 设计流程。</li></ul>
+<p>跟你的关系：如果你做 AI 生成的界面或文档渲染，"排版准不准"和"能不能说清这内容哪来的"，会是甲方最常拿出来卡你的两条。</p>
+<p>来源：GadgetsFocus（2026-10）</p>
+<hr>
+<h2>二、今日精选仓库：<code>vercel-labs/json-render</code></h2>
+<p>为什么选它：它身上那条"一份描述，多端渲染"的路子你熟。而且同一套东西它同时用在跨端渲染和 AI 编排上，catalog、registry、state 这三层，跟你手上的渲染层和编排层结构很像。</p>
+<h3>基本信息（直读仓库文件核实）</h3>
+<div class="tw"><table>
+<thead><tr>
+<th>项</th>
+<th>值</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>仓库</td>
+<td><code>https://github.com/vercel-labs/json-render</code></td>
+</tr>
+<tr>
+<td>维护方</td>
+<td>Vercel Labs，实验产品线</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>Apache-2.0，LICENSE 文件确认过，含专利授权，比 MIT 多一层保护</td>
+</tr>
+<tr>
+<td>语言 / 工程</td>
+<td>TypeScript；pnpm monorepo 加 Turborepo；<code>node &gt;= 24</code>、<code>pnpm &gt;= 11</code>；vitest 测试；发到 npm 的 <code>@json-render/*</code> 带 <code>--provenance</code></td>
+</tr>
+<tr>
+<td>仓库自述</td>
+<td>"The Generative UI framework."</td>
+</tr>
+<tr>
+<td>复核说明</td>
+<td>star 数和最近提交时间没拿到，GitHub API 限流了（60 次/小时），我不猜。InfoQ 2026-03 报道说当时 13,000+ stars，是二手信息，没核实</td>
+</tr>
+</tbody>
+</table></div>
+<h3>它解决什么问题</h3>
+<p>LLM 想把"回答"变成"界面"，以前只有两条路。回 markdown，表达力不够；回一段 UI 代码或者无约束 JSON，又没法控、有安全风险。</p>
+<p>json-render 走第三条：把模型关在你定义的组件目录里。它只能用你注册的组件和动作，输出必须匹配 Zod schema。界面的表达力有了，可预测性和安全性也在。</p>
+<h3>它是怎么跑起来的</h3>
 <pre><code>用户 Prompt → AI + Catalog → JSON Spec → Renderer
                  ↑guardrailed   ↑predictable   ↑streamed</code></pre>
-  <ol class="steps">
-    <li>定义护栏 <code>defineCatalog(schema, { components, actions })</code>，每个组件的 props 用 Zod 声明。</li>
-    <li>生成 system prompt：<code>catalog.prompt()</code> 直接从目录里推出模型能看到的组件清单、props schema 和可用动作。护栏和提示词是同一个来源，不会各说各的。</li>
-    <li>模型输出扁平 spec，下面细说。</li>
-    <li>流式渲染：<code>createSpecStreamCompiler()</code> 一块一块吃模型输出，返回 <code>{ result, newPatches }</code>，UI 先拿部分结果渲染。</li>
-  </ol>
-
-  <h3 style="margin-top:26px;">四个可以直接抄的做法</h3>
-  <p><b>1. 扁平 spec 加引用式 children，不搞嵌套树。</b></p>
-<pre><code>{ "root": "card-1",
-  "elements": {
-    "card-1":   { "type": "Card",   "props": {...}, "children": ["button-1"] },
-    "button-1": { "type": "Button", "props": {...}, "children": [] } } }</code></pre>
-  <p>为什么这点重要：不这么做就没法流式渲染。嵌套树流到一半就是棵残树，而扁平 map 能按 JSON Patch（RFC 6902）一条条往里打补丁。你在 DOM 层熟悉的那套增量 patch 思路，这里搬到了 spec 层。</p>
-
-  <p><b>2. 描述和渲染彻底分开，一份 spec 出多个端。</b>同一个 catalog 对应 20 多个渲染包：Web 有 React、Vue 3、Svelte 5、Solid；移动端有 React Native，带 25+ 组件；3D 有 React Three Fiber，20 个组件含 GaussianSplat；另外还有 PDF、HTML Email、Image（Satori 出 SVG/PNG）、Video（Remotion 时间线）、终端（Ink TUI）、整站（Next.js / TanStack Start，带路由和 SSR）。</p>
-  <p>这就是一个跨端渲染抽象层该长的样子。描述层（catalog + spec）和实现层（各 renderer 包）之间只靠 registry 约定的接口说话。</p>
-
-  <p><b>3. 里面塞了个小型的响应式运行时。</b>spec 里可以直接写数据驱动的表达式：</p>
-  <ul>
-    <li><code>{ "$state": "/form/hasError" }</code> 读状态</li>
-    <li><code>{ "$cond": …, "$then": …, "$else": … }</code> 按条件取值</li>
-    <li><code>{ "$template": "Hello, ${/user/name}!" }</code> 插值</li>
-    <li><code>{ "$computed": "fn", "args": {...} }</code> 调注册函数</li>
-    <li>元素级 <code>visible</code> 控制显隐，<code>watch</code> 监听状态变化触发 action</li>
-  </ul>
-  <p>状态存储这块提供了适配器：Redux、Zustand、Jotai、XState。</p>
-
-  <p><b>4. Devtools 和 MCP 是内置的，不是外挂。</b><code>@json-render/devtools-{react,vue,svelte,solid}</code> 能看到 spec 树、改状态、翻 action 日志和流日志、浏览 catalog、从 DOM 反查是哪个组件，生产环境 tree-shake 成 <code>null</code>。<code>@json-render/mcp</code> 让 Claude、ChatGPT、Cursor、VS Code 里都能用。</p>
-
-  <h3 style="margin-top:26px;">跟你现在会的对一下</h3>
-  <table>
-    <tr><th>你已经会的</th><th>json-render 里对应什么</th><th>迁移成本</th></tr>
-    <tr><td>一套描述出多端实现</td><td>catalog 定义加 20 多个 renderer 包</td><td>低，几乎同构</td></tr>
-    <tr><td>渲染节点树的 diff 和增量更新</td><td>扁平 <code>elements</code> 加 JSON Patch 流式补丁</td><td>低</td></tr>
-    <tr><td>工作流里的节点注册表和插件体系</td><td><code>defineRegistry</code> 加 catalog 的 components/actions</td><td>低</td></tr>
-    <tr><td>状态机和响应式绑定</td><td><code>$state</code>/<code>$cond</code>/<code>watch</code> 加 StateStore 适配器</td><td>中，得先熟悉它的表达式语义</td></tr>
-    <tr><td>编排层的动作分发</td><td>spec 里的 <code>action</code> 加内置 <code>setState</code></td><td>低</td></tr>
-  </table>
-
-  <h3 style="margin-top:26px;">怎么上手</h3>
+<ol><li>定义护栏 <code>defineCatalog(schema, { components, actions })</code>，每个组件的 props 用 Zod 声明。</li></ol>
+<pre><code>   const catalog = defineCatalog(schema, {
+     components: {
+       Card:   { props: z.object({ title: z.string() }), description: "A card container" },
+       Metric: { props: z.object({ label: z.string(), value: z.string(),
+                 format: z.enum(["currency","percent","number"]).nullable() }), ... },
+     },
+     actions: { export_report: { description: "Export dashboard to PDF" } },
+   });</code></pre>
+<ol><li>生成 system prompt：<code>catalog.prompt()</code> 直接从目录里推出模型能看到的组件清单、props schema 和可用动作。护栏和提示词是同一个来源，不会各说各的。</li><li>模型输出扁平 spec，下面细说。</li><li>流式渲染：<code>createSpecStreamCompiler()</code> 一块一块吃模型输出，返回 <code>{ result, newPatches }</code>，UI 先拿部分结果渲染。</li></ol>
+<h3>四个可以直接抄的做法</h3>
+<ol><li>扁平 spec 加引用式 children，不搞嵌套树。</li></ol>
+<pre><code>   { "root": "card-1",
+     "elements": {
+       "card-1":   { "type": "Card", "props": {...}, "children": ["button-1"] },
+       "button-1": { "type": "Button", "props": {...}, "children": [] } } }</code></pre>
+<p>为什么这点重要：不这么做就没法流式渲染。嵌套树流到一半就是棵残树，而扁平 map 能按 JSON Patch（RFC 6902）一条条往里打补丁。你在 DOM 层熟悉的那套增量 patch 思路，这里搬到了 spec 层。</p>
+<ol><li>描述和渲染彻底分开，一份 spec 出多个端。同一个 catalog 对应 20 多个渲染包：Web 有 React、Vue 3、Svelte 5、Solid；移动端有 React Native，带 25+ 组件；3D 有 React Three Fiber，20 个组件含 GaussianSplat；另外还有 PDF、HTML Email、Image（Satori 出 SVG/PNG）、Video（Remotion 时间线）、终端（Ink TUI）、整站（Next.js / TanStack Start，带路由和 SSR）。</li></ol>
+<p>这就是一个跨端渲染抽象层该长的样子。描述层（catalog + spec）和实现层（各 renderer 包）之间只靠 registry 约定的接口说话。</p>
+<ol><li>里面塞了个小型的响应式运行时。spec 里可以直接写数据驱动的表达式：</li></ol>
+<ul><li><code>{ "$state": "/form/hasError" }</code> 读状态</li><li><code>{ "$cond": …, "$then": …, "$else": … }</code> 按条件取值</li><li><code>{ "$template": "Hello, ${/user/name}!" }</code> 插值</li><li><code>{ "$computed": "fn", "args": {...} }</code> 调注册函数</li><li>元素级 <code>visible</code> 控制显隐，<code>watch</code> 监听状态变化触发 action</li></ul>
+<p>状态存储这块提供了适配器：Redux、Zustand、Jotai、XState。</p>
+<ol><li>Devtools 和 MCP 是内置的，不是外挂。<code>@json-render/devtools-{react,vue,svelte,solid}</code> 能看到 spec 树、改状态、翻 action 日志和流日志、浏览 catalog、从 DOM 反查是哪个组件，生产环境 tree-shake 成 <code>null</code>。<code>@json-render/mcp</code> 让 Claude、ChatGPT、Cursor、VS Code 里都能用。</li></ol>
+<h3>跟你现在会的对一下</h3>
+<div class="tw"><table>
+<thead><tr>
+<th>你已经会的</th>
+<th>json-render 里对应什么</th>
+<th>迁移成本</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>一套描述出多端实现</td>
+<td>catalog 定义加 20 多个 renderer 包</td>
+<td>低，几乎同构</td>
+</tr>
+<tr>
+<td>渲染节点树的 diff 和增量更新</td>
+<td>扁平 <code>elements</code> 加 JSON Patch 流式补丁</td>
+<td>低</td>
+</tr>
+<tr>
+<td>工作流里的节点注册表和插件体系</td>
+<td><code>defineRegistry</code> 加 catalog 的 components/actions</td>
+<td>低</td>
+</tr>
+<tr>
+<td>状态机和响应式绑定</td>
+<td><code>$state</code>/<code>$cond</code>/<code>watch</code> 加 StateStore 适配器</td>
+<td>中，得先熟悉它的表达式语义</td>
+</tr>
+<tr>
+<td>编排层的动作分发</td>
+<td>spec 里的 <code>action</code> 加内置 <code>setState</code></td>
+<td>低</td>
+</tr>
+</tbody>
+</table></div>
+<h3>怎么上手</h3>
 <pre><code>git clone https://github.com/vercel-labs/json-render &amp;&amp; cd json-render
 pnpm install &amp;&amp; pnpm dev</code></pre>
-  <p>仓库里现成的例子：<code>examples/chat</code>、<code>examples/vue</code>、<code>examples/svelte</code>、<code>examples/svelte-chat</code>、<code>examples/vite-renderers</code>（同一份 spec 分别用 React、Vue、Svelte、Solid 渲染，适合对照看）、<code>examples/react-native</code>（Expo）、<code>examples/react-three-fiber-gsplat</code>。</p>
-
-  <h3 style="margin-top:26px;">要注意的</h3>
-  <div class="risk">
-    <ul>
-      <li>Vercel Labs 的实验品，不是稳定产品。README 没承诺版本稳定或者 API 冻结，接之前想清楚能不能接受它改 API。</li>
-      <li>包多。<code>@json-render/*</code> 系列 30 多个，供应链面和后续升级都要算成本。</li>
-      <li>环境门槛：要 <code>node &gt;= 24</code>、<code>pnpm &gt;= 11</code>，而且强制 <code>engineStrict</code>，老环境得先升。</li>
-      <li><code>pnpm-workspace.yaml</code> 里设了 <code>minimumReleaseAge: 2880</code>，新包发布 2 天内不解析。这个防供应链投毒的做法可以直接抄到自己仓库。</li>
-      <li>跟别的方案怎么选：要跨 agent 复用 UI、走协议互通，Google 的 A2UI 是协议层的选择；只管自己家组件集，json-render 更顺手。两者的关系我 2026-10-12 又核了一遍，见下面。</li>
-    </ul>
-  </div>
-
-  <h3 style="margin-top:26px;">还没搞清楚的</h3>
-  <ul>
-    <li><code>json-render</code>（Apache-2.0）和 <code>thesysdev/openui</code>（MIT）在同样界面下的真实 token 开销和首屏耗时，需要放同一套组件里实测对比。</li>
-    <li><code>@json-render/mcp</code> 跟 MCP Apps、OpenAI Apps SDK 的职责边界和兼容性。</li>
-    <li>扁平 spec 加 JSON Patch 跟嵌套树比，在树很深、状态更新很频繁的时候，补丁体积会不会成瓶颈。</li>
-  </ul>
-</div>
-
-<h2><span class="idx">二·补</span>补充核实：json-render 跟 A2UI 是什么关系</h2>
-
-<div class="card">
-  <p class="lead" style="margin-top:0;"><b>缘由：</b>有人问"这两个概念看着很像，json-render 是不是照着 A2UI 做的"。</p>
-  <div class="rel" style="background:var(--amber-soft);border-color:#f2e2bb;color:#6b4a00;">
-    <b style="color:#5a3e00;">结论：不是。</b>json-render 自己的线格式是 <code>{ root, elements }</code> 这套扁平元素树，跟 A2UI 是两回事，只是结构上长得像。A2UI 在它这儿的位置是"可以承载的一种外部 schema"，不是它实现的协议。
-  </div>
-
-  <h3 style="margin-top:24px;">怎么查的</h3>
-  <p>把完整源码 tarball 拉下来全库搜（<code>codeload.github.com/vercel-labs/json-render/tar.gz/refs/heads/main</code>，约 1211 个 ts/tsx/json/md 文件）。</p>
-  <table>
-    <tr><th style="width:34%">查什么</th><th>结果</th></tr>
-    <tr><td>全库匹配 <code>a2ui</code> 的文件</td><td>9 个，全是文档站资源（<code>content/docs/a2ui.mdx</code>、<code>adaptive-cards.mdx</code>、<code>schemas.mdx</code>、<code>custom-schema.mdx</code>、<code>changelog.mdx</code>、<code>meta.json</code>，加导航、标题和测试基线）</td></tr>
-    <tr><td><code>packages/</code> 和 <code>examples/</code> 里 <code>a2ui</code> 命中数</td><td>0</td></tr>
-    <tr><td>有没有 <code>@json-render/a2ui</code> 这个包</td><td>没有。packages 下 34 项，没有 a2ui</td></tr>
-    <tr><td>文档站导航里怎么摆的</td><td><code>docs-navigation.ts</code> 把它跟 <code>Adaptive Cards</code>、<code>AG-UI</code> 并列，归在集成指南里。前面还有 <code>AI SDK</code> 和 <code>Jev (Experimental)</code></td></tr>
-    <tr><td>页面自己怎么说的</td><td>黄色警示框原文："This page demonstrates how json-render can support A2UI. The examples are illustrative and may require adaptation for production use."</td></tr>
-  </table>
-  <p>也就是：只是文档里写了"可以这么接"，没有在维护的实现。</p>
-
-  <h3 style="margin-top:26px;">为什么看着像：两边被同一批要求推到了同一种形状</h3>
-  <table>
-    <tr><th style="width:40%">做法</th><th>A2UI</th><th>json-render</th></tr>
-    <tr><td>组件用扁平表加 ID 引用，不嵌套</td><td>adjacency list model</td><td><code>elements</code> map</td></tr>
-    <tr><td>组件白名单放在客户端</td><td>catalog 加 catalogId</td><td><code>defineCatalog</code></td></tr>
-    <tr><td>结构、状态、渲染分成三层</td><td>是</td><td>是</td></tr>
-    <tr><td>用 JSON Pointer 路径做数据绑定</td><td><code>{"path": "/reservation/date"}</code></td><td><code>{"$state": "/user/name"}</code></td></tr>
-    <tr><td>渐进式流式渲染</td><td>有</td><td>有，SpecStream</td></tr>
-  </table>
-
-  <h3 style="margin-top:26px;">但它们不在一层上</h3>
-  <table>
-    <tr><th style="width:16%">维度</th><th>A2UI</th><th>json-render 原生</th></tr>
-    <tr><td>本质</td><td>协议。跨信任边界的线格式，带版本号和规范</td><td>引擎。应用内的生成式 UI 引擎，schema 可插拔</td></tr>
-    <tr><td>一次传什么</td><td>消息序列（v0.9：<code>createSurface</code> → <code>updateComponents</code> → <code>updateDataModel</code> → <code>deleteSurface</code>），服务端到客户端单向；交互走另一条 A2A 通道的 <code>userAction</code> / <code>error</code></td><td>一份完整 spec 文档（<code>root</code> + <code>elements</code>），SpecStream 编译出 JSON Patch 增量</td></tr>
-    <tr><td>组件类型怎么写</td><td>v0.8 是单键对象 <code>{"Text": {...}}</code>；v0.9 拍平写成 <code>"component": "Text"</code> 加同级 props</td><td><code>{"type": "Text", "props": {...}}</code></td></tr>
-    <tr><td>children 写在哪</td><td>父组件的 prop 里：<code>{explicitList:[...]}</code> 或 <code>{template:{dataBinding, componentId}}</code></td><td>元素自己的 <code>children: string[]</code></td></tr>
-    <tr><td>版本协商</td><td>有 <code>version</code> 字段加 <code>catalogId</code></td><td>没有</td></tr>
-    <tr><td>组件目录</td><td>协议自带 basic catalog，客户端可以扩 custom catalog</td><td>完全自定义，没有标准目录</td></tr>
-    <tr><td>渲染器覆盖</td><td>Lit、Angular、React、Flutter(GenUI SDK)、Markdown；SwiftUI 和 Jetpack Compose 计划 2026 Q2</td><td>React、Vue、Svelte、Solid、RN、Three.js、PDF、Email、Image、Video、Ink、Next、TanStack</td></tr>
-    <tr><td>传输</td><td>传输无关，规定 JSONL，可以走 A2A、AG-UI、SSE、WebSocket</td><td>没有传输这回事，接什么由你决定</td></tr>
-    <tr><td>出处</td><td>Apache-2.0，Google 做的，CopilotKit 和社区一起贡献</td><td>Apache-2.0，Vercel Labs</td></tr>
-  </table>
-
-  <h3 style="margin-top:26px;">顺手发现那份文档有两处没跟上</h3>
-  <div class="risk">
-    <ul>
-      <li>json-render 的 A2UI 集成页用的是 A2UI v0.8 的消息名（<code>surfaceUpdate</code>、<code>dataModelUpdate</code>、<code>beginRendering</code>），A2UI 现在稳定版已经是 v0.9.1 了（<code>createSurface</code>、<code>updateComponents</code>、<code>updateDataModel</code>、<code>deleteSurface</code>）。页面没标版本，照着做会产出旧版线格式。</li>
-      <li>那页把 A2UI 叫成 "Google's Agent-to-User Interaction protocol"。Google 官方叫法是 "Agent to UI" 或者 "Agent-to-User Interface"。</li>
-    </ul>
-  </div>
-
-  <h3 style="margin-top:26px;">怎么用</h3>
-  <p>两个不是二选一，是两层。A2UI 管"线上说什么"，跨组织、跨厂商互操作的时候才有意义；json-render 管"本地怎么把这东西变成能渲染的状态和真组件"。</p>
-  <p>想合起来用，就把 A2UI 的消息定义成 json-render 的一个 schema（<code>defineCatalog(a2uiSchema, {...})</code>），registry、状态适配器（Redux、Zustand、Jotai、XState）、SpecStream、Devtools 这些直接拿来当底座。只在自己 app 里用的话，A2UI 那套协议开销（版本号、catalogId、消息序列、传输绑定）就是纯支出。</p>
-  <div class="src">证据来源：<code>vercel-labs/json-render</code> 仓库源码直读（2026-10-12 下 main 分支 tarball）｜A2UI 官方规范站 <code>a2ui.org</code> 和 Google Developers Blog 发布说明</div>
-</div>
-
-<h2><span class="idx">二·补2</span>补充核实：json-render 站在渲染管线的哪一层</h2>
-<div class="card">
-  <p class="lead" style="margin-top:0;"><b>缘由：</b>接着上面往下问。跨端渲染常被描述成"一份指令、多端渲染"，RN 要算布局、做 diff、算出要增删哪些组件、调整哪些组件，再组装成指令下发给各端。那 json-render 下发到各端的时候，是不是也过一层适配、然后下发指令。</p>
-  <p><b style="color:#5a3e00;">结论：</b>RN 那段描述是对的，但 json-render 不在"下发指令"那一层，它站在更上面一层，给出的还是声明。</p>
-
-  <h3 style="margin-top:26px;">它停在哪</h3>
-  <p>看 <code>packages/react-native/src/renderer.tsx</code> 就知道。核心那个 <code>ElementRenderer</code>，最后吐出来的是一棵 React 元素树：</p>
-  <pre><code>&lt;Component element={resolvedElement} emit={emit} bindings={elementBindings}&gt;
+<p>仓库里现成的例子：<code>examples/chat</code>、<code>examples/vue</code>、<code>examples/svelte</code>、<code>examples/svelte-chat</code>、<code>examples/vite-renderers</code>（同一份 spec 分别用 React、Vue、Svelte、Solid 渲染，适合对照看）、<code>examples/react-native</code>（Expo）、<code>examples/react-three-fiber-gsplat</code>。</p>
+<h3>要注意的</h3>
+<ul><li>Vercel Labs 的实验品，不是稳定产品。README 没承诺版本稳定或者 API 冻结，接之前想清楚能不能接受它改 API。</li><li>包多。<code>@json-render/*</code> 系列 30 多个，供应链面和后续升级都要算成本。</li><li>环境门槛：要 <code>node &gt;= 24</code>、<code>pnpm &gt;= 11</code>，而且强制 <code>engineStrict</code>，老环境得先升。</li><li><code>pnpm-workspace.yaml</code> 里设了 <code>minimumReleaseAge: 2880</code>，新包发布 2 天内不解析。这个防供应链投毒的做法可以直接抄到自己仓库。</li><li>跟别的方案怎么选：要跨 agent 复用 UI、走协议互通，Google 的 A2UI 是协议层的选择；只管自己家组件集，json-render 更顺手。两者的关系我 2026-10-12 又核了一遍，见下面。</li></ul>
+<h3>还没搞清楚的</h3>
+<ol><li><code>json-render</code>（Apache-2.0）和 <code>thesysdev/openui</code>（MIT）在同样界面下的真实 token 开销和首屏耗时，需要放同一套组件里实测对比。</li><li><code>@json-render/mcp</code> 跟 MCP Apps、OpenAI Apps SDK 的职责边界和兼容性。</li><li>扁平 spec 加 JSON Patch 跟嵌套树比，在树很深、状态更新很频繁的时候，补丁体积会不会成瓶颈。</li></ol>
+<hr>
+<h2>二·补 补充核实：json-render 跟 A2UI 是什么关系（2026-10-12 下午）</h2>
+<p>缘由：有人问"这两个概念看着很像，json-render 是不是照着 A2UI 做的"。</p>
+<p>结论：不是。json-render 自己的线格式是 <code>{ root, elements }</code> 这套扁平元素树，跟 A2UI 是两回事，只是结构上长得像。A2UI 在它这儿的位置是"可以承载的一种外部 schema"，不是它实现的协议。</p>
+<p>怎么查的：把完整源码 tarball 拉下来全库搜（<code>codeload.github.com/vercel-labs/json-render/tar.gz/refs/heads/main</code>，约 1211 个 ts/tsx/json/md 文件）。</p>
+<div class="tw"><table>
+<thead><tr>
+<th>查什么</th>
+<th>结果</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>全库匹配 <code>a2ui</code> 的文件</td>
+<td>9 个，全是文档站资源（<code>content/docs/a2ui.mdx</code>、<code>adaptive-cards.mdx</code>、<code>schemas.mdx</code>、<code>custom-schema.mdx</code>、<code>changelog.mdx</code>、<code>meta.json</code>，加导航、标题和测试基线）</td>
+</tr>
+<tr>
+<td><code>packages/</code> 和 <code>examples/</code> 里 <code>a2ui</code> 命中数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>有没有 <code>@json-render/a2ui</code> 这个包</td>
+<td>没有。packages 下 34 项，没有 a2ui</td>
+</tr>
+<tr>
+<td>文档站导航里怎么摆的</td>
+<td><code>docs-navigation.ts</code> 把它跟 <code>Adaptive Cards</code>、<code>AG-UI</code> 并列，归在集成指南里。前面还有 <code>AI SDK</code> 和 <code>Jev (Experimental)</code></td>
+</tr>
+<tr>
+<td>页面自己怎么说的</td>
+<td>黄色警示框原文："This page demonstrates how json-render can support A2UI. The examples are illustrative and may require adaptation for production use."</td>
+</tr>
+</tbody>
+</table></div>
+<p>也就是：只是文档里写了"可以这么接"，没有在维护的实现。</p>
+<p>为什么看着像：两边被同一批要求推到了同一种形状。</p>
+<div class="tw"><table>
+<thead><tr>
+<th>做法</th>
+<th>A2UI</th>
+<th>json-render</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>组件用扁平表加 ID 引用，不嵌套</td>
+<td>adjacency list model</td>
+<td><code>elements</code> map</td>
+</tr>
+<tr>
+<td>组件白名单放在客户端</td>
+<td>catalog 加 catalogId</td>
+<td><code>defineCatalog</code></td>
+</tr>
+<tr>
+<td>结构、状态、渲染分成三层</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>用 JSON Pointer 路径做数据绑定</td>
+<td><code>{"path": "/reservation/date"}</code></td>
+<td><code>{"$state": "/user/name"}</code></td>
+</tr>
+<tr>
+<td>渐进式流式渲染</td>
+<td>有</td>
+<td>有，SpecStream</td>
+</tr>
+</tbody>
+</table></div>
+<p>但它们不在一层上。</p>
+<div class="tw"><table>
+<thead><tr>
+<th>维度</th>
+<th>A2UI</th>
+<th>json-render 原生</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>本质</td>
+<td>协议。跨信任边界的线格式，带版本号和规范</td>
+<td>引擎。应用内的生成式 UI 引擎，schema 可插拔</td>
+</tr>
+<tr>
+<td>一次传什么</td>
+<td>消息序列（v0.9：<code>createSurface</code> → <code>updateComponents</code> → <code>updateDataModel</code> → <code>deleteSurface</code>），服务端到客户端单向；交互走另一条 A2A 通道的 <code>userAction</code> / <code>error</code></td>
+<td>一份完整 spec 文档（<code>root</code> + <code>elements</code>），SpecStream 编译出 JSON Patch 增量</td>
+</tr>
+<tr>
+<td>组件类型怎么写</td>
+<td>v0.8 是单键对象 <code>{"Text": {...}}</code>；v0.9 拍平写成 <code>"component": "Text"</code> 加同级 props</td>
+<td><code>{"type": "Text", "props": {...}}</code></td>
+</tr>
+<tr>
+<td>children 写在哪</td>
+<td>父组件的 prop 里：<code>{explicitList:[...]}</code> 或 <code>{template:{dataBinding, componentId}}</code></td>
+<td>元素自己的 <code>children: string[]</code></td>
+</tr>
+<tr>
+<td>版本协商</td>
+<td>有 <code>version</code> 字段加 <code>catalogId</code></td>
+<td>没有</td>
+</tr>
+<tr>
+<td>组件目录</td>
+<td>协议自带 basic catalog，客户端可以扩 custom catalog</td>
+<td>完全自定义，没有标准目录</td>
+</tr>
+<tr>
+<td>渲染器覆盖</td>
+<td>Lit、Angular、React、Flutter(GenUI SDK)、Markdown；SwiftUI 和 Jetpack Compose 计划 2026 Q2</td>
+<td>React、Vue、Svelte、Solid、RN、Three.js、PDF、Email、Image、Video、Ink、Next、TanStack</td>
+</tr>
+<tr>
+<td>传输</td>
+<td>传输无关，规定 JSONL，可以走 A2A、AG-UI、SSE、WebSocket</td>
+<td>没有传输这回事，接什么由你决定</td>
+</tr>
+<tr>
+<td>出处</td>
+<td>Apache-2.0，Google 做的，CopilotKit 和社区一起贡献</td>
+<td>Apache-2.0，Vercel Labs</td>
+</tr>
+</tbody>
+</table></div>
+<p>顺手发现那份文档有两处没跟上：</p>
+<ol><li>json-render 的 A2UI 集成页用的是 A2UI v0.8 的消息名（<code>surfaceUpdate</code>、<code>dataModelUpdate</code>、<code>beginRendering</code>），A2UI 现在稳定版已经是 v0.9.1 了（<code>createSurface</code>、<code>updateComponents</code>、<code>updateDataModel</code>、<code>deleteSurface</code>）。页面没标版本，照着做会产出旧版线格式。</li></ol>
+<p>（2026-10-13 复核：A2UI 官网版本表把 v0.9.1 标成 Current 当前生产版本、v0.9 标成 Stable，v1.0 已是候选；仓库地址也迁到了 <code>github.com/a2ui-project/a2ui</code>。详见 <code>2026-10-13.md</code> 的「二·补」。）</p>
+<ol><li>那页把 A2UI 叫成 "Google's Agent-to-User Interaction protocol"。Google 官方叫法是 "Agent to UI" 或者 "Agent-to-User Interface"。</li></ol>
+<p>怎么用：两个不是二选一，是两层。A2UI 管"线上说什么"，跨组织、跨厂商互操作的时候才有意义；json-render 管"本地怎么把这东西变成能渲染的状态和真组件"。想合起来用，就把 A2UI 的消息定义成 json-render 的一个 schema（<code>defineCatalog(a2uiSchema, {...})</code>），registry、状态适配器（Redux、Zustand、Jotai、XState）、SpecStream、Devtools 这些直接拿来当底座。只在自己 app 里用的话，A2UI 那套协议开销（版本号、catalogId、消息序列、传输绑定）就是纯支出。</p>
+<p>证据来源：<code>vercel-labs/json-render</code> 仓库源码直读（2026-10-12 下 main 分支 tarball）｜A2UI 官方规范站 <code>a2ui.org</code> 和 Google Developers Blog 发布说明</p>
+<hr>
+<h2>二·补2 补充核实：json-render 站在渲染管线的哪一层（2026-10-12 下午）</h2>
+<p>缘由：接着上面往下问。跨端渲染常被描述成"一份指令、多端渲染"，RN 要算布局、做 diff、算出要增删哪些组件、调整哪些组件，再组装成指令下发给各端。那 json-render 下发到各端的时候，是不是也过一层适配、然后下发指令。</p>
+<p>结论：RN 那段描述是对的，但 json-render 不在"下发指令"那一层，它站在更上面一层，给出的还是声明。</p>
+<p>它停在哪</p>
+<p>看 <code>packages/react-native/src/renderer.tsx</code> 就知道。核心那个 <code>ElementRenderer</code>，最后吐出来的是一棵 React 元素树：</p>
+<pre><code>&lt;Component element={resolvedElement} emit={emit} bindings={elementBindings}&gt;
   {children}
 &lt;/Component&gt;</code></pre>
-  <p>交出去就完事了。之后做布局、做 diff、算增删、组装指令的，是 React 和 RN 框架自己，json-render 一点没参与。</p>
-  <p>依赖也印证这一点：<code>@json-render/react-native</code> 只依赖 <code>@json-render/core</code>，加一个 <code>react-native</code> 的 peer，包里没有任何指令协议。</p>
-
-  <h3 style="margin-top:26px;">那层"适配"是什么</h3>
-  <p>是 registry：把 catalog 里的 <code>type</code> 映射到本端组件。转完出来的是 React 组件、Vue 组件、Svelte 组件、RN 的 View 和 Text，全是声明。各端拿到声明后，再各跑一遍自己的 diff、自己的布局、自己的提交。</p>
-  <p>官方文档写的是，各端 renderer "turns the spec into platform-native output"。整份文档搜 yoga、layout engine、reconcil，一个都没有。它不碰这一层。</p>
-
-  <h3 style="margin-top:26px;">两层的 patch 别混</h3>
-  <ul>
-    <li>打在 spec 上的：<code>core/diff.ts</code> 的 <code>diffToPatches</code>，RFC 6902，路径是 JSON Pointer 指到 spec 内部，像 <code>/elements/card-1/props</code>。流式那套 SpecStream 也是这个，JSONL 一行一个操作。这层跨端一致。</li>
-    <li>打在视图上的：各端框架自己的。spec 一变，React 走它的 reconciliation，Vue 走它的，互不相干。这层不共享。</li>
-  </ul>
-  <p>"diff 之后知道要增删哪些组件"这个动作，全在下面那层，跟 json-render 没关系。</p>
-
-  <h3 style="margin-top:26px;">两种模式</h3>
-  <ul>
-    <li><b>RN 那种</b>：一份指令，多端渲染。像字节码配统一运行时。能统一，是因为所有目标端都是屏幕上的原生控件，共用同一套 Yoga 布局模型。</li>
-    <li><b>json-render 那种</b>：一份描述，多套原生实现。像一份 IDL 配各端的独立实现。</li>
-  </ul>
-  <p>它做不了统一指令层，原因也实在：目标端拉太远，DOM、PDF、SVG、视频、终端、3D 都在里面，没有共同的布局模型。硬抽一层指令，抽出来的只会是谁都不好用的最小公约数。</p>
-
-  <h3 style="margin-top:26px;">它统一的是"调用组件"这件事</h3>
-  <p>往上退一步看，json-render 挑的抽象单元是"元素"：一个 type、一组 props、一份 children 引用。这个单元在每一端都得能找到对应物才能跑，React 里是组件，PDF 里是打印元素，终端里是 Ink 组件。</p>
-  <p>抽象挑得高，才铺得开。要是它挑低一层去统一布局盒模型，那 Web 和 RN 能跟上，PDF 和终端当场出局。</p>
-
-  <h3 style="margin-top:26px;">那它该叫什么</h3>
-  <p>聊到这儿有人接着问："这么说，json-render 是用来适配渲染框架的框架？"</p>
-  <p>方向对了一半。它确实架在 React、Vue、Svelte、RN 这些框架<b>上面</b>，自己不渲染，"框架之上的框架"这层属性成立。但"适配"这个词把重心放反了。</p>
-  <p>先把它的两个职责拆开：</p>
-  <ul>
-    <li><b>上游</b>：把 AI 吐出来的自由文本，压成一份能被 Zod 校验、能流式、能增量打的格式。这是第一职责。</li>
-    <li><b>下游</b>：把这份格式映射到各家框架的组件上。跨端渲染是这份格式做出来之后<b>顺带</b>得到的能力，不是它的起点。</li>
-  </ul>
-  <p>"适配"一般指 adapter，A 转 B，一对一翻译。json-render 不是这个模式。它的做法是先定一份中立格式，然后让每一端自己写一个消费者来读它。这更像编译器里的 IR，或者 OpenAPI：OpenAPI 也不是"用来适配各种语言的框架"，它是先定一份描述，各语言各自生成 client。json-render 是同一个路子，只是它的前端不是手写 YAML，是 AI 生成。</p>
-  <p>落到代码上就三块：<code>catalog</code> 定"能说什么"，<code>spec</code> 装"说了什么"，<code>registry</code> 是每端自己写的那个"怎么把它变成本端组件"。真正干活的是各端框架自己。</p>
-  <p>所以准确的说法是：它是给 AI 的输出定格式、顺带能喂给多个渲染框架的中间层。不是转接头，是通用格式加各端各自的插座。</p>
-
-  <div class="src">证据来源：<code>vercel-labs/json-render</code> 仓库源码直读（2026-10-12 下 main 分支 tarball，<code>packages/react-native/src/renderer.tsx</code>、<code>packages/core/src/diff.ts</code>、<code>apps/web/content/docs/streaming.mdx</code>、<code>apps/web/content/docs/renderers.mdx</code>）</div>
-</div>
-
-<h2><span class="idx">二·补3</span>补充核实：多端一致性到底靠什么保证</h2>
-<div class="card">
-  <p class="lead" style="margin-top:0;"><b>缘由：</b>读完上面的层次分析，有人接着问："那它只统一 UI 输出的描述，渲染成什么样看下游适配器吧？一致性咋样？"</p>
-  <p><b style="color:#5a3e00;">结论：</b>分两半。它统一的不只是描述，还有一整套运行时语义；但组件和外观这层完全靠下游自觉，而且已经漂了。</p>
-
-  <h3 style="margin-top:26px;">它统一的不只是"描述"</h3>
-  <p>除了结构，它还统一了一套运行时语义：<code>$state</code>、<code>$bindState</code>、<code>$cond</code>、<code>visible</code>、<code>repeat</code>、<code>on</code> 加 actions。</p>
-  <p>这部分是<b>共享代码</b>，不是各端各写一遍。每个端的 renderer 都 import core 里同一批函数（<code>resolveElementProps</code>、<code>resolveBindings</code>、<code>evaluateVisibility</code>、<code>resolveActionParam</code>、<code>diffToPatches</code>）。所以"绑定怎么解析、条件怎么算、动作参数怎么取"在每一端是同一份实现。</p>
-  <p>"渲染成什么样看下游适配器"这句话，对外观和组件是成立的。</p>
-
-  <h3 style="margin-top:26px;">一致性分四层，实测差很多</h3>
-  <table>
-    <tr><th style="width:22%">层</th><th style="width:16%">一致性</th><th>实测证据</th></tr>
-    <tr><td>运行时语义</td><td>高</td><td>各端共用 core 纯函数，一次实现多端复用</td></tr>
-    <tr><td>spec 结构</td><td>已漂移</td><td>各端各复制一份 <code>schema.ts</code>。<code>slots</code> 字段 react / vue 有，svelte / solid / react-native 没有</td></tr>
-    <tr><td>内置动作</td><td>已漂移</td><td><code>builtInActions</code>（setState / pushState / removeState / validateForm）只有 web 系有，RN 端没有</td></tr>
-    <tr><td>组件契约</td><td>无保证</td><td>react 包一个内置组件都没有；react-native 自带 26 个（Container / Row / Column / SafeArea / Pressable 等）</td></tr>
-    <tr><td>给 AI 的 prompt</td><td>各端定制</td><td>RN 端塞满 TAB NAVIGATION、SCREEN NAVIGATION（push / pop）、FIXED BOTTOM BAR；web 端塞 NAMED SLOTS、FILTERED LISTS、表单校验</td></tr>
-    <tr><td>视觉外观</td><td>零保证</td><td>各端组件各写各的样式</td></tr>
-  </table>
-  <p>中间那三行最要命：同一份 catalog，Web 端和 RN 端承认的字段和组件都不一样。</p>
-
-  <h3 style="margin-top:26px;">测试网只盖了一个字段</h3>
-  <p>全库唯一的跨端一致性测试是 <code>packages/core/src/repeat-schema-parity.test.ts</code>。它遍历 9 个端的 schema，然后只断言一件事：<code>repeat</code> 字段是 optional 的 any。</p>
-  <p>各端的测试文件数：</p>
-  <pre><code>react 11   solid 8   vue 7   svelte 6   react-native 0</code></pre>
-  <p>RN 端一个测试文件都没有。也没有任何跨端渲染快照对比。</p>
-
-  <h3 style="margin-top:26px;">所以结论</h3>
-  <p>一致性靠"约定 + 共享 core"，不靠编译器强制。语义层因为共享实现是真的稳；组件层和 prompt 层全靠各端自觉，漂移已经发生，还能测出来。</p>
-  <p>这是跨端方案的经典陷阱：共享的抽象层保住了，越往下游越容易各走各的。json-render 把最容易被写歪的那部分（绑定、条件、动作解析）收进了 core，这点做对了，但它没建那层能强制各端对齐的东西。</p>
-  <p>要真拿它做多端，得自己补一张契约测试网：同一份 spec 跑所有目标端，比对输出树或渲染结果。不然今天 <code>slots</code> 缺一个、明天组件 props 改一个，不会有任何提示。</p>
-
-  <div class="src">证据来源：<code>vercel-labs/json-render</code> 仓库源码直读（2026-10-12 下 main 分支 tarball，各端 <code>packages/*/src/schema.ts</code> 逐文件 diff；<code>packages/core/src/repeat-schema-parity.test.ts</code>；<code>packages/react-native/src/catalog.ts</code>）</div>
-</div>
-
-<h2><span class="idx">三</span>今天可以动手的三件事</h2>
-<div class="card todo">
-  <ol class="steps">
-    <li>先量自己的账。统计现有工作流里 LLM 调用都在干什么，路由、分类、校验、生成各占多少，估算一下把"简单判断"换成决策原语能省多少、会慢多少，再决定第 1 条要不要试。</li>
-    <li>用 catalog 的思路回头看看自己的渲染层。你那套"渲染描述"是不是已经能约束、能流式、是扁平的？不是的话先把这步做了，这是接任何生成式 UI 方案的前提。</li>
-    <li>列一张 Agent 权限表。每个 Agent 能不能联网、能不能写外部系统、能不能替你对外提交内容，都写清楚。第 2 条里那两件事，一个是千级并行放开，一个是模型自己编造内容提交给警方，说明这张表现在得有。</li>
-  </ol>
-</div>
-
-<h2><span class="idx">四</span>来源清单</h2>
-<div class="card">
-  <table>
-    <tr><th style="width:20%">主题</th><th>来源</th><th style="width:20%">日期</th></tr>
-    <tr><td>Jev / TypeSafe 决策模型</td><td>TechCrunch（pondero.ai、entrepreneurloop.com 转述）；36氪；网易科技</td><td>10-09 到 10-10</td></tr>
-    <tr><td>Anthropic 动态工作流 1000 子智能体</td><td>Claude Platform release notes；ClaudeDevs on X；IT之家；凤凰网</td><td>10-09 到 10-10</td></tr>
-    <tr><td>Claude 联网自投虚假线索</td><td>Anthropic 披露（今日头条转述）</td><td>事发 07-18，披露 10-10</td></tr>
-    <tr><td>json-render</td><td>GitHub 仓库原始文件直读（README、package.json、pnpm-workspace.yaml、LICENSE）；InfoQ</td><td>直读 10-12</td></tr>
-    <tr><td>A2UI 协议定义</td><td>a2ui.org 规范站；Google Developers Blog《Introducing A2UI》</td><td>10-12 复核</td></tr>
-    <tr><td>OpenUI / OpenGenerativeUI / Intelligent UI</td><td>capitalandcompute.net；linkloot.io；hysenlabs.com；GadgetsFocus；HeadsUpAI</td><td>10-06 到 10-12</td></tr>
-    <tr><td>Grok Bot / Gemini Agent for Work / OpenAI Dots</td><td>HeadsUpAI 周报；GadgetsFocus；agihunt.info</td><td>10-05 到 10-12</td></tr>
-    <tr><td>SynthID Detector / GPT Image 2.5 / Ideogram 4.5</td><td>GadgetsFocus</td><td>10-01 到 10-12</td></tr>
-  </table>
-</div>
-
-<footer>
-  文本版：<code>04-Daily/2026-10-12.md</code>
-</footer>
-
+<p>交出去就完事了。之后做布局、做 diff、算增删、组装指令的，是 React 和 RN 框架自己，json-render 一点没参与。</p>
+<p>依赖也印证这一点：<code>@json-render/react-native</code> 只依赖 <code>@json-render/core</code>，加一个 <code>react-native</code> 的 peer，包里没有任何指令协议。</p>
+<p>那层"适配"是什么</p>
+<p>是 registry：把 catalog 里的 <code>type</code> 映射到本端组件。转完出来的是 React 组件、Vue 组件、Svelte 组件、RN 的 View 和 Text，全是声明。各端拿到声明后，再各跑一遍自己的 diff、自己的布局、自己的提交。</p>
+<p>官方文档写的是，各端 renderer "turns the spec into platform-native output"。整份文档搜 yoga、layout engine、reconcil，一个都没有。它不碰这一层。</p>
+<p>两层的 patch 别混</p>
+<ul><li>打在 spec 上的：<code>core/diff.ts</code> 的 <code>diffToPatches</code>，RFC 6902，路径是 JSON Pointer 指到 spec 内部，像 <code>/elements/card-1/props</code>。流式那套 SpecStream 也是这个，JSONL 一行一个操作。这层跨端一致。</li><li>打在视图上的：各端框架自己的。spec 一变，React 走它的 reconciliation，Vue 走它的，互不相干。这层不共享。</li></ul>
+<p>"diff 之后知道要增删哪些组件"这个动作，全在下面那层，跟 json-render 没关系。</p>
+<p>两种模式</p>
+<ul><li>RN 那种：一份指令，多端渲染。像字节码配统一运行时。能统一，是因为所有目标端都是屏幕上的原生控件，共用同一套 Yoga 布局模型。</li><li>json-render 那种：一份描述，多套原生实现。像一份 IDL 配各端的独立实现。</li></ul>
+<p>它做不了统一指令层，原因也实在：目标端拉太远，DOM、PDF、SVG、视频、终端、3D 都在里面，没有共同的布局模型。硬抽一层指令，抽出来的只会是谁都不好用的最小公约数。</p>
+<p>它统一的是"调用组件"这件事</p>
+<p>往上退一步看，json-render 挑的抽象单元是"元素"：一个 type、一组 props、一份 children 引用。这个单元在每一端都得能找到对应物才能跑，React 里是组件，PDF 里是打印元素，终端里是 Ink 组件。</p>
+<p>抽象挑得高，才铺得开。要是它挑低一层去统一布局盒模型，那 Web 和 RN 能跟上，PDF 和终端当场出局。</p>
+<p>那它该叫什么</p>
+<p>聊到这儿有人接着问："这么说，json-render 是用来适配渲染框架的框架？"</p>
+<p>方向对了一半。它确实架在 React、Vue、Svelte、RN 这些框架<strong>上面</strong>，自己不渲染，"框架之上的框架"这层属性成立。但"适配"这个词把重心放反了。</p>
+<p>先把它的两个职责拆开：</p>
+<ul><li>上游：把 AI 吐出来的自由文本，压成一份能被 Zod 校验、能流式、能增量打的格式。这是第一职责。</li><li>下游：把这份格式映射到各家框架的组件上。跨端渲染是这份格式做出来之后<strong>顺带</strong>得到的能力，不是它的起点。</li></ul>
+<p>"适配"一般指 adapter，A 转 B，一对一翻译。json-render 不是这个模式。它的做法是先定一份中立格式，然后让每一端自己写一个消费者来读它。这更像编译器里的 IR，或者 OpenAPI：OpenAPI 也不是"用来适配各种语言的框架"，它是先定一份描述，各语言各自生成 client。json-render 是同一个路子，只是它的前端不是手写 YAML，是 AI 生成。</p>
+<p>落到代码上就三块：<code>catalog</code> 定"能说什么"，<code>spec</code> 装"说了什么"，<code>registry</code> 是每端自己写的那个"怎么把它变成本端组件"。真正干活的是各端框架自己。</p>
+<p>所以准确的说法是：它是给 AI 的输出定格式、顺带能喂给多个渲染框架的中间层。不是转接头，是通用格式加各端各自的插座。</p>
+<p>证据来源：<code>vercel-labs/json-render</code> 仓库源码直读（2026-10-12 下 main 分支 tarball，<code>packages/react-native/src/renderer.tsx</code>、<code>packages/core/src/diff.ts</code>、<code>apps/web/content/docs/streaming.mdx</code>、<code>apps/web/content/docs/renderers.mdx</code>）</p>
+<hr>
+<h2>二·补3 补充核实：多端一致性到底靠什么保证（2026-10-12 下午）</h2>
+<p>缘由：读完上面的层次分析，有人接着问："那它只统一 UI 输出的描述，渲染成什么样看下游适配器吧？一致性咋样？"</p>
+<p>结论分两半。它统一的不只是描述，还有一整套运行时语义；但组件和外观这层完全靠下游自觉，而且已经漂了。</p>
+<p>它统一的不只是"描述"</p>
+<p>除了结构，它还统一了一套运行时语义：<code>$state</code>、<code>$bindState</code>、<code>$cond</code>、<code>visible</code>、<code>repeat</code>、<code>on</code> 加 actions。</p>
+<p>这部分是<strong>共享代码</strong>，不是各端各写一遍。每个端的 renderer 都 import core 里同一批函数（<code>resolveElementProps</code>、<code>resolveBindings</code>、<code>evaluateVisibility</code>、<code>resolveActionParam</code>、<code>diffToPatches</code>）。所以"绑定怎么解析、条件怎么算、动作参数怎么取"在每一端是同一份实现。</p>
+<p>"渲染成什么样看下游适配器"这句话，对外观和组件是成立的。</p>
+<p>一致性分四层，实测差很多</p>
+<div class="tw"><table>
+<thead><tr>
+<th>层</th>
+<th>一致性</th>
+<th>实测证据</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>运行时语义</td>
+<td>高</td>
+<td>各端共用 core 纯函数，一次实现多端复用</td>
+</tr>
+<tr>
+<td>spec 结构</td>
+<td>已漂移</td>
+<td>各端各复制一份 <code>schema.ts</code>。<code>slots</code> 字段 react / vue 有，svelte / solid / react-native 没有</td>
+</tr>
+<tr>
+<td>内置动作</td>
+<td>已漂移</td>
+<td><code>builtInActions</code>（setState / pushState / removeState / validateForm）只有 web 系有，RN 端没有</td>
+</tr>
+<tr>
+<td>组件契约</td>
+<td>无保证</td>
+<td>react 包一个内置组件都没有；react-native 自带 26 个（Container / Row / Column / SafeArea / Pressable 等）</td>
+</tr>
+<tr>
+<td>给 AI 的 prompt</td>
+<td>各端定制</td>
+<td>RN 端塞满 TAB NAVIGATION、SCREEN NAVIGATION（push / pop）、FIXED BOTTOM BAR；web 端塞 NAMED SLOTS、FILTERED LISTS、表单校验</td>
+</tr>
+<tr>
+<td>视觉外观</td>
+<td>零保证</td>
+<td>各端组件各写各的样式</td>
+</tr>
+</tbody>
+</table></div>
+<p>中间那三行最要命：同一份 catalog，Web 端和 RN 端承认的字段和组件都不一样。</p>
+<p>测试网只盖了一个字段</p>
+<p>全库唯一的跨端一致性测试是 <code>packages/core/src/repeat-schema-parity.test.ts</code>。它遍历 9 个端的 schema，然后只断言一件事：<code>repeat</code> 字段是 optional 的 any。</p>
+<p>各端的测试文件数：</p>
+<pre><code>react 11   solid 8   vue 7   svelte 6   react-native 0</code></pre>
+<p>RN 端一个测试文件都没有。也没有任何跨端渲染快照对比。</p>
+<p>所以结论</p>
+<p>一致性靠"约定 + 共享 core"，不靠编译器强制。语义层因为共享实现是真的稳；组件层和 prompt 层全靠各端自觉，漂移已经发生，还能测出来。</p>
+<p>这是跨端方案的经典陷阱：共享的抽象层保住了，越往下游越容易各走各的。json-render 把最容易被写歪的那部分（绑定、条件、动作解析）收进了 core，这点做对了，但它没建那层能强制各端对齐的东西。</p>
+<p>要真拿它做多端，得自己补一张契约测试网：同一份 spec 跑所有目标端，比对输出树或渲染结果。不然今天 <code>slots</code> 缺一个、明天组件 props 改一个，不会有任何提示。</p>
+<p>证据来源：<code>vercel-labs/json-render</code> 仓库源码直读（2026-10-12 下 main 分支 tarball，各端 <code>packages/*/src/schema.ts</code> 逐文件 diff；<code>packages/core/src/repeat-schema-parity.test.ts</code>；<code>packages/react-native/src/catalog.ts</code>）</p>
+<hr>
+<h2>三、今天可以动手的三件事</h2>
+<ol><li>先量自己的账。统计现有工作流里 LLM 调用都在干什么，路由、分类、校验、生成各占多少，估算一下把"简单判断"换成决策原语能省多少、会慢多少，再决定第 1 条要不要试。</li><li>用 catalog 的思路回头看看自己的渲染层。你那套"渲染描述"是不是已经能约束、能流式、是扁平的？不是的话先把这步做了，这是接任何生成式 UI 方案的前提。</li><li>列一张 Agent 权限表。每个 Agent 能不能联网、能不能写外部系统、能不能替你对外提交内容，都写清楚。第 2 条里那两件事，一个是千级并行放开，一个是模型自己编造内容提交给警方，说明这张表现在得有。</li></ol>
+<hr>
+<h2>四、来源清单</h2>
+<div class="tw"><table>
+<thead><tr>
+<th>#</th>
+<th>主题</th>
+<th>来源</th>
+<th>日期</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Jev / TypeSafe 决策模型</td>
+<td>TechCrunch（pondero.ai、entrepreneurloop.com 转述）；36氪；网易科技</td>
+<td>10-09 到 10-10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Anthropic 动态工作流 1000 子智能体</td>
+<td>Claude Platform release notes；ClaudeDevs on X；IT之家；凤凰网</td>
+<td>10-09 到 10-10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Claude 联网自投虚假线索</td>
+<td>Anthropic 披露（今日头条转述）</td>
+<td>事发 07-18，披露 10-10</td>
+</tr>
+<tr>
+<td>3</td>
+<td>json-render</td>
+<td>GitHub 仓库原始文件直读（README、package.json、pnpm-workspace.yaml、LICENSE）；InfoQ</td>
+<td>直读 10-12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>A2UI 协议定义</td>
+<td>a2ui.org 规范站；Google Developers Blog《Introducing A2UI》</td>
+<td>10-12 复核</td>
+</tr>
+<tr>
+<td>3</td>
+<td>OpenUI / OpenGenerativeUI / Intelligent UI</td>
+<td>capitalandcompute.net；linkloot.io；hysenlabs.com；GadgetsFocus；HeadsUpAI</td>
+<td>10-06 到 10-12</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Grok Bot / Gemini Agent for Work / OpenAI Dots</td>
+<td>HeadsUpAI 周报；GadgetsFocus；agihunt.info</td>
+<td>10-05 到 10-12</td>
+</tr>
+<tr>
+<td>5</td>
+<td>SynthID Detector / GPT Image 2.5 / Ideogram 4.5</td>
+<td>GadgetsFocus</td>
+<td>10-01 到 10-12</td>
+</tr>
+</tbody>
+</table></div>
 </div>
 </body>
 </html>
