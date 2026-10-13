@@ -17,7 +17,7 @@
   ],
   "relationships": [
     {
-      "target": "recce-wasm-runtime",
+      "target": "recce-runtime-selection",
       "type": "related_to",
       "explanation": "该对比表用 JIT、AOT、解释执行区分五个运行时，与执行路径分类的概念节点互补",
       "sources": [
@@ -149,9 +149,9 @@ WasmEdge 与 Wasmtime 的 iOS 一行来自外部资料：Wasmtime 的 Pulley 不
 - CVE-2025-15413、CVE-2025-15572 的漏洞库条目（2026-01、2026-02 发布）：影响 wasm3 0.5.0 及以下；两项都在 v0.9.0 的修复范围内。
 - iOS 的 JIT 限制在 2026 年的公开资料中描述不变：App Store 分发的应用不能启用 JIT，只有通过 BrowserEngineKit 接入的替代浏览器引擎例外。
 
-- [S1] [[05-Research/Wasm-虚拟机现状-移动端截图.jpg|Wasm 虚拟机现状（整页截图）]]；定位：标题「Wasm 虚拟机现状」；「基础对比」表；「支持功能」表；「性能」；「结论」——本次对比沿用的维度来自这份文档
-- [S2] [[05-Research/Wasm-虚拟机现状-基础对比表截图.png|Wasm 虚拟机现状·基础对比表（放大截图）]]；定位：「基础对比」表：双端支持情况的 iOS 与 Android 两行、执行方式、实现语言
-- [[01-Knowledge/recce-wasm-runtime|Recce 运行时选型与 Wasm 执行、隔离机制]]：相关；该对比表用 JIT、AOT、解释执行区分五个运行时，与执行路径分类的概念节点互补
+- [S1] Wasm 虚拟机现状（用户提供的整页截图，本库未留存）；定位：标题「Wasm 虚拟机现状」；「基础对比」表；「支持功能」表；「性能」；「结论」——本次对比沿用的维度来自这份文档
+- [S2] Wasm 虚拟机现状·基础对比表（用户提供的放大截图，本库未留存）；定位：「基础对比」表：双端支持情况的 iOS 与 Android 两行、执行方式、实现语言
+- [[01-Knowledge/recce-runtime-selection|Recce 的运行时与语言选型]]：相关；该对比表用 JIT、AOT、解释执行区分五个运行时，与执行路径分类的概念文档互补
 
 ## 建议
 

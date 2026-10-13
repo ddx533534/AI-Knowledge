@@ -39,17 +39,17 @@
 | 4 | 重构类方案的收益大头是「清历史债」，立项理由却只写「加能力」      | 图片重构顺带修掉 `ResizeMode` 一串问题与继承链的重复实现；背景重构一次收口 14 条三端不一致；触摸新架构顺手解锁了依赖它的一批点击属性                                                                                                                                                 |
 | 5 | 最弱的一环不是技术判断，是证据强度                   | 18 份里能在文档内给出可复核数字的只有 5 份（Yoga 引入的耗时对照、Android 升 yoga 的包体明细、SVG 的耗时与包体、字体加载的缓存耗时、Android 17 适配的 DAU 口径）；多数的「风险」章节写的是 todo 或「待定」，Benchmark 多为单机单次、无对照                                                                         |
 
-![图 2：三类「多端不一致」问题的收敛点。三行分别是背景渲染、触摸分发、属性协议，每行左边是三端各自修的旧形态，右边是 1.34 与 1.35 之后收口成的唯一入口：CompositeBackgroundDrawable、RecceTouchTargetHelper、pdef 生成。](assets/2026-10-13-recce-solutions/fig2-convergence.svg)
+![图 2：三类「多端不一致」问题的收敛点。三行分别是背景渲染、触摸分发、属性协议，每行左边是三端各自修的旧形态，右边是 1.34 与 1.35 之后收口成的唯一入口：CompositeBackgroundDrawable、RecceTouchTargetHelper、pdef 生成。](fig2-convergence.svg)
 
-![图 3：选型的分水岭。三个圆角矩形分别是 Yoga、SVG、Lottie 的选型落点，横轴是包体代价，纵轴是多端一致性收益；三个「一致性最高」的候选（保留文本 feature 的 resvg、thorvg、双 so 共存的 Yoga）都被包体余量否掉或改写，结论一律倒向包体可控的一侧。](assets/2026-10-13-recce-solutions/fig3-budget-line.svg)
+![图 3：选型的分水岭。三个圆角矩形分别是 Yoga、SVG、Lottie 的选型落点，横轴是包体代价，纵轴是多端一致性收益；三个「一致性最高」的候选（保留文本 feature 的 resvg、thorvg、双 so 共存的 Yoga）都被包体余量否掉或改写，结论一律倒向包体可控的一侧。](fig3-budget-line.svg)
 
-![图 4：重构类方案的共同形态。三列分别是 1.31 图片重构、1.34 背景重构、1.35 触摸新架构，上行是立项时写的能力目标，下行是这次重构顺带清掉的历史债；三份方案的收益大头都在「清债」一侧，但立项理由里写的都是「加能力」。](assets/2026-10-13-recce-solutions/fig4-refactor-debt.svg)
+![图 4：重构类方案的共同形态。三列分别是 1.31 图片重构、1.34 背景重构、1.35 触摸新架构，上行是立项时写的能力目标，下行是这次重构顺带清掉的历史债；三份方案的收益大头都在「清债」一侧，但立项理由里写的都是「加能力」。](fig4-refactor-debt.svg)
 
-![图 5：18 份方案的证据强度分级。绿格是文档内给出了可复核的实测或对照数据，橙格是给了数字但无对照或单点测量，红格是结论有、风险章节为 todo 或待定；字体加载、SVG、背景重构、Touch 指针、差异扫描这五份证据最完整，风险章节写 todo 的集中在早期几份。](assets/2026-10-13-recce-solutions/fig5-evidence-grade.svg)
+![图 5：18 份方案的证据强度分级。绿格是文档内给出了可复核的实测或对照数据，橙格是给了数字但无对照或单点测量，红格是结论有、风险章节为 todo 或待定；字体加载、SVG、背景重构、Touch 指针、差异扫描这五份证据最完整，风险章节写 todo 的集中在早期几份。](fig5-evidence-grade.svg)
 
 ## 二、全景
 
-![图 1：按版本与类别排布的技术方案全景。横轴是 1.28 到 1.35 八个版本，纵轴是五类工作：换依赖、新增能力、重构、对齐与适配、机制与扫描。换依赖集中在 1.28 与 1.31；新增能力从 1.29 的 Lottie 一路加到 1.35 的补充属性；重构集中在 1.31、1.34、1.35；对齐与适配贯穿 1.30 到 1.35；机制与扫描只在 1.33 与 1.35 出现。](assets/2026-10-13-recce-solutions/fig1-solution-map.svg)
+![图 1：按版本与类别排布的技术方案全景。横轴是 1.28 到 1.35 八个版本，纵轴是五类工作：换依赖、新增能力、重构、对齐与适配、机制与扫描。换依赖集中在 1.28 与 1.31；新增能力从 1.29 的 Lottie 一路加到 1.35 的补充属性；重构集中在 1.31、1.34、1.35；对齐与适配贯穿 1.30 到 1.35；机制与扫描只在 1.33 与 1.35 出现。](fig1-solution-map.svg)
 
 | 类别       | 方案                              | 共同点                          |
 | -------- | ------------------------------- | ---------------------------- |
@@ -90,7 +90,7 @@
 | **触摸新架构**（1.35） | 旧架构依托 Android 原生触摸（找点击范围内最深的 View，向上冒泡到第一个设了 onTouch／onClick 的 View 并返回 true），三条缺点：对原生响应有侵入（`ScrollView` 设 `OnTouchListener` 后返回 true 会阻碍滚动）、移出父布局范围的 View 点击不触发、点击热区只能在父 View 上设 `TouchDelegate`                         | 改成 RN 形态：`RecceRootView` 统一观察 Android touch 流，`ACTION_DOWN` 锁定整段手势的 target，`MOVE`／`UP` 只更新坐标不换目标；`RecceTouchTargetHelper` 从 root 递归 DFS（更深更靠上的 child 优先）；`pointerEvents` 四种取值决定 self／children 能否命中；边界判断考虑 `hitSlop`、`overflow`、`clipChildren`、`transform`（用逆矩阵把触点映射到 child 局部坐标）；Text 这类复合 View 做二次命中；native 统一发 touch 流，click 与 longclick 交给 recce-ui；`ScrollView`／`HScrollView` 只在真正 `onInterceptTouchEvent` 拦截成功后发 `touchcancel`；WebView／Titans 的内部 native child 设为 `pointerEvents=none`。另有两处细节：`move` 按帧回调（`Choreographer.postFrameCallback`，每帧只发最新一次）、以及去重（新架构下 root 的 `onIntercept` 与 `onTouchEvent` 会双发）。新旧共存选「native 加开关 + env 桥加开关 A，统一向业务层发 `on_touch_xxx`」 | ① 这是 18 份里技术含量最高的一份，形态也对：不是抄 RN 的代码，而是在 Recce 里重实现 RN 的命中算法，并补上 RN 没专门管的两处（双发去重、move 按帧节流）。② 接管成本没有列全：多指能力与无障碍影响都被列为 P0 未做，这两件事恰是「绕开原生自己做一套」的必然代价，应显式列一份「接管清单」（多指、无障碍、焦点、TV 遥控方向键）作为必须补的欠账。③ `move` 按帧节流改变了事件语义（业务收到的 move 次数不再等于真实移动次数），应给「是否逐条收取」的开关并写进文档。④ 共存方案选得对：加开关但不新增属性、由 recce-ui 统一向业务发事件，差异收在 native 与 recce-ui 之间，不给业务加心智负担           | 启发：当平台原生能力（Android 触摸分发）和上层期望（RN 的 responder 语义）冲突时，「绕开原生自己做一套」是对的，但代价是要一并接管原生的那些隐式收益（无障碍、多指、焦点）；接管清单不写全，下一轮就会以缺陷的形式补回来 |
 
 
-![图 7：触摸事件新旧架构的调用链对照。左侧旧架构依托 Android 原生分发，从点击范围内最深的 View 向上冒泡到第一个设了 onTouch 或 onClick 的 View 就停；右侧 1.35 的新架构由 RootView 统一观察 touch 流、在 ACTION\_DOWN 锁定 target，再由 RecceTouchTargetHelper 按 pointerEvents、hitSlop、overflow、transform 决定命中，native 只发 touch 流，click 与 longclick 交给 recce-ui。](assets/2026-10-13-recce-solutions/fig7-touch-arch.svg)
+![图 7：触摸事件新旧架构的调用链对照。左侧旧架构依托 Android 原生分发，从点击范围内最深的 View 向上冒泡到第一个设了 onTouch 或 onClick 的 View 就停；右侧 1.35 的新架构由 RootView 统一观察 touch 流、在 ACTION\_DOWN 锁定 target，再由 RecceTouchTargetHelper 按 pointerEvents、hitSlop、overflow、transform 决定命中，native 只发 touch 流，click 与 longclick 交给 recce-ui。](fig7-touch-arch.svg)
 
 ### 3.4 对齐与适配（4 份）
 
@@ -101,7 +101,7 @@
 | **Android 17 适配**（1.35） | Android 17 于 2026-06-16 正式发布，主要变化是隐私安全强化、后台行为限制与开发规范收紧；美团 App 安卓 17 设备 DAU 约 8000（7 月 1 日数据）。面向 Target37 的适配项本次只需了解、无需适配                                                                                                                  | 梳理被删 API：`android.text.StaticLayout` 旧版多参构造（影响 `RecceSwitchButton` 与 `RecceTextShadowNode`）、`android.widget.TextView.mCursorDrawableRes` 反射被删（影响 `RecceTextInputManager`）。逐项判：label 与 input 早已适配（API 23 以上走 `StaticLayout.Builder`）无需改；SwitchButton 需要修，但线上没有业务使用，跟美团主版本即可                                                                                                                                                                                                                                                                                      | ① 「线上没有业务在用」是本方案的关键判据，该显式固化成规则：要不要适配的依据是「线上有没有流量」，不是「代码里有没有引用」——Recce 里有一批没有流量的历史组件，每次系统升级都要为它们花人力。② 反射 API 被删是确定趋势，该一次改掉而不是加版本判断：`mCursorDrawableRes` 这类私有字段反射应换成语义等价的公开途径（主题属性 `android:textCursorDrawable`）或自绘光标。③ 更彻底的解法是出「删除清单」而不是「适配清单」：对确认无流量的组件（SwitchButton 这类）从 SDK 里摘出去，适配成本直接归零                                                               | 启发：系统版本适配的第一问不是「怎么改」，而是「这段代码线上还有没有流量」；没有流量的引用不该进适配清单，该进删除清单——每次系统升级都给死代码做适配，是维护成本里最不划算的一块 |
 | **补属性**（1.35）           | `ScrollView` 缺 `maintainVisibleContentPosition`、`scrollsChildToFocus`；`View` 缺 `removeClippedSubviews`、`needsOffscreenAlphaCompositing`、一组 `nextFocus*`、`focusable`／`tabIndex`、`hitSlop`、`pointerEvents`、`renderToHardwareTextureAndroid` | 分两类处理。**真补行为**：`maintainVisibleContentPosition`（属性设了才懒创建 helper、布局变化时记首个可见锚点、内容插入后按锚点反向调整 offset、接近顶部按阈值自动回顶）、`scrollsChildToFocus`（`requestChildFocus` 里按开关决定是否滚到 focused child，默认 true 保持原行为）、`removeClippedSubviews`（按可视区域裁剪，屏幕外子节点临时 detach）。**只补协议**：`focusable`／`tabIndex`／`hitSlop`／`pointerEvents`／`renderToHardwareTextureAndroid` 只补齐属性定义、二进制读写与 visitor 默认入口，Android 预留实现点、iOS／鸿蒙补空方法。分界本质是「行为依赖别的工作」（`hitSlop`／`pointerEvents` 依赖 1.35 的触摸重构，这正是需求把触摸重构列 P0、属性对齐列 P1 的原因）。注意项：给 `ScrollView` 设 `removeClippedSubviews` 时必须同时给 `scrollContentview` 设 | ① 「先补协议、后补行为」的手法本身是对的，危险在可观测性：属性收下了但不生效，业务会以为已经支持；更优是同时给可观测标记（显式标 no-op、或首次下发时打一条一次性日志），让「没生效」和「没实现」能区分开。② 依赖关系要反过来驱动排期而不是写在备注里：`hitSlop` 依赖触摸重构决定了这两项必须同批排期，否则会先交付一批注定返工的 no-op。③ `removeClippedSubviews` 从 `ScrollView` 专属属性上移为 `View` 通用属性、导入路径变了，这类变更要有迁移说明，否则业务升级后直接编译不过                                                                             | 启发：「补齐属性」真正的危险不是漏做，而是「属性收下了但不生效」；补协议和补行为要显式分开标注，当某个属性的行为依赖另一项架构改动时，两项必须同批次排期              |
 
-![图 6：属性「补协议」与「补行为」的分层，以及它与触摸重构的依赖关系。上层是 1.35 补属性方案里只补齐定义与读写入口的一批属性，下层是真正补上行为的一批；hitSlop 与 pointerEvents 悬在两层之间并指向 1.35 的触摸新架构，说明它们的行为依赖那一项工作，两类排期不能拆开。](assets/2026-10-13-recce-solutions/fig6-protocol-vs-behavior.svg)
+![图 6：属性「补协议」与「补行为」的分层，以及它与触摸重构的依赖关系。上层是 1.35 补属性方案里只补齐定义与读写入口的一批属性，下层是真正补上行为的一批；hitSlop 与 pointerEvents 悬在两层之间并指向 1.35 的触摸新架构，说明它们的行为依赖那一项工作，两类排期不能拆开。](fig6-protocol-vs-behavior.svg)
 
 ### 3.5 机制与扫描（3 份）
 
@@ -122,7 +122,7 @@
 | 5 | 重构类方案把「清债」写进立项收益        | 立项只写「支持 BoxShadow」「支持 hitSlop」时，这类方案在评审中很难拿到优先级，而三份重构的实际收益大头都在清债 | 立项页里把「顺带修掉的历史问题清单」与能力目标并列                                 |
 | 6 | 交付前给数字配「对照物」            | 18 份里只有 5 份有可复核数字；多年后判断对错说不清，多半不是选错了，而是没留下可复核的对照                 | 把「对照物是谁、在什么设备上、测几次」写进文档——这条不需要额外交付成本                      |
 
-![图 8：18 份方案的可带走规则。每行一份方案，右侧是一句能在下一次同类工作里直接用的判断，例如 Yoga 引入的「把补属性重定义成换依赖」、字体加载的「缓存 key 必须能区分版本」、Android 17 适配的「先问线上有没有流量」、差异扫描的「diff 查不出两边都错」。](assets/2026-10-13-recce-solutions/fig8-takeaways.svg)
+![图 8：18 份方案的可带走规则。每行一份方案，右侧是一句能在下一次同类工作里直接用的判断，例如 Yoga 引入的「把补属性重定义成换依赖」、字体加载的「缓存 key 必须能区分版本」、Android 17 适配的「先问线上有没有流量」、差异扫描的「diff 查不出两边都错」。](fig8-takeaways.svg)
 
 ## 五、待核实
 

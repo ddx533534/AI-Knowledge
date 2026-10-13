@@ -37,7 +37,7 @@ Recce 反过来有官方盖不到的场景。它比的是 Android 窗口与 Recc
 
 ## 一、RN 官方是怎么做的
 
-![图 1：两条调用链并排。左边 RN 官方从业务代码经 JS 注册表和 TurboModule 一路下沉到 C++，几何计算在 Fabric shadow tree 上完成，滚动过程中不产生 JS 与原生之间的往返；右边 Recce 1.24 在 Android 主线程上用 Rect 求交，算完单向上报。](assets/2026-10-13/fig1-two-chains.svg)
+![图 1：两条调用链并排。左边 RN 官方从业务代码经 JS 注册表和 TurboModule 一路下沉到 C++，几何计算在 Fabric shadow tree 上完成，滚动过程中不产生 JS 与原生之间的往返；右边 Recce 1.24 在 Android 主线程上用 Rect 求交，算完单向上报。](fig1-two-chains.svg)
 
 ### 1.1 从业务代码到几何计算，中间隔了四层
 
@@ -49,7 +49,7 @@ Recce 反过来有官方盖不到的场景。它比的是 Android 窗口与 Recc
 
 ### 1.2 什么时候算
 
-![图 2：RN 官方一次滚动的处理顺序。滚动先让 Fabric 更新 shadow tree，挂载完成触发挂载钩子，钩子按 surfaceId 取出该 surface 上所有 observer，逐个算几何并过阈值状态机，状态没变的丢掉，产生的 entry 攒起来后本周期只向 JS 调度一次，JS 侧 takeRecords 一次取走再分组回调。](assets/2026-10-13/fig2-mount-timeline.svg)
+![图 2：RN 官方一次滚动的处理顺序。滚动先让 Fabric 更新 shadow tree，挂载完成触发挂载钩子，钩子按 surfaceId 取出该 surface 上所有 observer，逐个算几何并过阈值状态机，状态没变的丢掉，产生的 entry 攒起来后本周期只向 JS 调度一次，JS 侧 takeRecords 一次取走再分组回调。](fig2-mount-timeline.svg)
 
 有两条触发路径。
 
@@ -65,7 +65,7 @@ surface 卸载时 `shadowTreeDidUnmount` 会给该 surface 上所有 observer �
 
 核心在 `IntersectionObserver::updateIntersectionObservation`。图 3 把六步一格格画了出来。
 
-![图 3：算一个交集要走的六步。先取 root 矩形，再按 rootMargin 外扩，再算 target 矩形，再减去 target 到 root 之间所有祖先的 overflow 裁剪，然后求交，最后用交集面积除以 target 面积得到比例。六格逐格叠加，第五格说明面积为 0 时靠交点位置判断贴边还是分离。](assets/2026-10-13/fig3-geometry.svg)
+![图 3：算一个交集要走的六步。先取 root 矩形，再按 rootMargin 外扩，再算 target 矩形，再减去 target 到 root 之间所有祖先的 overflow 裁剪，然后求交，最后用交集面积除以 target 面积得到比例。六格逐格叠加，第五格说明面积为 0 时靠交点位置判断贴边还是分离。](fig3-geometry.svg)
 
 root 矩形。有显式 root 时用 `computeRelativeLayoutMetrics` 算，没有就用根节点的 `layoutMetrics` 乘以 transform。
 
@@ -87,7 +87,7 @@ target 矩形。同样走 `computeRelativeLayoutMetrics`，打开 `includeTransf
 
 这个模型顺手解决了 Recce 文档里手工处理的那个问题：阈值 0.5，比例从 0.4 到 0.5 触发一次、从 0.5 到 0.6 又触发一次。在 RN 里后者跨过的最高阈值仍是 0.5，状态没变，不会重复通知。
 
-![图 4：阈值判定对照。上半是 RN 的三种状态与转移，只有跨过的最高阈值变化才产生 entry。下半是同一段比例从 0.4 到 0.5 再到 0.6 的两条时间轴：RN 官方只通知一次，Recce 手工的半开半闭比较通知两次，而且阈值 0 和 1 还要各写一条边界特判。](assets/2026-10-13/fig4-threshold.svg)
+![图 4：阈值判定对照。上半是 RN 的三种状态与转移，只有跨过的最高阈值变化才产生 entry。下半是同一段比例从 0.4 到 0.5 再到 0.6 的两条时间轴：RN 官方只通知一次，Recce 手工的半开半闭比较通知两次，而且阈值 0 和 1 还要各写一条边界特判。](fig4-threshold.svg)
 
 它也不需要为阈值 0 和 1 写边界特判，因为「完全不相交」由 `intersectOrNull` 返回 `nullopt` 表达，不是靠比例等于 0 推出来的。
 
@@ -141,7 +141,7 @@ target 矩形。同样走 `computeRelativeLayoutMetrics`，打开 `includeTransf
 
 `rootMargin` 与 `threshold` 的名字在三套方案里都能对上，差别在几何来源、触发方式和状态语义。
 
-![图 5：三套方案的能力边界。绿底能观察到，红底看不见，灰底是原文没写。RN 官方能看 RN 自己渲染树内的滚动，看不见原生容器滚动 RN 子树，也不涉及小窗分屏；Recce 1.24 这几类都能观察，限制在 Recce 容器内，小窗是已知问题；微信读书方案靠原生侧绑触发器，原文未涉及窗口形态。](assets/2026-10-13/fig5-boundary.svg)
+![图 5：三套方案的能力边界。绿底能观察到，红底看不见，灰底是原文没写。RN 官方能看 RN 自己渲染树内的滚动，看不见原生容器滚动 RN 子树，也不涉及小窗分屏；Recce 1.24 这几类都能观察，限制在 Recce 容器内，小窗是已知问题；微信读书方案靠原生侧绑触发器，原文未涉及窗口形态。](fig5-boundary.svg)
 
 | 维度 | RN 官方（Canary） | Recce 1.24 原生监听 | 微信读书事件触发 |
 | --- | --- | --- | --- |
@@ -172,7 +172,7 @@ Recce 文档 §3.1 的得分排序在两处需要修正，一处需要补充条�
 
 ## 六、分场景建议
 
-![图 6：三条路怎么选。滚动全在 RN 渲染树内且能开 Canary 就用官方，开不了 Canary 用事件触发式；有原生容器滚动 RN 子树时官方看不见，用原生侧绑触发器的事件触发式；要覆盖小窗分屏或三端同时可用，维持 Recce 1.24 原生监听。底部是可与前三条合用的转发路线。](assets/2026-10-13/fig6-decision.svg)
+![图 6：三条路怎么选。滚动全在 RN 渲染树内且能开 Canary 就用官方，开不了 Canary 用事件触发式；有原生容器滚动 RN 子树时官方看不见，用原生侧绑触发器的事件触发式；要覆盖小窗分屏或三端同时可用，维持 Recce 1.24 原生监听。底部是可与前三条合用的转发路线。](fig6-decision.svg)
 
 场景一：页面只用 RN 自己的 ScrollView，滚动都发生在 RN 渲染树内部，项目已经在新架构上并且愿意开 Canary。用 RN 官方 IntersectionObserver。代码最少，语义与 Web 一致，一份 C++ 实现覆盖各平台，维护在上游。
 

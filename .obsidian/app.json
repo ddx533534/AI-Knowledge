@@ -2,5 +2,6 @@
   "newFileLocation": "folder",
   "newFileFolderPath": "00-Inbox",
   "useMarkdownLinks": false,
-  "promptDelete": false
+  "promptDelete": false,
+  "alwaysUpdateLinks": true
 }
