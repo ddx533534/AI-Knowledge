@@ -9,3 +9,11 @@
 # macOS 与 Obsidian 的本地产物
 .DS_Store
 未命名.canvas
+
+# 站点构建产物（由 site/build.mjs 生成，部署时重建）
+site/dist/
+
+# Tencent Cloud EdgeOne
+.env
+.edgeone/*
+.tef_dist/*

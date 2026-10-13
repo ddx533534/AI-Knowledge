@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 306" width="680" height="306" role="img">
+  <rect x="0" y="0" width="680" height="306" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="679" height="305" rx="6" fill="none" stroke="#e5e7eb"/>
+
+  <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">以十进制、3 位尾数、1 位指数为例</text>
+
+  <text x="40" y="82" font-family="Menlo, Consolas, monospace" font-size="21" fill="#1c1f24">1230</text>
+  <text x="132" y="82" font-family="Menlo, Consolas, monospace" font-size="17" fill="#4a5158">= 1.23 × 10³</text>
+
+  <text x="40" y="126" font-family="Menlo, Consolas, monospace" font-size="21" fill="#1c1f24">+ 23.4</text>
+  <text x="132" y="126" font-family="Menlo, Consolas, monospace" font-size="17" fill="#4a5158">= 2.34 × 10¹</text>
+
+  <line x1="40" y1="148" x2="330" y2="148" stroke="#c9ced6" stroke-width="1"/>
+
+  <text x="40" y="182" font-family="Menlo, Consolas, monospace" font-size="21" fill="#1c1f24">1253.4</text>
+  <text x="150" y="182" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#4a5158">精确结果</text>
+
+  <text x="420" y="82" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#2f5d8a">3 位尾数够用</text>
+  <text x="420" y="126" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#2f5d8a">3 位尾数够用</text>
+  <text x="420" y="182" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#b3402f">需要 5 位，超了</text>
+
+  <line x1="40" y1="212" x2="640" y2="212" stroke="#e5e7eb" stroke-width="1"/>
+
+  <text x="40" y="256" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="15" fill="#1c1f24">只能保留 3 位，末两位被丢弃</text>
+  <text x="40" y="286" font-family="Menlo, Consolas, monospace" font-size="21" fill="#1c1f24">1250</text>
+  <text x="132" y="286" font-family="Menlo, Consolas, monospace" font-size="17" fill="#b3402f">丢弃 3.4</text>
+
+  <text x="420" y="256" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#4a5158">等价于先把 23.4</text>
+  <text x="420" y="278" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#4a5158">当成 20.0 再加</text>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" width="680" height="320" role="img">
+  <rect x="0" y="0" width="680" height="320" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="679" height="319" rx="6" fill="none" stroke="#e5e7eb"/>
+
+  <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">同一个 prompt「Tell me about Richard Feynman」，温度 0，采样 1000 次，每次生成 1000 个 token</text>
+
+  <rect x="48" y="70" width="250" height="60" rx="4" fill="#eef3f8" stroke="#2f5d8a"/>
+  <text x="173" y="92" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="12.5" fill="#1c1f24">Feynman was born on</text>
+  <text x="173" y="112" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="12.5" fill="#1c1f24">May 11, 1918, in</text>
+
+  <text x="173" y="152" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#2f5d8a">前 102 个 token：1000 条完全一致</text>
+
+  <path d="M298 100h40" stroke="#8a929b" stroke-width="1.2" fill="none"/>
+  <path d="M338 100v-24h18" stroke="#8a929b" stroke-width="1.2" fill="none"/>
+  <path d="M338 100v36h18" stroke="#8a929b" stroke-width="1.2" fill="none"/>
+  <path d="M356 72l-6 4v-8z" fill="#8a929b"/>
+  <path d="M356 132l-6 4v-8z" fill="#8a929b"/>
+
+  <rect x="362" y="56" width="278" height="44" rx="4" fill="#eef7f0" stroke="#2f7d4f"/>
+  <text x="501" y="76" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="12.5" fill="#1c1f24">Queens, New York</text>
+  <text x="501" y="93" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#2f7d4f">992 条走这一支</text>
+
+  <rect x="362" y="114" width="278" height="44" rx="4" fill="#faf1e8" stroke="#c2761a"/>
+  <text x="501" y="134" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="12.5" fill="#1c1f24">New York City</text>
+  <text x="501" y="151" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#a8641a">8 条走这一支</text>
+
+  <line x1="48" y1="184" x2="640" y2="184" stroke="#e5e7eb" stroke-width="1"/>
+
+  <text x="48" y="216" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#1c1f24">1000 条里出现 <tspan font-weight="600">80 种</tspan>不同的补全，出现最多的一种只有 <tspan font-weight="600">78 次</tspan>；分歧从第 103 个 token 才开始</text>
+  <text x="48" y="250" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#2f7d4f">换成批不变 kernel 之后：1000 条输出全部一模一样</text>
+  <text x="48" y="284" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">模型没改，采样逻辑也没改，差的只是前缀在不同 batch 大小下算出的 logits</text>
+</svg>

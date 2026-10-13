@@ -14,8 +14,7 @@
 
 | 文件 | 说明 |
 | --- | --- |
-| `YYYY-MM-DD.md` | 文本版日报，`git diff` 友好，便于检索 |
-| `YYYY-MM-DD.html` | 同内容阅读版，浅色主题，单文件无外部依赖 |
+| `YYYY-MM-DD.md` | 日报正文，`git diff` 友好，便于检索。站点页面由 `site/build.mjs` 从这里生成，不再单独手写 HTML |
 | `assets/YYYY-MM-DD/` | 当日插图。SVG 为自绘，位图取自源文档；都按 `figN-<短名>.<ext>` 命名，N 与正文的「图 N」一致 |
 
 ## 内容结构
@@ -40,7 +39,19 @@
 - 样式跟日报一致：浅色、扁平、细边框。不用渐变、阴影、emoji、外链字体。颜色只用来表达含义（该做/不该做、贵/便宜、丢失/保留），不做装饰。
 - 引用写法：`![图 N：说明](assets/<日期>/figN-短名.svg)`。位图可加宽度，例如 `![图 N：说明](assets/<日期>/figN-短名.png "w=430")`。
 - 图注就是这段说明，所以要能独立看懂，不依赖上下文；图里出现的数字要和正文一致。
-- HTML 生成时 SVG 直接内联、位图转 base64 内联，仍然保持单文件、无外部依赖。
+- 站点构建（`site/build.mjs`）会把图渲染成 `<figure>`，SVG 直接内联、位图按路径引用。
+
+## 发布链路
+
+日报写完后由站点生成器统一发布，不需要手工转 HTML：
+
+| 步骤 | 命令 |
+| --- | --- |
+| 重建站点 | `node site/build.mjs`（根目录下任何 `NN-名称` 目录都会自动成为一个栏目） |
+| 提交推送 | `git add -A && git commit && git push origin master` |
+| 部署上线 | `rm -rf .edgeone/assets && edgeone makers deploy -n moting-blog` |
+
+线上地址：<https://www.moting.com.cn>（Makers 项目 `moting-blog`，加速区域为全球可用区·不含中国大陆）。部署前必须先删 `.edgeone/assets`，否则构建阶段会撞上沙箱的删除拦截。
 
 ## 选材主线
 

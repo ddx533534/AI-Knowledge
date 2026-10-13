@@ -7,6 +7,7 @@
 | `01-Knowledge` | 提炼后的技术知识，一个主题一个文件 |
 | `02-Work-Practice` | 工作中真实遇到并解决的问题的实践记录，含插图 |
 | `03-Daily` | 每日 AI 行业简报与单个仓库分析，含插图 |
+| `site` | 博客站点生成器：`build.mjs` 扫描上面三个目录生成静态站，`style.css` 是样式，`dist/` 是构建产物（不入库） |
 | `.obsidian` | 编辑器配置 |
 
 ## 使用方式
@@ -20,6 +21,20 @@
 - `03-Daily`：每天一份日报，同日补充的核实内容追加到当天文件，不新建文件、不覆盖原有结论；每份配 3 到 6 张图。
 
 真实性纪律、关系证据要求与技术内容准入标准见 [AGENTS.md](AGENTS.md)。
+
+## 博客站点
+
+线上地址：<https://www.moting.com.cn>
+
+站点由 `site/build.mjs` 从三个内容目录自动生成，部署在腾讯云 EdgeOne Makers 项目 `moting-blog`（加速区域：全球可用区·不含中国大陆）。
+
+| 步骤 | 命令 |
+| --- | --- |
+| 重建站点 | `node site/build.mjs` |
+| 提交推送 | `git add -A && git commit && git push origin master` |
+| 部署上线 | `rm -rf .edgeone/assets && edgeone makers deploy -n moting-blog` |
+
+**新增目录即新增栏目**：仓库根下任何匹配 `NN-名称` 的目录都会自动成为一个栏目，不用改脚本；栏目中文名在 `site/build.mjs` 的 `CAT_META` 里登记，不登记就直接用目录名。每天 09:00 的日报任务已串上「写日报 → 重建站点 → 提交推送 → 部署」整条链路。
 
 ## 技术内容准入（2026-10-11 用户明确要求）
 

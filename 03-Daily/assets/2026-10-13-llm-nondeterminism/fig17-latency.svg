@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" width="680" height="300" role="img">
+  <rect x="0" y="0" width="680" height="300" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="679" height="299" rx="6" fill="none" stroke="#e5e7eb"/>
+
+  <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">单卡 Qwen-3-8B，1000 条请求，输出长度 90 到 110，单位：秒（越低越好）</text>
+
+  <line x1="60" y1="204" x2="640" y2="204" stroke="#c9ced6" stroke-width="1"/>
+
+  <rect x="110" y="139" width="120" height="65" fill="#d6e3f0" stroke="#2f5d8a"/>
+  <text x="170" y="130" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="17" fill="#2f5d8a">26</text>
+
+  <rect x="290" y="70" width="120" height="134" fill="#fae5cc" stroke="#c2761a"/>
+  <text x="350" y="61" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="17" fill="#a8641a">55</text>
+
+  <rect x="470" y="101" width="120" height="103" fill="#dcecdf" stroke="#2f7d4f"/>
+  <text x="530" y="92" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="17" fill="#2f7d4f">42</text>
+
+  <text x="170" y="226" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">vLLM 默认</text>
+  <text x="350" y="226" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">确定性 vLLM</text>
+  <text x="350" y="243" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">（未优化）</text>
+  <text x="530" y="226" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">＋改进后的</text>
+  <text x="530" y="243" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">attention kernel</text>
+
+  <text x="340" y="282" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a929b">大部分差距来自 FlexAttention 在 vLLM 里的集成还没认真调过</text>
+</svg>
