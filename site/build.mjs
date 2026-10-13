@@ -359,6 +359,7 @@ function prepare(post) {
 
   let summary = '';
   let seenHead = false;
+  let fallback = '';
   for (const raw of lines) {
     const line = raw.trim();
     if (/^#{1,6}\s/.test(line)) {
@@ -367,9 +368,22 @@ function prepare(post) {
     }
     if (!seenHead || !line) continue;
     if (/^[|>]|^```|^[-*+]\s|^\d+\.\s|^!\[/.test(line)) continue;
-    summary = stripInline(line);
+    if (/^(-{3,}|_{3,}|\*{3,})\s*$/.test(line)) continue;
+    const plain = stripInline(line);
+    if (!fallback) fallback = plain;
+    // 「整理日期：2026-10-11。」这类元信息行不适合当摘要，往后找一段
+    if (plain.length < 40 && /^(整理|核实|更新|校对|创建|发布|撰写|修订|最后编辑)?日期[：:]?\s*\d{4}-\d{2}-\d{2}/.test(plain)) {
+      continue;
+    }
+    summary = plain;
     break;
   }
+  if (!summary) summary = fallback;
+  // 段落首句就是日期时，去掉这个前缀，让摘要从正文开始
+  summary = summary.replace(
+    /^(整理|核实|更新|校对|创建|发布|撰写|修订|最后编辑)?日期[：:]?\s*\d{4}-\d{2}-\d{2}\s*[。.；;]?\s*/,
+    '',
+  );
   if (summary.length > 140) summary = `${summary.slice(0, 138)}…`;
 
   const chars = text.replace(/\s/g, '').length;
@@ -441,12 +455,17 @@ function figureFactory(post, depth) {
 
 /* -------------------------------------------------------------- 模板 */
 
-function layout({ depth, title, desc, body, cats, active }) {
+function layout({ depth, title, desc, body, cats, active, latest }) {
   const p = relPrefix(depth);
-  const nav = cats
+  const nav = [
+    { id: null, label: '首页', href: `${p}index.html`, n: null },
+    ...cats.map((c) => ({ id: c.id, label: c.nav, href: `${p}${c.id}/`, n: c.posts.length })),
+  ]
     .map(
-      (c) =>
-        `<a href="${p}${c.id}/"${active === c.id ? ' class="on"' : ''}>${esc(c.nav)}</a>`,
+      (it) =>
+        `<a href="${it.href}"${active === it.id ? ' class="on"' : ''}>${esc(it.label)}${
+          it.n != null ? `<b>${it.n}</b>` : ''
+        }</a>`,
     )
     .join('');
   return `<!doctype html>
@@ -461,40 +480,54 @@ function layout({ depth, title, desc, body, cats, active }) {
 </head>
 <body>
 <a class="skip" href="#main">跳到正文</a>
-<header class="masthead">
-  <div class="wrap head-in">
+<div class="shell">
+<aside class="side">
+  <div class="side-in">
     <a class="brand" href="${p}index.html">
-      <span class="brand-name">${esc(SITE.title)}</span>
-      <span class="brand-sub">${esc(SITE.sub)}</span>
+      <span class="brand-mark">M</span>
+      <span class="brand-txt">
+        <span class="brand-name">${esc(SITE.title)}</span>
+        <span class="brand-sub">${esc(SITE.sub)}</span>
+      </span>
     </a>
     <nav class="nav">${nav}</nav>
+    <p class="side-foot">${latest ? `更新至 <b>${esc(latest)}</b>` : ''}</p>
   </div>
-</header>
-<main id="main" class="wrap">
+</aside>
+<div class="col">
+<main id="main">
 ${body}
 </main>
 <footer class="foot">
-  <div class="wrap">
-    <p>${esc(SITE.title)} · ${esc(SITE.sub)}</p>
-    <p class="muted">内容来自本地知识库，构建脚本自动生成。</p>
-  </div>
+  <p>${esc(SITE.title)} · ${esc(SITE.sub)}</p>
+  <p class="muted">内容来自本地知识库，构建脚本自动生成。</p>
 </footer>
+</div>
+</div>
 </body>
 </html>
 `;
 }
 
-function postCard(post, depth) {
+/** 列表里的一条：桌面为「日期在上、正文在右」的两列，窄屏收成单列。 */
+function postItem(post, depth) {
   const p = relPrefix(depth);
   const href = `${p}${post.cat.id}/${enc(post.slug)}.html`;
-  return `<article class="card">
-  <a class="card-t" href="${href}">${esc(post.title)}</a>
-  <p class="card-m"><span class="tag">${esc(post.cat.title)}</span>${
-    post.date ? `<time>${esc(post.date)}</time>` : ''
-  }<span>约 ${post.minutes} 分钟</span></p>
-  ${post.summary ? `<p class="card-s">${esc(post.summary)}</p>` : ''}
+  return `<article class="item">
+  <div class="item-d">
+    ${post.date ? `<time>${esc(post.date)}</time>` : ''}
+    <span class="tag">${esc(post.cat.title)}</span>
+  </div>
+  <div class="item-b">
+    <a class="item-t" href="${href}">${esc(post.title)}</a>
+    ${post.summary ? `<p class="item-s">${esc(post.summary)}</p>` : ''}
+    <p class="item-m">约 ${post.minutes} 分钟</p>
+  </div>
 </article>`;
 }
+
+/** 首页每个栏目只展开前几条。 */
+const HOME_LIMIT = 5;
 
 /* --------------------------------------------------------------- 生成 */
 
@@ -522,38 +555,34 @@ function main() {
   const latest = all[0] && all[0].date;
 
   // 首页
-  const home = `<section class="hero">
+  const home = `<section class="intro">
   <h1>${esc(SITE.title)}</h1>
   <p class="lede">${esc(SITE.desc)}</p>
-  <p class="muted">${cats
-    .map((c) => `<a href="${c.id}/">${esc(c.title)}</a> <b>${c.posts.length}</b> 篇`)
-    .join(' · ')}${latest ? ` · 内容更新至 <b>${esc(latest)}</b>` : ''}</p>
+  <p class="stats">共 <b>${all.length}</b> 篇 · ${cats
+    .map((c) => `<a href="${c.id}/">${esc(c.title)}</a> <b>${c.posts.length}</b>`)
+    .join(' · ')}${latest ? ` · 更新至 <b>${esc(latest)}</b>` : ''}</p>
 </section>
 ${cats
   .map(
     (c) => `<section class="sec">
   <div class="sec-head">
     <h2><a href="${c.id}/">${esc(c.title)}</a></h2>
-    <span class="muted">${c.posts.length} 篇</span>
+    <span class="count">${c.posts.length} 篇</span>
   </div>
   ${c.intro ? `<p class="sec-intro">${esc(c.intro)}</p>` : ''}
-  <div class="cards">${c.posts.slice(0, 4).map((p) => postCard(p, 0)).join('')}</div>
+  <div class="list">${c.posts.slice(0, HOME_LIMIT).map((p) => postItem(p, 0)).join('')}</div>
   ${
-    c.posts.length > 4
+    c.posts.length > HOME_LIMIT
       ? `<p class="more"><a href="${c.id}/">全部 ${c.posts.length} 篇 →</a></p>`
       : ''
   }
 </section>`,
   )
-  .join('')}
-<section class="sec">
-  <div class="sec-head"><h2>最近更新</h2></div>
-  <div class="cards">${all.slice(0, 6).map((p) => postCard(p, 0)).join('')}</div>
-</section>`;
+  .join('')}`;
 
   fs.writeFileSync(
     path.join(DIST, 'index.html'),
-    layout({ depth: 0, title: SITE.title, desc: SITE.desc, body: home, cats, active: null }),
+    layout({ depth: 0, title: SITE.title, desc: SITE.desc, body: home, cats, active: null, latest }),
   );
 
   // 栏目页
@@ -561,11 +590,19 @@ ${cats
     const body = `<nav class="crumb"><a href="../index.html">首页</a><span>/</span>${esc(cat.title)}</nav>
 <h1 class="page-t">${esc(cat.title)}</h1>
 ${cat.intro ? `<p class="lede">${esc(cat.intro)}</p>` : ''}
-<div class="cards">${cat.posts.map((p) => postCard(p, 1)).join('')}</div>`;
+<div class="list">${cat.posts.map((p) => postItem(p, 1)).join('')}</div>`;
     fs.mkdirSync(path.join(DIST, cat.id), { recursive: true });
     fs.writeFileSync(
       path.join(DIST, cat.id, 'index.html'),
-      layout({ depth: 1, title: `${cat.title} · ${SITE.title}`, desc: cat.intro || SITE.desc, body, cats, active: cat.id }),
+      layout({
+        depth: 1,
+        title: `${cat.title} · ${SITE.title}`,
+        desc: cat.intro || SITE.desc,
+        body,
+        cats,
+        active: cat.id,
+        latest,
+      }),
     );
   }
 
@@ -582,12 +619,12 @@ ${cat.intro ? `<p class="lede">${esc(cat.intro)}</p>` : ''}
       const linkOf = (x) => `../${x.cat.id}/${enc(x.slug)}.html`;
       const body = `<nav class="crumb"><a href="../index.html">首页</a><span>/</span><a href="./">${esc(
         cat.title,
-      )}</a><span>/</span>${esc(post.slug)}</nav>
+      )}</a></nav>
 <article class="post">
   <h1 class="post-t">${esc(post.title)}</h1>
   <p class="post-m"><span class="tag">${esc(cat.title)}</span>${
     post.date ? `<time>${esc(post.date)}</time>` : ''
-  }<span>约 ${post.minutes} 分钟</span><span class="muted">${esc(post.slug)}</span></p>
+  }<span>约 ${post.minutes} 分钟</span></p>
   <div class="prose">
 ${html}
   </div>
@@ -600,7 +637,15 @@ ${html}
       fs.mkdirSync(path.join(DIST, cat.id), { recursive: true });
       fs.writeFileSync(
         path.join(DIST, cat.id, `${post.slug}.html`),
-        layout({ depth: 1, title: `${post.title} · ${SITE.title}`, desc: post.summary, body, cats, active: cat.id }),
+        layout({
+          depth: 1,
+          title: `${post.title} · ${SITE.title}`,
+          desc: post.summary,
+          body,
+          cats,
+          active: cat.id,
+          latest,
+        }),
       );
       written += 1;
     }
@@ -616,6 +661,7 @@ ${html}
       body: `<h1 class="page-t">页面不存在</h1><p class="lede">这个地址没有内容，可能是链接过期或路径写错了。</p><p class="back"><a href="./index.html">← 回首页</a></p>`,
       cats,
       active: null,
+      latest,
     }),
   );
 
