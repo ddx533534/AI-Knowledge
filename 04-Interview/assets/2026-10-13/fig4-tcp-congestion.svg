@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="400" fill="#ffffff"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">TCP Reno 拥塞控制状态机与 cwnd 变化</text>
+
+  <!-- 状态框 -->
+  <g font-size="11.5">
+    <rect x="40" y="70" width="150" height="56" rx="6" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.3"/>
+    <text x="115" y="94" text-anchor="middle" font-weight="600" fill="#1e40af">慢启动</text>
+    <text x="115" y="112" text-anchor="middle" font-size="10" fill="#3b82f6">cwnd 指数增长</text>
+
+    <rect x="40" y="200" width="150" height="56" rx="6" fill="#d1fae5" stroke="#34d399" stroke-width="1.3"/>
+    <text x="115" y="224" text-anchor="middle" font-weight="600" fill="#065f46">拥塞避免</text>
+    <text x="115" y="242" text-anchor="middle" font-size="10" fill="#059669">cwnd 每 RTT +1</text>
+
+    <rect x="310" y="70" width="150" height="56" rx="6" fill="#fef3c7" stroke="#fcd34d" stroke-width="1.3"/>
+    <text x="385" y="94" text-anchor="middle" font-weight="600" fill="#92400e">快速重传</text>
+    <text x="385" y="112" text-anchor="middle" font-size="10" fill="#b45309">3 个重复 ACK</text>
+
+    <rect x="310" y="200" width="150" height="56" rx="6" fill="#fce7f3" stroke="#f9a8d4" stroke-width="1.3"/>
+    <text x="385" y="224" text-anchor="middle" font-weight="600" fill="#9d174d">快速恢复</text>
+    <text x="385" y="242" text-anchor="middle" font-size="10" fill="#db2777">ssthresh=cwnd/2</text>
+
+    <rect x="580" y="200" width="180" height="56" rx="6" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.3"/>
+    <text x="670" y="224" text-anchor="middle" font-weight="600" fill="#991b1b">RTO 超时</text>
+    <text x="670" y="242" text-anchor="middle" font-size="10" fill="#dc2626">cwnd=1 退回慢启动</text>
+  </g>
+
+  <!-- 箭头与标注 -->
+  <g stroke="#6b7280" stroke-width="1.3" fill="#6b7280" font-size="10.5">
+    <line x1="115" y1="126" x2="115" y2="194"/>
+    <polygon points="115,200 111,190 119,190"/>
+    <text x="122" y="165" fill="#4b5563">cwnd ≥ ssthresh</text>
+
+    <line x1="190" y1="98" x2="304" y2="98"/>
+    <polygon points="310,98 300,94 300,102"/>
+    <text x="247" y="90" text-anchor="middle" fill="#4b5563">丢包</text>
+
+    <line x1="385" y1="126" x2="385" y2="194"/>
+    <polygon points="385,200 381,190 389,190"/>
+
+    <line x1="460" y1="215" x2="490" y2="215" stroke="none"/>
+    <line x1="460" y1="228" x2="574" y2="228"/>
+    <polygon points="580,228 570,224 570,232"/>
+    <text x="517" y="220" text-anchor="middle" fill="#4b5563">收到新 ACK</text>
+
+    <path d="M 385 256 Q 385 300 200 300 Q 120 300 115 262" fill="none" stroke="#6b7280"/>
+    <polygon points="115,256 111,266 119,266"/>
+    <text x="250" y="316" text-anchor="middle" fill="#4b5563" font-size="10">cwnd = ssthresh，回拥塞避免</text>
+  </g>
+
+  <!-- cwnd 曲线 -->
+  <g>
+    <rect x="40" y="330" width="720" height="58" rx="4" fill="#fafafa" stroke="#e5e7eb"/>
+    <text x="52" y="348" font-size="10.5" fill="#6b7280">cwnd 变化轨迹（锯齿波）</text>
+    <polyline points="60,378 120,352 150,345 200,340 260,336 300,340 340,344 380,348 400,368 440,360 500,352 560,344 600,340 640,344 680,348 720,368"
+      fill="none" stroke="#2563eb" stroke-width="1.8"/>
+    <text x="150" y="366" font-size="9.5" fill="#2563eb">指数</text>
+    <text x="270" y="332" font-size="9.5" fill="#059669">线性↑</text>
+    <text x="404" y="380" font-size="9.5" fill="#dc2626">砍半</text>
+    <text x="700" y="380" font-size="9.5" fill="#dc2626">砍半</text>
+  </g>
+</svg>

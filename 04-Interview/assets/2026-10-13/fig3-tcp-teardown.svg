@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="420" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">TCP 四次挥手时序与 TIME_WAIT 等待</text>
+
+  <line x1="180" y1="70" x2="180" y2="330" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <line x1="620" y1="70" x2="620" y2="330" stroke="#059669" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <rect x="105" y="46" width="150" height="26" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="180" y="64" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e40af">主动关闭方</text>
+  <rect x="545" y="46" width="150" height="26" fill="#d1fae5" stroke="#34d399"/>
+  <text x="620" y="64" text-anchor="middle" font-size="12.5" font-weight="600" fill="#065f46">被动关闭方</text>
+
+  <line x1="180" y1="110" x2="620" y2="110" stroke="#2563eb" stroke-width="1.6"/>
+  <polygon points="620,110 610,105 610,115" fill="#2563eb"/>
+  <text x="400" y="103" text-anchor="middle" font-size="12" fill="#1f2937">① FIN=1, seq=u（我不再发数据了）</text>
+
+  <line x1="620" y1="170" x2="180" y2="170" stroke="#059669" stroke-width="1.6"/>
+  <polygon points="180,170 190,165 190,175" fill="#059669"/>
+  <text x="400" y="163" text-anchor="middle" font-size="12" fill="#1f2937">② ACK=1, ack=u+1（收到，但我还有数据要发）</text>
+
+  <line x1="620" y1="230" x2="180" y2="230" stroke="#059669" stroke-width="1.6"/>
+  <polygon points="180,230 190,225 190,235" fill="#059669"/>
+  <text x="400" y="223" text-anchor="middle" font-size="12" fill="#1f2937">③ FIN=1, seq=w（我的数据也发完了）</text>
+
+  <line x1="180" y1="290" x2="620" y2="290" stroke="#2563eb" stroke-width="1.6"/>
+  <polygon points="620,290 610,285 610,295" fill="#2563eb"/>
+  <text x="400" y="283" text-anchor="middle" font-size="12" fill="#1f2937">④ ACK=1, ack=w+1</text>
+
+  <g font-size="10.5">
+    <rect x="26" y="98" width="118" height="22" rx="3" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="85" y="113" text-anchor="middle" fill="#475569">FIN_WAIT_1</text>
+    <rect x="26" y="158" width="118" height="22" rx="3" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="85" y="173" text-anchor="middle" fill="#475569">FIN_WAIT_2</text>
+    <rect x="656" y="158" width="118" height="22" rx="3" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="715" y="173" text-anchor="middle" fill="#475569">CLOSE_WAIT</text>
+    <rect x="656" y="218" width="118" height="22" rx="3" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="715" y="233" text-anchor="middle" fill="#475569">LAST_ACK</text>
+    <rect x="26" y="278" width="118" height="22" rx="3" fill="#fef3c7" stroke="#fcd34d"/>
+    <text x="85" y="293" text-anchor="middle" fill="#92400e" font-weight="600">TIME_WAIT</text>
+    <rect x="656" y="278" width="118" height="22" rx="3" fill="#d1fae5" stroke="#34d399"/>
+    <text x="715" y="293" text-anchor="middle" fill="#065f46">CLOSED</text>
+  </g>
+
+  <!-- 2MSL 说明 -->
+  <rect x="150" y="336" width="510" height="70" rx="4" fill="#fef9c3" stroke="#fde047"/>
+  <text x="166" y="355" font-size="11.5" fill="#713f12" font-weight="600">TIME_WAIT 等 2MSL 的两个作用：</text>
+  <text x="166" y="374" font-size="11" fill="#713f12">1. 保证最后的 ACK 能到达（对方若重传 FIN，本端还在 TIME_WAIT 可重发 ACK）</text>
+  <text x="166" y="392" font-size="11" fill="#713f12">2. 让本次连接的残余报文自然过期，避免被复用同一四元组的新连接误收</text>
+</svg>

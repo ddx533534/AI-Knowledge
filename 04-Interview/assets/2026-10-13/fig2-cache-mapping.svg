@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 460" width="860" height="460" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="460" fill="#ffffff"/>
+  <text x="30" y="34" font-size="17" font-weight="600" fill="#1f2937">Cache 三种地址映射方式：直接、全相联、组相联</text>
+
+  <!-- ========== 左边：直接映射 ========== -->
+  <text x="40" y="72" font-size="14" font-weight="600" fill="#2563eb">直接映射 Direct Mapped</text>
+  <text x="40" y="92" font-size="11" fill="#6b7280">主存块只能放进唯一确定的那一个 Cache 行</text>
+
+  <!-- 主存地址划分 -->
+  <rect x="40" y="108" width="60" height="30" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.3"/>
+  <text x="70" y="128" font-size="11" text-anchor="middle" fill="#1e40af">Tag</text>
+  <rect x="100" y="108" width="70" height="30" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.3"/>
+  <text x="135" y="128" font-size="11" text-anchor="middle" fill="#1e40af">行号 Index</text>
+  <rect x="170" y="108" width="70" height="30" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.3"/>
+  <text x="205" y="128" font-size="11" text-anchor="middle" fill="#1e40af">块内偏移</text>
+
+  <!-- Cache 结构 -->
+  <g font-size="10.5">
+    <rect x="40" y="164" width="200" height="22" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="48" y="179" fill="#475569">行 0</text>
+    <text x="120" y="179" fill="#475569">Tag</text>
+    <text x="180" y="179" fill="#475569">数据块</text>
+    <rect x="40" y="186" width="200" height="22" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="48" y="201" fill="#475569">行 1</text>
+    <rect x="40" y="208" width="200" height="22" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="48" y="223" fill="#475569">行 2</text>
+    <rect x="40" y="230" width="200" height="22" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="48" y="245" fill="#475569">行 3</text>
+  </g>
+  <text x="40" y="272" font-size="11" fill="#059669">优点：硬件最简单、比对最快、成本最低</text>
+  <text x="40" y="290" font-size="11" fill="#dc2626">缺点：冲突缺失严重 —— 主存中 index 相同的块互相踢</text>
+
+  <!-- ========== 中间：全相联 ========== -->
+  <text x="330" y="72" font-size="14" font-weight="600" fill="#7c3aed">全相联 Fully Associative</text>
+  <text x="330" y="92" font-size="11" fill="#6b7280">主存块可放进任意一个 Cache 行</text>
+
+  <rect x="330" y="108" width="70" height="30" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.3"/>
+  <text x="365" y="128" font-size="11" text-anchor="middle" fill="#5b21b6">Tag</text>
+  <rect x="400" y="108" width="70" height="30" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.3"/>
+  <text x="435" y="128" font-size="11" text-anchor="middle" fill="#5b21b6">块内偏移</text>
+  <text x="478" y="128" font-size="10" fill="#9ca3af">无 index 位</text>
+
+  <g font-size="10.5">
+    <rect x="330" y="164" width="200" height="22" fill="#faf5ff" stroke="#d8b4fe"/>
+    <text x="338" y="179" fill="#6b7280">行 0</text><text x="400" y="179" fill="#6b7280">Tag</text><text x="460" y="179" fill="#6b7280">数据块</text>
+    <rect x="330" y="186" width="200" height="22" fill="#ffffff" stroke="#d8b4fe"/>
+    <text x="338" y="201" fill="#6b7280">行 1</text>
+    <rect x="330" y="208" width="200" height="22" fill="#faf5ff" stroke="#d8b4fe"/>
+    <text x="338" y="223" fill="#6b7280">行 2</text>
+    <rect x="330" y="230" width="200" height="22" fill="#ffffff" stroke="#d8b4fe"/>
+    <text x="338" y="245" fill="#6b7280">行 3</text>
+  </g>
+  <text x="330" y="272" font-size="11" fill="#059669">优点：无冲突缺失，命中率理论最高</text>
+  <text x="330" y="290" font-size="11" fill="#dc2626">缺点：所有 Tag 要并行比较，硬件成本高、延迟大</text>
+
+  <!-- ========== 右边：组相联 ========== -->
+  <text x="620" y="72" font-size="14" font-weight="600" fill="#047857">组相联 Set Associative</text>
+  <text x="620" y="92" font-size="11" fill="#6b7280">折中方案，现网真实 CPU 都用它</text>
+
+  <rect x="620" y="108" width="55" height="30" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.3"/>
+  <text x="647" y="128" font-size="11" text-anchor="middle" fill="#065f46">Tag</text>
+  <rect x="675" y="108" width="60" height="30" fill="#d1fae5" stroke="#34d399" stroke-width="1.3"/>
+  <text x="705" y="128" font-size="11" text-anchor="middle" fill="#065f46">组号</text>
+  <rect x="735" y="108" width="60" height="30" fill="#a7f3d0" stroke="#10b981" stroke-width="1.3"/>
+  <text x="765" y="128" font-size="11" text-anchor="middle" fill="#065f46">块内偏移</text>
+
+  <g font-size="10.5">
+    <rect x="620" y="164" width="175" height="22" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <text x="628" y="179" fill="#047857">组 0</text>
+    <rect x="632" y="168" width="72" height="14" fill="#ffffff" stroke="#6ee7b7"/>
+    <text x="668" y="179" font-size="9.5" text-anchor="middle" fill="#065f46">路 0</text>
+    <rect x="710" y="168" width="78" height="14" fill="#ffffff" stroke="#6ee7b7"/>
+    <text x="749" y="179" font-size="9.5" text-anchor="middle" fill="#065f46">路 1</text>
+
+    <rect x="620" y="186" width="175" height="22" fill="#ffffff" stroke="#a7f3d0"/>
+    <text x="628" y="201" fill="#047857">组 1</text>
+    <rect x="632" y="190" width="72" height="14" fill="#f8fafc" stroke="#6ee7b7"/>
+    <text x="668" y="201" font-size="9.5" text-anchor="middle" fill="#065f46">路 0</text>
+    <rect x="710" y="190" width="78" height="14" fill="#f8fafc" stroke="#6ee7b7"/>
+    <text x="749" y="201" font-size="9.5" text-anchor="middle" fill="#065f46">路 1</text>
+
+    <rect x="620" y="208" width="175" height="22" fill="#ecfdf5" stroke="#a7f3d0"/>
+    <text x="628" y="223" fill="#047857">组 2</text>
+    <rect x="632" y="212" width="72" height="14" fill="#ffffff" stroke="#6ee7b7"/>
+    <text x="668" y="223" font-size="9.5" text-anchor="middle" fill="#065f46">路 0</text>
+    <rect x="710" y="212" width="78" height="14" fill="#ffffff" stroke="#6ee7b7"/>
+    <text x="749" y="223" font-size="9.5" text-anchor="middle" fill="#065f46">路 1</text>
+
+    <rect x="620" y="230" width="175" height="22" fill="#ffffff" stroke="#a7f3d0"/>
+    <text x="628" y="245" fill="#047857">组 3</text>
+    <rect x="632" y="234" width="72" height="14" fill="#f8fafc" stroke="#6ee7b7"/>
+    <text x="668" y="245" font-size="9.5" text-anchor="middle" fill="#065f46">路 0</text>
+    <rect x="710" y="234" width="78" height="14" fill="#f8fafc" stroke="#6ee7b7"/>
+    <text x="749" y="245" font-size="9.5" text-anchor="middle" fill="#065f46">路 1</text>
+  </g>
+  <text x="620" y="272" font-size="11" fill="#059669">优点：冲突减少，只在小范围内并行比较</text>
+  <text x="620" y="290" font-size="11" fill="#6b7280">典型：8 路组相联（Intel Core 系列 L1/L2）</text>
+
+  <!-- 底部补充 -->
+  <line x1="30" y1="312" x2="830" y2="312" stroke="#e5e7eb" stroke-width="1"/>
+
+  <text x="30" y="338" font-size="13" font-weight="600" fill="#1f2937">三个高频追问</text>
+
+  <text x="30" y="364" font-size="11.5" font-weight="600" fill="#b45309">① 替换算法</text>
+  <text x="30" y="383" font-size="11" fill="#475569">LRU（最常用）/ FIFO / 随机。全相联与组相联必须选一个牺牲者。</text>
+
+  <text x="300" y="364" font-size="11.5" font-weight="600" fill="#b45309">② 写策略</text>
+  <text x="300" y="383" font-size="11" fill="#475569">写直达 Write-Through（简单但流量大）vs 写回 Write-Back（加脏位，性能好）。</text>
+
+  <text x="620" y="364" font-size="11.5" font-weight="600" fill="#b45309">③ 缺失三类</text>
+  <text x="620" y="383" font-size="11" fill="#475569">强制缺失（冷启动）/ 冲突缺失（映射不够用）/ 容量缺失（Cache 太小）。</text>
+
+  <line x1="30" y1="400" x2="830" y2="400" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="30" y="426" font-size="11.5" fill="#475569">四种经典缺失率的降低手段：预取（劈容量缺失）、提高相联度（劈冲突缺失）、</text>
+  <text x="30" y="445" font-size="11.5" fill="#475569">增大块大小（劈强制缺失，但会加剧冲突）、多级 Cache（用 L2/L3 兜底 L1 缺失）。</text>
+</svg>

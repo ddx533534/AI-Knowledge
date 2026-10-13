@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 440" width="860" height="440" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="440" fill="#ffffff"/>
+  <text x="30" y="34" font-size="17" font-weight="600" fill="#1f2937">I/O 三种控制方式与 DMA 的数据流对比</text>
+
+  <!-- 表格头 -->
+  <rect x="30" y="52" width="800" height="30" rx="4" fill="#f1f5f9"/>
+  <text x="44" y="72" font-size="12.5" font-weight="600" fill="#334155">方式</text>
+  <text x="196" y="72" font-size="12.5" font-weight="600" fill="#334155">CPU 参与程度</text>
+  <text x="404" y="72" font-size="12.5" font-weight="600" fill="#334155">适用场景</text>
+  <text x="624" y="72" font-size="12.5" font-weight="600" fill="#334155">性能特征</text>
+
+  <g font-size="11.5" fill="#374151">
+    <text x="44" y="106" font-weight="600" fill="#dc2626">程序查询（轮询）</text>
+    <text x="196" y="106">CPU 全程忙等</text>
+    <text x="404" y="106">极慢设备、简单外设</text>
+    <text x="624" y="106">CPU 利用率极低</text>
+
+    <text x="44" y="136" font-weight="600" fill="#d97706">中断驱动</text>
+    <text x="196" y="136">数据传完才打断</text>
+    <text x="404" y="136">键盘、鼠标等低速设备</text>
+    <text x="624" y="136">CPU 与 IO 可并行</text>
+
+    <text x="44" y="166" font-weight="600" fill="#059669">DMA 直接存储器访问</text>
+    <text x="196" y="166">整块传完才打断一次</text>
+    <text x="404" y="166">磁盘、网卡、显卡</text>
+    <text x="624" y="166">接近内存带宽</text>
+  </g>
+
+  <line x1="30" y1="182" x2="830" y2="182" stroke="#e5e7eb"/>
+
+  <!-- 数据流示意：中断方式 -->
+  <text x="30" y="212" font-size="13" font-weight="600" fill="#d97706">中断方式：CPU 逐字节/逐字搬运</text>
+
+  <rect x="40" y="228" width="110" height="42" rx="5" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.3"/>
+  <text x="95" y="254" font-size="11.5" text-anchor="middle" fill="#1e40af">CPU</text>
+  <rect x="260" y="228" width="110" height="42" rx="5" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.3"/>
+  <text x="315" y="254" font-size="11.5" text-anchor="middle" fill="#92400e">内存</text>
+  <rect x="480" y="228" width="110" height="42" rx="5" fill="#f3e8ff" stroke="#c4b5fd" stroke-width="1.3"/>
+  <text x="535" y="254" font-size="11.5" text-anchor="middle" fill="#6d28d9">设备控制器</text>
+
+  <path d="M150 240 L258 240" stroke="#f59e0b" stroke-width="1.6"/>
+  <path d="M252 240 l-7 -4 v8 z" fill="#f59e0b"/>
+  <path d="M258 258 L152 258" stroke="#f59e0b" stroke-width="1.6"/>
+  <path d="M158 258 l7 -4 v8 z" fill="#f59e0b"/>
+  <text x="170" y="292" font-size="10.5" fill="#92400e">每个字节往返都占用 CPU 周期，反复打断</text>
+
+  <!-- 数据流示意：DMA -->
+  <text x="30" y="336" font-size="13" font-weight="600" fill="#059669">DMA 方式：CPU 只做启动与收尾，数据不经过 CPU</text>
+
+  <rect x="40" y="352" width="110" height="42" rx="5" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.3"/>
+  <text x="95" y="378" font-size="11.5" text-anchor="middle" fill="#1e40af">CPU</text>
+  <rect x="260" y="352" width="110" height="42" rx="5" fill="#ecfdf5" stroke="#34d399" stroke-width="1.4"/>
+  <text x="315" y="372" font-size="11.5" text-anchor="middle" fill="#065f46">DMA 控制器</text>
+  <text x="315" y="387" font-size="9.5" text-anchor="middle" fill="#047857">总线主控</text>
+  <rect x="480" y="352" width="110" height="42" rx="5" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.3"/>
+  <text x="535" y="378" font-size="11.5" text-anchor="middle" fill="#92400e">内存</text>
+
+  <path d="M150 366 L258 366" stroke="#059669" stroke-width="1.6" stroke-dasharray="5 3"/>
+  <path d="M252 366 l-7 -4 v8 z" fill="#059669"/>
+  <text x="160" y="358" font-size="10" fill="#047857">启动</text>
+
+  <path d="M370 366 L478 366" stroke="#059669" stroke-width="2"/>
+  <path d="M472 366 l-7 -4 v8 z" fill="#059669"/>
+  <text x="392" y="358" font-size="10" fill="#047857">整块直传</text>
+
+  <path d="M258 400 L152 400" stroke="#059669" stroke-width="1.6" stroke-dasharray="5 3"/>
+  <path d="M158 400 l7 -4 v8 z" fill="#059669"/>
+  <text x="160" y="414" font-size="10" fill="#047857">传完中断一次</text>
+
+  <text x="620" y="378" font-size="11" fill="#475569">DMA 抢占总线时</text>
+  <text x="620" y="396" font-size="11" fill="#475569">CPU 会短暂停访存，</text>
+  <text x="620" y="414" font-size="11" fill="#6b7280">称为「周期窃取」</text>
+</svg>

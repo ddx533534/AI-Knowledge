@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="400" fill="#ffffff"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">进程与线程的资源共享与私有划分</text>
+
+  <!-- 进程 A -->
+  <rect x="40" y="56" width="320" height="290" rx="8" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+  <text x="60" y="80" font-size="13" font-weight="600" fill="#1e40af">进程 A（独立虚拟地址空间）</text>
+
+  <!-- 共享资源区 -->
+  <rect x="60" y="94" width="280" height="130" rx="5" fill="#dbeafe" stroke="#93c5fd"/>
+  <text x="200" y="114" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e40af">进程级共享资源</text>
+  <text x="76" y="136" font-size="11" fill="#1e293b">• 代码段 / 数据段</text>
+  <text x="76" y="156" font-size="11" fill="#1e293b">• 全局变量 / 静态变量</text>
+  <text x="76" y="176" font-size="11" fill="#1e293b">• 堆（Heap）</text>
+  <text x="76" y="196" font-size="11" fill="#1e293b">• 文件描述符 / 进程权限</text>
+
+  <!-- 线程 -->
+  <rect x="60" y="234" width="128" height="94" rx="5" fill="#d1fae5" stroke="#34d399"/>
+  <text x="124" y="254" text-anchor="middle" font-size="11" font-weight="600" fill="#065f46">线程 T1</text>
+  <text x="72" y="274" font-size="10" fill="#065f46">• 线程栈</text>
+  <text x="72" y="292" font-size="10" fill="#065f46">• 寄存器上下文</text>
+  <text x="72" y="310" font-size="10" fill="#065f46">• TLS（线程局部存储）</text>
+
+  <rect x="212" y="234" width="128" height="94" rx="5" fill="#d1fae5" stroke="#34d399"/>
+  <text x="276" y="254" text-anchor="middle" font-size="11" font-weight="600" fill="#065f46">线程 T2</text>
+  <text x="224" y="274" font-size="10" fill="#065f46">• 线程栈</text>
+  <text x="224" y="292" font-size="10" fill="#065f46">• 寄存器上下文</text>
+  <text x="224" y="310" font-size="10" fill="#065f46">• TLS（线程局部存储）</text>
+
+  <!-- 进程 B -->
+  <rect x="440" y="56" width="320" height="290" rx="8" fill="#f0fdf4" stroke="#4ade80" stroke-width="1.6"/>
+  <text x="460" y="80" font-size="13" font-weight="600" fill="#166534">进程 B（独立虚拟地址空间）</text>
+  <rect x="460" y="94" width="280" height="130" rx="5" fill="#dcfce7" stroke="#86efac"/>
+  <text x="600" y="114" text-anchor="middle" font-size="11.5" font-weight="600" fill="#166534">进程级共享资源</text>
+  <text x="476" y="136" font-size="11" fill="#1e293b">• 代码段 / 数据段</text>
+  <text x="476" y="156" font-size="11" fill="#1e293b">• 全局变量 / 静态变量</text>
+  <text x="476" y="176" font-size="11" fill="#1e293b">• 堆（Heap）</text>
+  <text x="476" y="196" font-size="11" fill="#1e293b">• 文件描述符 / 进程权限</text>
+
+  <rect x="460" y="234" width="280" height="94" rx="5" fill="#bbf7d0" stroke="#4ade80"/>
+  <text x="600" y="262" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">线程（私有栈 + 上下文 + TLS）</text>
+  <text x="476" y="288" font-size="10.5" fill="#166534">进程间不共享内存，一个崩溃不影响另一个</text>
+  <text x="476" y="310" font-size="10.5" fill="#166534">通信必须走 IPC（管道 / 共享内存 / Socket 等）</text>
+
+  <!-- 中间隔离 -->
+  <line x1="400" y1="70" x2="400" y2="330" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <text x="400" y="356" text-anchor="middle" font-size="11" fill="#dc2626" font-weight="600">地址空间隔离</text>
+  <text x="400" y="374" text-anchor="middle" font-size="10.5" fill="#991b1b">进程是资源分配单位，线程是 CPU 调度单位</text>
+</svg>

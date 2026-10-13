@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="420" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">OSI 七层与 TCP/IP 五层及封装路径</text>
+
+  <!-- OSI -->
+  <text x="105" y="62" text-anchor="middle" font-size="13" font-weight="600" fill="#374151">OSI 七层</text>
+  <g font-size="12">
+    <rect x="30" y="72" width="150" height="42" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+    <text x="105" y="90" text-anchor="middle" fill="#1f2937">应用层</text>
+    <rect x="30" y="116" width="150" height="42" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+    <text x="105" y="134" text-anchor="middle" fill="#1f2937">表示层</text>
+    <rect x="30" y="160" width="150" height="42" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+    <text x="105" y="178" text-anchor="middle" fill="#1f2937">会话层</text>
+    <rect x="30" y="204" width="150" height="42" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1"/>
+    <text x="105" y="222" text-anchor="middle" fill="#1f2937">传输层</text>
+    <rect x="30" y="248" width="150" height="42" fill="#fef3c7" stroke="#fcd34d" stroke-width="1"/>
+    <text x="105" y="266" text-anchor="middle" fill="#1f2937">网络层</text>
+    <rect x="30" y="292" width="150" height="42" fill="#f3e8ff" stroke="#d8b4fe" stroke-width="1"/>
+    <text x="105" y="310" text-anchor="middle" fill="#1f2937">数据链路层</text>
+    <rect x="30" y="336" width="150" height="42" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    <text x="105" y="354" text-anchor="middle" fill="#1f2937">物理层</text>
+  </g>
+
+  <!-- TCP/IP -->
+  <text x="330" y="62" text-anchor="middle" font-size="13" font-weight="600" fill="#374151">TCP/IP 五层</text>
+  <g font-size="12">
+    <rect x="255" y="72" width="150" height="130" fill="#dbeafe" stroke="#60a5fa" stroke-width="1.2"/>
+    <text x="330" y="142" text-anchor="middle" fill="#1f2937">应用层</text>
+    <rect x="255" y="204" width="150" height="42" fill="#d1fae5" stroke="#34d399" stroke-width="1.2"/>
+    <text x="330" y="222" text-anchor="middle" fill="#1f2937">传输层</text>
+    <rect x="255" y="248" width="150" height="42" fill="#fde68a" stroke="#fbbf24" stroke-width="1.2"/>
+    <text x="330" y="266" text-anchor="middle" fill="#1f2937">网络层</text>
+    <rect x="255" y="292" width="150" height="42" fill="#e9d5ff" stroke="#c084fc" stroke-width="1.2"/>
+    <text x="330" y="310" text-anchor="middle" fill="#1f2937">数据链路层</text>
+    <rect x="255" y="336" width="150" height="42" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+    <text x="330" y="354" text-anchor="middle" fill="#1f2937">物理层</text>
+  </g>
+
+  <!-- 协议 -->
+  <text x="530" y="62" text-anchor="middle" font-size="13" font-weight="600" fill="#374151">典型协议</text>
+  <g font-size="11.5" fill="#4b5563">
+    <rect x="455" y="72" width="150" height="130" fill="#fafafa" stroke="#e5e7eb"/>
+    <text x="466" y="94">HTTP / HTTPS</text>
+    <text x="466" y="114">DNS / SMTP / FTP</text>
+    <text x="466" y="134">TLS（表示层加密）</text>
+    <rect x="455" y="204" width="150" height="42" fill="#fafafa" stroke="#e5e7eb"/>
+    <text x="466" y="229">TCP / UDP</text>
+    <rect x="455" y="248" width="150" height="42" fill="#fafafa" stroke="#e5e7eb"/>
+    <text x="466" y="273">IP / ICMP / ARP</text>
+    <rect x="455" y="292" width="150" height="42" fill="#fafafa" stroke="#e5e7eb"/>
+    <text x="466" y="317">以太网 / MAC</text>
+    <rect x="455" y="336" width="150" height="42" fill="#fafafa" stroke="#e5e7eb"/>
+    <text x="466" y="361">网线 / 光纤 / 无线电</text>
+  </g>
+
+  <!-- 封装箭头 -->
+  <g stroke="#2563eb" stroke-width="1.4" fill="#2563eb">
+    <line x1="620" y1="100" x2="620" y2="390"/>
+    <polygon points="620,398 616,388 624,388"/>
+  </g>
+  <text x="700" y="240" text-anchor="middle" font-size="12" fill="#2563eb" font-weight="600">封装</text>
+  <text x="700" y="258" text-anchor="middle" font-size="11" fill="#6b7280">逐层加头</text>
+  <text x="700" y="276" text-anchor="middle" font-size="11" fill="#6b7280">自上而下</text>
+  <text x="700" y="300" text-anchor="middle" font-size="11" fill="#9ca3af">解封装反之</text>
+</svg>

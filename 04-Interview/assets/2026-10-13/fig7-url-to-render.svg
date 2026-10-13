@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="800" height="480" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="480" fill="#ffffff"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">从输入 URL 到页面渲染的完整链路</text>
+
+  <!-- 步骤条 -->
+  <g font-size="11.5">
+    <rect x="40" y="48" width="720" height="34" rx="4" fill="#dbeafe" stroke="#60a5fa"/>
+    <circle cx="62" cy="65" r="11" fill="#2563eb"/>
+    <text x="62" y="69" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="600">1</text>
+    <text x="84" y="70" font-size="11.5" fill="#1e293b"><tspan font-weight="600">URL 解析</tspan>　判断合法性，补全协议（http / https）</text>
+
+    <rect x="40" y="90" width="720" height="46" rx="4" fill="#eff6ff" stroke="#93c5fd"/>
+    <circle cx="62" cy="113" r="11" fill="#2563eb"/>
+    <text x="62" y="117" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="600">2</text>
+    <text x="84" y="110" font-size="11.5" fill="#1e293b"><tspan font-weight="600">DNS 解析</tspan>　域名 → IP</text>
+    <text x="84" y="128" font-size="10.5" fill="#64748b">浏览器缓存 → 系统缓存/hosts → 本地 DNS → 根 → TLD → 权威 DNS</text>
+
+    <rect x="40" y="144" width="720" height="34" rx="4" fill="#d1fae5" stroke="#34d399"/>
+    <circle cx="62" cy="161" r="11" fill="#059669"/>
+    <text x="62" y="165" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="600">3</text>
+    <text x="84" y="166" font-size="11.5" fill="#1e293b"><tspan font-weight="600">TCP 三次握手</tspan>　与目标 IP 的 80 / 443 端口建立连接</text>
+
+    <rect x="40" y="186" width="720" height="34" rx="4" fill="#ecfdf5" stroke="#6ee7b7"/>
+    <circle cx="62" cy="203" r="11" fill="#059669"/>
+    <text x="62" y="207" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="600">4</text>
+    <text x="84" y="208" font-size="11.5" fill="#1e293b"><tspan font-weight="600">TLS 握手</tspan>（仅 HTTPS）　协商会话密钥，建立加密通道<tspan fill="#dc2626" font-weight="600">（必须先于 HTTP 数据）</tspan></text>
+
+    <rect x="40" y="228" width="720" height="34" rx="4" fill="#fef3c7" stroke="#fcd34d"/>
+    <circle cx="62" cy="245" r="11" fill="#d97706"/>
+    <text x="62" y="249" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="600">5</text>
+    <text x="84" y="250" font-size="11.5" fill="#1e293b"><tspan font-weight="600">发送 HTTP 请求</tspan>　请求行 + 请求头（Cookie、UA）+ 请求体</text>
+
+    <rect x="40" y="270" width="720" height="34" rx="4" fill="#f3e8ff" stroke="#d8b4fe"/>
+    <circle cx="62" cy="287" r="11" fill="#9333ea"/>
+    <text x="62" y="291" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="600">6</text>
+    <text x="84" y="292" font-size="11.5" fill="#1e293b"><tspan font-weight="600">服务端处理</tspan>　可能经 CDN / WAF / 负载均衡 → 应用服务器 → 查数据库 → 组装响应</text>
+
+    <rect x="40" y="312" width="720" height="34" rx="4" fill="#fce7f3" stroke="#f9a8d4"/>
+    <circle cx="62" cy="329" r="11" fill="#db2777"/>
+    <text x="62" y="333" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="600">7</text>
+    <text x="84" y="334" font-size="11.5" fill="#1e293b"><tspan font-weight="600">返回 HTTP 响应</tspan>　状态码 + 响应头（Cache-Control 等）+ 响应体</text>
+
+    <rect x="40" y="354" width="720" height="58" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <circle cx="62" cy="383" r="11" fill="#475569"/>
+    <text x="62" y="387" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="600">8</text>
+    <text x="84" y="372" font-size="11.5" fill="#1e293b"><tspan font-weight="600">浏览器渲染</tspan></text>
+    <text x="84" y="390" font-size="10.5" fill="#64748b">解析 HTML → DOM 树　|　解析 CSS → CSSOM 树　|　合成渲染树 Render Tree</text>
+    <text x="84" y="406" font-size="10.5" fill="#64748b">布局 Layout（算位置大小）→ 绘制 Paint（画像素），并对发现的 CSS/JS/图片发起后续请求</text>
+
+    <rect x="40" y="420" width="720" height="34" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <circle cx="62" cy="437" r="11" fill="#64748b"/>
+    <text x="62" y="441" text-anchor="middle" font-size="11" fill="#ffffff" font-weight="600">9</text>
+    <text x="84" y="442" font-size="11.5" fill="#1e293b"><tspan font-weight="600">连接关闭或复用</tspan>　HTTP/1.1 默认 Keep-Alive 复用连接，长连接下不一定马上四次挥手</text>
+  </g>
+</svg>

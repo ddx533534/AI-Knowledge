@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="400" fill="#ffffff"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">TLS 1.2 与 TLS 1.3 握手轮次对比</text>
+
+  <!-- TLS 1.2 -->
+  <text x="200" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">TLS 1.2（约 2 RTT）</text>
+  <line x1="90" y1="80" x2="90" y2="300" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="310" y1="80" x2="310" y2="300" stroke="#059669" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="90" y="74" text-anchor="middle" font-size="11" fill="#1e40af">客户端</text>
+  <text x="310" y="74" text-anchor="middle" font-size="11" fill="#065f46">服务端</text>
+
+  <g font-size="10.5" fill="#374151">
+    <line x1="90" y1="104" x2="310" y2="104" stroke="#2563eb" stroke-width="1.3"/>
+    <polygon points="310,104 300,100 300,108" fill="#2563eb"/>
+    <text x="200" y="98" text-anchor="middle">ClientHello (随机数+套件)</text>
+
+    <line x1="310" y1="134" x2="90" y2="134" stroke="#059669" stroke-width="1.3"/>
+    <polygon points="90,134 100,130 100,138" fill="#059669"/>
+    <text x="200" y="128" text-anchor="middle">ServerHello + 证书 + 随机数</text>
+
+    <text x="200" y="158" text-anchor="middle" font-size="10" fill="#6b7280">— 1 RTT —</text>
+
+    <line x1="90" y1="182" x2="310" y2="182" stroke="#2563eb" stroke-width="1.3"/>
+    <polygon points="310,182 300,178 300,186" fill="#2563eb"/>
+    <text x="200" y="176" text-anchor="middle">密钥交换（RSA 加密 / ECDHE）</text>
+
+    <line x1="310" y1="212" x2="90" y2="212" stroke="#059669" stroke-width="1.3"/>
+    <polygon points="90,212 100,208 100,216" fill="#059669"/>
+    <text x="200" y="206" text-anchor="middle">ChangeCipherSpec + Finished</text>
+
+    <line x1="90" y1="242" x2="310" y2="242" stroke="#2563eb" stroke-width="1.3"/>
+    <polygon points="310,242 300,238 300,246" fill="#2563eb"/>
+    <text x="200" y="236" text-anchor="middle">Finished → 开始加密传输</text>
+    <text x="200" y="266" text-anchor="middle" font-size="10" fill="#6b7280">— 2 RTT —</text>
+  </g>
+
+  <!-- 分隔 -->
+  <line x1="400" y1="52" x2="400" y2="300" stroke="#e5e7eb" stroke-width="1.2" stroke-dasharray="3 3"/>
+
+  <!-- TLS 1.3 -->
+  <text x="600" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">TLS 1.3（约 1 RTT）</text>
+  <line x1="490" y1="80" x2="490" y2="300" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="710" y1="80" x2="710" y2="300" stroke="#059669" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="490" y="74" text-anchor="middle" font-size="11" fill="#1e40af">客户端</text>
+  <text x="710" y="74" text-anchor="middle" font-size="11" fill="#065f46">服务端</text>
+
+  <g font-size="10.5" fill="#374151">
+    <line x1="490" y1="110" x2="710" y2="110" stroke="#2563eb" stroke-width="1.3"/>
+    <polygon points="710,110 700,106 700,114" fill="#2563eb"/>
+    <text x="600" y="104" text-anchor="middle">ClientHello + 密钥共享</text>
+
+    <line x1="710" y1="146" x2="490" y2="146" stroke="#059669" stroke-width="1.3"/>
+    <polygon points="490,146 500,142 500,150" fill="#059669"/>
+    <text x="600" y="140" text-anchor="middle">ServerHello + 密钥共享 + 证书 + Finished</text>
+
+    <line x1="490" y1="182" x2="710" y2="182" stroke="#2563eb" stroke-width="1.3"/>
+    <polygon points="710,182 700,178 700,186" fill="#2563eb"/>
+    <text x="600" y="176" text-anchor="middle">Finished → 开始加密传输</text>
+    <text x="600" y="206" text-anchor="middle" font-size="10" fill="#6b7280">— 1 RTT —</text>
+
+    <rect x="500" y="222" width="200" height="46" rx="4" fill="#ecfdf5" stroke="#6ee7b7"/>
+    <text x="510" y="240" font-size="10" fill="#065f46">恢复连接可 0-RTT：</text>
+    <text x="510" y="256" font-size="10" fill="#065f46">首个报文直接带早期数据</text>
+  </g>
+
+  <!-- 底部 -->
+  <rect x="40" y="322" width="720" height="62" rx="4" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="56" y="342" font-size="11.5" font-weight="600" fill="#1e40af">关键变化：</text>
+  <text x="56" y="361" font-size="10.5" fill="#1e40af">TLS 1.3 删除 RSA 密钥交换，强制 ECDHE（前向安全）；把两个 RTT 压成一个；删除老旧弱套件。</text>
+  <text x="56" y="378" font-size="10.5" fill="#1e40af">前向安全 = 长期私钥泄露也无法解密历史会话（每次会话用临时密钥，用完即弃）。</text>
+</svg>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 470" width="860" height="470" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="470" fill="#ffffff"/>
+  <text x="30" y="34" font-size="17" font-weight="600" fill="#1f2937">八大排序算法：时间、空间与稳定性对照</text>
+
+  <!-- 表头 -->
+  <rect x="30" y="52" width="800" height="30" rx="4" fill="#f1f5f9"/>
+  <text x="44" y="72" font-size="12.5" font-weight="600" fill="#334155">算法</text>
+  <text x="184" y="72" font-size="12.5" font-weight="600" fill="#334155">平均</text>
+  <text x="294" y="72" font-size="12.5" font-weight="600" fill="#334155">最坏</text>
+  <text x="404" y="72" font-size="12.5" font-weight="600" fill="#334155">空间</text>
+  <text x="514" y="72" font-size="12.5" font-weight="600" fill="#334155">稳定</text>
+  <text x="624" y="72" font-size="12.5" font-weight="600" fill="#334155">一句话记忆点</text>
+
+  <!-- 行 -->
+  <g font-size="12" fill="#374151">
+    <text x="44" y="106" font-weight="600" fill="#2563eb">冒泡排序</text>
+    <text x="184" y="106">O(n²)</text><text x="294" y="106">O(n²)</text><text x="404" y="106">O(1)</text>
+    <text x="522" y="106" fill="#059669" font-weight="600">稳定</text>
+    <text x="624" y="106" fill="#6b7280">只交换相邻逆序对</text>
+
+    <text x="44" y="136" font-weight="600" fill="#2563eb">插入排序</text>
+    <text x="184" y="136">O(n²)</text><text x="294" y="136">O(n²)</text><text x="404" y="136">O(1)</text>
+    <text x="522" y="136" fill="#059669" font-weight="600">稳定</text>
+    <text x="624" y="136" fill="#6b7280">近乎有序时接近 O(n)</text>
+
+    <text x="44" y="166" font-weight="600" fill="#2563eb">选择排序</text>
+    <text x="184" y="166">O(n²)</text><text x="294" y="166">O(n²)</text><text x="404" y="166">O(1)</text>
+    <text x="522" y="166" fill="#dc2626" font-weight="600">不稳定</text>
+    <text x="624" y="166" fill="#6b7280">交换次数最少，仅 n-1 次</text>
+
+    <text x="44" y="196" font-weight="600" fill="#2563eb">希尔排序</text>
+    <text x="184" y="196">O(n^1.3)</text><text x="294" y="196">O(n²)</text><text x="404" y="196">O(1)</text>
+    <text x="522" y="196" fill="#dc2626" font-weight="600">不稳定</text>
+    <text x="624" y="196" fill="#6b7280">插入排序的增量版</text>
+
+    <text x="44" y="226" font-weight="600" fill="#7c3aed">归并排序</text>
+    <text x="184" y="226">O(n log n)</text><text x="294" y="226">O(n log n)</text>
+    <text x="404" y="226" fill="#d97706" font-weight="600">O(n)</text>
+    <text x="522" y="226" fill="#059669" font-weight="600">稳定</text>
+    <text x="624" y="226" fill="#6b7280">外排序首选，缺点是要额外空间</text>
+
+    <text x="44" y="256" font-weight="600" fill="#7c3aed">快速排序</text>
+    <text x="184" y="256">O(n log n)</text><text x="294" y="256" fill="#dc2626">O(n²)</text>
+    <text x="404" y="256">O(log n)</text>
+    <text x="522" y="256" fill="#dc2626" font-weight="600">不稳定</text>
+    <text x="624" y="256" fill="#6b7280">常数最小最快；随机化枢轴防退化</text>
+
+    <text x="44" y="286" font-weight="600" fill="#7c3aed">堆排序</text>
+    <text x="184" y="286">O(n log n)</text><text x="294" y="286">O(n log n)</text><text x="404" y="286">O(1)</text>
+    <text x="522" y="286" fill="#dc2626" font-weight="600">不稳定</text>
+    <text x="624" y="286" fill="#6b7280">原地且保证最坏上界</text>
+
+    <text x="44" y="316" font-weight="600" fill="#7c3aed">计数/基数</text>
+    <text x="184" y="316">O(n+k)</text><text x="294" y="316">O(n+k)</text>
+    <text x="404" y="316">O(n+k)</text>
+    <text x="522" y="316" fill="#059669" font-weight="600">稳定</text>
+    <text x="624" y="316" fill="#6b7280">非比较排序，要求数据范围确定</text>
+  </g>
+
+  <line x1="30" y1="330" x2="830" y2="330" stroke="#e5e7eb" stroke-width="1"/>
+
+  <!-- 记忆法 -->
+  <text x="30" y="358" font-size="13" font-weight="600" fill="#1f2937">口诀：稳定只有「冒插归基」，其余都不稳定</text>
+  <text x="30" y="380" font-size="11.5" fill="#475569">「冒」泡、「插」入、「归」并、「基」数 —— 四个稳定</text>
+
+  <line x1="30" y1="396" x2="830" y2="396" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="30" y="422" font-size="13" font-weight="600" fill="#1f2937">工程默认选择</text>
+  <text x="30" y="444" font-size="11.5" fill="#475569">通用内存排序：快排；要求稳定：归并；要求确定性最坏上界：堆排；外部大文件：归并；</text>
+  <text x="30" y="461" font-size="11.5" fill="#475569">小数组（n 较小）：直接插入排序。JDK 双轴快排 / Dart / V8 都是「混合排序」思路。</text>
+</svg>
