@@ -24,9 +24,9 @@
 
 ## 博客站点
 
-线上地址：<https://www.moting.com.cn>
+线上地址：<https://blog.moting.com.cn>
 
-站点由 `site/build.mjs` 从三个内容目录自动生成，部署在腾讯云 EdgeOne Makers 项目 `moting-blog`（加速区域：全球可用区·不含中国大陆）。
+站点由 `site/build.mjs` 从内容目录自动生成，部署在腾讯云 EdgeOne Makers 项目 `moting-blog`（加速区域：全球可用区·不含中国大陆）。
 
 | 步骤 | 命令 |
 | --- | --- |

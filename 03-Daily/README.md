@@ -51,7 +51,7 @@
 | 提交推送 | `git add -A && git commit && git push origin master` |
 | 部署上线 | `rm -rf .edgeone/assets && edgeone makers deploy -n moting-blog` |
 
-线上地址：<https://www.moting.com.cn>（Makers 项目 `moting-blog`，加速区域为全球可用区·不含中国大陆）。部署前必须先删 `.edgeone/assets`，否则构建阶段会撞上沙箱的删除拦截。
+线上地址：<https://blog.moting.com.cn>（Makers 项目 `moting-blog`，加速区域为全球可用区·不含中国大陆）。部署前必须先删 `.edgeone/assets`，否则构建阶段会撞上沙箱的删除拦截。
 
 ## 选材主线
 
