@@ -1,0 +1,32 @@
+<svg viewBox="0 0 680 228" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>给长任务上下文减负的三条路，代价依次变高</title>
+  <desc>压缩是把历史总结成摘要再重开窗口，最便宜；外部笔记是把关键结论写成文件之后读回来；子智能体是每段一个干净窗口，最贵，而且交接时有损。</desc>
+
+  <line x1="40" y1="44" x2="640" y2="44" stroke="#888780" stroke-width="1" fill="none" marker-end="url(#arrowB)"/>
+  <text x="340" y="26" text-anchor="middle" font-size="12" fill="#4a5158" dominant-baseline="central">代价越高</text>
+
+  <rect x="40" y="60" width="180" height="120" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="130" y="86" text-anchor="middle" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">压缩</text>
+  <text x="130" y="120" text-anchor="middle" font-size="12" fill="#185FA5" dominant-baseline="central">把历史总结成摘要</text>
+  <text x="130" y="144" text-anchor="middle" font-size="12" fill="#185FA5" dominant-baseline="central">重开一个窗口</text>
+
+  <rect x="250" y="60" width="180" height="120" rx="10" fill="#B5D4F4" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="340" y="86" text-anchor="middle" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">外部笔记</text>
+  <text x="340" y="120" text-anchor="middle" font-size="12" fill="#0C447C" dominant-baseline="central">关键结论写成文件</text>
+  <text x="340" y="144" text-anchor="middle" font-size="12" fill="#0C447C" dominant-baseline="central">之后读回来</text>
+
+  <rect x="460" y="60" width="180" height="120" rx="10" fill="#85B7EB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="550" y="86" text-anchor="middle" font-size="13" font-weight="500" fill="#042C53" dominant-baseline="central">子智能体</text>
+  <text x="550" y="120" text-anchor="middle" font-size="12" fill="#042C53" dominant-baseline="central">每段一个干净窗口</text>
+  <text x="550" y="144" text-anchor="middle" font-size="12" fill="#042C53" dominant-baseline="central">交接时有损</text>
+
+  <text x="130" y="202" text-anchor="middle" font-size="12" fill="#4a5158" dominant-baseline="central">最便宜</text>
+  <text x="340" y="202" text-anchor="middle" font-size="12" fill="#4a5158" dominant-baseline="central">中等</text>
+  <text x="550" y="202" text-anchor="middle" font-size="12" fill="#4a5158" dominant-baseline="central">最贵</text>
+
+  <defs>
+    <marker id="arrowB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+</svg>

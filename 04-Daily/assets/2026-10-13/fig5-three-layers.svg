@@ -1,0 +1,51 @@
+<svg viewBox="0 0 680 300" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>AG-UI、A2UI、json-render 各管一段</title>
+  <desc>上排是三样东西各自管什么：A2UI 管界面上有什么，AG-UI 管怎么送到前端，json-render 管收到之后怎么变成本端组件。下排是装上之后的顺序：Agent 后端经 AG-UI 事件流到前端，前端经 A2UI 消息到渲染器。</desc>
+
+  <rect x="40" y="36" width="186" height="92" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="133" y="62" text-anchor="middle" font-size="14" font-weight="500" fill="#0C447C" dominant-baseline="central">A2UI</text>
+  <text x="133" y="88" text-anchor="middle" font-size="11" fill="#185FA5" dominant-baseline="central">管界面上有什么</text>
+  <text x="133" y="108" text-anchor="middle" font-size="11" fill="#185FA5" dominant-baseline="central">Google，当前 v0.9.1</text>
+
+  <rect x="247" y="36" width="186" height="92" rx="10" fill="#B5D4F4" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="340" y="62" text-anchor="middle" font-size="14" font-weight="500" fill="#0C447C" dominant-baseline="central">AG-UI</text>
+  <text x="340" y="88" text-anchor="middle" font-size="11" fill="#0C447C" dominant-baseline="central">管怎么送到前端</text>
+  <text x="340" y="108" text-anchor="middle" font-size="11" fill="#0C447C" dominant-baseline="central">31 个事件类型，8 个族</text>
+
+  <rect x="454" y="36" width="186" height="92" rx="10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="547" y="62" text-anchor="middle" font-size="14" font-weight="500" fill="#085041" dominant-baseline="central">json-render</text>
+  <text x="547" y="88" text-anchor="middle" font-size="11" fill="#0F6E56" dominant-baseline="central">管收到后怎么变组件</text>
+  <text x="547" y="108" text-anchor="middle" font-size="11" fill="#0F6E56" dominant-baseline="central">core 0.21.0，只依赖 zod</text>
+
+  <text x="40" y="152" font-size="11" fill="#4a5158" dominant-baseline="central">装上之后的顺序</text>
+
+  <rect x="40" y="176" width="126" height="52" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="103" y="196" text-anchor="middle" font-size="13" fill="#0C447C" dominant-baseline="central">Agent 后端</text>
+  <text x="103" y="216" text-anchor="middle" font-size="11" fill="#185FA5" dominant-baseline="central">编排与工具</text>
+
+  <line x1="168" y1="202" x2="250" y2="202" stroke="#185FA5" stroke-width="1.5" fill="none" marker-end="url(#arrowLayers)"/>
+  <text x="209" y="186" text-anchor="middle" font-size="10" fill="#4a5158" dominant-baseline="central">AG-UI 事件流</text>
+
+  <rect x="254" y="176" width="146" height="52" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="327" y="196" text-anchor="middle" font-size="13" fill="#0C447C" dominant-baseline="central">前端应用</text>
+  <text x="327" y="216" text-anchor="middle" font-size="11" fill="#185FA5" dominant-baseline="central">渲染器在这里</text>
+
+  <line x1="402" y1="202" x2="478" y2="202" stroke="#0F6E56" stroke-width="1.5" fill="none" marker-end="url(#arrowLayersB)"/>
+  <text x="440" y="186" text-anchor="middle" font-size="10" fill="#4a5158" dominant-baseline="central">A2UI 消息</text>
+
+  <rect x="482" y="176" width="158" height="52" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="561" y="196" text-anchor="middle" font-size="13" fill="#085041" dominant-baseline="central">渲染器</text>
+  <text x="561" y="216" text-anchor="middle" font-size="11" fill="#0F6E56" dominant-baseline="central">各端原生控件</text>
+
+  <rect x="40" y="252" width="600" height="34" rx="8" fill="#F7F6F3" stroke="#888780" stroke-width="0.5"/>
+  <text x="56" y="269" font-size="11" fill="#4a5158" dominant-baseline="central">json-render 不在线上跑，它站在最后一格：收到一份 spec，变成本端组件。</text>
+
+  <defs>
+    <marker id="arrowLayers" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrowLayersB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+</svg>

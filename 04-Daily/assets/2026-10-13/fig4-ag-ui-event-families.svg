@@ -1,0 +1,30 @@
+<svg viewBox="0 0 680 242" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>AG-UI 协议 1.0 的 8 个事件族按 3 种模式分组</title>
+  <desc>生命周期有运行与步骤、子智能体两族；流式有文本消息、工具调用、思考过程三族；快照加补丁有状态、活动两族；独立只有透传一族。只有运行生命周期是必须的，其余族消费者都要接得住。</desc>
+
+  <rect x="40" y="44" width="138" height="150" rx="8" fill="#FFFFFF" stroke="#B4B2A9" stroke-width="0.5"/>
+  <text x="52" y="66" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">生命周期</text>
+  <line x1="52" y1="80" x2="166" y2="80" stroke="#E5E7EB" stroke-width="0.5"/>
+  <text x="52" y="104" font-size="12" fill="#4a5158" dominant-baseline="central">运行与步骤</text>
+  <text x="52" y="126" font-size="12" fill="#4a5158" dominant-baseline="central">子智能体</text>
+
+  <rect x="188" y="44" width="138" height="150" rx="8" fill="#FFFFFF" stroke="#B4B2A9" stroke-width="0.5"/>
+  <text x="200" y="66" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">流式</text>
+  <line x1="200" y1="80" x2="314" y2="80" stroke="#E5E7EB" stroke-width="0.5"/>
+  <text x="200" y="104" font-size="12" fill="#4a5158" dominant-baseline="central">文本消息</text>
+  <text x="200" y="126" font-size="12" fill="#4a5158" dominant-baseline="central">工具调用</text>
+  <text x="200" y="148" font-size="12" fill="#4a5158" dominant-baseline="central">思考过程</text>
+
+  <rect x="336" y="44" width="138" height="150" rx="8" fill="#FFFFFF" stroke="#B4B2A9" stroke-width="0.5"/>
+  <text x="348" y="66" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">快照 + 补丁</text>
+  <line x1="348" y1="80" x2="462" y2="80" stroke="#E5E7EB" stroke-width="0.5"/>
+  <text x="348" y="104" font-size="12" fill="#4a5158" dominant-baseline="central">状态</text>
+  <text x="348" y="126" font-size="12" fill="#4a5158" dominant-baseline="central">活动</text>
+
+  <rect x="484" y="44" width="138" height="150" rx="8" fill="#FFFFFF" stroke="#B4B2A9" stroke-width="0.5"/>
+  <text x="496" y="66" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">独立</text>
+  <line x1="496" y1="80" x2="610" y2="80" stroke="#E5E7EB" stroke-width="0.5"/>
+  <text x="496" y="104" font-size="12" fill="#4a5158" dominant-baseline="central">透传</text>
+
+  <text x="340" y="218" text-anchor="middle" font-size="12" fill="#4a5158" dominant-baseline="central">8 个族，31 个事件类型。只有运行生命周期是必须的，其余族消费者都要接得住。</text>
+</svg>
