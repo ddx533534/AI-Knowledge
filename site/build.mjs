@@ -50,12 +50,6 @@ const CAT_META = {
     nav: '面试',
     intro: '计算机基础面试的成体系整理：结论先行、有图有据，覆盖网络、操作系统、数据结构、组成原理与数据库缓存。',
   },
-  Board: {
-    title: '备考看板',
-    nav: '看板',
-    pageDir: true,
-    intro: '自己用的工具页：逐日勾选任务、记录耗时与卡点、错题到期复习。数据只存在你自己的浏览器里，不会上传。',
-  },
 };
 
 /* ------------------------------------------------------------------ 工具 */
@@ -101,9 +95,6 @@ const stripInline = (s) =>
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/\*([^*]+)\*/g, '$1')
     .trim();
-
-/** 页面类栏目的 title 标记会被原样嵌进 <head>，做一次转义防护。 */
-const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
 /* ------------------------------------------------------- markdown 渲染 */
 
@@ -316,8 +307,6 @@ function slugId(s) {
 
 function discover() {
   const cats = [];
-  // 内容栏目按名字排序；页面类栏目（看板等工具页）排在导航最后，避免插在日报和面试中间
-  const catOrder = [];
   for (const name of fs.readdirSync(REPO).sort()) {
     const m = name.match(/^(\d\d)-(.+)$/);
     if (!m) continue;
@@ -325,14 +314,10 @@ function discover() {
     if (!fs.statSync(abs).isDirectory()) continue;
     const suffix = m[2];
     const meta = CAT_META[suffix] || {};
-    const pageDir = !!meta.pageDir;
-    if (!pageDir) catOrder.push(suffix.toLowerCase());
     cats.push({
       id: suffix.toLowerCase(),
       dir: abs,
       dirName: name,
-      pageDir,
-      exts: pageDir ? ['.html'] : ['.md'],
       title: meta.title || suffix,
       nav: meta.nav || suffix,
       intro: meta.intro || '',
@@ -340,14 +325,13 @@ function discover() {
     });
   }
 
-  const isIndex = (f) => /^(readme|index)\.(md|html)$/i.test(f);
   for (const cat of cats) {
     for (const f of fs.readdirSync(cat.dir).sort()) {
-      if (!cat.exts.some((e) => f.toLowerCase().endsWith(e))) continue;
-      if (isIndex(f)) continue;
+      if (!/\.md$/i.test(f)) continue;
+      if (/^(readme|index)\.md$/i.test(f)) continue;
       const abs = path.join(cat.dir, f);
       if (!fs.statSync(abs).isFile()) continue;
-      const slug = f.replace(/\.[a-z0-9]+$/i, '');
+      const slug = f.replace(/\.md$/i, '');
       const rel = path.relative(REPO, abs);
       const dm = slug.match(/^(\d{4}-\d{2}-\d{2})/);
       const date = dm ? dm[1] : gitDate(rel) || mtimeDate(abs);
@@ -355,11 +339,7 @@ function discover() {
     }
     cat.posts.sort((a, b) => String(b.date).localeCompare(String(a.date)) || a.slug.localeCompare(b.slug));
   }
-  return cats.filter((c) => c.posts.length).sort((a, b) => {
-    const ka = catOrder.includes(a.id) ? catOrder.indexOf(a.id) : catOrder.length + cats.indexOf(a);
-    const kb = catOrder.includes(b.id) ? catOrder.indexOf(b.id) : catOrder.length + cats.indexOf(b);
-    return ka - kb;
-  });
+  return cats.filter((c) => c.posts.length);
 }
 
 function prepare(post) {
@@ -372,17 +352,6 @@ function prepare(post) {
   }
   const { refs, text } = splitRefs(src);
   const lines = text.split('\n');
-
-  // 页面类栏目：丢进来的就是现成 HTML，正文原样使用，不套模板（文件名即标题）
-  if (post.cat.pageDir) {
-    post.title = post.slug;
-    post.summary = post.cat.intro;
-    post.minutes = 0;
-    post.refs = {};
-    post.src = '';
-    post.html = src;
-    return;
-  }
 
   let title = post.slug;
   for (const line of lines) {
@@ -422,17 +391,16 @@ function prepare(post) {
   );
   if (summary.length > 140) summary = `${summary.slice(0, 138)}…`;
 
-  const html = buildHtml(src, refs, figureFactory(post, 1));
-
+  const chars = text.replace(/\s/g, '').length;
   post.title = title;
   post.summary = summary;
-  post.minutes = Math.max(1, Math.round(text.replace(/\s/g, '').length / 400));
+  post.minutes = Math.max(1, Math.round(chars / 400));
   post.refs = refs;
   post.src = text;
-  post.html = html;
+  post.html = buildHtml(src, refs, figureFactory(post, 1));
 }
 
-/** 把一份 markdown 正文渲染成 HTML（不含标题行），文章页与工具页共用。 */
+/** 把一份 markdown 正文渲染成 HTML（不含标题行）。 */
 function buildHtml(src, refs, figure) {
   const ctx = { refs, figure: figure || (() => '') };
   return renderBlock(src.replace(/^#\s+.*$/m, ''), ctx);
@@ -466,7 +434,6 @@ function assetIndex(catAssetDir) {
  * <栏目>/assets/ 下递归查找——不少文档里只写了 figN-xxx.svg 这样的裸文件名。
  */
 function resolveImage(catDir, clean) {
-  if (/^https?:\/\//i.test(clean)) return clean;
   const direct = path.resolve(catDir, clean);
   if (fs.existsSync(direct) && fs.statSync(direct).isFile()) return direct;
   const hit = assetIndex(path.join(catDir, 'assets')).get(path.basename(clean));
@@ -477,47 +444,35 @@ function figureFactory(post, depth) {
   const catAssetDir = path.join(post.cat.dir, 'assets');
   return (alt, src, hint) => {
     const clean = String(src).trim();
-    const w = hint && /w=(\d+)/.exec(hint);
-    const style = w ? ` style="max-width:${w[1]}px"` : '';
-    const cap = stripInline(alt);
-    const caption = cap ? `<figcaption>${esc(cap)}</figcaption>` : '';
     if (/^https?:\/\//i.test(clean)) {
-      return `<figure class="fig"><img src="${esc(clean)}" alt="${esc(cap)}"${style}>${caption}</figure>`;
+      const w = hint && /w=(\d+)/.exec(hint);
+      return `<figure class="fig"><img src="${esc(clean)}" alt="${esc(stripInline(alt))}"${
+        w ? ` style="max-width:${w[1]}px"` : ''
+      }>${alt ? `<figcaption>${esc(stripInline(alt))}</figcaption>` : ''}</figure>`;
     }
     const abs = resolveImage(post.cat.dir, clean);
     if (!abs) {
       return `<figure class="fig missing"><figcaption>图片缺失：${esc(clean)}</figcaption></figure>`;
     }
-    // 挪进来的现成 HTML 页面：图片就放在页面旁边，直接引用相对路径即可
-    if (path.extname(abs).toLowerCase() === '.html') {
-      return `<figure class="fig self"><figcaption>交互页面：<a href="${esc(enc(clean))}">${esc(
-        cap || clean,
-      )}</a></figcaption></figure>`;
-    }
     const relFromAssets = path.relative(catAssetDir, abs).split(path.sep).join('/');
     const url = `${relPrefix(depth)}assets/${post.cat.id}/${enc(relFromAssets)}`;
-    return `<figure class="fig"><img src="${esc(url)}" alt="${esc(cap)}" loading="lazy"${style}>${caption}</figure>`;
+    const w = hint && /w=(\d+)/.exec(hint);
+    const style = w ? ` style="max-width:${w[1]}px"` : '';
+    const cap = stripInline(alt);
+    return `<figure class="fig"><img src="${esc(url)}" alt="${esc(cap)}" loading="lazy"${style}>${
+      cap ? `<figcaption>${esc(cap)}</figcaption>` : ''
+    }</figure>`;
   };
 }
 
 /* -------------------------------------------------------------- 模板 */
 
-/** 栏目名可能在栏目页里被改写（如「备考看板」写成「每日备考看板」），记下来给导航用。 */
-const post_titles = new Map();
-
-/** nav 元素的标签名可能带 class（页面类栏目自己也渲染了侧边栏），统一按栏目真实信息重算。 */
-function navInner(active, depth, cats, labelOf) {
+function layout({ depth, title, desc, body, cats, active, latest }) {
   const p = relPrefix(depth);
-  const items = [
+  const nav = [
     { id: null, label: '首页', href: `${p}index.html`, n: null },
-    ...cats.map((c) => ({
-      id: c.id,
-      label: post_titles.get(c.id) || (labelOf && labelOf(c)) || c.nav || c.title,
-      href: `${p}${c.pageDir ? `${c.id}/index.html` : `${c.id}/`}`,
-      n: c.pageDir ? null : c.posts.length,
-    })),
-  ];
-  return items
+    ...cats.map((c) => ({ id: c.id, label: c.nav, href: `${p}${c.id}/`, n: c.posts.length })),
+  ]
     .map(
       (it) =>
         `<a href="${it.href}"${active === it.id ? ' class="on"' : ''}>${esc(it.label)}${
@@ -525,21 +480,6 @@ function navInner(active, depth, cats, labelOf) {
         }</a>`,
     )
     .join('');
-}
-
-function navHtml(active, depth, cats, labelOf) {
-  return `<nav class="nav">${navInner(active, depth, cats, labelOf)}</nav>`;
-}
-
-/** 页面类栏目自带侧边栏，构建时替换成按真实栏目算出来的版本，避免手写链接失效。 */
-function freshNav(html, depth, cats, active) {
-  if (!/<nav class="nav">[\s\S]*?<\/nav>/i.test(html)) return html;
-  return html.replace(/<nav class="nav">[\s\S]*?<\/nav>/i, navHtml(active, depth, cats));
-}
-
-function layout({ depth, title, desc, body, cats, active, latest }) {
-  const p = relPrefix(depth);
-  const items = navInner(active, depth, cats);
   return `<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -562,7 +502,7 @@ function layout({ depth, title, desc, body, cats, active, latest }) {
         <span class="brand-sub">${esc(SITE.sub)}</span>
       </span>
     </a>
-    <nav class="nav">${items}</nav>
+    <nav class="nav">${nav}</nav>
     <p class="side-foot">${latest ? `更新至 <b>${esc(latest)}</b>` : ''}</p>
   </div>
 </aside>
@@ -585,7 +525,6 @@ ${body}
 function postItem(post, depth) {
   const p = relPrefix(depth);
   const href = `${p}${post.cat.id}/${enc(post.slug)}.html`;
-  const meta = post.cat.pageDir ? '工具页 · 点开即用' : `约 ${post.minutes} 分钟`;
   return `<article class="item">
   <div class="item-d">
     ${post.date ? `<time>${esc(post.date)}</time>` : ''}
@@ -594,7 +533,7 @@ function postItem(post, depth) {
   <div class="item-b">
     <a class="item-t" href="${href}">${esc(post.title)}</a>
     ${post.summary ? `<p class="item-s">${esc(post.summary)}</p>` : ''}
-    <p class="item-m">${esc(meta)}</p>
+    <p class="item-m">约 ${post.minutes} 分钟</p>
   </div>
 </article>`;
 }
@@ -613,15 +552,6 @@ function main() {
 
   for (const cat of cats) cat.posts.forEach(prepare);
 
-  // 先读一遍页面类栏目的手写首页，把自定义标题登记好，免得后面生成的页面还叫目录名
-  for (const cat of cats) {
-    if (!cat.pageDir) continue;
-    const custom = path.join(SITE_DIR, `${cat.id}-index.html`);
-    if (!fs.existsSync(custom)) continue;
-    const t = fs.readFileSync(custom, 'utf8').match(/<title>([^<]*)<\/title>/i);
-    if (t && t[1].trim()) post_titles.set(cat.id, t[1].trim());
-  }
-
   fs.rmSync(DIST, { recursive: true, force: true });
   fs.mkdirSync(DIST, { recursive: true });
   fs.copyFileSync(path.join(SITE_DIR, 'style.css'), path.join(DIST, 'style.css'));
@@ -631,12 +561,6 @@ function main() {
     if (fs.existsSync(from)) {
       fs.cpSync(from, path.join(DIST, 'assets', cat.id), { recursive: true });
     }
-    if (!cat.pageDir) continue;
-    // 页面类栏目：整目录搬过去，另外把项目 README 也带出去供直接下载
-    fs.mkdirSync(path.join(DIST, cat.id), { recursive: true });
-    fs.cpSync(cat.dir, path.join(DIST, cat.id), { recursive: true });
-    const readme = path.join(cat.dir, 'README.md');
-    if (fs.existsSync(readme)) fs.copyFileSync(readme, path.join(DIST, cat.id, 'README.md'));
   }
 
   const all = cats.flatMap((c) => c.posts).sort((a, b) => String(b.date).localeCompare(String(a.date)));
@@ -675,44 +599,6 @@ ${cats
 
   // 栏目页
   for (const cat of cats) {
-    // 页面类栏目：有手写的 site/<id>-index.html 就直接用它，标题靠文件里声明的
-    if (cat.pageDir) {
-      const custom = path.join(SITE_DIR, `${cat.id}-index.html`);
-      const idxPath = path.join(DIST, cat.id, 'index.html');
-      if (fs.existsSync(custom)) {
-        let html = fs.readFileSync(custom, 'utf8');
-        const t = html.match(/<title>([^<]*)<\/title>/i);
-        const d = html.match(/<meta name="description" content="([^"]*)"/i);
-        const titleOf = (t && t[1].trim()) || cat.title;
-        post_titles.set(cat.id, titleOf);
-        cat.linkTitle = titleOf;
-        const head =
-          `<title>${esc(titleOf)} · ${esc(SITE.title)}</title>\n` +
-          `<meta name="description" content="${esc(d ? d[1] : cat.intro || SITE.desc)}">`;
-        html = /<title>[\s\S]*?<\/title>/i.test(html)
-          ? html.replace(/<title>[\s\S]*?<\/title>[\s\S]*?(?=<link rel="stylesheet")/i, `${head}\n`)
-          : html;
-        html = freshNav(html, `${cat.id}/`, cats, cat.id);
-        fs.writeFileSync(idxPath, html);
-      } else {
-        const body = `<nav class="crumb"><a href="../index.html">首页</a><span>/</span>${esc(cat.title)}</nav>
-<h1 class="page-t">${esc(cat.title)}</h1>
-${cat.intro ? `<p class="lede">${esc(cat.intro)}</p>` : ''}`;
-        fs.writeFileSync(
-          idxPath,
-          layout({
-            depth: 1,
-            title: `${cat.title} · ${SITE.title}`,
-            desc: cat.intro || SITE.desc,
-            body,
-            cats,
-            active: cat.id,
-            latest,
-          }),
-        );
-      }
-      continue;
-    }
     const body = `<nav class="crumb"><a href="../index.html">首页</a><span>/</span>${esc(cat.title)}</nav>
 <h1 class="page-t">${esc(cat.title)}</h1>
 ${cat.intro ? `<p class="lede">${esc(cat.intro)}</p>` : ''}
@@ -738,20 +624,7 @@ ${cat.intro ? `<p class="lede">${esc(cat.intro)}</p>` : ''}
     const idx = cat.posts;
     for (let n = 0; n < idx.length; n += 1) {
       const post = idx[n];
-      const ctx = { refs: post.refs, figure: figureFactory(post, 1) };
-      const html = post.html != null ? post.html : renderBlock(post.src.replace(/^#\s+.*$/m, ''), ctx);
-      fs.mkdirSync(path.join(DIST, cat.id), { recursive: true });
-
-      // 页面类栏目：现成 HTML 直接落盘，用其它栏目拼好的精确侧边栏替掉它自己那份
-      if (cat.pageDir) {
-        const fixed = cat.exts.includes('.html')
-          ? post.html.replace(/<nav class="nav">[\s\S]*?<\/nav>/i, navHtml(cat.id, 1, cats))
-          : post.html;
-        fs.writeFileSync(path.join(DIST, cat.id, `${post.slug}.html`), fixed);
-        written += 1;
-        continue;
-      }
-
+      const html = post.html;
       const prev = idx[n - 1];
       const next = idx[n + 1];
       const linkOf = (x) => `../${x.cat.id}/${enc(x.slug)}.html`;
