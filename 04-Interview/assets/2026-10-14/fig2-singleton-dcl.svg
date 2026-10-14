@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="420" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">单例 DCL 的字节码：「分配 → 初始化 → 赋值」为何需要 volatile</text>
+
+  <!-- 正确顺序 -->
+  <rect x="40" y="56" width="350" height="140" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="1.6"/>
+  <text x="215" y="80" text-anchor="middle" font-size="12.5" font-weight="600" fill="#166534">正确顺序（禁止重排时）</text>
+  <rect x="60" y="94" width="310" height="26" rx="3" fill="#f0fdf4" stroke="#6ee7b7"/>
+  <text x="74" y="112" font-size="11" fill="#14532d">① new       分配内存（字段为默认值）</text>
+  <rect x="60" y="124" width="310" height="26" rx="3" fill="#f0fdf4" stroke="#6ee7b7"/>
+  <text x="74" y="142" font-size="11" fill="#14532d">② invokespecial  调构造器，初始化</text>
+  <rect x="60" y="154" width="310" height="26" rx="3" fill="#f0fdf4" stroke="#6ee7b7"/>
+  <text x="74" y="172" font-size="11" fill="#14532d">③ putstatic    把引用赋给 instance</text>
+
+  <!-- 错误顺序 -->
+  <rect x="410" y="56" width="350" height="140" rx="6" fill="#fee2e2" stroke="#f87171" stroke-width="1.6"/>
+  <text x="585" y="80" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7f1d1d">JMM 允许的 ②③ 重排</text>
+  <rect x="430" y="94" width="310" height="26" rx="3" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="444" y="112" font-size="11" fill="#7f1d1d">① new       分配内存</text>
+  <rect x="430" y="124" width="310" height="26" rx="3" fill="#fecaca" stroke="#ef4444"/>
+  <text x="444" y="142" font-size="11" font-weight="600" fill="#7f1d1d">③ putstatic  先赋值 → instance != null</text>
+  <rect x="430" y="154" width="310" height="26" rx="3" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="444" y="172" font-size="11" fill="#7f1d1d">② invokespecial  还没来得及初始化</text>
+
+  <line x1="400" y1="86" x2="400" y2="180" stroke="#94a3b8" stroke-dasharray="4 3"/>
+  <!-- 另一个线程 -->
+  <rect x="80" y="212" width="640" height="42" rx="5" fill="#fef3c7" stroke="#fbbf24"/>
+  <text x="96" y="234" font-size="11" fill="#78350f">另一线程在第一次检查看到 instance != null → 直接 return → 拿到字段全默认值的「半初始化对象」</text>
+  <text x="96" y="250" font-size="10.5" font-weight="600" fill="#b45309">这就是 DCL 必须加 volatile 的唯一原因：禁止 ②③ 重排</text>
+
+  <!-- 三种写法 -->
+  <text x="40" y="288" font-size="12.5" font-weight="600" fill="#1e40af">三种写法的实际防御能力</text>
+  <rect x="40" y="300" width="240" height="106" rx="5" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="160" y="322" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e40af">DCL + volatile</text>
+  <text x="56" y="344" font-size="10.5" fill="#1e3a8a">✓ 多线程安全</text>
+  <text x="56" y="364" font-size="10.5" fill="#b91c1c">✗ 反射可造第二个</text>
+  <text x="56" y="384" font-size="10.5" fill="#b91c1c">✗ 反序列化可造新对象</text>
+  <text x="56" y="402" font-size="10.5" fill="#475569">并发场景可用</text>
+
+  <rect x="290" y="300" width="230" height="106" rx="5" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="405" y="322" text-anchor="middle" font-size="11.5" font-weight="600" fill="#166534">静态内部类</text>
+  <text x="306" y="344" font-size="10.5" fill="#14532d">✓ 多线程安全（&lt;clinit&gt;）</text>
+  <text x="306" y="364" font-size="10.5" fill="#b91c1c">✗ 反射同样可破</text>
+  <text x="306" y="384" font-size="10.5" fill="#14532d">✓ 天然延迟加载</text>
+  <text x="306" y="402" font-size="10.5" fill="#475569">无需 synchronized</text>
+
+  <rect x="530" y="300" width="230" height="106" rx="5" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.6"/>
+  <text x="645" y="322" text-anchor="middle" font-size="11.5" font-weight="600" fill="#92400e">枚举 ★ 最推荐</text>
+  <text x="546" y="344" font-size="10.5" fill="#78350f">✓ 反射抛 IllegalArgumentException</text>
+  <text x="546" y="364" font-size="10.5" fill="#78350f">✓ 反序列化走 readEnum 返回同一实例</text>
+  <text x="546" y="384" font-size="10.5" fill="#78350f">✓ 类加载保证单例</text>
+  <text x="546" y="402" font-size="10.5" font-weight="600" fill="#b45309">《Effective Java》Item 3 推荐</text>
+</svg>

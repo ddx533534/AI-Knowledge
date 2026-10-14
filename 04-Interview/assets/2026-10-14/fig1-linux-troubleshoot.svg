@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" width="800" height="440" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="440" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">排查命令链：症状分流，以及「文件删除不释放」的 inode 机制</text>
+
+  <!-- 四个症状 -->
+  <rect x="30" y="52" width="182" height="126" rx="5" fill="#fee2e2" stroke="#f87171"/>
+  <text x="121" y="74" text-anchor="middle" font-size="12" font-weight="600" fill="#7f1d1d">CPU 100%</text>
+  <text x="44" y="96" font-size="10" fill="#7f1d1d">top → top -Hp PID</text>
+  <text x="44" y="114" font-size="10" fill="#7f1d1d">printf '%x' TID</text>
+  <text x="44" y="132" font-size="10" fill="#7f1d1d">jstack PID | grep nid</text>
+  <text x="44" y="152" font-size="10" font-weight="600" fill="#b91c1c">先看 %us/%sy/%wa/%hi</text>
+  <text x="44" y="170" font-size="10" fill="#b91c1c">%wa 高 → 等 IO，加 CPU 无用</text>
+
+  <rect x="222" y="52" width="182" height="126" rx="5" fill="#fef3c7" stroke="#fbbf24"/>
+  <text x="313" y="74" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">内存高</text>
+  <text x="236" y="96" font-size="10" fill="#78350f">free -h</text>
+  <text x="236" y="114" font-size="10" fill="#78350f">top -o %MEM</text>
+  <text x="236" y="132" font-size="10" fill="#78350f">jmap -histo / -dump</text>
+  <text x="236" y="152" font-size="10" font-weight="600" fill="#b45309">看 available，不是 used</text>
+  <text x="236" y="170" font-size="10" fill="#b45309">buff/cache 可回收</text>
+
+  <rect x="414" y="52" width="182" height="126" rx="5" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="505" y="74" text-anchor="middle" font-size="12" font-weight="600" fill="#1e40af">磁盘满</text>
+  <text x="428" y="96" font-size="10" fill="#1e3a8a">df -h</text>
+  <text x="428" y="114" font-size="10" fill="#1e3a8a">df -i（inode 是否耗尽）</text>
+  <text x="428" y="132" font-size="10" fill="#1e3a8a">du -sh /* | sort -rh</text>
+  <text x="428" y="152" font-size="10" font-weight="600" fill="#1d4ed8">lsof +L1</text>
+  <text x="428" y="170" font-size="10" fill="#1d4ed8">查已删仍持句柄的文件</text>
+
+  <rect x="606" y="52" width="164" height="126" rx="5" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="688" y="74" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">连不上</text>
+  <text x="620" y="96" font-size="10" fill="#14532d">ss -lntp</text>
+  <text x="620" y="114" font-size="10" fill="#14532d">netstat -an</text>
+  <text x="620" y="132" font-size="10" fill="#14532d">tcpdump -i eth0</text>
+  <text x="620" y="152" font-size="10" font-weight="600" fill="#15803d">CLOSE_WAIT 堆积</text>
+  <text x="620" y="170" font-size="10" fill="#15803d">= 应用没 close，代码 bug</text>
+
+  <!-- inode 机制 -->
+  <text x="30" y="212" font-size="12.5" font-weight="600" fill="#92400e">「文件删了空间不释放」的机制：unlink 只减链接计数，进程仍持有 inode</text>
+
+  <rect x="30" y="226" width="150" height="60" rx="4" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="105" y="248" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">dentry（目录项）</text>
+  <text x="105" y="268" text-anchor="middle" font-size="10" fill="#64748b">file.log → inode #123</text>
+
+  <line x1="180" y1="256" x2="226" y2="256" stroke="#64748b" stroke-width="1.6"/>
+  <polygon points="226,256 216,251 216,261" fill="#64748b"/>
+  <text x="203" y="248" text-anchor="middle" font-size="9.5" fill="#b91c1c">rm → unlink</text>
+
+  <rect x="230" y="226" width="200" height="60" rx="4" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="330" y="248" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">inode #123（仍存在）</text>
+  <text x="330" y="268" text-anchor="middle" font-size="10" fill="#b91c1c">nlink = 0，但 i_count = 1</text>
+
+  <line x1="430" y1="256" x2="476" y2="256" stroke="#64748b" stroke-width="1.6"/>
+  <polygon points="476,256 466,251 466,261" fill="#64748b"/>
+  <text x="453" y="248" text-anchor="middle" font-size="9.5" fill="#334155">被引用</text>
+
+  <rect x="480" y="226" width="290" height="60" rx="4" fill="#fef3c7" stroke="#fbbf24"/>
+  <text x="494" y="248" font-size="10.5" font-weight="600" fill="#78350f">进程的 struct file（fd 表项）</text>
+  <text x="494" y="268" font-size="10.5" fill="#92400e">数据块不释放 → df 显示仍占用</text>
+
+  <!-- 解法 -->
+  <rect x="30" y="298" width="740" height="42" rx="5" fill="#f0fdf4" stroke="#6ee7b7"/>
+  <text x="46" y="318" font-size="11" font-weight="600" fill="#065f46">正确处理：用 `> file.log`（截断）而不是 `rm file.log`；已 rm 则重启进程释放 fd，或从 /proc/&lt;PID&gt;/fd/&lt;n&gt; 恢复内容</text>
+  <text x="46" y="335" font-size="10.5" fill="#047857">只有「nlink == 0 且 i_count == 0」两个条件同时满足，内核才真正释放这个 inode 的数据块。</text>
+
+  <!-- 另两个坑 -->
+  <rect x="30" y="352" width="363" height="76" rx="5" fill="#fee2e2" stroke="#f87171"/>
+  <text x="46" y="373" font-size="11.5" font-weight="600" fill="#7f1d1d">CLOSE_WAIT ≠ TIME_WAIT</text>
+  <text x="46" y="393" font-size="10.5" fill="#7f1d1d">CLOSE_WAIT：对方已 FIN，我**没** close → 代码 bug</text>
+  <text x="46" y="413" font-size="10.5" fill="#7f1d1d">TIME_WAIT：**我**主动关，等待 TCP_TIMEWAIT_LEN</text>
+
+  <rect x="407" y="352" width="363" height="76" rx="5" fill="#fef3c7" stroke="#fbbf24"/>
+  <text x="423" y="373" font-size="11.5" font-weight="600" fill="#92400e">僵尸 vs 孤儿</text>
+  <text x="423" y="393" font-size="10.5" fill="#78350f">僵尸：已退出但父进程没 wait → **kill 无效**</text>
+  <text x="423" y="413" font-size="10.5" fill="#78350f">孤儿：父进程先退出，被 init 收养 → 无害</text>
+</svg>

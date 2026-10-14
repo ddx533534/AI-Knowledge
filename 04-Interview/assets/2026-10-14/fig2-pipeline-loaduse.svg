@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="420" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">load-use 冒险的时空图：为什么转发也救不了，必须插气泡</text>
+
+  <!-- 表头 -->
+  <text x="60" y="62" font-size="11.5" font-weight="600" fill="#334155">周期 →</text>
+  <g font-size="10" fill="#64748b" text-anchor="middle">
+    <text x="200" y="62">C1</text>
+    <text x="270" y="62">C2</text>
+    <text x="340" y="62">C3</text>
+    <text x="410" y="62">C4</text>
+    <text x="480" y="62">C5</text>
+    <text x="550" y="62">C6</text>
+    <text x="620" y="62">C7</text>
+  </g>
+
+  <!-- lw 行 -->
+  <text x="60" y="92" font-size="11" font-weight="600" fill="#1e40af">lw x1, 0(x2)</text>
+  <rect x="176" y="76" width="60" height="24" rx="3" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="206" y="92" text-anchor="middle" font-size="10" fill="#1e40af">IF</text>
+  <rect x="246" y="76" width="60" height="24" rx="3" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="276" y="92" text-anchor="middle" font-size="10" fill="#1e40af">ID</text>
+  <rect x="316" y="76" width="60" height="24" rx="3" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="346" y="92" text-anchor="middle" font-size="10" fill="#1e40af">EX</text>
+  <rect x="386" y="76" width="60" height="24" rx="3" fill="#fca5a5" stroke="#ef4444"/>
+  <text x="416" y="92" text-anchor="middle" font-size="10" font-weight="600" fill="#7f1d1d">MEM</text>
+  <rect x="456" y="76" width="60" height="24" rx="3" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="486" y="92" text-anchor="middle" font-size="10" fill="#1e40af">WB</text>
+  <text x="540" y="92" font-size="10" fill="#b91c1c">← 数据在 MEM 末才有效</text>
+
+  <!-- stall 行 -->
+  <text x="60" y="128" font-size="11" font-weight="600" fill="#92400e">stall（气泡）</text>
+  <rect x="246" y="112" width="60" height="24" rx="3" fill="#fef3c7" stroke="#fbbf24" stroke-dasharray="4 3"/>
+  <text x="276" y="128" text-anchor="middle" font-size="10" font-weight="600" fill="#92400e">ID</text>
+  <rect x="316" y="112" width="60" height="24" rx="3" fill="#fef3c7" stroke="#fbbf24" stroke-dasharray="4 3"/>
+  <text x="346" y="128" text-anchor="middle" font-size="10" font-weight="600" fill="#b45309">bubble</text>
+  <text x="410" y="128" font-size="10" fill="#b45309">← 必须等 lw 的数据</text>
+
+  <!-- add 行 -->
+  <text x="60" y="164" font-size="11" font-weight="600" fill="#166534">add x3, x1, x4</text>
+  <rect x="246" y="148" width="60" height="24" rx="3" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="276" y="164" text-anchor="middle" font-size="10" fill="#166534">IF</text>
+  <rect x="316" y="148" width="60" height="24" rx="3" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="346" y="164" text-anchor="middle" font-size="10" fill="#166534">ID</text>
+  <rect x="386" y="148" width="60" height="24" rx="3" fill="#86efac" stroke="#22c55e"/>
+  <text x="416" y="164" text-anchor="middle" font-size="10" font-weight="600" fill="#14532d">EX</text>
+  <rect x="456" y="148" width="60" height="24" rx="3" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="486" y="164" text-anchor="middle" font-size="10" fill="#166534">MEM</text>
+  <rect x="526" y="148" width="60" height="24" rx="3" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="556" y="164" text-anchor="middle" font-size="10" fill="#166534">WB</text>
+
+  <!-- 转发箭头 -->
+  <line x1="516" y1="100" x2="416" y2="146" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="5 3"/>
+  <polygon points="416,146 426,142 421,137" fill="#dc2626"/>
+  <text x="470" y="112" font-size="10" font-weight="600" fill="#dc2626">WB→EX 转发</text>
+
+  <!-- 说明 -->
+  <rect x="40" y="196" width="720" height="92" rx="5" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="56" y="218" font-size="11.5" font-weight="600" fill="#334155">为什么转发救不了 load-use</text>
+  <text x="56" y="240" font-size="10.5" fill="#475569">其他指令（如 add）结果在 <tspan font-weight="600">EX 段末</tspan>就有，下一条在 EX 段开始前刚好能转发（EX→EX 捷径）。</text>
+  <text x="56" y="260" font-size="10.5" fill="#475569">而 lw 的数据要等 <tspan font-weight="600">MEM 段结束</tspan>才从内存取回——时间上赶不上下一条的 EX 输入，转也无从转起。</text>
+  <text x="56" y="280" font-size="10.5" font-weight="600" fill="#b91c1c">唯一解法：插一个气泡，让 add 的 EX 推迟到 lw 的 WB 之后，再走「WB→EX 转发」。</text>
+
+  <!-- 分支预测 -->
+  <rect x="40" y="300" width="720" height="106" rx="5" fill="#fee2e2" stroke="#f87171"/>
+  <text x="56" y="322" font-size="11.5" font-weight="600" fill="#7f1d1d">流水线越深，分支预测错误代价越大</text>
+  <text x="56" y="344" font-size="10.5" fill="#7f1d1d">现代 CPU 流水线 10–20 级甚至更多；预测错误要清空已取入的错误指令，损失数十周期。</text>
+  <text x="56" y="366" font-size="10.5" fill="#7f1d1d">准确率 99%：每 5 条指令 1 个分支 → 浪费 ≈ 0.04 周期/指令</text>
+  <text x="56" y="386" font-size="10.5" fill="#7f1d1d">准确率 90%：浪费 ≈ 0.4 周期/指令 —— 在 CPI ≈ 1 的基准上，这是 <tspan font-weight="600">40% 的性能差异</tspan></text>
+  <text x="416" y="386" font-size="10.5" fill="#b91c1c">这就是分支预测是高 IPC 关键的原因</text>
+</svg>

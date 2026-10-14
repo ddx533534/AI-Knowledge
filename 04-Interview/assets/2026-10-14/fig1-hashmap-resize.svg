@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="420" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">HashMap：位运算索引、树化阈值与扩容的 hi/lo 拆分</text>
+
+  <!-- 索引 -->
+  <rect x="40" y="56" width="350" height="120" rx="5" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="56" y="80" font-size="12.5" font-weight="600" fill="#1e40af">索引：为什么容量必须是 2 的幂</text>
+  <text x="56" y="104" font-size="11" fill="#1e3a8a">目标：hash % n　→　hash &amp; (n - 1)</text>
+  <text x="56" y="126" font-size="10.5" fill="#1e3a8a">n = 16：n-1 = 0b01111（低位全 1）→ 等价取模 ✓</text>
+  <text x="56" y="146" font-size="10.5" fill="#1e3a8a">n = 10：n-1 = 0b01001（位不连续）→ 不等价 ✗</text>
+  <text x="56" y="166" font-size="10.5" font-weight="600" fill="#1d4ed8">代价：只用低位 → 故 hash() 里 h ^ (h &gt;&gt;&gt; 16)</text>
+
+  <!-- 树化阈值 -->
+  <rect x="410" y="56" width="350" height="120" rx="5" fill="#fef3c7" stroke="#fbbf24"/>
+  <text x="426" y="80" font-size="12.5" font-weight="600" fill="#92400e">阈值：泊松分布 λ = 0.5 算出来的</text>
+  <text x="426" y="102" font-size="10.5" fill="#78350f">桶内 7 个节点概率 0.00000094</text>
+  <text x="426" y="122" font-size="10.5" fill="#78350f">桶内 8 个节点概率 <tspan font-weight="600">0.00000006（6e-8）</tspan></text>
+  <text x="426" y="144" font-size="10.5" fill="#78350f">TREEIFY = 8 ／ UNTREEIFY = 6（留滞后区间防抖动）</text>
+  <text x="426" y="164" font-size="10.5" font-weight="600" fill="#b45309">MIN_TREEIFY_CAPACITY = 64：不足先扩容</text>
+
+  <!-- 扩容 -->
+  <text x="40" y="206" font-size="12.5" font-weight="600" fill="#1e40af">扩容 resize：一位判断决定元素命运</text>
+
+  <rect x="40" y="220" width="90" height="46" rx="4" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="85" y="240" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e40af">oldCap = 16</text>
+  <text x="85" y="258" text-anchor="middle" font-size="10" fill="#1e3a8a">新容量 = 32</text>
+
+  <line x1="130" y1="243" x2="176" y2="243" stroke="#64748b" stroke-width="1.6"/>
+  <polygon points="176,243 166,238 166,248" fill="#64748b"/>
+
+  <rect x="180" y="212" width="250" height="62" rx="4" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="196" y="232" font-size="11" font-weight="600" fill="#166534">hash &amp; oldCap == 0</text>
+  <text x="196" y="252" font-size="10.5" fill="#14532d">留在原位 j（loHead / loTail 链）</text>
+  <text x="196" y="268" font-size="10" fill="#15803d">保持链内相对顺序</text>
+
+  <rect x="450" y="212" width="310" height="62" rx="4" fill="#fee2e2" stroke="#f87171"/>
+  <text x="466" y="232" font-size="11" font-weight="600" fill="#7f1d1d">hash &amp; oldCap != 0</text>
+  <text x="466" y="252" font-size="10.5" fill="#7f1d1d">移到 j + oldCap（hiHead / hiTail 链）</text>
+  <text x="466" y="268" font-size="10" fill="#b91c1c">JDK 8 相对 JDK 7 的关键改进</text>
+
+  <!-- 底部 -->
+  <rect x="40" y="292" width="720" height="52" rx="5" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="56" y="314" font-size="11" font-weight="600" fill="#334155">JDK 7 头插法的后果</text>
+  <text x="56" y="334" font-size="10.5" fill="#475569">头插 + 并发扩容 → 链表逆序 + 指针交叉 → 形成环形链表 → get 死循环（CPU 100%）。JDK 8 改尾插 + hi/lo 拆分后消除。</text>
+
+  <rect x="40" y="356" width="720" height="52" rx="5" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="56" y="378" font-size="11" font-weight="600" fill="#1e40af">负载因子 0.75 的取舍（源码注释原话）</text>
+  <text x="56" y="398" font-size="10.5" fill="#1e3a8a">「在时间与空间开销之间取得良好折中」：更高 → 省空间但冲突/查找变慢；更低 → 浪费空间但冲突少。</text>
+</svg>

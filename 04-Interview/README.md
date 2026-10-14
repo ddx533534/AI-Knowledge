@@ -7,22 +7,24 @@
 ### 计算机基础
 
 - [[计算机网络面试知识体系]] — **深水区**：TIME_WAIT 的内核处理与 PAWS、连接管理细节、RTO/SACK 的真实代价、Reno→CUBIC→BBR、三层队头阻塞、TLS 1.3 与前向安全。（2026-10-14 按源码/规范级重写）
-- [[操作系统面试知识体系]] — 用户态/内核态、进程与线程、CPU 调度、同步与死锁、虚拟内存与地址翻译、写时复制、IO 模型与多路复用。
-- [[数据结构与算法面试知识体系]] — 复杂度分析、线性结构、哈希、树与图、排序、查找、动态规划套路。
-- [[计算机组成原理面试知识体系]] — 冯·诺依曼与哈佛结构、数据表示、存储层次与 Cache、流水线与冒险、总线与 IO。
+- [[操作系统面试知识体系]] — **深水区**：`epoll` 的 `eventpoll`/`epitem` 与 LT/ET 的「一行 `list_add_tail`」、CFS 的 `vruntime` 与 `sched_prio_to_weight`、fork 的 COW 真实代价、malloc 的 128KB 阈值、futex 快慢路径、条件变量为什么必须 while。（2026-10-14 按源码级重写）
+- [[数据结构与算法面试知识体系]] — **深水区**：HashMap 的泊松阈值与 `hash & oldCap` 扩容拆分、红黑树 vs AVL 的旋转次数、B+ 树扇出、建堆 O(n) 推导、introsort 三部件、背包逆序的因果、并查集 α(n)、Dijkstra 非负权前提。（2026-10-14 按源码/常量级重写）
+- [[计算机组成原理面试知识体系]] — **深水区**：补码的范围不对称、IEEE 754 阶码偏移与非规格化数、Cache 地址划分与 64 字节伪共享、多级 AMAT 展开、`load-use` 为什么转发救不了、Amdahl 上限。（2026-10-14 按规格/可计算级重写）
 - [[数据库与缓存面试知识体系]] — **深水区**：B+ 树扇出估算与页分裂、MVCC 四条可见性分支、行锁与索引的因果链、redo/binlog 2PC、Redis 过期删除源码、渐进式 rehash、RDB 的 COW 代价。（2026-10-14 按源码级重写）
 
 ### 软件设计与系统
 
-- [[面向对象与设计模式面试知识体系]] — SOLID 六大原则、23 种模式分类、代理/装饰器、策略/状态、观察者/发布订阅等易混对比、单例的几种写法。
-- [[系统设计与分布式面试知识体系]] — CAP 与 BASE、一致性模型、Raft 共识、分布式事务、分布式锁、限流熔断降级、一致性哈希、分库分表、缓存体系、消息队列、答题模板。
-- [[Linux 与工程实践面试知识体系]] — 按症状分流的排查命令链、进程与信号、文件系统与 inode、Git 协作、Docker 基础。
+- [[面向对象与设计模式面试知识体系]] — **深水区**：里氏替换的行为契约、DCL 的字节码三步与 volatile、枚举单例的防御机制、代理/装饰器/适配器的目的分界、桥接/策略同构、观察者的持锁坑、Spring 与 JDK 里的类名落点。（2026-10-14 按源码/类名级重写）
+- [[系统设计与分布式面试知识体系]] — **深水区**：CAP 的误读纠正与 PACELC、一致性模型阶梯、Raft 选主与提交规则、分布式锁的三层与 fencing token、限流算法的令牌桶实现、一致性哈希的原论文前提、RocketMQ 顺序消息与事务消息。（2026-10-14 按论文/源码级重写）
+- [[Linux 与工程实践面试知识体系]] — **深水区**：CPU 高要分辨 `%wa`、`available` 与可回收页缓存、`unlink` 与硬链接计数的空间不释放机制、CLOSE_WAIT 是代码 bug、僵尸进程 kill 无效的原因、Git 的 blob/tree/commit 与 reset 三棵树、namespace/cgroups 与分层存储。（2026-10-14 按手册/机制级重写）
 
 ### 方法论
 
-- [[面试方法论与答题框架]] — 算法题四步法、Blind 75 模式识别、系统设计七步、行为面 STAR、反向提问、全流程时间线。
+- [[面试方法论与答题框架]] — **深水区**：评分四维度里三个靠说、算法题四步（含卡住时怎么办）、按模式刷而非按题号、系统设计时间分配、STAR 的底层假设与完整示例、反向提问清单。（2026-10-14 按框架来源级重写）
 
-> 对标仓库：CyC2018/CS-Notes、Snailclimb/JavaGuide、jwasham/coding-interview-university、donnemartin/system-design-primer、yangshun/tech-interview-handbook、doocs/advanced-java、kdn251/interviews。
+> 对标仓库：CyC2018/CS-Notes、Snailclimb/JavaGuide、jwasham/coding-interview-university、donnemartin/system-design-primer、yangshun/tech-interview-handbook、doocs/advanced-java、kdn251/interviews、xiaolincoder/CS-Base、iluwatar/java-design-patterns。
+
+> **全部 9 篇已于 2026-10-14 按「源码/规范级 + 追问链」深度标准重写完毕。**
 
 ## 写法约定
 

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="420" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">epoll 的双结构：红黑树存注册集合，就绪链表由回调填充</text>
+
+  <!-- 用户态 API -->
+  <rect x="40" y="58" width="720" height="56" rx="5" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="56" y="80" font-size="12" font-weight="600" fill="#1e40af">用户态 API</text>
+  <text x="56" y="101" font-size="11" fill="#1e3a8a">epoll_create1() 建 eventpoll ｜ epoll_ctl(ADD/MOD/DEL) 增删改注册项 ｜ epoll_wait() 取就绪事件</text>
+
+  <!-- eventpoll 结构体 -->
+  <rect x="40" y="132" width="720" height="180" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.6"/>
+  <text x="56" y="155" font-size="13" font-weight="600" fill="#334155">struct eventpoll（fs/eventpoll.c）</text>
+
+  <!-- rbr -->
+  <rect x="60" y="170" width="330" height="126" rx="5" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="76" y="192" font-size="12" font-weight="600" fill="#1e40af">rbr：红黑树根（注册集合）</text>
+  <text x="76" y="212" font-size="10.5" fill="#1e3a8a">struct rb_root_cached rb_root</text>
+  <text x="76" y="232" font-size="10.5" fill="#1e3a8a">所有 epoll_ctl 注册的 fd 长期挂在这里</text>
+  <text x="76" y="252" font-size="10.5" fill="#1e3a8a">增删查 O(log n)</text>
+  <text x="76" y="276" font-size="10.5" font-weight="600" fill="#1d4ed8">epoll_wait 不遍历这棵树</text>
+
+  <!-- rdllist -->
+  <rect x="410" y="170" width="330" height="126" rx="5" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="426" y="192" font-size="12" font-weight="600" fill="#166534">rdllist：就绪链表</text>
+  <text x="426" y="212" font-size="10.5" fill="#14532d">struct list_head rdllist</text>
+  <text x="426" y="232" font-size="10.5" fill="#14532d">只放当前已就绪的 fd（临时）</text>
+  <text x="426" y="252" font-size="10.5" fill="#14532d">epoll_wait 只从这条链上摘</text>
+  <text x="426" y="276" font-size="10.5" font-weight="600" fill="#15803d">ovflist：扫描期溢出单链表</text>
+
+  <!-- 回调 -->
+  <rect x="40" y="330" width="720" height="34" rx="5" fill="#fffbeb" stroke="#fcd34d"/>
+  <text x="56" y="352" font-size="11.5" font-weight="600" fill="#92400e">事件就绪 → 内核回调 ep_poll_callback() → 把 epitem 挂到 rdllist（内核主动，不是轮询）</text>
+
+  <!-- LT / ET -->
+  <rect x="40" y="372" width="352" height="34" rx="5" fill="#fef3c7" stroke="#fbbf24"/>
+  <text x="56" y="393" font-size="11" fill="#78350f"><tspan font-weight="600">LT</tspan>：ep_send_events 里 list_add_tail 挂回 rdllist</text>
+  <rect x="408" y="372" width="352" height="34" rx="5" fill="#fee2e2" stroke="#f87171"/>
+  <text x="424" y="393" font-size="11" fill="#7f1d1d"><tspan font-weight="600">ET</tspan>：不挂回；新数据＝新边沿才再通知</text>
+</svg>

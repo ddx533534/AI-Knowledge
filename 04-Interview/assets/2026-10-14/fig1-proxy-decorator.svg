@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="400" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">代理 vs 装饰器 vs 适配器：目的决定分类，不是层数</text>
+
+  <!-- 代理 -->
+  <rect x="40" y="60" width="230" height="150" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
+  <text x="155" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">代理 Proxy</text>
+  <text x="56" y="108" font-size="11" font-weight="600" fill="#1d4ed8">目的：控制访问</text>
+  <text x="56" y="128" font-size="10.5" fill="#1e3a8a">客户端不感知原对象</text>
+  <text x="56" y="148" font-size="10.5" fill="#1e3a8a">代理自己管理被代理对象</text>
+  <text x="56" y="172" font-size="10.5" fill="#475569">Spring AOP · MapperProxy</text>
+  <text x="56" y="192" font-size="10.5" fill="#475569">unmodifiableList（分类有争议）</text>
+  <text x="155" y="198" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1d4ed8">门卫</text>
+
+  <!-- 装饰器 -->
+  <rect x="285" y="60" width="230" height="150" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="1.6"/>
+  <text x="400" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="#166534">装饰器 Decorator</text>
+  <text x="301" y="108" font-size="11" font-weight="600" fill="#15803d">目的：增强功能</text>
+  <text x="301" y="128" font-size="10.5" fill="#14532d">客户端感知，可多层套娃</text>
+  <text x="301" y="148" font-size="10.5" fill="#14532d">递归持有，接口不变</text>
+  <text x="301" y="172" font-size="10.5" fill="#475569">BufferedInputStream</text>
+  <text x="301" y="192" font-size="10.5" fill="#475569">synchronizedList · 压缩+加密</text>
+  <text x="400" y="198" text-anchor="middle" font-size="10.5" font-weight="600" fill="#15803d">洋葱</text>
+
+  <!-- 适配器 -->
+  <rect x="530" y="60" width="230" height="150" rx="6" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.6"/>
+  <text x="645" y="84" text-anchor="middle" font-size="13" font-weight="600" fill="#92400e">适配器 Adapter</text>
+  <text x="546" y="108" font-size="11" font-weight="600" fill="#b45309">目的：接口转换</text>
+  <text x="546" y="128" font-size="10.5" fill="#78350f">改变接口（签名变了）</text>
+  <text x="546" y="148" font-size="10.5" fill="#78350f">不增强功能，只做翻译</text>
+  <text x="546" y="172" font-size="10.5" fill="#475569">InputStreamReader</text>
+  <text x="546" y="192" font-size="10.5" fill="#475569">SLF4J bindings · Arrays.asList</text>
+  <text x="645" y="198" text-anchor="middle" font-size="10.5" font-weight="600" fill="#b45309">翻译官</text>
+
+  <!-- 关键分界 -->
+  <rect x="40" y="228" width="720" height="60" rx="5" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="56" y="250" font-size="11.5" font-weight="600" fill="#334155">关键分界（一个能立刻判别的问法）</text>
+  <text x="56" y="272" font-size="10.5" fill="#475569">调用方<b>根本不知道</b>有一层存在 → 代理（如 Spring AOP）；调用方<b>明确知道</b>自己套了几层 → 装饰器（如 new BufferedInputStream(...)）。</text>
+
+  <!-- 分类不绝对 -->
+  <rect x="40" y="300" width="720" height="76" rx="5" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="56" y="322" font-size="11.5" font-weight="600" fill="#1e40af">「模式分类不绝对」——面试说出这一类边界最能加分</text>
+  <text x="56" y="344" font-size="10.5" fill="#1e3a8a">· Collections.unmodifiableList：GoF 常判为代理（控制写），用法是装饰器（套在另一个 List 外）</text>
+  <text x="56" y="364" font-size="10.5" fill="#1e3a8a">· 桥接（Bridge）与策略（Strategy）类图同构，差别只在意图：两维度独立变化 vs 单维度替换</text>
+</svg>

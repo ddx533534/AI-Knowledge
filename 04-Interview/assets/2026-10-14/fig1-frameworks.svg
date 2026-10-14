@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="400" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">面试官评分四维度：只有一个是「写代码」，其余三个靠「说」</text>
+
+  <!-- 四维度 -->
+  <rect x="40" y="56" width="170" height="96" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
+  <text x="125" y="80" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e40af">问题理解</text>
+  <text x="56" y="104" font-size="10.5" fill="#1e3a8a">抓需求、问关键问题</text>
+  <text x="56" y="126" font-size="10.5" font-weight="600" fill="#1d4ed8">← 澄清阶段展示</text>
+  <text x="56" y="145" font-size="10" fill="#64748b">「他以后会先确认需求」</text>
+
+  <rect x="222" y="56" width="170" height="96" rx="6" fill="#dcfce7" stroke="#22c55e" stroke-width="1.6"/>
+  <text x="307" y="80" text-anchor="middle" font-size="12.5" font-weight="600" fill="#166534">问题解决</text>
+  <text x="238" y="104" font-size="10.5" fill="#14532d">思路完整性、能否优化</text>
+  <text x="238" y="126" font-size="10.5" font-weight="600" fill="#15803d">← 讲思路阶段展示</text>
+  <text x="238" y="145" font-size="10" fill="#64748b">暴力解 → 优化 的叙事</text>
+
+  <rect x="404" y="56" width="170" height="96" rx="6" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.6"/>
+  <text x="489" y="80" text-anchor="middle" font-size="12.5" font-weight="600" fill="#92400e">编码能力</text>
+  <text x="420" y="104" font-size="10.5" fill="#78350f">正确、清晰、边界</text>
+  <text x="420" y="126" font-size="10.5" font-weight="600" fill="#b45309">← 唯一看「写」的维度</text>
+  <text x="420" y="145" font-size="10" fill="#64748b">主动自测是加分项</text>
+
+  <rect x="586" y="56" width="174" height="96" rx="6" fill="#fee2e2" stroke="#f87171" stroke-width="1.6"/>
+  <text x="673" y="80" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7f1d1d">沟通协作</text>
+  <text x="602" y="104" font-size="10.5" fill="#7f1d1d">说清想法、接受提示</text>
+  <text x="602" y="126" font-size="10.5" font-weight="600" fill="#b91c1c">← 全程展示</text>
+  <text x="602" y="145" font-size="10" fill="#64748b">沉默是最大负面信号</text>
+
+  <!-- 结论 -->
+  <rect x="40" y="166" width="720" height="42" rx="5" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="56" y="186" font-size="11.5" font-weight="600" fill="#1e40af">核心结论：四个维度里只有一个是「写代码」，其余三个都靠「说」——</text>
+  <text x="56" y="202" font-size="10.5" fill="#1e3a8a">这就是「技术很强但讲不清」容易挂的原因：他只在 1/4 的维度上得分。</text>
+
+  <!-- 三类框架 -->
+  <text x="40" y="238" font-size="12.5" font-weight="600" fill="#334155">三类问题各有固定套路</text>
+
+  <rect x="40" y="252" width="232" height="116" rx="5" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="156" y="274" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e40af">算法题：四步</text>
+  <text x="56" y="296" font-size="10.5" fill="#1e3a8a">① 澄清（规模/性质/边界/返回值）</text>
+  <text x="56" y="316" font-size="10.5" fill="#1e3a8a">② 讲思路（暴力解 → 优化）</text>
+  <text x="56" y="336" font-size="10.5" fill="#1e3a8a">③ 编码（模块化 + 边写边讲）</text>
+  <text x="56" y="356" font-size="10.5" fill="#1e3a8a">④ 测试（正常 + 边界 + 特殊）</text>
+
+  <rect x="284" y="252" width="232" height="116" rx="5" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="400" y="274" text-anchor="middle" font-size="11.5" font-weight="600" fill="#166534">系统设计：七步</text>
+  <text x="300" y="296" font-size="10.5" fill="#14532d">① 需求澄清（0–5 min）</text>
+  <text x="300" y="316" font-size="10.5" fill="#14532d">② 容量估算　③ 接口 + 数据模型</text>
+  <text x="300" y="336" font-size="10.5" fill="#14532d">④ 高层架构　⑤ 深入一个组件</text>
+  <text x="300" y="356" font-size="10.5" fill="#14532d">⑥ 瓶颈与权衡　⑦ 扩展方向</text>
+
+  <rect x="528" y="252" width="232" height="116" rx="5" fill="#fef3c7" stroke="#fbbf24"/>
+  <text x="644" y="274" text-anchor="middle" font-size="11.5" font-weight="600" fill="#92400e">行为面：STAR</text>
+  <text x="544" y="296" font-size="10.5" fill="#78350f">S 情境 / T 任务</text>
+  <text x="544" y="316" font-size="10.5" fill="#78350f">A 行动（占一半以上）</text>
+  <text x="544" y="336" font-size="10.5" fill="#78350f">R 结果（必须量化）</text>
+  <text x="544" y="356" font-size="10" fill="#b45309">＋ 学到了什么（反思闭环）</text>
+</svg>

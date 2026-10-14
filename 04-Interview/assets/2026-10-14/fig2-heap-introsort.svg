@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="420" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">建堆为什么是 O(n)，以及 introsort 的三个部件</text>
+
+  <!-- 建堆 -->
+  <text x="40" y="60" font-size="12.5" font-weight="600" fill="#1e40af">建堆 O(n)：自底向上下沉，越靠下的节点越多但深度越浅</text>
+
+  <!-- 树 -->
+  <circle cx="180" cy="96" r="15" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="180" y="101" text-anchor="middle" font-size="10" fill="#1e40af">h=3</text>
+  <circle cx="120" cy="140" r="15" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="120" y="145" text-anchor="middle" font-size="10" fill="#1e40af">h=2</text>
+  <circle cx="240" cy="140" r="15" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="240" y="145" text-anchor="middle" font-size="10" fill="#1e40af">h=2</text>
+  <circle cx="90" cy="184" r="14" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="90" y="189" text-anchor="middle" font-size="9.5" fill="#166534">h=1</text>
+  <circle cx="150" cy="184" r="14" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="150" y="189" text-anchor="middle" font-size="9.5" fill="#166534">h=1</text>
+  <circle cx="210" cy="184" r="14" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="210" y="189" text-anchor="middle" font-size="9.5" fill="#166534">h=1</text>
+  <circle cx="270" cy="184" r="14" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="270" y="189" text-anchor="middle" font-size="9.5" fill="#166534">h=1</text>
+  <line x1="180" y1="111" x2="120" y2="125" stroke="#94a3b8"/>
+  <line x1="180" y1="111" x2="240" y2="125" stroke="#94a3b8"/>
+  <line x1="120" y1="155" x2="90" y2="170" stroke="#94a3b8"/>
+  <line x1="120" y1="155" x2="150" y2="170" stroke="#94a3b8"/>
+  <line x1="240" y1="155" x2="210" y2="170" stroke="#94a3b8"/>
+  <line x1="240" y1="155" x2="270" y2="170" stroke="#94a3b8"/>
+
+  <!-- 推导 -->
+  <rect x="330" y="70" width="430" height="128" rx="5" fill="#f0fdf4" stroke="#6ee7b7"/>
+  <text x="346" y="92" font-size="11.5" font-weight="600" fill="#065f46">代价推导（等比数列收敛）</text>
+  <text x="346" y="114" font-size="10.5" fill="#064e3b">高度 h 的节点 ≤ ⌈n / 2^(h+1)⌉，每个下沉 ≤ h 层</text>
+  <text x="346" y="136" font-size="10.5" fill="#064e3b">总代价 ≤ n × Σ (h / 2^(h+1))</text>
+  <text x="346" y="158" font-size="10.5" fill="#064e3b">Σ h/2^h 收敛到常数 2　→　总代价 = O(n)</text>
+  <text x="346" y="182" font-size="10.5" font-weight="600" fill="#047857">对比：逐个插入建堆 = n × O(log n) = O(n log n)</text>
+
+  <!-- introsort -->
+  <text x="40" y="240" font-size="12.5" font-weight="600" fill="#92400e">introsort：三个部件各司其职（std::sort）</text>
+
+  <rect x="40" y="254" width="228" height="86" rx="5" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="56" y="276" font-size="11.5" font-weight="600" fill="#1e40af">① 快速排序（主力）</text>
+  <text x="56" y="298" font-size="10.5" fill="#1e3a8a">平均常数最小</text>
+  <text x="56" y="316" font-size="10.5" fill="#1e3a8a">缓存友好</text>
+  <text x="56" y="334" font-size="10" fill="#1d4ed8">三路划分处理大量重复元素</text>
+
+  <rect x="286" y="254" width="228" height="86" rx="5" fill="#fee2e2" stroke="#f87171"/>
+  <text x="302" y="276" font-size="11.5" font-weight="600" fill="#7f1d1d">② 堆排兜底</text>
+  <text x="302" y="298" font-size="10.5" fill="#7f1d1d">递归深度 &gt; 2·⌊log₂n⌋ 时切换</text>
+  <text x="302" y="316" font-size="10.5" fill="#7f1d1d">把最坏从 O(n²) 拉回 O(n log n)</text>
+  <text x="302" y="334" font-size="10" fill="#b91c1c">存在的唯一目的：防攻击性输入</text>
+
+  <rect x="532" y="254" width="228" height="86" rx="5" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="548" y="276" font-size="11.5" font-weight="600" fill="#166534">③ 插入排序收尾</text>
+  <text x="548" y="298" font-size="10.5" fill="#14532d">小区间（约 ≤ 16）改用插入</text>
+  <text x="548" y="316" font-size="10.5" fill="#14532d">小数组上常数比递归快排小</text>
+  <text x="548" y="334" font-size="10" fill="#15803d">近乎有序时接近 O(n)</text>
+
+  <!-- 底部 -->
+  <rect x="40" y="356" width="720" height="52" rx="5" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="56" y="378" font-size="11" font-weight="600" fill="#1e40af">Java 的分层选择</text>
+  <text x="56" y="398" font-size="10.5" fill="#1e3a8a">基本类型 int[] → 双轴快排（不稳定但快）；对象 Object[] → TimSort（稳定，识别自然有序 run）。稳定性只对对象有意义，所以代价只在需要时付出。</text>
+</svg>
