@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 250" width="680" height="250" role="img">
+  <rect x="0" y="0" width="680" height="250" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="679" height="249" rx="6" fill="none" stroke="#e5e7eb"/>
+
+  <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">推理服务视角：把「这一次要处理的所有请求」整体当成一组输入</text>
+
+  <rect x="40" y="56" width="180" height="60" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+  <text x="130" y="80" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#1c1f24">同一组用户请求</text>
+  <text x="130" y="100" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">含同时进来的其他请求</text>
+
+  <line x1="228" y1="86" x2="256" y2="86" stroke="#8a929b" stroke-width="1.2"/>
+  <path d="M260 86l-6-4v8z" fill="#8a929b"/>
+
+  <rect x="264" y="56" width="160" height="60" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+  <text x="344" y="84" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#1c1f24">前向计算</text>
+  <text x="344" y="104" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">无 atomic add</text>
+
+  <line x1="432" y1="86" x2="460" y2="86" stroke="#8a929b" stroke-width="1.2"/>
+  <path d="M464 86l-6-4v8z" fill="#8a929b"/>
+
+  <rect x="468" y="56" width="172" height="60" rx="4" fill="#eef3f8" stroke="#2f5d8a"/>
+  <text x="554" y="80" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#2f5d8a">输出</text>
+  <text x="554" y="100" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#2f5d8a">还是同一组，就逐位相同</text>
+
+  <line x1="40" y1="146" x2="640" y2="146" stroke="#e5e7eb" stroke-width="1"/>
+
+  <text x="40" y="180" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13.5" fill="#4a5158">维基百科对确定性算法的定义是：给定某个特定输入，永远产出相同的输出。</text>
+  <text x="40" y="206" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13.5" fill="#4a5158">这里「输入」是服务端这一次要处理的全部请求，所以前向计算确实满足这个定义。</text>
+  <text x="40" y="234" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">问题在于：单个用户没法把自己的请求当成完整输入 —— 他控制不了旁边还有谁在同时提问。</text>
+</svg>

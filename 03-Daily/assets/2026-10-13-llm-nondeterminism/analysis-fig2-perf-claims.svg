@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 372" width="680" height="372" role="img">
+  <rect x="0" y="0" width="680" height="372" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="679" height="371" rx="6" fill="none" stroke="#e5e7eb"/>
+
+  <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">同一份数据，换一个统计区间，批不变矩阵乘的吞吐损失从 17% 变到 13%</text>
+
+  <line x1="486" y1="62" x2="486" y2="266" stroke="#e5e7eb" stroke-width="1"/>
+
+  <line x1="70" y1="214" x2="460" y2="214" stroke="#c9ced6" stroke-width="1"/>
+
+  <line x1="70" y1="104" x2="460" y2="104" stroke="#b3402f" stroke-width="1" stroke-dasharray="6 4"/>
+  <text x="70" y="96" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#b3402f">原文正文的说法：约损失 20%</text>
+
+  <rect x="100" y="122" width="110" height="92" fill="#fae5cc" stroke="#c2761a"/>
+  <text x="155" y="114" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="15" fill="#a8641a">16.8%</text>
+
+  <rect x="240" y="142" width="110" height="72" fill="#d6e3f0" stroke="#2f5d8a"/>
+  <text x="295" y="134" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="15" fill="#2f5d8a">13.1%</text>
+
+  <rect x="380" y="145" width="80" height="69" fill="#dcecdf" stroke="#2f7d4f"/>
+  <text x="420" y="137" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="15" fill="#2f7d4f">12.5%</text>
+
+  <text x="155" y="238" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#1c1f24">全部 1023 个点平均</text>
+  <text x="155" y="256" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11.5" fill="#8a929b">batch 8 到 8184</text>
+
+  <text x="295" y="238" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#1c1f24">batch ≥ 2048 平均</text>
+  <text x="295" y="256" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11.5" fill="#8a929b">进入常规服务区间后</text>
+
+  <text x="420" y="238" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#1c1f24">batch ≥ 4000 平均</text>
+  <text x="420" y="256" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11.5" fill="#8a929b">最靠近大 batch 生产</text>
+
+  <text x="504" y="92" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">vLLM 官方文档</text>
+  <text x="504" y="116" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">只写「开启后可能</text>
+  <text x="504" y="134" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">影响性能」，没给</text>
+  <text x="504" y="152" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">任何具体数值，也</text>
+  <text x="504" y="170" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">没有复述 20%。</text>
+
+  <text x="504" y="206" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">所以「值不值」只能</text>
+  <text x="504" y="224" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">按自己业务的 batch</text>
+  <text x="504" y="242" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">分布重算一遍。</text>
+
+  <line x1="40" y1="278" x2="640" y2="278" stroke="#e5e7eb" stroke-width="1"/>
+
+  <text x="40" y="302" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#4a5158">原文正文的 20% 更接近「全区间平均」这个口径（算出来是 16.8%），不算写错；</text>
+  <text x="40" y="324" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#4a5158">只是它没交代口径，读者容易把它当成「大 batch 下的损失」。</text>
+  <text x="40" y="348" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#4a5158">同一篇文章里，凡是讲 batch 影响的结论，必须带上区间才可用。</text>
+</svg>

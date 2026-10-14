@@ -1,0 +1,28 @@
+<svg viewBox="0 0 680 250" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>一次流式响应里 84 次更新都送了什么</title>
+  <desc>一份 6341 个字符的响应在 18.7 秒里发了 84 次更新。其中 52 次连整段编译后的程序一起重发，14 次只是文字变长，10 次停在没写完的标签里界面不动，另有 5 次送图片结果、1 次建消息、2 次标记完成。</desc>
+
+  <text x="24" y="30" font-size="12" font-weight="500" fill="#2C2C2A">一次响应的 84 次更新</text>
+  <text x="656" y="30" text-anchor="end" font-size="11.5" fill="#444441">共 6341 个字符，文字流了 18.7 秒</text>
+
+  <rect x="24" y="44" width="391" height="40" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <rect x="415" y="44" width="105" height="40" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <rect x="520" y="44" width="75" height="40" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <rect x="595" y="44" width="38" height="40" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <rect x="633" y="44" width="23" height="40" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+
+  <text x="219" y="64" text-anchor="middle" font-size="13" font-weight="500" fill="#633806" dominant-baseline="central">52</text>
+
+  <text x="24" y="112" font-size="12" fill="#854F0B">■ 连整段程序一起重发</text>
+  <text x="24" y="134" font-size="11.5" fill="#444441">程序是一整段嵌套表达式，末尾括号每次变，只能整段替换</text>
+
+  <text x="360" y="112" font-size="12" fill="#185FA5">■ 只是文字变长，程序没动</text>
+  <text x="360" y="134" font-size="11.5" fill="#444441">14 次</text>
+
+  <text x="520" y="112" font-size="12" fill="#444441">■ 停在没写完的标签里</text>
+  <text x="520" y="134" font-size="11.5" fill="#444441">10 次，界面不动</text>
+
+  <rect x="24" y="162" width="632" height="68" rx="10" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+  <text x="44" y="186" font-size="12.5" font-weight="500" fill="#791F1F" dominant-baseline="central">重发的程序占了这次补丁体积的 83%</text>
+  <text x="44" y="210" font-size="11.5" fill="#A32D2D" dominant-baseline="central">总补丁约 275 KB。更新间隔中位数 230 毫秒，整段重编译约每 290 毫秒一次</text>
+</svg>

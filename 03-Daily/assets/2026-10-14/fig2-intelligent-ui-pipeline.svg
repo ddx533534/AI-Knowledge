@@ -1,0 +1,48 @@
+<svg viewBox="0 0 680 320" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>ChatGPT 智能界面的四段链路</title>
+  <desc>模型写出 DIL，服务端把这段文本编译成一段 JavaScript 程序加一份 JSON 数据，客户端在沙箱里跑这段程序并算出界面操作，页面再拿自己的原生组件画出来。用户拖动滑块时由沙箱重算并回传操作，不调用模型。</desc>
+
+  <rect x="24" y="28" width="140" height="92" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="94" y="50" text-anchor="middle" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">模型</text>
+  <text x="94" y="72" text-anchor="middle" font-size="11.5" fill="#185FA5" dominant-baseline="central">写 DIL：Markdown</text>
+  <text x="94" y="90" text-anchor="middle" font-size="11.5" fill="#185FA5" dominant-baseline="central">加类 JSX 标签</text>
+  <text x="94" y="108" text-anchor="middle" font-size="11.5" fill="#185FA5" dominant-baseline="central">加 JavaScript</text>
+
+  <rect x="186" y="28" width="150" height="92" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="261" y="50" text-anchor="middle" font-size="13" font-weight="500" fill="#633806" dominant-baseline="central">服务端编译</text>
+  <text x="261" y="72" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">补全半截的输出</text>
+  <text x="261" y="90" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">静态文字挪进常量表</text>
+  <text x="261" y="108" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">属性对不上就删掉</text>
+
+  <rect x="358" y="28" width="150" height="92" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="433" y="50" text-anchor="middle" font-size="13" font-weight="500" fill="#633806" dominant-baseline="central">沙箱里跑</text>
+  <text x="433" y="72" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">隐藏 iframe 里的 Worker</text>
+  <text x="433" y="90" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">先摘掉网络和定时器</text>
+  <text x="433" y="108" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">算完输出界面操作</text>
+
+  <rect x="530" y="28" width="126" height="92" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="593" y="50" text-anchor="middle" font-size="13" font-weight="500" fill="#27500A" dominant-baseline="central">页面画</text>
+  <text x="593" y="72" text-anchor="middle" font-size="11.5" fill="#3B6D11" dominant-baseline="central">用 ChatGPT 自己的</text>
+  <text x="593" y="90" text-anchor="middle" font-size="11.5" fill="#3B6D11" dominant-baseline="central">原生组件，约 70 个</text>
+  <text x="593" y="108" text-anchor="middle" font-size="11.5" fill="#3B6D11" dominant-baseline="central">只认已知组件类型</text>
+
+  <line x1="166" y1="74" x2="184" y2="74" stroke="#888780" stroke-width="1"/>
+  <path d="M184 74 l-7 -4 l0 8 z" fill="#888780"/>
+  <line x1="338" y1="74" x2="356" y2="74" stroke="#888780" stroke-width="1"/>
+  <path d="M356 74 l-7 -4 l0 8 z" fill="#888780"/>
+  <line x1="510" y1="74" x2="528" y2="74" stroke="#888780" stroke-width="1"/>
+  <path d="M528 74 l-7 -4 l0 8 z" fill="#888780"/>
+
+  <rect x="210" y="152" width="260" height="60" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="340" y="174" text-anchor="middle" font-size="12" fill="#444441" dominant-baseline="central">用户拖滑块：回调只传一个函数编号</text>
+  <text x="340" y="194" text-anchor="middle" font-size="12" fill="#444441" dominant-baseline="central">沙箱改状态、重新渲染、回传操作</text>
+
+  <path d="M470 170 C 520 170, 540 150, 560 122" fill="none" stroke="#888780" stroke-width="1"/>
+  <path d="M560 122 l-8 3 l3 7 z" fill="#888780"/>
+  <path d="M210 170 C 160 170, 140 150, 120 122" fill="none" stroke="#888780" stroke-width="1"/>
+  <path d="M120 122 l5 7 l4 -5 z" fill="#888780"/>
+
+  <rect x="210" y="240" width="260" height="52" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="340" y="258" text-anchor="middle" font-size="12.5" font-weight="500" fill="#27500A" dominant-baseline="central">这一步里模型调用次数是 0</text>
+  <text x="340" y="278" text-anchor="middle" font-size="11.5" fill="#3B6D11" dominant-baseline="central">界面自己能响应，不用再问一遍模型</text>
+</svg>

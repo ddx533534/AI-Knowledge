@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 396" width="680" height="396" role="img">
+  <rect x="0" y="0" width="680" height="396" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="679" height="395" rx="6" fill="none" stroke="#e5e7eb"/>
+
+  <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">两条看上去都说得通的链路，只有下面那条通到用户</text>
+
+  <text x="40" y="66" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#8a929b">被文章推翻的那条：只说到「kernel 结果会变」就停了</text>
+
+  <rect x="40" y="80" width="140" height="52" rx="4" fill="#f2f3f5" stroke="#d5d9df"/>
+  <text x="110" y="102" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">浮点不可结合</text>
+  <text x="110" y="120" text-anchor="middle" font-family="Menlo, Consolas, monospace" font-size="11.5" fill="#8a929b">(a+b)+c ≠ a+(b+c)</text>
+
+  <line x1="188" y1="106" x2="212" y2="106" stroke="#c9ced6" stroke-width="1.2"/>
+  <path d="M216 106l-6-4v8z" fill="#c9ced6"/>
+
+  <rect x="224" y="80" width="140" height="52" rx="4" fill="#f2f3f5" stroke="#d5d9df"/>
+  <text x="294" y="102" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">并发完成顺序不定</text>
+  <text x="294" y="120" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11.5" fill="#8a929b">原子加 / fetch-and-add</text>
+
+  <line x1="372" y1="106" x2="396" y2="106" stroke="#c9ced6" stroke-width="1.2"/>
+  <path d="M400 106l-6-4v8z" fill="#c9ced6"/>
+
+  <rect x="408" y="80" width="232" height="52" rx="4" fill="#f2f3f5" stroke="#d5d9df"/>
+  <text x="524" y="102" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">归约顺序变 → kernel 结果变</text>
+  <text x="524" y="120" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11.5" fill="#8a929b">这就是 run-to-run 不确定性</text>
+
+  <text x="40" y="156" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#b3402f">✗ 反例：LLM 一次前向计算里一个原子加都没有；同一份数据反复做同一个矩阵乘，结果永远逐位相同。</text>
+  <text x="40" y="176" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#b3402f">　 这条链只能解释「某些 kernel 自己会飘」，解释不了用户看到的不确定性。</text>
+
+  <line x1="40" y1="198" x2="640" y2="198" stroke="#e5e7eb" stroke-width="1"/>
+
+  <text x="40" y="228" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#2f5d8a">文章给出的那条：绕开了「前向计算本身是否确定」这个问题</text>
+
+  <rect x="40" y="242" width="140" height="52" rx="4" fill="#ffffff" stroke="#2f5d8a"/>
+  <text x="110" y="266" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#2f5d8a">每一行的结果</text>
+  <text x="110" y="284" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#2f5d8a">随 batch 大小改变</text>
+
+  <line x1="188" y1="268" x2="212" y2="268" stroke="#8a929b" stroke-width="1.2"/>
+  <path d="M216 268l-6-4v8z" fill="#8a929b"/>
+
+  <rect x="224" y="242" width="140" height="52" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+  <text x="294" y="266" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#1c1f24">batch 大小由</text>
+  <text x="294" y="284" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#1c1f24">当时的服务负载决定</text>
+
+  <line x1="372" y1="268" x2="396" y2="268" stroke="#8a929b" stroke-width="1.2"/>
+  <path d="M400 268l-6-4v8z" fill="#8a929b"/>
+
+  <rect x="408" y="242" width="140" height="52" rx="4" fill="#ffffff" stroke="#d5d9df"/>
+  <text x="478" y="266" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#1c1f24">负载本身</text>
+  <text x="478" y="284" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#1c1f24">对用户不可知</text>
+
+  <line x1="556" y1="268" x2="580" y2="268" stroke="#8a929b" stroke-width="1.2"/>
+  <path d="M584 268l-6-4v8z" fill="#8a929b"/>
+
+  <rect x="592" y="242" width="48" height="52" rx="4" fill="#fae9e6" stroke="#b3402f"/>
+  <text x="616" y="266" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#b3402f">结果</text>
+  <text x="616" y="284" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#b3402f">不同</text>
+
+  <text x="40" y="322" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#2f5d8a">✓ 「前向计算是确定的」和「用户拿到不确定的结果」可以同时为真，</text>
+  <text x="40" y="342" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#2f5d8a">　 因为用户控制不了自己旁边有谁在同时提问。</text>
+  <text x="40" y="368" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#4a5158">　 所以解法方向不是「让浮点变可结合」，而是「让每一行的计算不关心 batch 里有谁」——这就是批不变性。</text>
+</svg>

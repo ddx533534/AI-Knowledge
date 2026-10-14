@@ -1,0 +1,35 @@
+<svg viewBox="0 0 680 356" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>React Native 两个端侧引擎的实测对比</title>
+  <desc>按同一套 Zod 结构校验，ExecuTorch 跑 Llama 3.2 1B、把 schema 放进提示词时 20 次通过 2 次；改成给例子并加一步修复后 10 次通过 6 次；Apple 的引导生成 20 次全部通过。代价方面，ExecuTorch 首次使用要下载 1.14 GB，Apple 不用下载，但第一次调用要 9.7 到 19.2 秒。</desc>
+
+  <text x="24" y="28" font-size="12.5" font-weight="500" fill="#2C2C2A">结构化输出通过率（同一套 schema 校验）</text>
+
+  <text x="24" y="62" font-size="11.5" fill="#444441" dominant-baseline="central">ExecuTorch　schema 放进提示词</text>
+  <rect x="24" y="74" width="520" height="22" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <rect x="24" y="74" width="52" height="22" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+  <text x="556" y="86" font-size="12" font-weight="500" fill="#791F1F" dominant-baseline="central">2 / 20</text>
+
+  <text x="24" y="122" font-size="11.5" fill="#444441" dominant-baseline="central">ExecuTorch　给例子加修复步骤</text>
+  <rect x="24" y="134" width="520" height="22" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <rect x="24" y="134" width="312" height="22" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="556" y="146" font-size="12" font-weight="500" fill="#633806" dominant-baseline="central">6 / 10</text>
+
+  <text x="24" y="182" font-size="11.5" fill="#444441" dominant-baseline="central">Apple 引导生成</text>
+  <rect x="24" y="194" width="520" height="22" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <rect x="24" y="194" width="520" height="22" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="556" y="206" font-size="12" font-weight="500" fill="#27500A" dominant-baseline="central">20 / 20</text>
+
+  <text x="24" y="240" font-size="12.5" font-weight="500" fill="#2C2C2A">首次使用的代价</text>
+
+  <rect x="24" y="254" width="304" height="86" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="44" y="276" font-size="12.5" font-weight="500" fill="#633806" dominant-baseline="central">ExecuTorch 加 1B 模型</text>
+  <text x="44" y="298" font-size="11.5" fill="#854F0B" dominant-baseline="central">要下 1.14 GB，6 分 12 秒</text>
+  <text x="44" y="316" font-size="11.5" fill="#854F0B" dominant-baseline="central">每次启动加载 4.4 到 5.3 秒</text>
+  <text x="44" y="332" font-size="11.5" fill="#854F0B" dominant-baseline="central">首次出字 0.6 到 0.8 秒</text>
+
+  <rect x="352" y="254" width="304" height="86" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="372" y="276" font-size="12.5" font-weight="500" fill="#0C447C" dominant-baseline="central">Apple 系统模型</text>
+  <text x="372" y="298" font-size="11.5" fill="#185FA5" dominant-baseline="central">不用下载，跑在系统进程里</text>
+  <text x="372" y="316" font-size="11.5" fill="#185FA5" dominant-baseline="central">第一次调用要 9.7 到 19.2 秒</text>
+  <text x="372" y="332" font-size="11.5" fill="#185FA5" dominant-baseline="central">之后每次约半秒</text>
+</svg>

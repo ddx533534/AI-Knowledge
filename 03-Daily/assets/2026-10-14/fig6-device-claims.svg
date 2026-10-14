@@ -1,0 +1,32 @@
+<svg viewBox="0 0 680 274" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>多个智能体同时干活时设备怎么分</title>
+  <desc>每个 git worktree 有自己的一份隐式会话，彼此不会串到对方的会话里。同一台机器上的模拟器或真机同一时刻只归一个会话占用，另外两个只能排队。device status 看设备归谁，device release --stale 释放占用者已经不在的设备。</desc>
+
+  <rect x="24" y="36" width="196" height="66" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="122" y="58" text-anchor="middle" font-size="12" font-weight="500" fill="#2C2C2A" dominant-baseline="central">worktree A</text>
+  <text x="122" y="80" text-anchor="middle" font-size="11" fill="#444441" dominant-baseline="central">自己的一份隐式会话</text>
+
+  <rect x="242" y="36" width="196" height="66" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="340" y="58" text-anchor="middle" font-size="12" font-weight="500" fill="#27500A" dominant-baseline="central">worktree B</text>
+  <text x="340" y="80" text-anchor="middle" font-size="11" fill="#3B6D11" dominant-baseline="central">当前占着设备</text>
+
+  <rect x="460" y="36" width="196" height="66" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="558" y="58" text-anchor="middle" font-size="12" font-weight="500" fill="#2C2C2A" dominant-baseline="central">worktree C</text>
+  <text x="558" y="80" text-anchor="middle" font-size="11" fill="#444441" dominant-baseline="central">自己的一份隐式会话</text>
+
+  <rect x="24" y="126" width="632" height="72" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="44" y="150" font-size="12.5" font-weight="500" fill="#0C447C" dominant-baseline="central">同一台机器上的模拟器和真机</text>
+  <text x="44" y="174" font-size="11.5" fill="#185FA5" dominant-baseline="central">一台设备同一时刻只归一个会话，别的智能体不会把它抢走</text>
+  <text x="44" y="192" font-size="11.5" fill="#185FA5" dominant-baseline="central">人在手动操作设备时，会先暂停智能体对它的改动</text>
+
+  <line x1="340" y1="102" x2="340" y2="124" stroke="#3B6D11" stroke-width="1"/>
+  <path d="M340 124 l-4 -7 l8 0 z" fill="#3B6D11"/>
+
+  <rect x="24" y="216" width="304" height="46" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="176" y="232" text-anchor="middle" font-size="11.5" fill="#444441" dominant-baseline="central">agent-device device status</text>
+  <text x="176" y="250" text-anchor="middle" font-size="11" fill="#888780" dominant-baseline="central">看设备归谁，不用起守护进程</text>
+
+  <rect x="352" y="216" width="304" height="46" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="504" y="232" text-anchor="middle" font-size="11.5" fill="#444441" dominant-baseline="central">agent-device device release --stale</text>
+  <text x="504" y="250" text-anchor="middle" font-size="11" fill="#888780" dominant-baseline="central">确认占用者已经不在进程里，才释放</text>
+</svg>

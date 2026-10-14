@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 408" width="680" height="408" role="img">
+  <rect x="0" y="0" width="680" height="408" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="679" height="407" rx="6" fill="none" stroke="#e5e7eb"/>
+
+  <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">从一篇博客到推理框架里的一个开关，用了一年出头</text>
+
+  <line x1="152" y1="72" x2="152" y2="344" stroke="#d5d9df" stroke-width="1.5"/>
+
+  <circle cx="152" cy="92" r="5" fill="#8a929b"/>
+  <text x="136" y="96" text-anchor="end" font-family="Menlo, Consolas, monospace" font-size="12.5" fill="#8a929b">2025-06-11</text>
+  <text x="176" y="90" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13.5" fill="#1c1f24">arXiv 2506.09501 把不确定性归到「浮点不可结合＋并发」</text>
+  <text x="176" y="108" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">也就是文章开头点名引用的那篇预印本</text>
+
+  <circle cx="152" cy="154" r="5" fill="#2f5d8a"/>
+  <text x="136" y="158" text-anchor="end" font-family="Menlo, Consolas, monospace" font-size="12.5" fill="#8a929b">2025-09-10</text>
+  <text x="176" y="152" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13.5" fill="#2f5d8a">文章发布，同一天开源 batch_invariant_ops</text>
+  <text x="176" y="170" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">MIT 许可，包版本 0.1.0，元数据自标 Alpha</text>
+
+  <circle cx="152" cy="216" r="5" fill="#8a929b"/>
+  <text x="136" y="220" text-anchor="end" font-family="Menlo, Consolas, monospace" font-size="12.5" fill="#8a929b">2025-11-04</text>
+  <text x="176" y="214" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13.5" fill="#1c1f24">算子库最后一次提交，此后没有动静</text>
+  <text x="176" y="232" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">提交 feed 共 7 条，集中在 09-10 到 11-04；页面显示 1084 star（2026-10-13 读取）</text>
+
+  <circle cx="152" cy="278" r="5" fill="#2f7d4f"/>
+  <text x="136" y="282" text-anchor="end" font-family="Menlo, Consolas, monospace" font-size="12.5" fill="#8a929b">2026 年</text>
+  <text x="176" y="276" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13.5" fill="#2f7d4f">vLLM 把批不变性做成开关 VLLM_BATCH_INVARIANT=1</text>
+  <text x="176" y="294" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">官方仍标注 beta，进度挂在 issue #27433</text>
+
+  <circle cx="152" cy="340" r="5" fill="#2f7d4f"/>
+  <text x="136" y="344" text-anchor="end" font-family="Menlo, Consolas, monospace" font-size="12.5" fill="#8a929b">2026 年</text>
+  <text x="176" y="338" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13.5" fill="#2f7d4f">SGLang 加 --enable-deterministic-inference</text>
+  <text x="176" y="356" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">文档写明「建立在 Thinking Machines Lab 的批不变算子上」</text>
+
+  <line x1="40" y1="374" x2="640" y2="374" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="40" y="396" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12.5" fill="#8a929b">也就是说：这篇文章的结论已经进了产品，但原作者的算子库自己没有继续维护，接力棒交给了框架侧。</text>
+</svg>

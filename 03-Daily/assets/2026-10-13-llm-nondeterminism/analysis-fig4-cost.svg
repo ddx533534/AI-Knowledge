@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 348" width="680" height="348" role="img">
+  <rect x="0" y="0" width="680" height="348" fill="#ffffff"/>
+  <rect x="0.5" y="0.5" width="679" height="347" rx="6" fill="none" stroke="#e5e7eb"/>
+
+  <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#8a929b">确定性不是白拿的，代价分三类；下面每一条都来自原文或 vLLM／SGLang 官方文档</text>
+
+  <rect x="34" y="50" width="192" height="278" rx="6" fill="#fbfbfc" stroke="#e5e7eb"/>
+  <text x="130" y="74" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#c2761a">性能</text>
+  <line x1="34" y1="86" x2="226" y2="86" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="48" y="112" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">端到端 26 秒 → 42 秒</text>
+  <text x="48" y="132" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">原文自测，Qwen-3-8B 单卡</text>
+  <text x="48" y="152" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">1000 条请求，输出 90 到 110</text>
+
+  <text x="48" y="188" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">矩阵乘吞吐掉约一成</text>
+  <text x="48" y="208" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">原文正文说 20%，数据算 13%</text>
+
+  <text x="48" y="244" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">批次小时掉得更多</text>
+  <text x="48" y="264" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">指令过宽、并行度不足</text>
+
+  <text x="48" y="300" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">vLLM 文档只写「可能影响</text>
+  <text x="48" y="318" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">性能」，没给数字</text>
+
+  <rect x="242" y="50" width="192" height="278" rx="6" fill="#fbfbfc" stroke="#e5e7eb"/>
+  <text x="338" y="74" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#b3402f">功能</text>
+  <line x1="242" y1="86" x2="434" y2="86" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="256" y="112" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">张量并行要换 all-reduce</text>
+  <text x="256" y="132" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">vLLM 关掉 FlashInfer、AITER、</text>
+  <text x="256" y="150" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">QuickReduce 的 all-reduce</text>
+
+  <text x="256" y="186" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">SGLang 后端选错会丢缓存</text>
+  <text x="256" y="206" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">FlashInfer 后端下前缀缓存不可用，</text>
+  <text x="256" y="224" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">FA3／Triton 后端才保住</text>
+
+  <text x="256" y="260" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">要避开某些编译路径</text>
+  <text x="256" y="280" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">Ada／Hopper／Blackwell 上改用</text>
+  <text x="256" y="298" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">breakable CUDA graph，不走</text>
+  <text x="256" y="316" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">torch.compile</text>
+
+  <rect x="450" y="50" width="192" height="278" rx="6" fill="#fbfbfc" stroke="#e5e7eb"/>
+  <text x="546" y="74" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#2f5d8a">硬件与适用范围</text>
+  <line x1="450" y1="86" x2="642" y2="86" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="464" y="112" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">vLLM：NVIDIA 算力 8.0 起</text>
+  <text x="464" y="132" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">另支持 AMD Instinct 与 Intel XPU</text>
+  <text x="464" y="150" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">（XPU 必须用 Triton attention）</text>
+
+  <text x="464" y="186" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">张量并行仍有未覆盖场景</text>
+  <text x="464" y="206" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">all-reduce 大小不是 16 字节整数倍时</text>
+  <text x="464" y="224" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">会按 batch 大小在 NCCL 与</text>
+  <text x="464" y="242" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">自有实现之间切换</text>
+
+  <text x="464" y="278" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#1c1f24">原文的验证面很窄</text>
+  <text x="464" y="298" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">单卡、单模型、单次实验；</text>
+  <text x="464" y="316" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#8a929b">没有多机、长上下文、高并发数据</text>
+</svg>

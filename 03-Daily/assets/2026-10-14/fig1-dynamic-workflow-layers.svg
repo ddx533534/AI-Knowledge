@@ -1,0 +1,46 @@
+<svg viewBox="0 0 680 300" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>动态工作流的三段分工</title>
+  <desc>主智能体交任务，Claude 生成一段编排程序，程序由 Anthropic 服务器在后台执行，程序按阶段拉起一批子智能体并把上一阶段的结果当下一阶段的输入。主智能体不参与每次交接，可以直接等最终结果。</desc>
+
+  <rect x="24" y="24" width="180" height="86" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="114" y="52" text-anchor="middle" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">主智能体</text>
+  <text x="114" y="76" text-anchor="middle" font-size="11.5" fill="#185FA5" dominant-baseline="central">提任务，读最终结果</text>
+  <text x="114" y="94" text-anchor="middle" font-size="11.5" fill="#185FA5" dominant-baseline="central">不参与每次交接</text>
+
+  <rect x="250" y="24" width="180" height="86" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="340" y="46" text-anchor="middle" font-size="13" font-weight="500" fill="#633806" dominant-baseline="central">编排程序</text>
+  <text x="340" y="68" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">Claude 自己写的一段</text>
+  <text x="340" y="86" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">含并行、分支、重试</text>
+  <text x="340" y="102" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">不是给模型看的清单</text>
+
+  <rect x="476" y="24" width="180" height="86" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="566" y="52" text-anchor="middle" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">子智能体</text>
+  <text x="566" y="76" text-anchor="middle" font-size="11.5" fill="#185FA5" dominant-baseline="central">每个一条独立会话线程</text>
+  <text x="566" y="94" text-anchor="middle" font-size="11.5" fill="#185FA5" dominant-baseline="central">同一沙箱里共享文件</text>
+
+  <line x1="206" y1="67" x2="248" y2="67" stroke="#888780" stroke-width="1"/>
+  <path d="M248 67 l-7 -4 l0 8 z" fill="#888780"/>
+  <line x1="432" y1="67" x2="474" y2="67" stroke="#888780" stroke-width="1"/>
+  <path d="M474 67 l-7 -4 l0 8 z" fill="#888780"/>
+
+  <text x="24" y="140" font-size="12" font-weight="500" fill="#444441">服务器在后台跑这段程序</text>
+
+  <rect x="24" y="156" width="632" height="52" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="340" y="182" text-anchor="middle" font-size="12" fill="#444441" dominant-baseline="central">按阶段推进：上一阶段的结果直接当下一阶段的输入，失败时程序自己决定重试或终止</text>
+
+  <rect x="24" y="224" width="152" height="56" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="100" y="244" text-anchor="middle" font-size="15" font-weight="500" fill="#2C2C2A" dominant-baseline="central">1000</text>
+  <text x="100" y="264" text-anchor="middle" font-size="11.5" fill="#444441" dominant-baseline="central">单次运行最多智能体</text>
+
+  <rect x="184" y="224" width="152" height="56" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="260" y="244" text-anchor="middle" font-size="15" font-weight="500" fill="#2C2C2A" dominant-baseline="central">64</text>
+  <text x="260" y="264" text-anchor="middle" font-size="11.5" fill="#444441" dominant-baseline="central">同时工作上限，不保证</text>
+
+  <rect x="344" y="224" width="152" height="56" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="420" y="244" text-anchor="middle" font-size="15" font-weight="500" fill="#2C2C2A" dominant-baseline="central">24 小时</text>
+  <text x="420" y="264" text-anchor="middle" font-size="11.5" fill="#444441" dominant-baseline="central">单次运行默认寿命</text>
+
+  <rect x="504" y="224" width="152" height="56" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="580" y="244" text-anchor="middle" font-size="15" font-weight="500" fill="#2C2C2A" dominant-baseline="central">$0.08</text>
+  <text x="580" y="264" text-anchor="middle" font-size="11.5" fill="#444441" dominant-baseline="central">每会话小时，另按 token 计</text>
+</svg>
