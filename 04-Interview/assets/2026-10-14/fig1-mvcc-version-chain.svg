@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="400" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">记录版本链：DB_ROLL_PTR 串起 undo log 中的历史版本</text>
+
+  <!-- 当前记录 -->
+  <rect x="70" y="70" width="200" height="120" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.6"/>
+  <text x="170" y="94" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e40af">聚簇索引当前记录</text>
+  <line x1="86" y1="106" x2="254" y2="106" stroke="#93c5fd" stroke-width="1"/>
+  <text x="86" y="126" font-size="11.5" fill="#1e3a8a">name = 'Tom'</text>
+  <text x="86" y="148" font-size="11.5" fill="#1e3a8a">age = 20</text>
+  <rect x="86" y="158" width="168" height="22" rx="3" fill="#bfdbfe" stroke="#60a5fa"/>
+  <text x="170" y="173" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e3a8a">DB_TRX_ID = 100</text>
+
+  <!-- 箭头 -->
+  <line x1="270" y1="130" x2="330" y2="130" stroke="#64748b" stroke-width="1.6"/>
+  <polygon points="330,130 320,125 320,135" fill="#64748b"/>
+  <text x="300" y="120" text-anchor="middle" font-size="10" fill="#64748b">ROLL_PTR</text>
+
+  <!-- 版本 V2 -->
+  <rect x="335" y="70" width="180" height="120" rx="5" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="425" y="94" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">undo 版本 v2</text>
+  <line x1="351" y1="106" x2="499" y2="106" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="351" y="126" font-size="11" fill="#475569">age = 19</text>
+  <rect x="351" y="152" width="148" height="22" rx="3" fill="#e2e8f0" stroke="#cbd5e1"/>
+  <text x="425" y="167" text-anchor="middle" font-size="10" font-weight="600" fill="#475569">DB_TRX_ID = 90</text>
+
+  <line x1="515" y1="130" x2="565" y2="130" stroke="#64748b" stroke-width="1.6"/>
+  <polygon points="565,130 555,125 555,135" fill="#64748b"/>
+
+  <!-- 版本 V1 -->
+  <rect x="570" y="70" width="180" height="120" rx="5" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="660" y="94" text-anchor="middle" font-size="12" font-weight="600" fill="#475569">undo 版本 v1（最旧）</text>
+  <line x1="586" y1="106" x2="734" y2="106" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="586" y="126" font-size="11" fill="#64748b">age = 18</text>
+  <rect x="586" y="152" width="148" height="22" rx="3" fill="#eef2f7" stroke="#e2e8f0"/>
+  <text x="660" y="167" text-anchor="middle" font-size="10" font-weight="600" fill="#64748b">DB_TRX_ID = 80</text>
+
+  <!-- 读方向 -->
+  <text x="400" y="216" text-anchor="middle" font-size="11" fill="#858d99">读取：从最新版本开始，沿链逐个判断可见性，不可见就往更旧的版本找</text>
+
+  <!-- ReadView 四字段 -->
+  <rect x="70" y="238" width="330" height="128" rx="5" fill="#fffbeb" stroke="#fcd34d"/>
+  <text x="86" y="262" font-size="12.5" font-weight="600" fill="#92400e">ReadView 四字段</text>
+  <text x="86" y="286" font-size="11" fill="#78350f">m_ids</text>
+  <text x="170" y="286" font-size="10.5" fill="#a16207">生成时活跃（未提交）的事务 ID 列表</text>
+  <text x="86" y="308" font-size="11" fill="#78350f">min_trx_id</text>
+  <text x="170" y="308" font-size="10.5" fill="#a16207">m_ids 中的最小值</text>
+  <text x="86" y="330" font-size="11" fill="#78350f">max_trx_id</text>
+  <text x="170" y="330" font-size="10.5" fill="#a16207">下一个将分配的事务 ID（非 m_ids 最大值）</text>
+  <text x="86" y="352" font-size="11" fill="#78350f">creator_trx_id</text>
+  <text x="170" y="352" font-size="10.5" fill="#a16207">创建本 ReadView 的事务自身 ID</text>
+
+  <!-- 判定规则 -->
+  <rect x="420" y="238" width="330" height="128" rx="5" fill="#f0fdf4" stroke="#6ee7b7"/>
+  <text x="436" y="262" font-size="12.5" font-weight="600" fill="#065f46">判定分支（设版本 trx_id = t）</text>
+  <text x="436" y="284" font-size="10.5" fill="#064e3b">① t == creator_trx_id <tspan font-weight="600">→ 可见</tspan></text>
+  <text x="436" y="304" font-size="10.5" fill="#064e3b">② t &lt; min_trx_id <tspan font-weight="600">→ 可见</tspan>（生成前已提交）</text>
+  <text x="436" y="324" font-size="10.5" fill="#064e3b">③ t &gt;= max_trx_id <tspan font-weight="600">→ 不可见</tspan>（生成后才开）</text>
+  <text x="436" y="344" font-size="10.5" fill="#064e3b">④ min ≤ t &lt; max：在 m_ids 中不可见；不在则可见</text>
+  <text x="436" y="360" font-size="10" fill="#047857">不可见 → 沿链找更旧的版本，直到可见或到头</text>
+
+  <!-- 底部 -->
+  <rect x="70" y="378" width="680" height="18" rx="0" fill="none"/>
+  <text x="70" y="392" font-size="11" fill="#b45309">RC 与 RR 的唯一区别：ReadView 生成时机（RC 每条 SELECT 生成，RR 首次生成后复用）。</text>
+</svg>

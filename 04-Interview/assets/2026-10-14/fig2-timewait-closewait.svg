@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="400" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">四次挥手：TIME_WAIT 在主动方，CLOSE_WAIT 在被动方</text>
+
+  <!-- 竖线 -->
+  <line x1="200" y1="66" x2="200" y2="300" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <line x1="600" y1="66" x2="600" y2="300" stroke="#059669" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <rect x="125" y="44" width="150" height="26" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="200" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e40af">主动关闭方</text>
+  <rect x="525" y="44" width="150" height="26" fill="#d1fae5" stroke="#34d399"/>
+  <text x="600" y="62" text-anchor="middle" font-size="12.5" font-weight="600" fill="#065f46">被动关闭方</text>
+
+  <!-- 4 次挥手 -->
+  <line x1="200" y1="104" x2="600" y2="104" stroke="#2563eb" stroke-width="1.6"/>
+  <polygon points="600,104 590,99 590,109" fill="#2563eb"/>
+  <text x="400" y="97" text-anchor="middle" font-size="11.5" fill="#1f2937">① FIN=1, seq=u</text>
+  <text x="400" y="120" text-anchor="middle" font-size="10.5" fill="#858d99">主动方：FIN_WAIT_1 → 被动方：仍 ESTABLISHED</text>
+
+  <line x1="600" y1="158" x2="200" y2="158" stroke="#059669" stroke-width="1.6"/>
+  <polygon points="200,158 210,153 210,163" fill="#059669"/>
+  <text x="400" y="151" text-anchor="middle" font-size="11.5" fill="#1f2937">② ACK=1, ack=u+1</text>
+  <text x="400" y="174" text-anchor="middle" font-size="10.5" fill="#858d99">主动方进入 FIN_WAIT_2；<tspan fill="#b45309" font-weight="600">被动方进入 CLOSE_WAIT</tspan></text>
+
+  <line x1="600" y1="212" x2="200" y2="212" stroke="#059669" stroke-width="1.6"/>
+  <polygon points="200,212 210,207 210,217" fill="#059669"/>
+  <text x="400" y="205" text-anchor="middle" font-size="11.5" fill="#1f2937">③ FIN=1, seq=w（数据发完了）</text>
+  <text x="400" y="228" text-anchor="middle" font-size="10.5" fill="#858d99">被动方 LAST_ACK → 主动方仍 FIN_WAIT_2</text>
+
+  <line x1="200" y1="262" x2="600" y2="262" stroke="#2563eb" stroke-width="1.6"/>
+  <polygon points="600,262 590,257 590,267" fill="#2563eb"/>
+  <text x="400" y="255" text-anchor="middle" font-size="11.5" fill="#1f2937">④ ACK=1, ack=w+1</text>
+  <text x="400" y="278" text-anchor="middle" font-size="10.5" fill="#858d99"><tspan fill="#b45309" font-weight="600">主动方进入 TIME_WAIT（等 60s）</tspan>；被动方 CLOSED</text>
+
+  <!-- 底部两栏对比 -->
+  <rect x="80" y="310" width="310" height="76" rx="4" fill="#fef9c3" stroke="#fde047"/>
+  <text x="235" y="332" text-anchor="middle" font-size="12" font-weight="600" fill="#713f12">TIME_WAIT —— 正常，机制使然</text>
+  <text x="96" y="353" font-size="10.8" fill="#713f12">位置：主动关闭方 ｜ 时长：60s 常量</text>
+  <text x="96" y="371" font-size="10.8" fill="#713f12">危害：占端口（约 2.8万/60s → 数百 QPS）</text>
+
+  <rect x="410" y="310" width="310" height="76" rx="4" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="565" y="332" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">CLOSE_WAIT —— 几乎一定是 bug</text>
+  <text x="426" y="353" font-size="10.8" fill="#7f1d1d">位置：被动关闭方 ｜ 卡在应用层没调 close()</text>
+  <text x="426" y="371" font-size="10.8" fill="#7f1d1d">危害：占 fd ｜ <tspan font-weight="600">调内核参数完全无效，只能改代码</tspan></text>
+</svg>

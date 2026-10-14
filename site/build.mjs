@@ -422,7 +422,7 @@ function prepare(post) {
   );
   if (summary.length > 140) summary = `${summary.slice(0, 138)}…`;
 
-  const html = buildHtml(src, refs);
+  const html = buildHtml(src, refs, figureFactory(post, 1));
 
   post.title = title;
   post.summary = summary;
@@ -433,8 +433,8 @@ function prepare(post) {
 }
 
 /** 把一份 markdown 正文渲染成 HTML（不含标题行），文章页与工具页共用。 */
-function buildHtml(src, refs) {
-  const ctx = { refs, figure: () => '' };
+function buildHtml(src, refs, figure) {
+  const ctx = { refs, figure: figure || (() => '') };
   return renderBlock(src.replace(/^#\s+.*$/m, ''), ctx);
 }
 

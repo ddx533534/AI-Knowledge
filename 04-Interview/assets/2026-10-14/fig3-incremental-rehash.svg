@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="420" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">渐进式 rehash：两张表并存，每次操作迁移一批</text>
+
+  <!-- dict 结构 -->
+  <rect x="60" y="56" width="300" height="150" rx="5" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="76" y="78" font-size="12" font-weight="600" fill="#0f172a">dict 结构（同时维护两张表）</text>
+  <text x="76" y="102" font-size="11" fill="#334155" font-family="monospace">dictht ht[2];</text>
+  <text x="76" y="122" font-size="11" fill="#334155" font-family="monospace">long rehashidx;  // 进度</text>
+  <text x="76" y="142" font-size="11" fill="#334155" font-family="monospace">            // -1 表示未在 rehash</text>
+  <line x1="76" y1="152" x2="344" y2="152" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="76" y="172" font-size="10.5" fill="#64748b">平时只用 ht[0]；rehash 时两张表都用</text>
+  <text x="76" y="190" font-size="10.5" fill="#64748b">扩容为 ht[0].used × 2，向上取 2 的幂</text>
+
+  <!-- 规则 -->
+  <rect x="380" y="56" width="360" height="150" rx="5" fill="#f0fdf4" stroke="#6ee7b7"/>
+  <text x="396" y="78" font-size="12" font-weight="600" fill="#065f46">rehash 期间的读写规则</text>
+  <text x="396" y="102" font-size="11" fill="#064e3b"><tspan font-weight="600">查找</tspan>：先查 ht[0]，没找到再查 ht[1]</text>
+  <text x="396" y="124" font-size="11" fill="#064e3b"><tspan font-weight="600">插入</tspan>：只插 ht[1]</text>
+  <text x="396" y="142" font-size="10.5" fill="#047857">　保证 ht[0] 只减不增，rehash 必然能结束</text>
+  <text x="396" y="166" font-size="11" fill="#064e3b"><tspan font-weight="600">每次操作</tspan>：顺便迁移 rehashidx 位置的一批</text>
+  <text x="396" y="184" font-size="10.5" fill="#047857">　搬完 rehashidx++，全部搬完则切换释放</text>
+  <text x="396" y="200" font-size="10.5" fill="#047857">serverCron 有定时兜底，不靠请求推动也做完</text>
+
+  <!-- ht[0] -->
+  <text x="60" y="240" font-size="12" font-weight="600" fill="#b45309">ht[0]（旧表，正在被搬空）</text>
+  <g>
+    <rect x="60" y="252" width="60" height="34" rx="3" fill="#fde68a" stroke="#f59e0b"/>
+    <text x="90" y="273" text-anchor="middle" font-size="10" fill="#78350f">桶0 已搬</text>
+    <rect x="128" y="252" width="60" height="34" rx="3" fill="#fde68a" stroke="#f59e0b"/>
+    <text x="158" y="273" text-anchor="middle" font-size="10" fill="#78350f">桶1 已搬</text>
+    <rect x="196" y="252" width="74" height="34" rx="3" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.8"/>
+    <text x="233" y="273" text-anchor="middle" font-size="10" font-weight="600" fill="#92400e">← rehashidx</text>
+    <rect x="278" y="252" width="60" height="34" rx="3" fill="#fde68a" stroke="#f59e0b"/>
+    <text x="308" y="273" text-anchor="middle" font-size="10" fill="#78350f">桶3 待搬</text>
+  </g>
+  <text x="233" y="302" text-anchor="middle" font-size="10.5" fill="#92400e">rehashidx 及其之后 = 还没迁走的部分</text>
+
+  <!-- 箭头 -->
+  <line x1="355" y1="270" x2="410" y2="270" stroke="#64748b" stroke-width="1.8"/>
+  <polygon points="410,270 400,265 400,275" fill="#64748b"/>
+  <text x="382" y="262" text-anchor="middle" font-size="10" fill="#64748b">迁移</text>
+
+  <!-- ht[1] -->
+  <text x="425" y="240" font-size="12" font-weight="600" fill="#065f46">ht[1]（新表，只增不减）</text>
+  <g>
+    <rect x="425" y="252" width="70" height="34" rx="3" fill="#a7f3d0" stroke="#10b981"/>
+    <text x="460" y="273" text-anchor="middle" font-size="10" fill="#065f46">新桶…</text>
+    <rect x="503" y="252" width="70" height="34" rx="3" fill="#a7f3d0" stroke="#10b981"/>
+    <text x="538" y="273" text-anchor="middle" font-size="10" fill="#065f46">新桶…</text>
+    <rect x="581" y="252" width="70" height="34" rx="3" fill="#d1fae5" stroke="#6ee7b7" stroke-dasharray="3 3"/>
+    <text x="616" y="273" text-anchor="middle" font-size="10" fill="#047857">空桶</text>
+    <rect x="659" y="252" width="70" height="34" rx="3" fill="#d1fae5" stroke="#6ee7b7" stroke-dasharray="3 3"/>
+    <text x="694" y="273" text-anchor="middle" font-size="10" fill="#047857">空桶</text>
+  </g>
+  <text x="577" y="302" text-anchor="middle" font-size="10.5" fill="#047857">所有新插入都落在这里</text>
+
+  <!-- 结论 -->
+  <rect x="60" y="320" width="680" height="86" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="76" y="343" font-size="11.5" font-weight="600" fill="#0f172a">为什么这么做：一次性 rehash 在百万级 key 下会阻塞主线程数秒。</text>
+  <text x="76" y="365" font-size="11" fill="#334155">渐进式把「一次大迁移」拆成「每次操作搬一小批」，单次耗时从秒级降到微秒级。</text>
+  <text x="76" y="385" font-size="11" fill="#334155">这是 Redis 的通用手法：持久化用 COW 分摊、大 key 用 lazyfree 异步删、过期用抽样分批删。</text>
+  <text x="76" y="402" font-size="10.8" fill="#b45309">代价：rehash 期间内存会短暂翻倍（两张表同时存在），这是「用空间换不阻塞」的取舍。</text>
+</svg>

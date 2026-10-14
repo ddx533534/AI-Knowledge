@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="400" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">队头阻塞的三层：HTTP/1.1 → HTTP/2 → HTTP/3</text>
+
+  <!-- 三栏 -->
+  <!-- HTTP/1.1 -->
+  <rect x="60" y="56" width="210" height="290" rx="6" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="165" y="80" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">HTTP/1.1</text>
+  <text x="165" y="99" text-anchor="middle" font-size="10.5" fill="#858d99">一个连接，请求串行</text>
+  <line x1="100" y1="112" x2="100" y2="330" stroke="#94a3b8" stroke-width="1.4"/>
+  <rect x="112" y="130" width="120" height="42" rx="3" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="172" y="156" text-anchor="middle" font-size="10.5" fill="#1e40af">请求 1（占用中）</text>
+  <rect x="112" y="180" width="120" height="42" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-dasharray="3 3"/>
+  <text x="172" y="206" text-anchor="middle" font-size="10.5" fill="#64748b">请求 2 等待</text>
+  <rect x="112" y="230" width="120" height="42" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-dasharray="3 3"/>
+  <text x="172" y="256" text-anchor="middle" font-size="10.5" fill="#64748b">请求 3 等待</text>
+  <rect x="76" y="292" width="178" height="40" rx="3" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="165" y="308" text-anchor="middle" font-size="10.5" font-weight="600" fill="#b91c1c">应用层 HOL</text>
+  <text x="165" y="323" text-anchor="middle" font-size="10" fill="#7f1d1d">前面没回来，后面排队</text>
+
+  <!-- HTTP/2 -->
+  <rect x="295" y="56" width="210" height="290" rx="6" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="400" y="80" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">HTTP/2</text>
+  <text x="400" y="99" text-anchor="middle" font-size="10.5" fill="#858d99">单连接，多流复用</text>
+  <line x1="345" y1="112" x2="345" y2="330" stroke="#94a3b8" stroke-width="1.4"/>
+  <rect x="357" y="126" width="120" height="30" rx="3" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="417" y="145" text-anchor="middle" font-size="10.5" fill="#1e40af">流 A</text>
+  <rect x="357" y="162" width="120" height="30" rx="3" fill="#e0e7ff" stroke="#818cf8"/>
+  <text x="417" y="181" text-anchor="middle" font-size="10.5" fill="#3730a3">流 B</text>
+  <rect x="357" y="198" width="120" height="30" rx="3" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="417" y="217" text-anchor="middle" font-size="10.5" fill="#1e40af">流 C</text>
+  <rect x="357" y="234" width="120" height="30" rx="3" fill="#e0e7ff" stroke="#818cf8"/>
+  <text x="417" y="253" text-anchor="middle" font-size="10.5" fill="#3730a3">流 D</text>
+  <rect x="357" y="270" width="120" height="22" rx="3" fill="#fee2e2" stroke="#f87171"/>
+  <text x="417" y="285" text-anchor="middle" font-size="9.5" fill="#991b1b">一个包丢了 → 卡住</text>
+  <rect x="311" y="296" width="178" height="36" rx="3" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="400" y="311" text-anchor="middle" font-size="10.5" font-weight="600" fill="#b91c1c">传输层 HOL（TCP）</text>
+  <text x="400" y="326" text-anchor="middle" font-size="10" fill="#7f1d1d">所有流共用一个 TCP，全被拖住</text>
+
+  <!-- HTTP/3 -->
+  <rect x="530" y="56" width="210" height="290" rx="6" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="635" y="80" text-anchor="middle" font-size="13" font-weight="600" fill="#0f172a">HTTP/3</text>
+  <text x="635" y="99" text-anchor="middle" font-size="10.5" fill="#858d99">QUIC（UDP），流级独立</text>
+  <line x1="580" y1="112" x2="580" y2="330" stroke="#34d399" stroke-width="1.4"/>
+  <rect x="592" y="126" width="120" height="30" rx="3" fill="#d1fae5" stroke="#6ee7b7"/>
+  <text x="652" y="145" text-anchor="middle" font-size="10.5" fill="#065f46">流 A（独立重传）</text>
+  <rect x="592" y="164" width="120" height="30" rx="3" fill="#ecfdf5" stroke="#a7f3d0"/>
+  <text x="652" y="183" text-anchor="middle" font-size="10.5" fill="#047857">流 B</text>
+  <rect x="592" y="202" width="120" height="30" rx="3" fill="#ecfdf5" stroke="#a7f3d0"/>
+  <text x="652" y="221" text-anchor="middle" font-size="10.5" fill="#047857">流 C</text>
+  <rect x="592" y="240" width="120" height="30" rx="3" fill="#d1fae5" stroke="#6ee7b7"/>
+  <text x="652" y="259" text-anchor="middle" font-size="10.5" fill="#065f46">流 D</text>
+  <rect x="546" y="296" width="178" height="36" rx="3" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="635" y="311" text-anchor="middle" font-size="10.5" font-weight="600" fill="#065f46">彻底解决</text>
+  <text x="635" y="326" text-anchor="middle" font-size="10" fill="#064e3b">A 丢包只阻塞 A，其余照常</text>
+
+  <!-- 结论 -->
+  <rect x="60" y="360" width="680" height="32" rx="4" fill="#fef9c3" stroke="#fde047"/>
+  <text x="76" y="381" font-size="11" fill="#713f12">面试陷阱：「HTTP/2 解决了队头阻塞」是错的 —— 它只解决了应用层 HOL，传输层反而更严重。</text>
+</svg>

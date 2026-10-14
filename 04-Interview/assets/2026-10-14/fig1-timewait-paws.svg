@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" width="800" height="440" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="440" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">TIME_WAIT 的内核处理：新包提前回收，旧包被 PAWS 丢弃</text>
+
+  <!-- 时间轴 -->
+  <line x1="80" y1="76" x2="740" y2="76" stroke="#d3d8e0" stroke-width="1.5"/>
+  <polygon points="740,76 730,71 730,81" fill="#d3d8e0"/>
+  <text x="748" y="80" font-size="11" fill="#858d99">时间</text>
+
+  <!-- 进入 TIME_WAIT -->
+  <rect x="80" y="60" width="150" height="32" rx="4" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="155" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e40af">收到 FIN，回最后 ACK</text>
+  <text x="155" y="108" text-anchor="middle" font-size="11" fill="#454b57">进入 TIME_WAIT</text>
+
+  <!-- 60s 区间 -->
+  <rect x="232" y="60" width="330" height="32" rx="4" fill="#fef9c3" stroke="#fde047"/>
+  <text x="397" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#713f12">TIME_WAIT = TCP_TIMEWAIT_LEN = 60s（常量，非 2MSL）</text>
+  <text x="397" y="108" text-anchor="middle" font-size="11" fill="#858d99">期间有包到达 → 走下面的判定</text>
+
+  <!-- 结束 -->
+  <rect x="564" y="60" width="120" height="32" rx="4" fill="#d1fae5" stroke="#34d399"/>
+  <text x="624" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#065f46">CLOSED</text>
+
+  <!-- 判定分叉 -->
+  <line x1="397" y1="120" x2="397" y2="150" stroke="#858d99" stroke-width="1.4"/>
+  <polygon points="397,150 392,141 402,141" fill="#858d99"/>
+  <text x="410" y="140" font-size="11" fill="#454b57">有数据包到达处于 TIME_WAIT 的 socket</text>
+
+  <!-- PAWS 判定 -->
+  <rect x="255" y="156" width="290" height="34" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="400" y="178" text-anchor="middle" font-size="11.5" font-weight="600" fill="#0f172a">用 TCP 时间戳（PAWS，RFC 7323）比较 tw_paws</text>
+
+  <!-- 左分支：旧包 -->
+  <line x1="330" y1="190" x2="330" y2="222" stroke="#858d99" stroke-width="1.4"/>
+  <polygon points="330,222 325,213 335,213" fill="#858d99"/>
+  <text x="248" y="212" font-size="11" fill="#b91c1c" font-weight="600">时间戳更旧</text>
+  <rect x="130" y="228" width="330" height="70" rx="4" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="295" y="250" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">判定为陈旧报文 → 丢弃</text>
+  <text x="295" y="270" text-anchor="middle" font-size="11" fill="#7f1d1d">这是本次连接早先的残留包</text>
+  <text x="295" y="288" text-anchor="middle" font-size="11" fill="#7f1d1d">丢弃可防止它污染后续新连接</text>
+
+  <!-- 右分支：新包 -->
+  <line x1="470" y1="190" x2="470" y2="222" stroke="#858d99" stroke-width="1.4"/>
+  <polygon points="470,222 465,213 475,213" fill="#858d99"/>
+  <text x="478" y="212" font-size="11" fill="#065f46" font-weight="600">时间戳更新</text>
+  <rect x="350" y="228" width="330" height="70" rx="4" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="515" y="250" text-anchor="middle" font-size="12" font-weight="600" fill="#065f46">判定对端已发起新连接 → 提前回收</text>
+  <text x="515" y="270" text-anchor="middle" font-size="11" fill="#064e3b">走 inet_twsk_kill 路径，不再干等 60 秒</text>
+  <text x="515" y="288" text-anchor="middle" font-size="11" fill="#064e3b">这是 tcp_tw_reuse 能安全复用的底层依据</text>
+
+  <!-- 结论条 -->
+  <rect x="80" y="322" width="640" height="98" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="96" y="344" font-size="11.5" font-weight="600" fill="#0f172a">所以 TIME_WAIT 不是「干等浪费」：</text>
+  <text x="96" y="366" font-size="11" fill="#334155">1. 它在用时间戳做实际校验，旧包丢弃、新包提前回收，是有工作的状态。</text>
+  <text x="96" y="386" font-size="11" fill="#334155">2. 60 秒是内核常量，调 MSL 不能缩短它；tcp_fin_timeout 管的是 FIN_WAIT_2，别混淆。</text>
+  <text x="96" y="406" font-size="11" fill="#334155">3. tcp_tw_reuse 依赖时间戳生效，且只对主动连接方（客户端）有效。</text>
+</svg>

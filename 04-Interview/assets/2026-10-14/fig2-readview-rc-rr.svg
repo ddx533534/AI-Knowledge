@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" width="800" height="380" font-family="-apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="380" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">RC 与 RR：ReadView 生成时机决定「能否看到新提交」</text>
+
+  <!-- 时间轴 -->
+  <line x1="90" y1="90" x2="730" y2="90" stroke="#d3d8e0" stroke-width="1.5"/>
+  <polygon points="730,90 720,85 720,95" fill="#d3d8e0"/>
+  <text x="740" y="94" font-size="10.5" fill="#858d99">t</text>
+
+  <!-- t1 事件 -->
+  <circle cx="200" cy="90" r="5" fill="#2563eb"/>
+  <text x="200" y="72" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">t1</text>
+  <text x="200" y="112" text-anchor="middle" font-size="10" fill="#454b57">事务 A 首次 SELECT</text>
+  <text x="200" y="126" text-anchor="middle" font-size="10" fill="#454b57">（事务 B 未提交）</text>
+
+  <!-- t2 事件 -->
+  <circle cx="420" cy="90" r="5" fill="#059669"/>
+  <text x="420" y="72" text-anchor="middle" font-size="11" font-weight="600" fill="#065f46">t2</text>
+  <text x="420" y="112" text-anchor="middle" font-size="10" fill="#454b57">事务 B 提交</text>
+
+  <!-- t3 事件 -->
+  <circle cx="630" cy="90" r="5" fill="#2563eb"/>
+  <text x="630" y="72" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">t3</text>
+  <text x="630" y="112" text-anchor="middle" font-size="10" fill="#454b57">事务 A 再次 SELECT</text>
+
+  <!-- RC -->
+  <rect x="70" y="150" width="320" height="130" rx="5" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="230" y="174" text-anchor="middle" font-size="12.5" font-weight="600" fill="#0f172a">READ COMMITTED</text>
+  <line x1="90" y1="186" x2="370" y2="186" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="90" y="208" font-size="10.5" fill="#334155">t1：生成 ReadView₁ → B 在 m_ids 中</text>
+  <text x="90" y="230" font-size="10.5" fill="#334155">t3：<tspan font-weight="600">重新生成</tspan> ReadView₂ → B 已不在</text>
+  <text x="90" y="252" font-size="10.5" fill="#334155">画面：两条虚线，各管各的 SELECT</text>
+  <rect x="90" y="258" width="280" height="14" rx="0" fill="none"/>
+  <text x="230" y="270" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">结果：t3 读到了 B 的修改 → 不可重复读</text>
+  <line x1="90" y1="243" x2="370" y2="243" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- RR -->
+  <rect x="410" y="150" width="320" height="130" rx="5" fill="#f0fdf4" stroke="#6ee7b7"/>
+  <text x="570" y="174" text-anchor="middle" font-size="12.5" font-weight="600" fill="#0f172a">REPEATABLE READ（InnoDB 默认）</text>
+  <line x1="430" y1="186" x2="710" y2="186" stroke="#a7f3d0" stroke-width="1"/>
+  <text x="430" y="208" font-size="10.5" fill="#064e3b">t1：生成 ReadView → B 在 m_ids 中</text>
+  <text x="430" y="230" font-size="10.5" fill="#064e3b">t3：<tspan font-weight="600">沿用同一个</tspan> ReadView</text>
+  <text x="430" y="252" font-size="10.5" fill="#064e3b">画面：一条贯穿始终的快照线</text>
+  <line x1="430" y1="243" x2="710" y2="243" stroke="#a7f3d0" stroke-width="1"/>
+  <text x="570" y="270" text-anchor="middle" font-size="11" font-weight="600" fill="#065f46">结果：t3 读不到 B 的修改 → 可重复读</text>
+
+  <!-- 底部提示 -->
+  <rect x="70" y="298" width="660" height="62" rx="4" fill="#fef9c3" stroke="#fde047"/>
+  <text x="86" y="320" font-size="11" font-weight="600" fill="#713f12">注意：以上只适用于「快照读」（普通 SELECT）。</text>
+  <text x="86" y="340" font-size="10.8" fill="#713f12">当前读（SELECT ... FOR UPDATE / UPDATE / DELETE）不走 MVCC，总是读最新已提交版本并加锁。</text>
+  <text x="86" y="356" font-size="10.8" fill="#713f12">所以「RR 能不能看到新数据」的答案取决于你问的是快照读还是当前读 —— 混答即错。</text>
+</svg>
