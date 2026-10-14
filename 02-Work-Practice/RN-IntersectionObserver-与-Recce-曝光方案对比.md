@@ -2,9 +2,7 @@
 
 核实日期：2026-10-13
 
-曝光检测要回答的问题只有一个：某个组件当前露出多少。团队现在的做法是 Recce 1.24 的原生监听，React Native 上游在同一时期也把官方的 IntersectionObserver 加进了新架构。这份文档把两边的实现拆开，对照各自的能力边界，给出该用哪个的判断。
-
-对照的三份材料：
+曝光检测要回答的问题只有一个：某个组件当前露出多少。团队现在的做法是 Recce 1.24 的原生监听，React Native 上游在同一时期也把官方的 IntersectionObserver 加进了新架构。这份文档把两边的实现拆开，对照各自的能力边界，给出该用哪个的判断。对照的三份材料：
 
 - React Native 官方 IntersectionObserver，`main` 分支源码与本机抓取当日（2026-10-13）的 `__docs__/README.md`，以及官方文档站 `reactnative.dev/docs/global-intersectionobserver`。
 - Recce 1.24《Recce 1.24 View 的重叠区域变化技术方案》，2026-10-13 读取。
@@ -12,19 +10,16 @@
 
 三份材料的版本不齐：RN 是当前 `main` 分支，Recce 是排期中的 1.24 方案，微信读书是 2021 年的第三方库说明。比能力边界时带着这一点看。
 
-## 结论
+## 结论：一张表看完
 
-实现层次上 RN 官方更靠底层。几何计算全部发生在 C++ 渲染层的 shadow tree 上，触发靠 Fabric 的挂载钩子，滚动这一路上不产生任何 JS 与原生之间的往返。Recce 把计算放在 Android 原生 View 坐标上，靠 `onScroll` 触发，算完单向上报。
+| 问题 | 结论 |
+| --- | --- |
+| 实现层次谁更靠底层 | RN 官方。几何计算全部发生在 C++ 渲染层的 shadow tree 上，触发靠 Fabric 的挂载钩子，滚动这一路上不产生任何 JS 与原生之间的往返；Recce 把计算放在 Android 原生 View 坐标上，靠 `onScroll` 触发，算完单向上报 |
+| 现在能不能直接上生产 | RN 官方不能。文档站仍标注 Canary，需要启用新架构的 RN 0.83 及以上，从 0.83 到 0.87 的发布说明里再也没提过它 |
+| Recce 反过来有官方盖不到的场景 | 它比的是 Android 窗口与 Recce 容器，小窗、分屏、状态栏与导航栏都做过实测；RN 官方只能观察 RN 自身渲染树内部的滚动，外部原生容器滚动 RN 子树时它看不见 |
+| 该怎么选 | 两边的强弱各落在不同维度，结论要按场景分，见第六章 |
 
-可用性是另一回事，RN 官方现在还不能直接上生产。文档站仍标注 Canary，需要启用新架构的 RN 0.83 及以上，从 0.83 到 0.87 的发布说明里再也没提过它。
-
-Recce 反过来有官方盖不到的场景。它比的是 Android 窗口与 Recce 容器，小窗、分屏、状态栏与导航栏都做过实测；RN 官方只能观察 RN 自身渲染树内部的滚动，外部原生容器滚动 RN 子树时它看不见。
-
-两边的强弱各落在不同维度，结论要按场景分，见第六节。
-
-## 读之前把几个词说清楚
-
-后面会反复用到这几个词，先给一句白话解释。
+## 词表
 
 | 词 | 指的是什么 |
 | --- | --- |
@@ -43,89 +38,70 @@ Recce 反过来有官方盖不到的场景。它比的是 Android 窗口与 Recc
 
 业务侧 `new IntersectionObserver(cb, { threshold })` 拿到的是一个 JS 类。观察关系先记在 JS 侧的 `IntersectionObserverManager` 里并分配 `observerId`，再经 `NativeIntersectionObserver` TurboModule 转成 C++ 调用。TurboModule 只有五个方法：`observeV2`、`unobserveV2`、`connect`、`disconnect`、`takeRecords`。真正干活的是 C++ 的 `IntersectionObserverManager`，它同时实现 `UIManagerMountHook` 与 `RuntimeSchedulerIntersectionObserverDelegate` 两个接口。
 
-`observeV2` 的入参是 `intersectionObserverId`、`rootShadowNode`、`targetShadowNode`、`thresholds`、`rootThresholds`、`rootMargin`。传的是 shadow node 的引用，不是平台的原生 view。
-
-这一点决定了后面所有差异。滚动位置在 Fabric 的 shadow tree 里随 state 更新维护，几何信息因此有一份跨平台、持续最新的来源，iOS 与 Android 共用同一套计算代码。
+`observeV2` 的入参是 `intersectionObserverId`、`rootShadowNode`、`targetShadowNode`、`thresholds`、`rootThresholds`、`rootMargin` —— 传的是 shadow node 的引用，不是平台的原生 view。这一点决定了后面所有差异：滚动位置在 Fabric 的 shadow tree 里随 state 更新维护，几何信息因此有一份跨平台、持续最新的来源，iOS 与 Android 共用同一套计算代码。
 
 ### 1.2 什么时候算
 
 ![图 2：RN 官方一次滚动的处理顺序。滚动先让 Fabric 更新 shadow tree，挂载完成触发挂载钩子，钩子按 surfaceId 取出该 surface 上所有 observer，逐个算几何并过阈值状态机，状态没变的丢掉，产生的 entry 攒起来后本周期只向 JS 调度一次，JS 侧 takeRecords 一次取走再分组回调。](fig2-mount-timeline.svg)
 
-有两条触发路径。
-
-mount hook 是主路径。`connect()` 里执行 `uiManager.registerMountHook(*this)`，此后每次 shadow tree 挂载完成（`shadowTreeDidMount`）就把该 surface 上注册的所有 observer 全部重算一遍。observer 按 `surfaceId` 分桶存放，一次挂载只需要关心一个 surface。
-
-事件循环步负责初始通知。`connect()` 里同时执行 `runtimeScheduler.setIntersectionObserverDelegate(this)`，`updateIntersectionObservations` 在这个时机处理刚建立、还没有 pending 事务的观察关系：该 surface 有 pending rendering update 就等 mount hook，没有就当场算。
+两条触发路径。**mount hook 是主路径**：`connect()` 里执行 `uiManager.registerMountHook(*this)`，此后每次 shadow tree 挂载完成（`shadowTreeDidMount`）就把该 surface 上注册的所有 observer 全部重算一遍；observer 按 `surfaceId` 分桶存放，一次挂载只需要关心一个 surface。**事件循环步负责初始通知**：`connect()` 里同时执行 `runtimeScheduler.setIntersectionObserverDelegate(this)`，`updateIntersectionObservations` 在这个时机处理刚建立、还没有 pending 事务的观察关系——该 surface 有 pending rendering update 就等 mount hook，没有就当场算。surface 卸载时 `shadowTreeDidUnmount` 会给该 surface 上所有 observer 补一条不相交的通知。
 
 `IntersectionObserverManager.cpp` 的注释解释了为什么不照搬 Web 规范在这一步算：Web 那样做会漏掉事务处理与挂载耗时，算出来的 paint 时间不准。这是 RN 对 Web 规范的有意偏离。
 
-surface 卸载时 `shadowTreeDidUnmount` 会给该 surface 上所有 observer 补一条不相交的通知。
-
 ### 1.3 怎么算
 
-核心在 `IntersectionObserver::updateIntersectionObservation`。图 3 把六步一格格画了出来。
+核心在 `IntersectionObserver::updateIntersectionObservation`，图 3 把六步一格格画了出来。
 
 ![图 3：算一个交集要走的六步。先取 root 矩形，再按 rootMargin 外扩，再算 target 矩形，再减去 target 到 root 之间所有祖先的 overflow 裁剪，然后求交，最后用交集面积除以 target 面积得到比例。六格逐格叠加，第五格说明面积为 0 时靠交点位置判断贴边还是分离。](fig3-geometry.svg)
 
-root 矩形。有显式 root 时用 `computeRelativeLayoutMetrics` 算，没有就用根节点的 `layoutMetrics` 乘以 transform。
-
-rootMargin。以 root 尺寸为基准换算，上下取高度的百分比、左右取宽度的百分比，再用 `outsetBy` 展开 root 矩形。正数扩大，负数缩小，与 Recce 的处理方向一致。
-
-target 矩形。同样走 `computeRelativeLayoutMetrics`，打开 `includeTransform` 与 `includeViewportOffset`。
-
-裁剪。`getClippedTargetBoundingRect` 打开 `enableOverflowClipping`，把 target 到 root 之间所有祖先的 overflow 裁剪都算进去。这是 RN 比只比两个矩形多出来的一层。
-
-相交。`intersectOrNull` 先做 `Rect::intersect`，再专门处理面积为 0 的情况：检查交点是否同时落在两个矩形内，落在里面算贴边相交，落在外面算分离。这一步决定了「刚好滚出屏幕」到底要不要报。
-
-比例。交集面积除以 target 面积，target 面积为 0 时记 0。
+| 步骤 | 怎么做 |
+| --- | --- |
+| root 矩形 | 有显式 root 时用 `computeRelativeLayoutMetrics` 算，没有就用根节点的 `layoutMetrics` 乘以 transform |
+| rootMargin | 以 root 尺寸为基准换算，上下取高度的百分比、左右取宽度的百分比，再用 `outsetBy` 展开 root 矩形。正数扩大，负数缩小，与 Recce 的处理方向一致 |
+| target 矩形 | 同样走 `computeRelativeLayoutMetrics`，打开 `includeTransform` 与 `includeViewportOffset` |
+| 裁剪 | `getClippedTargetBoundingRect` 打开 `enableOverflowClipping`，把 target 到 root 之间所有祖先的 overflow 裁剪都算进去。这是 RN 比只比两个矩形多出来的一层 |
+| 相交 | `intersectOrNull` 先做 `Rect::intersect`，再专门处理面积为 0 的情况：检查交点是否同时落在两个矩形内，落在里面算贴边相交，落在外面算分离。这一步决定了「刚好滚出屏幕」到底要不要报 |
+| 比例 | 交集面积除以 target 面积，target 面积为 0 时记 0 |
 
 ### 1.4 什么时候通知
 
-阈值判定用的不是逐条阈值比较，而是「已跨过的最高阈值」状态机。
+阈值判定用的不是逐条阈值比较，而是「已跨过的最高阈值」状态机。状态有三种：`Initial`、`NotIntersecting`、`Intersecting(threshold, rootThreshold)`；`getHighestThresholdCrossed` 取所有小于等于当前比例的阈值里最大的那个，状态没变就不产生 entry。
 
-状态有三种：`Initial`、`NotIntersecting`、`Intersecting(threshold, rootThreshold)`。`getHighestThresholdCrossed` 取所有小于等于当前比例的阈值里最大的那个，状态没变就不产生 entry。
-
-这个模型顺手解决了 Recce 文档里手工处理的那个问题：阈值 0.5，比例从 0.4 到 0.5 触发一次、从 0.5 到 0.6 又触发一次。在 RN 里后者跨过的最高阈值仍是 0.5，状态没变，不会重复通知。
+这个模型顺手解决了 Recce 文档里手工处理的那个问题：阈值 0.5，比例从 0.4 到 0.5 触发一次、从 0.5 到 0.6 又触发一次；在 RN 里后者跨过的最高阈值仍是 0.5，状态没变，不会重复通知。它也不需要为阈值 0 和 1 写边界特判，因为「完全不相交」由 `intersectOrNull` 返回 `nullopt` 表达，不是靠比例等于 0 推出来的。
 
 ![图 4：阈值判定对照。上半是 RN 的三种状态与转移，只有跨过的最高阈值变化才产生 entry。下半是同一段比例从 0.4 到 0.5 再到 0.6 的两条时间轴：RN 官方只通知一次，Recce 手工的半开半闭比较通知两次，而且阈值 0 和 1 还要各写一条边界特判。](fig4-threshold.svg)
 
-它也不需要为阈值 0 和 1 写边界特判，因为「完全不相交」由 `intersectOrNull` 返回 `nullopt` 表达，不是靠比例等于 0 推出来的。
-
-通知合并是另一件事。entry 先攒进 `pendingEntries_`，`notifiedIntersectionObservers_` 标志位保证一个事件循环周期内只向 JS 调度一次回调。JS 收到后调 `takeRecords()` 一次性取走全部 entry，按 `intersectionObserverId` 分组，再逐个 observer 回调。一次滚动里无论有多少个 observer，原生到 JS 只走一趟。
+通知合并是另一件事：entry 先攒进 `pendingEntries_`，`notifiedIntersectionObservers_` 标志位保证一个事件循环周期内只向 JS 调度一次回调；JS 收到后调 `takeRecords()` 一次性取走全部 entry，按 `intersectionObserverId` 分组，再逐个 observer 回调。一次滚动里无论有多少个 observer，原生到 JS 只走一趟。
 
 ### 1.5 交给 JS 的结果
 
-`IntersectionObserverEntry` 暴露 `boundingClientRect`、`intersectionRect`、`intersectionRatio`、`rnRootIntersectionRatio`、`rootBounds`、`isIntersecting`、`target`、`time`。
-
-原生侧只回传 `targetRect`、`rootRect`、`intersectionRect`、`isIntersectingAboveThresholds`、`time` 五项，`DOMRectReadOnly` 与各个比例都在 JS 侧懒计算。
-
-`isIntersecting` 用的是 W3C 语义：target 是否与 root 相交、是否高于阈值。
+| 项 | 内容 |
+| --- | --- |
+| JS 侧暴露的字段 | `boundingClientRect`、`intersectionRect`、`intersectionRatio`、`rnRootIntersectionRatio`、`rootBounds`、`isIntersecting`、`target`、`time` |
+| 原生实际回传 | `targetRect`、`rootRect`、`intersectionRect`、`isIntersectingAboveThresholds`、`time` 五项；`DOMRectReadOnly` 与各个比例都在 JS 侧懒计算 |
+| `isIntersecting` 语义 | W3C：target 是否与 root 相交、是否高于阈值 |
 
 ### 1.6 现状与已知限制
 
-状态是 Canary。官方文档页顶部写着这段 API 目前只在 Canary 与 Experimental 通道提供，需要在应用里启用 Canary 通道。它在 0.83（2025-12-10）随新架构引入，之后 0.84（2026-02-11）、0.85（2026-04-07）、0.86（2026-06-11）、0.87（2026-08-11）的发布说明都没有再提，到 2026-10-13 仍未转正。
-
-原始提交 #37853 的说明里承认了滚动时间戳的延迟：常规渲染先更新 shadow tree 再挂载，时间戳准；state 更新先更新 UI 再更新 shadow tree，上报的时间戳是处理更新的时刻，不是滚动事件本身的时刻。
-
-同一份说明还承认初始通知不可靠。挂载早于观察建立时，初始通知报的是观察时刻而不是首帧时刻。Android 用推送模型下发 mutation，事务在 commit 之后才被消费，这段逻辑被破坏。
-
-观察范围限于 RN 自身的 shadow tree。这一点不在官方限制列表里，是从实现推出来的：外部原生容器滚动 RN 子树时，shadow tree 内的相对布局没有变化，`includeViewportOffset` 也涉及不到外层原生容器，所以观察不到。
-
-`rnRootThreshold` 是 RN 私有扩展，不是标准。
+| 限制 | 内容 |
+| --- | --- |
+| 状态是 Canary | 官方文档页顶部写着这段 API 目前只在 Canary 与 Experimental 通道提供，需要在应用里启用 Canary 通道。它在 0.83（2025-12-10）随新架构引入，之后 0.84（2026-02-11）、0.85（2026-04-07）、0.86（2026-06-11）、0.87（2026-08-11）的发布说明都没有再提，到 2026-10-13 仍未转正 |
+| 滚动时间戳有延迟 | 原始提交 #37853 的说明里承认：常规渲染先更新 shadow tree 再挂载，时间戳准；state 更新先更新 UI 再更新 shadow tree，上报的时间戳是处理更新的时刻，不是滚动事件本身的时刻 |
+| 初始通知不可靠 | 挂载早于观察建立时，初始通知报的是观察时刻而不是首帧时刻；Android 用推送模型下发 mutation，事务在 commit 之后才被消费，这段逻辑被破坏 |
+| 观察范围限于 RN 自身的 shadow tree | 这一点不在官方限制列表里，是从实现推出来的：外部原生容器滚动 RN 子树时，shadow tree 内的相对布局没有变化，`includeViewportOffset` 也涉及不到外层原生容器 |
+| `rnRootThreshold` 是 RN 私有扩展 | 不是标准 |
 
 ## 二、Recce 1.24 是怎么做的
 
 对外是一个 `isVisibleAreaChange` 属性。入参 `root`、`rootMargin`、`threshold`，出参 `boundingClientRect`、`intersectionRect`、`intersectionRatio`、`isIntersecting`。
 
-触发采用路线二。view 初始化时用 `OnGlobalLayoutListener` 一次性拿到父级 ScrollView 引用，只遍历到 RecceRootView，然后在这些 ScrollView 上注册 `OnRecceScrollChangeListener`，滚动回调里算重叠。代价是要改 RecceScrollView 和 RecceHorizontalView。
-
-被放弃的路线一是直接给 view 挂 `OnGlobalLayoutListener` 加 `OnScrollChangedListener`。实现闭环在单独模块里、改动最小，但嵌在 mrn 或原生页面里时外层容器滚动也会触发，而且同样要改那两个 ScrollView 类。
-
-计算用 Android `Rect` 的 `setIntersect`，文档特别强调必须判返回值。rootMargin 施加到 Rect 上是 left 与 top 做减法、right 与 bottom 做加法。阈值走手工的左开右闭与左闭右开，并对 0 和 1 两个边界单独特判。
-
-性能取舍是：`onScroll` 回调按 16ms 节流、主线程直接算、不用入队也不扔子线程。父级 ScrollView 引用用 `WeakReference` 持有。
-
-窗口形态实测覆盖全屏、沉浸式、隐藏或展示导航栏、小窗、分屏，逐项列出了 `DisplayMetrics` 与 `decorRect` 的差异。小窗模式的两行标记为不符合预期，写进了 TODO。
+| 项 | 做法 |
+| --- | --- |
+| 触发 | 采用路线二：view 初始化时用 `OnGlobalLayoutListener` 一次性拿到父级 ScrollView 引用，只遍历到 RecceRootView，然后在这些 ScrollView 上注册 `OnRecceScrollChangeListener`，滚动回调里算重叠。代价是要改 RecceScrollView 和 RecceHorizontalView |
+| 被放弃的路线一 | 直接给 view 挂 `OnGlobalLayoutListener` 加 `OnScrollChangedListener`。实现闭环在单独模块里、改动最小，但嵌在 mrn 或原生页面里时外层容器滚动也会触发，而且同样要改那两个 ScrollView 类 |
+| 计算 | Android `Rect` 的 `setIntersect`，文档特别强调必须判返回值；rootMargin 施加到 Rect 上是 left 与 top 做减法、right 与 bottom 做加法；阈值走手工的左开右闭与左闭右开，并对 0 和 1 两个边界单独特判 |
+| 性能取舍 | `onScroll` 回调按 16ms 节流、主线程直接算、不用入队也不扔子线程；父级 ScrollView 引用用 `WeakReference` 持有 |
+| 窗口形态 | 实测覆盖全屏、沉浸式、隐藏或展示导航栏、小窗、分屏，逐项列出了 `DisplayMetrics` 与 `decorRect` 的差异。小窗模式的两行标记为不符合预期，写进了 TODO |
 
 ## 三、原方案调研表（复刻 Recce 文档 §3.1）
 
@@ -174,17 +150,48 @@ Recce 文档 §3.1 的得分排序在两处需要修正，一处需要补充条�
 
 ![图 6：三条路怎么选。滚动全在 RN 渲染树内且能开 Canary 就用官方，开不了 Canary 用事件触发式；有原生容器滚动 RN 子树时官方看不见，用原生侧绑触发器的事件触发式；要覆盖小窗分屏或三端同时可用，维持 Recce 1.24 原生监听。底部是可与前三条合用的转发路线。](fig6-decision.svg)
 
-场景一：页面只用 RN 自己的 ScrollView，滚动都发生在 RN 渲染树内部，项目已经在新架构上并且愿意开 Canary。用 RN 官方 IntersectionObserver。代码最少，语义与 Web 一致，一份 C++ 实现覆盖各平台，维护在上游。
+| 场景 | 用什么 | 为什么 |
+| --- | --- | --- |
+| 页面只用 RN 自己的 ScrollView，滚动都发生在 RN 渲染树内部，项目已经在新架构上并且愿意开 Canary | RN 官方 IntersectionObserver | 代码最少，语义与 Web 一致，一份 C++ 实现覆盖各平台，维护在上游 |
+| RN 页面嵌在原生滚动容器里，由原生的 ScrollView 或 RecyclerView 滚动 RN 子树 | 事件触发式，把触发器放在原生侧，用 scope 分组按需触发 | 官方观察不到这类滚动；scope 分组可按需降频 |
+| 需要覆盖小窗、分屏、沉浸式，或者必须三端同时可用且不接受 Canary 依赖 | 维持 Recce 1.24 的原生监听 | 它的窗口形态实测是官方文档里没有的 |
 
-场景二：RN 页面嵌在原生滚动容器里，由原生的 ScrollView 或 RecyclerView 滚动 RN 子树。RN 官方观察不到，继续用事件触发式，把触发器放在原生侧，用 scope 分组按需触发。
+三条路也可以不互斥：Recce 的 `isVisibleAreaChange` 入参与出参和 W3C 几乎一一对应，可以在宿主是 RN 内部滚动时转发给官方 IntersectionObserver，只在检测到原生容器滚动时才退回自研路径。这样上游转正以后，切换成本只落在转发层。
 
-场景三：需要覆盖小窗、分屏、沉浸式，或者必须三端同时可用且不接受 Canary 依赖。维持 Recce 1.24 的原生监听。它的窗口形态实测是官方文档里没有的。
+## 七、业界还有哪些做法
 
-三条路也可以不互斥。Recce 的 `isVisibleAreaChange` 入参与出参和 W3C 几乎一一对应，可以在宿主是 RN 内部滚动时转发给官方 IntersectionObserver，只在检测到原生容器滚动时才退回自研路径。这样上游转正以后，切换成本只落在转发层。
+前六章比的是「我们两家怎么实现」。这一章把视野拉开：规范里还有什么、原生生态是怎么做的、我们该补什么。出处为公开规范与上游源码（2026-10-14 抓取）。
 
-## 七、待核实
+### 7.1 规范层面：v1 与 v2 之间隔着一个没落地的能力
 
-- Recce 文档给出的 ★★★ / ★★ / ★ 排序没有附实测数据，缺同设备同场景的三方案对照。
-- RN `IntersectionObserver.js` 里 `root` 的 getter 注释仍写着这段属性目前无法配置、`root` 恒为 `null`，但构造函数会把 `options.root` 存下来，`observeV2` 也把它作为 `rootShadowNode` 传给原生。注释与实现不一致，需要确认 `root` 是否真的生效。
-- RN 0.87 之后 IntersectionObserver 是否仍停在 Canary，需要按最新 release 分支复核，本节结论只到 2026-10-13 的官方文档与 `main` 分支。
-- Recce 文档的小窗模式两行标记为不符合预期，且条目已勾选完成，实际修复方式与验证结果未在文档中说明。
+**v1 的语义与本文第一节的 RN 实现能一一对上**，说明 RN 是照规范做的，唯一的偏离是「什么时候算」（从事件循环挪到了挂载钩子）：`threshold` 默认 0，含义是「目标一接触 root 边界就触发，即使还没有像素可见」；`thresholds` 是升序数组，比值是「相交面积 ÷ target 边界框面积」；`rootMargin` 默认 `0px 0px 0px 0px`，只收 px 与 %，正值扩大、负值缩小；观察建立时必定回调一次初始 entry；`isIntersecting` 表示「至少部分相交」；**只共享边界线、或 target 面积为 0 的零面积相交不算进入相交状态**（这正是 RN 用 `intersectOrNull` 返回 `nullopt` 表达的那件事）；entry 走队列投递、一次可能多个；回调在主线程，官方建议耗时工作交给 `requestIdleCallback`。出处：[MDN Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)。
+
+**v2 才是真正回答「有没有被遮挡」的那一版，而它没普及。** v2 给通知加了一个 `isVisible`：为 true 是「目标完全未被遮挡、且没有会改变或扭曲其显示的视觉特效」的强保证；实现允许假阴性、不允许假阳性（可以说看不见但其实看得见，不能反过来）。动机是防点击劫持 —— iframe 里的代码不必信任嵌入方，就能自己验证是否被如实展示。难点官方自己写了：靠读回 GPU 像素判断遮挡代价过高，建议复用已有的 hit-testing 能力；另外必须配 `delay` 限流（小于 100 会被强制设成 100）。浏览器支持只有 Chromium 系（Chrome 74 / Edge 79 起），Firefox 与 Safari 全不支持，MDN 标注为「非 Baseline」。出处：[v2 explainer](https://raw.githubusercontent.com/w3c/IntersectionObserver/v2/explainer.md)、[trackVisibility](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/trackVisibility)。
+
+对照我们的实现：RN 官方在构造函数里把 `trackVisibility`、`delay`、`scrollMargin` 三个选项**直接抛错**。所以「有更标准的方案可以换」这件事在这一层并不成立 —— 想要「可见 vs 被遮挡」的强语义，规范给不了、RN 也不给，只能自己做（我们的原生几何反而能覆盖其中一部分）。
+
+### 7.2 不用 IntersectionObserver 的四条路数
+
+| 路数 | 它判什么 | 与我们的关系 |
+| --- | --- | --- |
+| **RN 内建的 ViewabilityHelper**（`onViewableItemsChanged`） | 用 `ListMetricsAggregator` 取每项 offset/length，结合 scrollOffset 与 viewportHeight 逐项算可见比例；两种阈值**互斥且必须二选一**（都设或都不设直接 assert 失败）：`viewAreaCoveragePercentThreshold`（占视口比例）与 `itemVisiblePercentThreshold`（该项自身可见比例）；`minimumViewTime` 用 `setTimeout` 延迟派发、并用版本号丢弃过期更新；默认 config 是 `{ viewAreaCoveragePercentThreshold: 0 }` | 只服务虚拟列表（必须知道每项 offset/length），不适合任意组件。但它有一个我们没有的参数：`minimumViewTime`（停留多久才算数） |
+| **Flutter 的 `visibility_detector`**（0.4.0+2，2023-03） | `RenderVisibilityDetector` 在 `paint()` 里记录 canvas 的局部裁剪与 transform，注册 `Layer.addCompositionCallback` 捕获合成阶段变化，再沿 Layer 链累积 `describeClipBounds()` 求交；Viewport 场景另有 Sliver 版本；所有 detector 的回调在帧间一起触发，各自最多每 `updateInterval`（默认 500ms）回调一次 | 官方 README 承认两个限制：只看 bounding box，**不考虑 opacity，也不处理被别的 widget 遮挡**。值得借的是它把「多久刷新一次」做成了显式参数 |
+| **原生 Android 的公开库：Litho / Epoxy** | Litho 有六类可见性事件（Visible / Invisible / Focused / Unfocused / Full Impression / Visibility Changed），并支持 `visibleWidthRatio` / `visibleHeightRatio` 自定义触发比例，另有 `LithoVisibilityEventsController` 处理「Activity 被压后台」导致的可见性变化。Epoxy 自 2.19.0 起 `EpoxyVisibilityTracker().attach(recyclerView)`，把子 view 的 global visible rect 与 RecyclerView 边界比较得出 `percentVisibleHeight`，另用 `partialImpressionThresholdPercentage` 控制 PARTIAL_IMPRESSION 的门槛（默认 null 即关闭该事件） | 印证两件事：① 原生生态把这套能力做成「每帧回调 + 比例阈值」，与我们 1.24 的形态同源；② 曝光事件要分「部分可见」与「完全可见」。Litho 官方还提醒 `Visibility Changed` 滚动时每帧都回调、别在里面做重活 |
+| **平台层的基础件** | RecyclerView 的 `OnScrollListener` + LayoutManager 的 first/last visible position 逐项算；`View.getLocalVisibleRect` / `getGlobalVisibleRect` 求交 | 我们 1.24 的 Rect 求交就属这一类。本次未找到 Android 平台或 AndroidX 提供官方曝光库的证据（相关官方参考页抓取被重定向，未取到一手文档） |
+
+### 7.3 判断：该补的三处
+
+1. **加一个停留时长参数。** 两套方案都是「露出即算」，而埋点口径里最常被追加的条件恰恰是「露出后停留 N 毫秒」。RN 的 `minimumViewTime`、Flutter 的 `updateInterval` 都是这个位置上的参数。
+2. **把事件拆成两档。** 现在出参只有 `intersectionRatio`，「部分可见」与「完全可见」交给业务侧自己判；Litho 的 Full Impression、Epoxy 的 `partialImpressionThresholdPercentage` 都是平台侧就分好档。
+3. **`isIntersecting` 改回标准含义。** 第五章已提；不改的话，将来第六章那条「转发给官方 API」的路线在语义上就接不上。
+
+## 八、待核实
+
+| # | 事项 |
+| --- | --- |
+| 1 | Recce 文档给出的 ★★★ / ★★ / ★ 排序没有附实测数据，缺同设备同场景的三方案对照 |
+| 2 | RN `IntersectionObserver.js` 里 `root` 的 getter 注释仍写着这段属性目前无法配置、`root` 恒为 `null`，但构造函数会把 `options.root` 存下来，`observeV2` 也把它作为 `rootShadowNode` 传给原生。注释与实现不一致，需要确认 `root` 是否真的生效 |
+| 3 | RN 0.87 之后 IntersectionObserver 是否仍停在 Canary，需要按最新 release 分支复核，本文结论只到 2026-10-13 的官方文档与 `main` 分支 |
+| 4 | Recce 文档的小窗模式两行标记为不符合预期，且条目已勾选完成，实际修复方式与验证结果未在文档中说明 |
+| 5 | **v2 未普及的原因只找到技术性说明。** explainer 写了「读回 GPU 像素代价过高」，但各浏览器（Firefox / Safari）为何不实现，未取到任何厂商立场文档或 bug 原文 |
+| 6 | **平台是否有官方曝光库未核实。** `developer.android.com` 与 AOSP 大文件在本次抓取中被重定向或返回空，`getGlobalVisibleRect` 等只有第三方文章作依据，不能断言「平台没有官方库」 |

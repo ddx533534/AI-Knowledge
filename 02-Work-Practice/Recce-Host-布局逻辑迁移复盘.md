@@ -2,27 +2,20 @@
 
 核实日期：2026-10-13。材料通过学城 CLI 直读原文核对，未引用二手转述。这条线 2025-07 规划，2025-12 与 2026-01 完成两次上线，本文按上线结果回看规划。
 
-## 写在开头：这次最值得记的是什么
-
-上一份复盘讲「怎么把范围划清楚」，这份讲另一半：**怎么判断一个没有当下痛点的改造值不值得做。**
-
-《Recce-Host 布局逻辑迁移规划》给了四条理由，性能排第一——跨语言调用从 N+2 次降到 N+1 次。这是四条里唯一可测的。实测两端给出相反的答案：Android 从 340.8ms 变 418.4ms（慢了），鸿蒙极端页 host 布局从 17.826s 降到 0.694s（快约 26 倍）。两端的成因都不在架构——一边是新增成本没结清（多解析一次数据建影子树 +72ms、主线程队列未优化 +70ms），一边是被替换的旧实现本来就慢。
-
-> 用性能论证这类改造，等于把结论交给「被替换掉的旧实现有多差」这个偶然变量。
-
-换一个端、换一个页面，符号都可能翻转。规划真正兑现的是那两条本来就测不出来的——三端共用一套布局计算代码，为将来换布局框架（taffy 这类）预留接口。**它们不需要 benchmark，也不该用 benchmark 来论证。**
-
-另一条更实操：**能不能回滚，决定要不要拆成两次发布。** yoga 直接升级、没有开关，出问题只能把 white list 置空强制降级；host 新架构有 horn 开关，随时可退。两件事因此拆成鸿蒙点评 11.51.0（yoga）与 11.55.0（host）两次上线。
-
 ## 一张表看完
 
-| 问题 | 这份规划给出的答案 |
-| --- | --- |
-| 这事该不该做 | 四条理由三条不可测；唯一可测的性能，两端实测符号相反 |
-| 真正的收益在哪 | 三端共用一套布局计算代码、为换布局框架留接口——都不需要 benchmark |
-| 怎么上线 | 拆两次：没开关的先上（yoga），有开关的后上（host） |
-| 选哪个端做验证 | 不是越低越好，量级要够暴露问题——最终选点评（日均 3.35 万） |
-| 怎么验收 | 与旧架构行为一致，不是「符合理想」 |
+一句话：**这份规划要回答的，是一个没有当下痛点的改造值不值得做。**
+
+| # | 判断 | 依据 | 下次怎么做 |
+| --- | --- | --- | --- |
+| 1 | 该不该做：四条理由里三条不可测，唯一可测的是性能 | Android 从 340.8ms 变 418.4ms（慢了），鸿蒙极端页 host 布局从 17.826s 降到 0.694s（快约 26 倍），两端实测符号相反 | 理论收益要减掉新增成本才是净收益：省一次跨语言调用是收益、多一次数据解析是成本，两笔要在同一张账上算 |
+| 2 | 性能实测靠不住，它量的是「被替换的旧实现有多差」 | 快出来的那 26 倍来自旧版 host 布局实现太慢；换一个端、换一个页面，符号都可能翻转 | 用性能论证架构改造前，先问对照组是哪个实现；真正稳的依据是测不出来的那些——代码复用、架构自由度 |
+| 3 | 真正的收益在两条本来就测不出来的 | 三端共用一套布局计算代码、为将来换布局框架（taffy 这类）预留接口 | 它们不需要 benchmark，也不该用 benchmark 来论证 |
+| 4 | 选哪个端验证：不是越低越好，量级要够暴露问题 | 候选量级摆开选点评（日均 3.35 万）；外卖商家端日均 1，判「跑不出问题、验证不到」 | 「选低流量载体」要配一个下限——够不够暴露问题比低不低更重要。改引擎可以选日均个位数的 B 端，改架构主干不行 |
+| 5 | 能不能回滚，决定要不要拆成两次发布 | yoga 直接升级、没有开关，出问题只能把 white list 置空强制降级；host 新架构有 horn 开关，随时可退 | 两件事因此拆成鸿蒙点评 11.51.0（yoga）与 11.55.0（host）两次上线；有开关的可以带着风险上，没开关的单独安排、留更长观察期 |
+| 6 | 验收的判据是「与旧架构一致」，不是「符合理想」 | 整份游乐场回归里大量条目的结论写的是「可忽略，与旧架构保持一致」，真正的修复只有 5 条 | 迁移类改动是对内保持自身一致，能力补齐是对齐外部标准（RN 的语义），两类改动不能共用一套判据 |
+
+> 用性能论证这类改造，等于把结论交给「被替换掉的旧实现有多差」这个偶然变量。
 
 ## 词表
 
@@ -145,15 +138,47 @@ Android 的两项相加 142ms，正是文档结论「慢了 140ms 左右」的�
 
 ![图 4：验收这一环：整份回归大半判「与旧架构一致」，线上则看不到差异](fig4-verification.svg)
 
-## 六、可以带走的五条
+## 六、技术思路与业界方案
 
-1. **理论收益要减掉新增成本才是净收益。** 省一次跨语言调用是收益，多一次数据解析是成本，两笔要在同一张账上算。方案把第一笔写进正文、第二笔写进方案细节、性能一节写「暂定」，这是最容易漏掉的地方。
-2. **用性能论证架构改造之前，先问对照组是哪个实现。** 收益大小取决于被替换的旧实现有多差，换一个端就会翻转。真正稳的决策依据是那些测不出来的：代码复用、架构自由度。
-3. **「选低流量载体」要配一个下限。** 够不够暴露问题，比低不低更重要。改引擎可以选日均个位数的 B 端，改架构主干就不行。
-4. **能不能回滚，决定要不要拆开发布。** 有开关的改动可以带着风险上，没开关的改动就得单独安排、留出更长的观察期。这次两件事因此被拆成两次上线。
-5. **迁移类改动的验收基线是「等价」，不是「更好」。** 能力补齐是对齐外部标准（RN 的语义），迁移是保持自身一致（与旧架构行为相同）。判据混用会把大量「和旧架构一样」的正常表现记成缺陷。
+前面几章算的是这笔账值不值、验得够不够；这一章补两件没展开的：迁移在代码上省的是哪一次调用（以及那笔「多解析一次」到底是不是这类架构的必然代价），和「等价」这个判据在业界怎么被做成可复跑的用例。出处为公开上游来源（2026-10-14 抓取），可点开复核。
 
-![图 5：三处判断口径值得换一下，以及回滚能力与发布粒度的关系](fig5-criteria.svg)
+### 6.1 省下的那次调用，与「多解析一次」的来源
+
+改动本身是影子树从 platform 层搬到 host 层：host 侧建影子树并算布局，再把带布局信息的数据传给 platform，platform 建真实视图。
+
+**上游同一件事长什么样**：RN 的 Fabric 就是「布局算在共享层、平台层只管视图与事件」。官方渲染管线文档写明 Commit 阶段的第一个动作是 Layout Calculation —— 由 Yoga 算出每个 React Shadow Node 的位置与尺寸，输入是各节点的样式加根节点的 layout constraints，在后台线程执行、绝大部分计算在 C++ 内完成。代码级落点：
+
+- `LayoutableShadowNode` 声明纯虚的 `layoutTree(LayoutContext, LayoutConstraints)` 与 `layout(LayoutContext)`；
+- `YogaLayoutableShadowNode` 持有 `yoga::Node yogaNode_` 与 `yoga::Config yogaConfig_`，注册 measure / baseline / clone 三个回调连接器，并在布局前用 `configureYogaTree(pointScaleFactor, fontSizeMultiplier, defaultErrata, swapLeftAndRight)` 与 `resolveErrata` 配置这棵树；
+- 触发点在 `ShadowTree::tryCommit`，产出 `affectedLayoutableNodes` 后统一 `emitLayoutEvents`。
+
+出处：[渲染管线](https://reactnative.dev/docs/next/render-pipeline)、[LayoutableShadowNode.h](https://raw.githubusercontent.com/facebook/react-native/main/packages/react-native/ReactCommon/react/renderer/core/LayoutableShadowNode.h)、[YogaLayoutableShadowNode.h](https://raw.githubusercontent.com/facebook/react-native/main/packages/react-native/ReactCommon/react/renderer/components/view/YogaLayoutableShadowNode.h)、[ShadowTree commit](https://github.com/facebook/react-native/commit/56cb19f419af49af27b48c91df9692f30c970425)。
+
+两处差异值得单独拎出来：
+
+- **上游那一趟不是「跨语言调用」。** 同一进程内的 C++ 调用，平台侧读布局结果走的是 shadow node 已有的 props / layout 结构，**不存在「把数据再解析一次」**。也就是说，第二章那笔账里的「多解析一次」是 Recce 自己的数据传递设计带来的，不是「布局挪到共享层」这个架构的必然代价 —— 两笔账里，这一项是唯一可以靠设计消掉的。
+- **文本度量本来就不归布局引擎。** RN 里 Yoga 是通过 measure callback 把文本测量交回平台层的。所以规划那条「为换布局框架预留接口」的收益要成立，前提是这层接口只收尺寸约束、文本度量单独留出来；这与 taffy 的现状也是吻合的（taffy 不实现文本布局，见 6.3）。
+
+### 6.2 「等价」怎么变成可复跑的用例
+
+我们的做法是整份游乐场回归靠人工判「与旧架构一致」。业界三种做法的共同点是：把「一致」变成一个能反复跑的用例集。
+
+| 做法 | 怎么落地 | 可核实到的细节 |
+| --- | --- | --- |
+| 引擎自带的 fixture 对照（Yoga / taffy / stretch 都是这一套） | 用 HTML fixture 描述节点结构，在 Chrome 里渲染出**期望布局**，再拿本地实现跑同一组 fixture 比结果 | Yoga：测试是自动生成的，fixture 放 `gentest/fixtures`，`yarn gentest` 重新生成代码（[react/yoga](https://github.com/react/yoga)）。taffy：CONTRIBUTING 写明「Flexbox layouts are tested by validating that layouts written in this crate perform the same as in Chrome」，生成脚本会自动下载一对匹配的 Chrome for Testing 与 ChromeDriver，`just gentest` 重建 `tests/generated`；仓库里另有 `scripts/import-yoga-tests`、`scripts/getchrome`、`scripts/diff-test-fixtures-with-yoga.sh` —— **直接拿 Yoga 的用例做逐条差异对照**（[CONTRIBUTING](https://raw.githubusercontent.com/DioxusLabs/taffy/main/CONTRIBUTING.md)、[scripts](https://github.com/DioxusLabs/taffy/tree/main/scripts)） |
+| 浏览器的 Web 测试 | 在 content_shell 里加载页面，把渲染输出或 JS 输出与已有 expected 文件比对；官方已把 LayoutTests 更名 Web Tests。LayoutNG 的 contract 是「每个布局算法的输入固定为 (BlockNode, ComputedStyle, children, ConstraintSpace)，输出 PhysicalFragment」，这正是能做增量回归与缓存命中的结构基础；官方还说每次修 bug 都补一个 WPT | 期望结果在 `third_party/blink/web_tests/platform` 或测试同目录，失败产物落在 `out/Default/layout_test_results/`（[Web Tests](https://chromium.googlesource.com/chromium/src/+/main/docs/testing/web_tests.md)、[LayoutNG](https://chromium.googlesource.com/chromium/src/+/HEAD/third_party/blink/renderer/core/layout/layout_ng.md)） |
+| Flutter 的 golden | `matchesGoldenFile` + `LocalFileComparator` 做**逐像素**比对，`flutter test --update-goldens` 刷基准；框架自身走 SkiaGold 把基准图放到集中服务 | 官方 API 文档写明「perform a pixel-for-pixel comparison of the decoded PNGs」；已知脆弱点是字体在不同平台/版本渲染不同，默认用 'Ahem' 方块字体，换 SDK 常要重出基准图（[goldenFileComparator](https://api.flutter.dev/flutter/flutter_test/goldenFileComparator.html)） |
+
+最直接可搬的是第一行：本次「同一个开关切换、同一份 bundle」的新老对照，正好可以固化成一组 fixture 用例。第五章里 `has_new_layout` 那次靠人工逐个比对两份变更列表，缺的就是这样一个 diff 脚本。
+
+### 6.3 同一件事上游怎么做
+
+| 环节 | 上游的做法 | 与本次的差异 | 能不能借鉴 |
+| --- | --- | --- | --- |
+| 布局计算放在哪一层 | Fabric 放在 C++ 共享层（ShadowTree → LayoutableShadowNode → Yoga） | 我们是从 platform 层迁到 host 层，方向相同 | 方向已对上；差别是上游那一趟不跨语言，成本结构不同 |
+| 平台侧怎么拿布局结果 | 直接读 shadow node 的 props / layout，不重新解析 | 我们多解析一次 | 这一项可以靠设计消掉，见 6.1 |
+| 迁移类改动的验收 | fixture + 期望值自动比对，可反复跑（6.2） | 人工判「与旧架构一致」 | 值得；本次已有的对照数据已具备固化条件 |
+| 「为换布局框架预留接口」的可行性 | taffy 不实现文本布局，wasm 绑定仍列 WIP；使用者多为 Rust 系 GUI 框架 | 接口收益卡在文本度量与 wasm 两处 | 把「尺寸约束」与「文本度量」在接口层分开是对的；但别把它当成「整条渲染链路都能换」的依据 |
 
 ## 七、还差的与待核实
 
@@ -165,6 +190,8 @@ Android 的两项相加 142ms，正是文档结论「慢了 140ms 左右」的�
 | 排期表状态没回填 | 现行版最后一格停在「5. 鸿蒙上线验证 进行中」，而实际上线分别在 2025-12 与 2026-01 完成；「调研 host 层闭环文本布局计算的可行性」与「尝试在 Android 上进行 taffy 布局计算框架替换」两格始终是「待开始」，都没有结论或触发条件 |
 | 「方案二」指代相反 | 《部分规划调整-2》里方案二＝两件事一起上，两份上线记录里方案二＝两件事依次上；直接引用编号会读错 |
 | 「三端统一复用」只落地一端 | 规划的首要目标含三端统一复用，实际完成的上线是鸿蒙点评，Android 与 iOS 侧的迁移复用没有找到对应记录 |
+| 「多解析一次」是设计选择还是约束所致 | 6.1 说这一项可以靠设计消掉，依据是与上游架构的对照（上游平台侧不重新解析）；本次方案里为什么选了解析两次，材料里没有理由，未与方案设计者确认 |
+| 上游布局触发的原文没取到 | 6.1 里 `ShadowTree::tryCommit` 产出 `affectedLayoutableNodes` 出自 commit diff；`ShadowTree.cpp` 内调用 `layoutTree` 那几行的原文未取到，触发链只由类声明与该 diff 间接佐证 |
 
 ## 附：读了什么
 

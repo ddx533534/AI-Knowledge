@@ -106,7 +106,7 @@
 <tr>
 <td>1.30</td>
 <td><strong>字体路径</strong></td>
-<td>《recce-Android 字体路径适配技术方案》</td>
+<td>《【已上线】【keeta 国际支付】recce-Android 字体路径适配技术方案》</td>
 </tr>
 <tr>
 <td>1.31</td>
@@ -171,7 +171,7 @@
 <tr>
 <td>1.35</td>
 <td><strong>触摸新架构</strong></td>
-<td>《1.35 Recce-Android 触摸事件新架构技术方案》</td>
+<td>《【已评审】1.35 Recce-Android 触摸事件新架构技术方案》</td>
 </tr>
 <tr>
 <td>1.35</td>
@@ -185,8 +185,129 @@
 </tr>
 </tbody>
 </table></div>
-<h2>一、结论：这八份版本下来，最大的启发是什么</h2>
-<p>一句话：<strong>1.28 到 1.35 做的主要不是「加功能」，而是「把借来的东西收回来」。</strong> 顺着这句有五条判断，对应的动作放在第四节。</p>
+<p><strong>一句话结论：1.28 到 1.35 做的主要不是「加功能」，而是「把借来的东西收回来」。</strong></p>
+<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 348" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>Recce 1.28 到 1.35 的技术方案按版本与类别分布</title>
+  <desc>五行八列的矩阵。行是五类工作：换依赖、新增能力、重构、对齐与适配、机制与扫描；列是 1.28 到 1.35 八个版本。换依赖出现在 1.28（Yoga 引入）与 1.31（Android 升 yoga、鸿蒙升 yoga）。新增能力从 1.29 的 Lottie 起，1.32 加 SVG，1.33 加字体加载与文本渐变，1.34 加 Touch 指针，1.35 加补充缺失属性。重构出现在 1.31（图片重构）、1.34（背景重构）、1.35（触摸事件新架构）。对齐与适配出现在 1.30（字体路径）、1.32（Image 二期）、1.35（Android 17 适配）。机制与扫描只在 1.35（实名认证方案调研、RN 差异扫描）。格子颜色只表示类别，不表示评价。</desc>
+
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">18 份方案按版本与类别排开</text>
+
+  <rect x="24" y="32" width="632" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
+  <text x="32" y="44" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">类别</text>
+  <text x="163.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.28</text>
+  <text x="229" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.29</text>
+  <text x="294.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.30</text>
+  <text x="360" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.31</text>
+  <text x="425.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.32</text>
+  <text x="491" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.33</text>
+  <text x="556.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.34</text>
+  <text x="622" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.35</text>
+
+  <!-- 行 1 换依赖 -->
+  <text x="32" y="74" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">换依赖</text>
+  <text x="32" y="89" font-size="8.5" fill="#8a929c" dominant-baseline="central">借来的引擎收回自己手里</text>
+  <rect x="132" y="58" width="63" height="50" rx="5" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
+  <text x="163.5" y="78" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">Yoga 引入</text>
+  <text x="163.5" y="90" font-size="8" fill="#A9743A" text-anchor="middle" dominant-baseline="central">3.2.1 自打包</text>
+  <rect x="328.5" y="58" width="63" height="50" rx="5" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
+  <text x="360" y="73" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">Android 升</text>
+  <text x="360" y="84" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">yoga</text>
+  <text x="360" y="96" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">鸿蒙升 yoga</text>
+
+  <!-- 行 2 新增能力 -->
+  <text x="32" y="128" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">新增能力</text>
+  <text x="32" y="143" font-size="8.5" fill="#8a929c" dominant-baseline="central">各定一套资源来源规则</text>
+  <rect x="197.5" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="229" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">Lottie</text>
+  <text x="229" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">dist/lottie</text>
+  <rect x="394" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="425.5" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">SVG</text>
+  <text x="425.5" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">data: 前缀</text>
+  <rect x="459.5" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="491" y="127" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">字体加载</text>
+  <text x="491" y="138" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">文本渐变</text>
+  <text x="491" y="150" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">bundle 内字体</text>
+  <rect x="525" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="556.5" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">Touch 指针</text>
+  <text x="556.5" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">协议先行</text>
+  <rect x="590.5" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="622" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">补属性</text>
+  <text x="622" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">协议 + 行为</text>
+
+  <!-- 行 3 重构 -->
+  <text x="32" y="182" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">重构</text>
+  <text x="32" y="197" font-size="8.5" fill="#8a929c" dominant-baseline="central">收益大头在清历史债</text>
+  <rect x="328.5" y="166" width="63" height="50" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="360" y="186" font-size="8.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">图片重构</text>
+  <text x="360" y="198" font-size="8" fill="#5C9575" text-anchor="middle" dominant-baseline="central">拆父子关系</text>
+  <rect x="525" y="166" width="63" height="50" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="556.5" y="186" font-size="8.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">背景重构</text>
+  <text x="556.5" y="198" font-size="8" fill="#5C9575" text-anchor="middle" dominant-baseline="central">收口到一个类</text>
+  <rect x="590.5" y="166" width="63" height="50" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
+  <text x="622" y="186" font-size="8.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">触摸新架构</text>
+  <text x="622" y="198" font-size="8" fill="#5C9575" text-anchor="middle" dominant-baseline="central">绕开原生分发</text>
+
+  <!-- 行 4 对齐与适配 -->
+  <text x="32" y="236" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">对齐与适配</text>
+  <text x="32" y="251" font-size="8.5" fill="#8a929c" dominant-baseline="central">判据换成线上有没有流量</text>
+  <rect x="263" y="220" width="63" height="50" rx="5" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="294.5" y="240" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">字体路径</text>
+  <text x="294.5" y="252" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">资源目录变更</text>
+  <rect x="394" y="220" width="63" height="50" rx="5" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="425.5" y="240" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">Image 二期</text>
+  <text x="425.5" y="252" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">属性逐项对齐</text>
+  <rect x="590.5" y="220" width="63" height="50" rx="5" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
+  <text x="622" y="236" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">Android 17</text>
+  <text x="622" y="248" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">适配</text>
+  <text x="622" y="260" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">被删 API 梳理</text>
+
+  <!-- 行 5 机制与扫描 -->
+  <text x="32" y="290" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">机制与扫描</text>
+  <text x="32" y="305" font-size="8.5" fill="#8a929c" dominant-baseline="central">交的是能力不是特性</text>
+  <rect x="590.5" y="274" width="63" height="50" rx="5" fill="#EEF5FC" stroke="#C9DFF2" stroke-width="0.5"/>
+  <text x="622" y="289" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">实名调研</text>
+  <text x="622" y="300" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">差异扫描</text>
+  <text x="622" y="312" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">pdef / 对读</text>
+
+  <line x1="24" y1="332" x2="656" y2="332" stroke="#e6e9ed" stroke-width="0.5"/>
+  <text x="24" y="342" font-size="8.5" fill="#8a929c" dominant-baseline="central">颜色只区分类别：橙＝换依赖，蓝＝新增能力与机制，绿＝重构，灰＝对齐与适配。</text>
+</svg></div><figcaption>图 1：按版本与类别排布的技术方案全景。横轴是 1.28 到 1.35 八个版本，纵轴是五类工作：换依赖、新增能力、重构、对齐与适配、机制与扫描。换依赖集中在 1.28 与 1.31；新增能力从 1.29 的 Lottie 一路加到 1.35 的补充属性；重构集中在 1.31、1.34、1.35；对齐与适配贯穿 1.30 到 1.35；机制与扫描只在 1.33 与 1.35 出现。</figcaption></figure>
+<div class="tw"><table>
+<thead><tr>
+<th>类别</th>
+<th>方案</th>
+<th>共同点</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>换依赖（3）</td>
+<td>Yoga 引入、Android 升 yoga、鸿蒙升 yoga</td>
+<td>借来的引擎要收回自己手里；代价是包体与双引擎共存</td>
+</tr>
+<tr>
+<td>新增能力（5）</td>
+<td>Lottie、SVG、字体加载、文本渐变、Touch 指针</td>
+<td>每个能力都要先定「资源从哪来、数据长什么样」</td>
+</tr>
+<tr>
+<td>重构（3）</td>
+<td>图片重构、背景重构、触摸新架构</td>
+<td>立项理由写「加能力」，实际收益大头是「清历史债」</td>
+</tr>
+<tr>
+<td>对齐与适配（4）</td>
+<td>字体路径、Image 二期、Android 17、补属性</td>
+<td>判据从「代码里有」换成「线上有流量」</td>
+</tr>
+<tr>
+<td>机制与扫描（3）</td>
+<td>实名调研、差异扫描、安全区域</td>
+<td>交的是机制或边界判断，不是功能，验收标准与功能型方案不同</td>
+</tr>
+</tbody>
+</table></div>
+<h2>一、这八份版本下来，最大的启发是什么</h2>
+<p>顺着开头那句话有五条判断，对应的动作放在第四节。</p>
 <div class="tw"><table>
 <thead><tr>
 <th>#</th>
@@ -197,30 +318,33 @@
 <tr>
 <td>1</td>
 <td>对标的锚点从 MRN 换成 RN，方案性质就从「补能力」变成「消差异」</td>
-<td>1.28–1.31 的参照物还是 MRN（「MPN 已经有了」「和 MRN 对齐」）；1.32 之后几乎每份第一句都变成「对齐 RN」，验收从「业务能用」变成「和 RN 逐字段一致」——这是被动接需求转向主动定标准的分界点</td>
+<td>1.28–1.31 方案里的参照物还是 MRN（「MPN 已经有了」「和 MRN 对齐」）；1.32 之后几乎每份方案第一句都变成「对齐 RN」，验收标准从「业务能用」变成「和 RN 逐字段一致」。这是被动接需求转向主动定标准的分界点</td>
 </tr>
 <tr>
 <td>2</td>
 <td>凡是「多端不一致」，最后都是把差异收口到一处，不是三端各修一遍</td>
-<td>正面：背景收口到 <code>CompositeBackgroundDrawable</code>、触摸收口到 <code>RecceTouchTargetHelper</code>、属性协议收口到 pdef 生成。反面：Lottie 的 <code>/dist/lottie</code> 路径、SVG 的 <code>data:</code> 前缀、字体加载的 bundle 内字体，三份方案各定义一套「资源从哪来」——同一个抽象缺失被付了三次成本</td>
+<td>背景收口到 <code>CompositeBackgroundDrawable</code>、触摸收口到 <code>RecceTouchTargetHelper</code>、属性协议收口到 pdef 生成，三份重构的共同形态都是「先建唯一入口，再让各端往里填」；反面是 Lottie 的 <code>/dist/lottie</code> 路径、SVG 的 <code>data:</code> 前缀、字体加载的 bundle 内字体，三份方案各定义了一套「资源从哪来」的规则——同一个抽象缺失，在三份方案里各付了一次成本</td>
 </tr>
 <tr>
 <td>3</td>
 <td>选型的分水岭永远是宿主 App 的包体余量，不是技术优劣</td>
-<td>点评当时的 Android 余量约 1.09MB，候选方案增量在 194KB 到 2.5MB 之间；Yoga 自打包 so、SVG 从 resvg 退回原生、thorvg 因 +600KB 落选，三次都倒在这条线上</td>
+<td>点评当时的 Android 余量约 1.09MB，而候选方案的增量在 194KB 到 2.5MB 之间；Yoga 走自打包 so、SVG 从 resvg 退回原生、thorvg 因 +600KB 落选，三次选型都倒在这条线上</td>
 </tr>
 <tr>
 <td>4</td>
 <td>重构类方案的收益大头是「清历史债」，立项理由却只写「加能力」</td>
-<td>图片重构顺带修掉 <code>ResizeMode</code> 一串问题与继承链的重复实现；背景重构一次收口 14 条三端不一致；触摸新架构顺手解锁一批依赖它的点击属性</td>
+<td>图片重构顺带修掉 <code>ResizeMode</code> 一串问题与继承链的重复实现；背景重构一次收口 14 条三端不一致；触摸新架构顺手解锁了依赖它的一批点击属性</td>
 </tr>
 <tr>
 <td>5</td>
 <td>最弱的一环不是技术判断，是证据强度</td>
-<td>18 份里能在文档内给出可复核数字的只有 5 份（Yoga 引入的耗时对照、Android 升 yoga 的包体明细、SVG 的耗时与包体、字体加载的缓存耗时、Android 17 适配的 DAU 口径）；多数「风险」章节是 todo 或「待定」，Benchmark 多为单机单次、无对照</td>
+<td>18 份里能在文档内给出可复核数字的只有 5 份（Yoga 引入的耗时对照、Android 升 yoga 的包体明细、SVG 的耗时与包体、字体加载的缓存耗时、Android 17 适配的 DAU 口径）；多数的「风险」章节写的是 todo 或「待定」，Benchmark 多为单机单次、无对照</td>
 </tr>
 </tbody>
 </table></div>
+<h2>二、五条判断的配图</h2>
+<p>判断 1（对标锚点从 MRN 换成 RN）见开头的全景图，其余四条各配一张：</p>
+<p><strong>判断 2 —— 凡是「多端不一致」，最后都是收口到一处，不是三端各修一遍。</strong>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 400" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>三类多端不一致问题的收敛点，以及一处没收口的反例</title>
   <desc>四行对照。前三行是已经收口的：背景渲染原来的形态是三端各自绘制边框、圆角与背景色，收口后所有 View 只设置一个 CompositeBackgroundDrawable；触摸分发原来三端各写一套命中与冒泡，收口后由 RecceTouchTargetHelper 统一按 pointerEvents、hitSlop、overflow、transform 判定；属性协议原来三端手写属性定义与读写，收口后由 pdef 单一源头生成 native 与 Rust 产物。第四行是反例：资源来源至今没收口，Lottie 用 dist/lottie 目录、SVG 用 data 前缀、字体加载用 bundle 内字体各定一套规则，缺的是统一的资源来源接口。</desc>
@@ -297,7 +421,8 @@
   <text x="334" y="360" font-size="8" fill="#C2604F" dominant-baseline="central">bundle 内 / data URI / 远端 URL / 宿主 assets 四类来源各一个实现</text>
 
   <text x="24" y="394" font-size="8.5" fill="#8a929c" dominant-baseline="central">三份方案各定一套资源规则，是同一个抽象缺失被付了三次成本。</text>
-</svg></div><figcaption>图 2：三类「多端不一致」问题的收敛点。三行分别是背景渲染、触摸分发、属性协议，每行左边是三端各自修的旧形态，右边是 1.34 与 1.35 之后收口成的唯一入口：CompositeBackgroundDrawable、RecceTouchTargetHelper、pdef 生成。</figcaption></figure>
+</svg></div><figcaption>图 2：三类「多端不一致」问题的收敛点。三行分别是背景渲染、触摸分发、属性协议，每行左边是三端各自修的旧形态，右边是 1.34 与 1.35 之后收口成的唯一入口：CompositeBackgroundDrawable、RecceTouchTargetHelper、pdef 生成。</figcaption></figure></p>
+<p><strong>判断 3 —— 选型的分水岭是宿主 App 的包体余量，不是技术优劣。</strong>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 336" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>三组选型的候选与落点，包体与依赖规范是共同的否决线</title>
   <desc>九行表格，四列是选型、候选、包体增量、多端一致性与结论。Yoga 引擎一组：直接依赖开源 yoga 被否，原因是包名与 mrn:yoga 冲突且不允许直接依赖开源组件；引入源码改包名自编译 so 入选，压缩后约增 194KB；换 Taffy 留作备选，因为缺 RTL 与 Position Static。SVG 渲染一组：RN-SVG 三端一致性高但视图节点数随子标签增长被否；androidsvg 纯原生包体最小、一致性中等而入选；rust-resvg 像素级一致但包体增加约 2.0MB 且复杂图耗时超过 1000ms 被否；thorvg 像素级一致、性能最好但增加约 600KB 被否。动画引擎一组：参考 lottie-react-native 与公司内 MRN 实现入选，按需集成；若当时与 SVG 共用 thorvg 则一致性与包体都更优，但这一条当时未评估。</desc>
@@ -365,7 +490,8 @@
 
   <rect x="24" y="308" width="632" height="24" rx="6" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
   <text x="32" y="320" font-size="8.5" fill="#8A4B00" dominant-baseline="central">包体余量是硬约束：点评 Android 当时余量约 1.09MB，候选方案的增量在 194KB 到 2.5MB 之间。</text>
-</svg></div><figcaption>图 3：选型的分水岭。三个圆角矩形分别是 Yoga、SVG、Lottie 的选型落点，横轴是包体代价，纵轴是多端一致性收益；三个「一致性最高」的候选（保留文本 feature 的 resvg、thorvg、双 so 共存的 Yoga）都被包体余量否掉或改写，结论一律倒向包体可控的一侧。</figcaption></figure>
+</svg></div><figcaption>图 3：选型的分水岭。三个圆角矩形分别是 Yoga、SVG、Lottie 的选型落点，横轴是包体代价，纵轴是多端一致性收益；三个「一致性最高」的候选（保留文本 feature 的 resvg、thorvg、双 so 共存的 Yoga）都被包体余量否掉或改写，结论一律倒向包体可控的一侧。</figcaption></figure></p>
+<p><strong>判断 4 —— 重构类方案的收益大头是「清历史债」，立项理由却只写「加能力」。</strong>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 344" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>三份重构方案的共同形态：立项写的是加能力，收益大头是清历史债</title>
   <desc>三列对照。第一列是 1.31 图片重构，立项写的能力是让 ResizeMode 生效、支持动态更新与扩展取值，顺带清掉的债包括子类大量 super 调用导致 setImageDrawable 二次设置绘制边界、把普通图误判为动画图、父子关系混淆造成重复方法、Android 不支持动态更新 ResizeMode、fit_start 与 fit_end 未支持。第二列是 1.34 背景重构，立项写的是支持 BoxShadow 并为背景图与轮廓线铺垫，顺带清掉 14 条三端背景渲染不一致、背景绘制逻辑散在三个类里、borderStyle 与四边颜色不统一无法同时满足、elevation 圆角投影、低版本 overflow 圆角裁剪。第三列是 1.35 触摸新架构，立项写的是支持点击热区、pointer-events 精细控制、移出父布局可点击，顺带清掉 ScrollView 设 OnTouchListener 会阻碍滚动、移出父布局的 View 点击不触发、点击热区只能靠父 View 的 TouchDelegate、click 与 longclick 优先级混乱、move 事件无节流、root 事件双发。三列的收益大头都在下半部分，但立项理由里写的是上半部分。</desc>
@@ -426,7 +552,8 @@
   <text x="462" y="286" font-size="8.5" fill="#5b6470" dominant-baseline="central">  TouchDelegate 打补丁</text>
   <text x="462" y="302" font-size="8.5" fill="#5b6470" dominant-baseline="central">· click / longclick 优先级混乱</text>
   <text x="462" y="318" font-size="8.5" fill="#5b6470" dominant-baseline="central">· move 无节流、root 事件双发</text>
-</svg></div><figcaption>图 4：重构类方案的共同形态。三列分别是 1.31 图片重构、1.34 背景重构、1.35 触摸新架构，上行是立项时写的能力目标，下行是这次重构顺带清掉的历史债；三份方案的收益大头都在「清债」一侧，但立项理由里写的都是「加能力」。</figcaption></figure>
+</svg></div><figcaption>图 4：重构类方案的共同形态。三列分别是 1.31 图片重构、1.34 背景重构、1.35 触摸新架构，上行是立项时写的能力目标，下行是这次重构顺带清掉的历史债；三份方案的收益大头都在「清债」一侧，但立项理由里写的都是「加能力」。</figcaption></figure></p>
+<p><strong>判断 5 —— 最弱的一环不是技术判断，是证据强度。</strong>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 456" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>18 份方案在四个证据维度上的强弱分布</title>
   <desc>十八行四列的矩阵，四个维度依次是文档内有可复核数字、有对照物、风险章节落到动作、有可执行的验收标准。绿格是有，橙格是部分，红格是没有或原文为空。有可复核数字的只有五行：1.28 Yoga 引入的耗时对照、1.31 Android 升 yoga 的包体明细、1.32 SVG 的耗时与包体、1.33 字体加载的缓存耗时、1.35 Android 17 的 DAU 口径。风险章节落到动作的比例也不高，1.29 Lottie、1.30 字体路径、1.31 图片重构、1.32 Image 二期、1.33 文本渐变与安全区域的风险或 todo 章节是空的或只写待定。验收标准较完整的是背景重构、Touch 指针、补属性、差异扫描四份。</desc>
@@ -559,130 +686,9 @@
   <line x1="24" y1="418" x2="656" y2="418" stroke="#e6e9ed" stroke-width="0.5"/>
   <text x="24" y="430" font-size="8.5" fill="#8a929c" dominant-baseline="central">有可复核数字的只有五行；风险章节写 todo 或待定的集中在 1.29 到 1.33 早期几份。</text>
   <text x="24" y="444" font-size="8.5" fill="#8a929c" dominant-baseline="central">背景重构、Touch 指针、补属性、差异扫描四份的验收项最完整，可当模板。</text>
-</svg></div><figcaption>图 5：18 份方案的证据强度分级。绿格是文档内给出了可复核的实测或对照数据，橙格是给了数字但无对照或单点测量，红格是结论有、风险章节为 todo 或待定；字体加载、SVG、背景重构、Touch 指针、差异扫描这五份证据最完整，风险章节写 todo 的集中在早期几份。</figcaption></figure>
-<h2>二、全景</h2>
-<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 348" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
-  <title>Recce 1.28 到 1.35 的技术方案按版本与类别分布</title>
-  <desc>五行八列的矩阵。行是五类工作：换依赖、新增能力、重构、对齐与适配、机制与扫描；列是 1.28 到 1.35 八个版本。换依赖出现在 1.28（Yoga 引入）与 1.31（Android 升 yoga、鸿蒙升 yoga）。新增能力从 1.29 的 Lottie 起，1.32 加 SVG，1.33 加字体加载与文本渐变，1.34 加 Touch 指针，1.35 加补充缺失属性。重构出现在 1.31（图片重构）、1.34（背景重构）、1.35（触摸事件新架构）。对齐与适配出现在 1.30（字体路径）、1.32（Image 二期）、1.35（Android 17 适配）。机制与扫描只在 1.35（实名认证方案调研、RN 差异扫描）。格子颜色只表示类别，不表示评价。</desc>
-
-  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">18 份方案按版本与类别排开</text>
-
-  <rect x="24" y="32" width="632" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
-  <text x="32" y="44" font-size="10.5" font-weight="500" fill="#5b6470" dominant-baseline="central">类别</text>
-  <text x="163.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.28</text>
-  <text x="229" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.29</text>
-  <text x="294.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.30</text>
-  <text x="360" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.31</text>
-  <text x="425.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.32</text>
-  <text x="491" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.33</text>
-  <text x="556.5" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.34</text>
-  <text x="622" y="44" font-size="10.5" font-weight="500" fill="#5b6470" text-anchor="middle" dominant-baseline="central">1.35</text>
-
-  <!-- 行 1 换依赖 -->
-  <text x="32" y="74" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">换依赖</text>
-  <text x="32" y="89" font-size="8.5" fill="#8a929c" dominant-baseline="central">借来的引擎收回自己手里</text>
-  <rect x="132" y="58" width="63" height="50" rx="5" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
-  <text x="163.5" y="78" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">Yoga 引入</text>
-  <text x="163.5" y="90" font-size="8" fill="#A9743A" text-anchor="middle" dominant-baseline="central">3.2.1 自打包</text>
-  <rect x="328.5" y="58" width="63" height="50" rx="5" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
-  <text x="360" y="73" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">Android 升</text>
-  <text x="360" y="84" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">yoga</text>
-  <text x="360" y="96" font-size="8.5" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">鸿蒙升 yoga</text>
-
-  <!-- 行 2 新增能力 -->
-  <text x="32" y="128" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">新增能力</text>
-  <text x="32" y="143" font-size="8.5" fill="#8a929c" dominant-baseline="central">各定一套资源来源规则</text>
-  <rect x="197.5" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
-  <text x="229" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">Lottie</text>
-  <text x="229" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">dist/lottie</text>
-  <rect x="394" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
-  <text x="425.5" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">SVG</text>
-  <text x="425.5" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">data: 前缀</text>
-  <rect x="459.5" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
-  <text x="491" y="127" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">字体加载</text>
-  <text x="491" y="138" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">文本渐变</text>
-  <text x="491" y="150" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">bundle 内字体</text>
-  <rect x="525" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
-  <text x="556.5" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">Touch 指针</text>
-  <text x="556.5" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">协议先行</text>
-  <rect x="590.5" y="112" width="63" height="50" rx="5" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
-  <text x="622" y="132" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">补属性</text>
-  <text x="622" y="144" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">协议 + 行为</text>
-
-  <!-- 行 3 重构 -->
-  <text x="32" y="182" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">重构</text>
-  <text x="32" y="197" font-size="8.5" fill="#8a929c" dominant-baseline="central">收益大头在清历史债</text>
-  <rect x="328.5" y="166" width="63" height="50" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
-  <text x="360" y="186" font-size="8.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">图片重构</text>
-  <text x="360" y="198" font-size="8" fill="#5C9575" text-anchor="middle" dominant-baseline="central">拆父子关系</text>
-  <rect x="525" y="166" width="63" height="50" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
-  <text x="556.5" y="186" font-size="8.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">背景重构</text>
-  <text x="556.5" y="198" font-size="8" fill="#5C9575" text-anchor="middle" dominant-baseline="central">收口到一个类</text>
-  <rect x="590.5" y="166" width="63" height="50" rx="5" fill="#EAF7EE" stroke="#B7DEC4" stroke-width="0.5"/>
-  <text x="622" y="186" font-size="8.5" fill="#1F6B3B" text-anchor="middle" dominant-baseline="central">触摸新架构</text>
-  <text x="622" y="198" font-size="8" fill="#5C9575" text-anchor="middle" dominant-baseline="central">绕开原生分发</text>
-
-  <!-- 行 4 对齐与适配 -->
-  <text x="32" y="236" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">对齐与适配</text>
-  <text x="32" y="251" font-size="8.5" fill="#8a929c" dominant-baseline="central">判据换成线上有没有流量</text>
-  <rect x="263" y="220" width="63" height="50" rx="5" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
-  <text x="294.5" y="240" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">字体路径</text>
-  <text x="294.5" y="252" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">资源目录变更</text>
-  <rect x="394" y="220" width="63" height="50" rx="5" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
-  <text x="425.5" y="240" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">Image 二期</text>
-  <text x="425.5" y="252" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">属性逐项对齐</text>
-  <rect x="590.5" y="220" width="63" height="50" rx="5" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
-  <text x="622" y="236" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">Android 17</text>
-  <text x="622" y="248" font-size="8.5" fill="#5b6470" text-anchor="middle" dominant-baseline="central">适配</text>
-  <text x="622" y="260" font-size="8" fill="#8a929c" text-anchor="middle" dominant-baseline="central">被删 API 梳理</text>
-
-  <!-- 行 5 机制与扫描 -->
-  <text x="32" y="290" font-size="10.5" font-weight="500" fill="#1f2328" dominant-baseline="central">机制与扫描</text>
-  <text x="32" y="305" font-size="8.5" fill="#8a929c" dominant-baseline="central">交的是能力不是特性</text>
-  <rect x="590.5" y="274" width="63" height="50" rx="5" fill="#EEF5FC" stroke="#C9DFF2" stroke-width="0.5"/>
-  <text x="622" y="289" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">实名调研</text>
-  <text x="622" y="300" font-size="8.5" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">差异扫描</text>
-  <text x="622" y="312" font-size="8" fill="#5A87BE" text-anchor="middle" dominant-baseline="central">pdef / 对读</text>
-
-  <line x1="24" y1="332" x2="656" y2="332" stroke="#e6e9ed" stroke-width="0.5"/>
-  <text x="24" y="342" font-size="8.5" fill="#8a929c" dominant-baseline="central">颜色只区分类别：橙＝换依赖，蓝＝新增能力与机制，绿＝重构，灰＝对齐与适配。</text>
-</svg></div><figcaption>图 1：按版本与类别排布的技术方案全景。横轴是 1.28 到 1.35 八个版本，纵轴是五类工作：换依赖、新增能力、重构、对齐与适配、机制与扫描。换依赖集中在 1.28 与 1.31；新增能力从 1.29 的 Lottie 一路加到 1.35 的补充属性；重构集中在 1.31、1.34、1.35；对齐与适配贯穿 1.30 到 1.35；机制与扫描只在 1.33 与 1.35 出现。</figcaption></figure>
-<div class="tw"><table>
-<thead><tr>
-<th>类别</th>
-<th>方案</th>
-<th>共同点</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>换依赖（3）</td>
-<td>Yoga 引入、Android 升 yoga、鸿蒙升 yoga</td>
-<td>借来的引擎要收回自己手里；代价是包体与双引擎共存</td>
-</tr>
-<tr>
-<td>新增能力（5）</td>
-<td>Lottie、SVG、字体加载、文本渐变、Touch 指针</td>
-<td>每个能力都要先定「资源从哪来、数据长什么样」</td>
-</tr>
-<tr>
-<td>重构（3）</td>
-<td>图片重构、背景重构、触摸新架构</td>
-<td>立项理由写「加能力」，实际收益大头是「清历史债」</td>
-</tr>
-<tr>
-<td>对齐与适配（4）</td>
-<td>字体路径、Image 二期、Android 17、补属性</td>
-<td>判据从「代码里有」换成「线上有流量」</td>
-</tr>
-<tr>
-<td>机制与扫描（3）</td>
-<td>实名调研、差异扫描、安全区域</td>
-<td>交的是机制或边界判断，不是功能，验收标准与功能型方案不同</td>
-</tr>
-</tbody>
-</table></div>
+</svg></div><figcaption>图 5：18 份方案的证据强度分级。绿格是文档内给出了可复核的实测或对照数据，橙格是给了数字但无对照或单点测量，红格是结论有、风险章节为 todo 或待定；字体加载、SVG、背景重构、Touch 指针、差异扫描这五份证据最完整，风险章节写 todo 的集中在早期几份。</figcaption></figure></p>
 <h2>三、逐方案复盘</h2>
-<p>按类别排成五张表。每行四个内容列分别是：<strong>要解决的问题 → 做法与当时的取舍 → 2026 年视角下更优的解法 → 可带走的启发</strong>。</p>
+<p>按类别排成五张表。每行的四个内容列分别是：<strong>要解决的问题 → 做法与当时的取舍 → 2026 年视角下更优的解法 → 可带走的启发</strong>（启发列用「启发：」起头）。</p>
 <h3>3.1 换依赖（3 份）</h3>
 <div class="tw"><table>
 <thead><tr>
@@ -695,24 +701,24 @@
 <tbody>
 <tr>
 <td><strong>Yoga 引入</strong>（1.28）</td>
-<td>布局计算全靠从 MRN 借的 Yoga，版本停在官方 1.18.0。三条诉求撞在一起：业务要 gap、上游若静默升级无人知会、1.18.0 有 absolute 元素 <code>visible: false</code> 失效的 bug</td>
-<td>开源 3.2.1 源码入 recce-library、改包名、自编 <code>recce-yoga.so</code> 与 <code>mrn:yoga</code> 共存；horn 开关 <code>use_new_yoga</code> 默认关，特性分支先发特性版验证。公司不允许直接依赖开源组件，只能自建；代价是包体（两份文档 428KB 与 489.52KB 两个口径）、双 so 共存、开关用静态变量「只有重启 APP 生效」</td>
-<td>① 版本判断仍成立：Yoga 最新发布版到 2026-10 还是 3.2.1，「等上游发新版」当时就不是选项。② 开关应走 Recce 已有的按 bundleName 白名单，「只有重启生效」把可回滚缩水了。③ 真正的缺口是「引擎怎么跟上游」的升级机制，换 Taffy 不是答案（仍缺 RTL 与 <code>Position::Static</code>）</td>
-<td>把「补一个属性」重定义成「换掉一个依赖」，一次拿到功能、稳定性、历史 bug 三份收益；代价是验收面变宽，必须配共存 + 开关 + 对照埋点。成色看开关的生效粒度</td>
+<td>Recce 不实现布局计算，全部委托从 MRN 借来的 Yoga，版本停在官方 1.18.0。业务要 gap、上游若静默升级无人知会、1.18.0 还有 absolute 元素 <code>visible: false</code> 失效的 bug</td>
+<td>开源 Yoga 3.2.1 源码引入 recce-library、包名改 <code>com.meituan.android.recce.yoga</code>、自编 so 命名 <code>recce-yoga.so</code> 与 <code>mrn:yoga</code> 共存；horn 开关 <code>use_new_yoga</code> 默认关，特性分支先发特性版验证后合主干。取舍：直接依赖开源组件会与 <code>mrn:yoga</code> 包名冲突且公司不允许，只能自建；代价是包体（两份文档口径不一：428KB／168KB 与 489.52KB／194KB）、双 so 共存、开关是静态变量「只有重启 APP 生效」</td>
+<td>① 版本判断到 2026-10 仍成立：Yoga 最新发布版仍是 3.2.1（2024-12-13），两年无新版，「等上游发新版」当时就不是选项。② 开关应走 Recce 已有的按 bundleName 白名单（后来实际落地就是这样），静态变量把「可回滚」缩水成「可重启回滚」。③ 更根本的是缺升级机制：立项里最值钱的一条是「上游静默升级无人知会」，答案不是换 Taffy（至今仍缺 RTL 与 <code>Position::Static</code>），而是把「引擎多久跟一次上游、由谁跟」写成机制</td>
+<td>启发：把「补一个属性」重定义成「换掉一个依赖」，一个动作同时拿到功能、稳定性和历史 bug 三份收益；代价是验收面变宽，必须配「共存 + 开关 + 对照埋点」，否则「可回滚」只是文档上的一句话。判断这类方案成色，看开关的生效粒度就够了</td>
 </tr>
 <tr>
 <td><strong>Android 升 yoga</strong>（1.31）</td>
 <td>三端统一升级里 Android 侧的落地记录</td>
-<td>两方案对比后选「导源码改包名自建」；so 构建放 <code>ndk_build.gradle</code>、产物进 library 的 jni，加载走 Soloader 且时机不变；用 readelf 查出新 so 不再依赖 <code>libc++_shared</code> 与 <code>libfd</code>。风险里写包体：Android 压缩前 +489.52KB、压缩后 +194KB</td>
-<td>① readelf 查依赖并裁掉多余 so 是最值钱的动作，该固化成引入原生库的标准步骤。② so 加载时机是复制来的不是设计出来的，应收口成注册表（每个 so 声明依赖与时机、统一排序）。③ 同版本两份文档包体口径分叉（428 与 489.52KB），说明数据没有唯一出处</td>
-<td>引入第三方原生库，验收项里必须有「so 依赖链」；同一个数字在文档间不一致，问题不在数字，在没有唯一出处</td>
+<td>两方案对比后选「导源码改包名自建构建」；so 构建放 <code>ndk_build.gradle</code> 与 wasai 的 so 同处、产物挪到 library 的 jni 目录；加载走美团 Soloader、时机保持与原先一致；用 readelf 查出新 so 不再依赖 <code>libc++_shared</code> 与 <code>libfd</code>。风险里写了包体：iOS 压缩前 +150.52KB、Android 压缩前 +489.52KB／压缩后 +194KB</td>
+<td>① 「用 readelf 查依赖并裁掉多余的 so」是最值钱的动作，值得固化成引入原生库的标准步骤，否则每次引入都静默多带几个 so。② so 加载时机是复制来的不是设计出来的：应收口成一个注册表，每个 so 声明依赖与时机由注册表统一排序，加依赖时不用改调用点。③ 同一版本两份文档包体口径分叉（428KB 与 489.52KB），说明数据没有唯一出处；应共用一份体积清单，写清构建类型、abi、压缩前后，方案只引用不重算</td>
+<td>启发：引入第三方原生库，验收项里必须有「so 依赖链」——把实到的 so 列出来；没列过依赖的引入等于默认接受了不可见的包体税。同一个数字在两个文档里不一致时，问题不在数字，在没有唯一出处</td>
 </tr>
 <tr>
 <td><strong>鸿蒙升 yoga</strong>（1.31）</td>
 <td>同一次升级的鸿蒙侧落地</td>
-<td><code>yoga-rs</code> 升 0.5.3、同步 Yoga 3.2.1 改动；<code>Config</code> 加 <code>YGErrata</code> 兼容旧行为；wasai 侧换 <code>get_node_ref_context</code> 以支持 gap。风险里写明「直接升级、并无 AB，需要重点关注」</td>
-<td>① 同一次升级，Android 是「双引擎 + 开关」、鸿蒙是「无 AB」，两套纪律；不能共存也要定义回滚路径与生效条件。② 拿到 <code>YGErrata</code> 却没用（文档写「鸿蒙布局架构没有用到」）——不能 AB 的端最该用它当安全网。③ 风险止步于「需要重点关注」，该翻成必测清单、回滚顺序、决策人</td>
-<td>上游给了兼容开关就等于拿到了安全网，不用它等于把确定性还回去；平台放量能力越弱越要靠上游开关兜底</td>
+<td><code>yoga-rs</code> 直接升 0.5.3、同步 Yoga 3.2.1 全部改动；<code>Config</code> 增加 <code>YGErrata</code> 配置以兼容旧行为；wasai 侧把 <code>text</code>／<code>textinput</code> 的 <code>Node::get_context</code> 换成 <code>get_node_ref_context</code> 以支持 gap。风险里明确写了「直接升级、并无 AB」</td>
+<td>① 同一次升级，Android 是「双引擎共存 + 开关」，鸿蒙是「直接升级无 AB」，两套风险口径；即使平台不支持共存，也要定义回滚路径（整包回滚／灰度回退）与生效条件。② 拿到了兼容开关却没用：<code>YGErrata</code> 可让新版按旧版布局行为跑，文档写「鸿蒙布局架构没有用到」——不能 AB 的端最该用它当安全网。③ 风险只写到「需要重点关注」没落到动作，应翻成必测页面清单、回滚顺序、决策人</td>
+<td>启发：上游给了兼容开关就等于拿到了安全网，不用它等于把升级带来的确定性还回去；平台放量能力越弱，越要靠上游开关兜底。风险描述不落到动作，风险就等于没管</td>
 </tr>
 </tbody>
 </table></div>
@@ -728,38 +734,38 @@
 <tbody>
 <tr>
 <td><strong>Lottie</strong>（1.29）</td>
-<td>keeta 反馈竞品 talabat 动画表现好、Recce 动画能力有限；外卖在优化首页到提单链路，动画需求会持续增加</td>
-<td>新增 <code>recce-lottie</code> module（按需集成、要走新增 module 审批），参考 <code>lottie-react-native</code> 与公司内 MRN；约定动画 json 必须放 bundle 根 <code>dist/lottie</code> 下、用 <code>DioBundleUtil</code> 拼路径。属性支持 8 项、不支持 4 项，其中 3 项有理由，<code>AutoPlay</code> 标了未支持却没写理由</td>
-<td>① 硬编码 <code>/dist/lottie</code> 是可以避免的耦合，1.29 就该抽出「Recce 资源解析」一层（bundle／data URI／远端各一来源），后面 SVG 的前缀规则、bundle 内字体都是同一层能力被各写一遍。② 「表里列了却不做」的项必须写理由，否则后来者分不出有意不做和漏了。③ Lottie 与 SVG 本可共用引擎（thorvg 两者都支持），两个决策分开做就看不到交集</td>
-<td>相近窗口内的一批新能力，先看能不能共用一层（引擎／资源解析／属性协议）再逐个决策；按需求逐个立项最容易重复造轮子</td>
+<td>keeta 反馈竞品 talabat 动画表现好，Recce 动画能力有限；外卖在优化首页到提单的黄金链路，动画需求会持续增加</td>
+<td>新增 <code>recce-lottie</code> module（按需集成，集成到美团／点评要走新增 module 审批）；思路参考 <code>lottie-react-native</code> 与公司内 MRN；实现 ViewManager／View（继承 <code>LottieView</code>）／ShadowNode／属性工具类；规定业务动画 json 必须放在 bundle 根的 <code>dist/lottie</code> 下，用 <code>DioBundleUtil</code> 拼全路径读取。属性支持 8 项、不支持 4 项，其中 3 项有理由（Android 独有、iOS 的 lottie 版本太低），<code>AutoPlay</code> 标了未支持但没写理由</td>
+<td>① 硬编码 <code>/dist/lottie</code> 是可以避免的耦合：1.29 就该抽出「Recce 资源解析」一层（本地 bundle／data URI／远端各一个来源实现），后面 1.32 的 SVG 前缀规则、1.33 的 bundle 内字体都是同一层能力，被各写了一遍。② 「表里列了却不做」的项必须写理由，否则后来者分不出「有意不做」和「漏了」。③ Lottie 与 SVG 本可共用引擎（thorvg 两者都支持），两个决策分开做就看不到这个交集</td>
+<td>启发：相近版本窗口内的一批新能力，先看能不能共用一层（引擎／资源解析／属性协议）再逐个决策；按需求逐个立项最容易重复造轮子——Lottie、SVG、字体加载三份方案各定义一套资源来源规则，就是同一个坑踩了三次</td>
 </tr>
 <tr>
 <td><strong>SVG</strong>（1.32）</td>
 <td>业务需要 SVG 能力</td>
-<td>五方案对比（RN-SVG／androidsvg／rust-resvg／rust 解析 + native 渲染／thorvg）后初选 resvg、最终改原生；source 只支持 <code>data:image/svg+xml;utf8,</code> 与 <code>;base64,</code> 两种前缀。取舍全在包体与耗时：resvg 带文本 +2.0MB、去文本 1MB，thorvg +600KB，原生最小；复杂图耗时 thorvg 52ms、native 70ms、resvg &gt;1000ms 且无法稳定加载</td>
-<td>① 回退原生的结论仍成立，但理由该换：thorvg 的 Rust 绑定已到 0.5.1（2026-08）却自述「尚未可用于生产」，说明「像素级一致」这条路两年后仍未成熟。② 真正的缺口是共同契约：没写下「支持的标签／属性白名单 + 逐项三端用例」，「三端不一致」这个被否掉的风险原样保留，只是变成长期维护风险。③ SVG 该走与其它图片相同的 source 解析链，只在拿到字节后分流解码器</td>
-<td>「像素级一致」和「包体」在移动端常不可兼得，判据是宿主包体余量不是技术优劣；选完要留一条「回头看」——否掉的那条路现在成熟了没有</td>
+<td>五方案对比（RN-SVG／androidsvg 纯原生／rust-resvg／rust 解析 + native 渲染／thorvg），初选 resvg，最终改原生；source 只支持 <code>data:image/svg+xml;utf8,</code> 与 <code>;base64,</code> 两种前缀，不支持本地文件与远程图片；recce-ui 的宽高不作用到 SVG 上。取舍：包体是决定项——resvg 保留文本 feature 加 2.0MB、去掉文本 1MB，thorvg +600KB，原生最小；复杂图耗时 thorvg 52ms、native 70ms、resvg &gt;1000ms 且无法稳定加载</td>
+<td>① 回退原生的结论到 2026-10 仍然成立，但理由该换：thorvg 的 Rust 绑定已发到 0.5.1（2026-08），crate 自己标着「尚未可用于生产」，即「三端像素级一致」两年后仍未成熟。② 真正的缺口不是选型是共同契约：没把「支持的标签／属性白名单 + 逐项三端用例」写下来，「三端不一致」这个被否掉的风险其实原样保留，只是从选型风险变成长期维护风险。③ 同一个 <code>source</code> 字段两套规则会让业务困惑，SVG 应走与其它图片相同的 source 解析链，只在拿到字节后分流到不同解码器</td>
+<td>启发：「像素级一致」和「包体」在移动端常常不可兼得，判据是宿主包体余量而不是技术优劣；选完要留一条「回头看」——当初否掉的那条路现在成熟了没有。成熟了切换成本会从「重新选型」降到「换一个实现」</td>
 </tr>
 <tr>
 <td><strong>字体加载</strong>（1.33）</td>
 <td>微贷要三类能力：iconfont、bundle 内字体（业务把字体放进 bundle）、远端 URL 字体</td>
-<td>远端 URL 判「无需支持」，聚焦 bundle 内字体，来源用 <code>FontFamily::new("bundle-xxx.ttf")</code> 显式标识。缓存用实测论证：无缓存每次约 10ms、x 个 label 约 10x ms，加缓存后首次约 4ms、之后 0ms；key 选全路径，否掉字体名（下发新版后仍用旧字体、跨业务冲突）与 md5（多一次 IO）；LRU 限数量防 OOM</td>
-<td>① 这是 18 份里实测支撑做得最好的一份，10／4／0ms 三个数字可直接当书写模板。② 缓存 key 还有第三档没展开：内容指纹放构建期算（构建时把 md5 写进清单，运行期零 IO）或运行期「路径 + 文件长度 + 首尾若干字节」弱指纹。③ 跨 bundle 共享的运行期限制可以在构建期做资源去重解决。④ 远端「无需支持」安全上合理，但该把理由写出来</td>
-<td>缓存 key 只要记一条——必须能区分版本；真正的最优解常在构建期不在运行期；运行期做不到的事先想能不能挪到构建期</td>
+<td>远端 URL 判「无需支持」，聚焦 bundle 内字体，来源用 <code>FontFamily::new(&quot;bundle-xxx.ttf&quot;)</code> 显式标识。缓存单独论证：无缓存每次约 10ms、x 个 label 约 10x ms，加缓存后首次约 4ms、之后 0ms。缓存 key 选全路径（固定前缀 + bundleName + version + hash.dio + 路径），否掉字体名为 key（下发新版本后仍用旧字体、跨业务易冲突）与 md5 为 key（每次多一次 IO）；缓存策略 LRU 限数量防 OOM；跨 bundle 共享判不支持</td>
+<td>① 这是 18 份里「用实测数据支撑决策」做得最好的一份，10ms／4ms／0ms 三个数字可直接当同类方案的书写模板。② 缓存 key 还有第三档没展开：内容指纹放构建期算（bundle 构建时把每个资源 md5 写进清单，运行期零 IO 直接查），或运行期用「路径 + 文件长度 + 首尾若干字节」做弱指纹。③ 跨 bundle 共享的运行期限制可以在构建期做资源去重解决（同一字体只打进一个公共 bundle）。④ 远端「无需支持」在安全上合理（任意 URL 加载字体是攻击面），但结论该把理由写出来，否则会被反复问起</td>
+<td>启发：缓存设计只要记住一条——key 必须能区分版本；真正做到最优的往往是构建期（清单里带内容指纹），不在运行期。运行期做不到的事，先想能不能挪到构建期</td>
 </tr>
 <tr>
 <td><strong>文本渐变</strong>（1.33）</td>
-<td>微贷要文本渐变，Recce 不支持</td>
-<td>两方案对比后倾向 MaskedView（通用性强、渐变内容可以是任意 View／Drawable，但需离屏 layer 与 bitmap、低版本合成坑多）；TextPaint Shader 更快更简单但只能用于文本。给出 RN <code>RNCMaskedView</code> 的 <code>DST_IN</code> 实现与 recce-ui 包装方式。踩坑：<code>RecceMaskedView</code> 只在 <code>child == getChildAt(0)</code> 时标脏 mask，小米成立、华为 Mate30 不成立（回调的是更深的 <code>RecceTextView</code>），表现为「子文本变了但 mask 没刷新」</td>
-<td>① 标脏条件应从「是不是第 0 个 child」改成「是不是 mask 视图的后代」，就与层级数无关、不会换机型失效——搬开源实现第一件事是列出它依赖的平台假设（第几个 child、回调里是谁、依赖几层）。② 「通用性强」在只有一类实际用途时是负收益：业务诉求就是文字颜色渐变，Shader 十行以内、无离屏合成。③ 要通用就该反过来先让提出方给出第二个用例，有排期才叫通用</td>
-<td>搬开源实现时把平台假设换成结构性判断（是不是后代），不要换成机型名单；通用性只有在有第二个用例排期时才是收益</td>
+<td>微贷要实现文本渐变，Recce 不支持</td>
+<td>两方案对比后倾向 MaskedView（基于 alpha 通道裁剪，通用性强，渐变内容可以是任意 View／Drawable，但需离屏 layer／bitmap、低版本合成坑多）；TextPaint Shader 更快更简单但只能用于文本。给出 RN <code>RNCMaskedView</code> 的 <code>dispatchDraw</code> + <code>DST_IN</code> 实现与 recce-ui 包装方式。踩坑写得很细：<code>RecceMaskedView</code> 只在 <code>child == getChildAt(0)</code> 时把 mask bitmap 标脏，小米成立、华为 Mate30 不成立（回调的是更深层的 <code>RecceTextView</code>），表现为「子文本变了但 masked view 没刷新」</td>
+<td>① 标脏条件应从「是不是第 0 个 child」改成「是不是 mask 视图的后代」（判断包含关系），就与视图层级数无关、不会换机型失效——照搬开源实现的第一件事是找出它依赖的平台假设：第几个 child、回调里是谁、依赖几层。② 「通用性强」在只有一类实际用途时是负收益：业务诉求就是文字颜色渐变，Shader 方案十行以内、无离屏合成、无低版本坑。③ 如果确实要通用能力，应该反过来先让提出方给出第二个用例，有排期才叫通用</td>
+<td>启发：搬开源实现时先把它的平台假设列出来，把假设换成结构性判断（是不是后代），不要换成机型名单；通用性只有在有第二个用例排期时才是收益，没排期叫过度设计</td>
 </tr>
 <tr>
 <td><strong>Touch 指针</strong>（1.34）</td>
-<td>四个 touch 事件 prop 回调不携带任何事件数据（<code>OnTouchStart</code> 的 Response 是 <code>()</code>、<code>OnTouchMove</code> 是裸 <code>String</code>），微贷做不了拖拽、自定义手势、点击涟漪、画板</td>
-<td>定义 <code>TouchPoint</code>（location／page／screen 三组坐标 + identifier、timestamp、force）与 <code>TouchEventData</code>（touches／changedTouches），命名对齐 RN 的 <code>nativeEvent</code>；Rust 侧用强类型替代裸 String、反序列化失败走 <code>Default</code> 不 panic；MVP 不支持多指；<code>MotionEvent</code> 在回调里同步提取不持有引用；验收 8 条（含中点点击 <code>location_x ≈ 100</code>、误差 ≤ 2dp、timestamp 单调递增、三端一致）</td>
-<td>① 这是 18 份里「字段规格 + 边界条件 + 验收标准」三样都齐的唯一一份，可直接当协议类方案的模板。② 协议形态埋了返工点：定成数组但 MVP 只有一个元素，应按「以后一定有」的形态定死、只在「填几个」上做减法。③ <code>timestamp</code> 用相对系统启动的单调时间而非墙上时钟是对的，可作为同类字段的默认约定</td>
-<td>协议类改动按「以后一定有」的形态定结构，MVP 只减数量不减结构；边界条件表（会被 recycle、压感可能不支持、反序列化可能失败）比字段表更值钱</td>
+<td>四个 touch 事件 prop（<code>on_touch_start</code>／<code>end</code>／<code>move</code>／<code>cancel</code>）回调不携带任何事件数据——<code>OnTouchStart</code> 的 Response 是 <code>()</code>，<code>OnTouchMove</code> 是裸 <code>String</code>，微贷因此做不了拖拽、自定义手势、点击涟漪、画板、长按跟随气泡</td>
+<td>定义 <code>TouchPoint</code>（location／page／screen 三组坐标 + identifier、timestamp、force）与 <code>TouchEventData</code>（touches／changedTouches），字段命名对齐 RN 的 <code>nativeEvent</code>；Rust 侧用强类型结构体替代裸 String，反序列化失败走 <code>Default</code> 不 panic；MVP 首期不支持多指；<code>MotionEvent</code> 在回调里同步提取、不持有引用（避免被 recycle）；<code>force</code> 不支持压感时返回 1.0。验收 8 条，含「200×200dp 的 View 中点点击 <code>location_x ≈ 100</code>、误差 ≤ 2dp」「timestamp 单调递增」「三端字段一致」</td>
+<td>① 这是 18 份里「字段规格 + 边界条件 + 验收标准」三样都齐的唯一一份，可直接当协议类方案的模板。② 协议形态埋了一处返工点：定成数组但 MVP 只有一个元素，多指需求来了要么改协议、要么在数组语义上打补丁——协议应按「以后一定有」的形态定死，MVP 只在「填几个」上做减法。③ <code>timestamp</code> 用「相对系统启动的单调时间」而非墙上时钟是对的，不受用户改系统时间影响，可作为同类字段的默认约定</td>
+<td>启发：协议类改动要按「以后一定有」的形态定数组与结构，MVP 只在「填几个」上做减法，不在结构上做减法。边界条件表（MotionEvent 会被 recycle、force 可能不支持、反序列化可能失败）比字段表更值钱，它决定上线后会不会崩</td>
 </tr>
 </tbody>
 </table></div>
@@ -775,24 +781,24 @@
 <tbody>
 <tr>
 <td><strong>图片重构</strong>（1.31）</td>
-<td><code>ResizeMode</code> 设 <code>Stretch</code> 与动态更新都无效、<code>fit_start</code>／<code>fit_end</code> 未支持。根因两层：<code>RecceRoundImageView</code> 把普通图误判为动画图、又用原始尺寸覆盖了一遍绘制边界；<code>MTRecceRoundImageView</code> 子类大量无脑调 <code>super</code>，而 <code>super</code> 操作的是父类成员</td>
-<td>认定根因是「父子关系错误」，解除父子关系、抽公共基类（美团与开源实现各自一套），设 <code>ResizeMode</code> 时把图片状态置 <code>Dirty</code>；<code>fit_start</code>／<code>fit_end</code> 与 iOS 沟通后挪到 1.32。抽基类仍保留继承，只是把「父子」换成「兄弟」</td>
-<td>① 更彻底的是改组合：外层包一个持有 <code>ImageView</code> + 一组 Drawable 的组合对象（1.34 背景重构最后就是这个形态），抽基类只解决「谁调谁」，没解决「子类覆盖父类时静默失效」。② <code>configureBounds</code> 的坑是「在别人的决策点上二次覆盖」，不该覆盖系统已算好的边界。③ 它与 1.35 的差异扫描是同一问题的两半，却没有互相引用</td>
-<td>「本地版继承开源版」一旦上游改了内部实现，子类的 <code>super</code> 会静默失效，标志是子类里出现大量 <code>super</code>；修它要把父子关系一起拆掉，只加 override 治不好</td>
+<td><code>ResizeMode</code> 设为 <code>Stretch</code> 无效、动态更新 <code>ResizeMode</code> 无效、<code>fit_start</code>／<code>fit_end</code> 未支持。根因两层：<code>RecceRoundImageView</code> 在 <code>setImageDrawable</code> 里把普通图误判为动画图，又用图片原始尺寸覆盖了一遍绘制边界；<code>MTRecceRoundImageView</code> 继承前者、子类大量无脑调 <code>super</code>，而 <code>super</code> 操作的是父类成员</td>
+<td>认定根因是「父子关系错误」，做重构：解除父子关系、抽出公共基类，美团图片类与开源图片类各自实现；设置 <code>ResizeMode</code> 时把图片状态置 <code>Dirty</code>；<code>fit_start</code>／<code>fit_end</code> 与 iOS 沟通后挪到 1.32；给了降级路径。抽公共基类仍保留继承关系，只是把「父子」换成「兄弟」</td>
+<td>① 更彻底的是改组合：外层包一个持有 <code>ImageView</code> + 一组 <code>Drawable</code> 的组合对象（1.34 背景重构最后就用了这个形态），抽公共基类只解决「谁调谁」，没解决「子类覆盖父类行为时静默失效」。② <code>configureBounds</code> 的坑是「在别人的决策点上二次覆盖」，系统已在 <code>updateDrawable</code> 算好边界，更优是不覆盖系统决策、只在需要「动画首帧」时局部处理。③ 这类坑本该被机制兜住：「子类大量 super」是显式信号，而 1.35 差异扫描做的正是同一件事——两份方案是同一问题的两半，却没有互相引用</td>
+<td>启发：「本地版继承开源版」这种形态，一旦上游改了内部实现，子类的 <code>super</code> 调用就会静默失效，识别标志是子类里出现大量 <code>super</code>；修它要把父子关系一起拆掉（改组合），只加 override 治不好</td>
 </tr>
 <tr>
 <td><strong>背景重构</strong>（1.34）</td>
-<td>三端背景渲染不一致的问题越来越多（UIAutomation 发现）；生活费、月付与收银台要类 RN BoxShadow 的高级阴影；将来的背景图与轮廓线在现有架构上支持成本很高</td>
-<td>全部背景收口到 <code>CompositeBackgroundDrawable</code>（内部管背景／边框／内外阴影三个 Drawable），对齐 RN 的 <code>BackgroundStyleApplicator</code> 形态，ViewManager 只 set 一个组合 Drawable。手法：背景色用 <code>StateListDrawable</code> 持正常与按下态；<code>borderStyle</code> 与四边不统一的冲突用 <code>clipPath</code> 裁梯形；内阴影 Android 10+、外阴影 9+；<code>elevation</code> 重写 <code>getOutline</code> 让投影跟圆角。测试：三端各一台 + 用 RN 写同一套用例跑第四台</td>
-<td>① 抄上游抄的是「职责划分」不是代码，且有一处比上游好：用观察者模式让 Drawable 自刷新，RN 是逐个手动 <code>invalidate</code>——这种「抄得比上游好」的点该显式写出来。② 两处「技术已具备却判暂不实现」可以再收：单边 <code>borderStyle</code> 用的就是同一个 <code>clipPath</code> 手法，边际成本只剩增量。③ 「RN 对照组」最该固化成流程——三端一致只能说明三端内部一致，与 RN 同机对照才能说明「和标准一致」</td>
-<td>照上游抄要抄职责划分不抄代码，发现上游更笨就用更好的写法并写下来；把上游跑成对照组，比「三端各测一遍」高一个证据等级</td>
+<td>三端背景渲染不一致的问题越来越多（UIAutomation 发现）；C 端生活费、月付和收银台要 Recce 支持类 RN BoxShadow 的高级阴影；将来的背景图与轮廓线在现有架构上支持成本很高</td>
+<td>把全部背景收口到一个 <code>CompositeBackgroundDrawable</code>（内部管 <code>BackgroundDrawable</code>／<code>BorderDrawable</code>／内外阴影 Drawable），对齐 RN 的 <code>BackgroundStyleApplicator</code> 形态，各 ViewManager 只 set 一个组合 Drawable。手法：背景色用 <code>StateListDrawable</code> 持正常态与按下态；<code>borderStyle</code> 与「四边颜色／宽度不统一」的冲突用 <code>clipPath</code> 裁梯形再单独画线（RN 用不规则四边形，代价是 style 失效）；内阴影 Android 10+、外阴影 9+；RTL 下 <code>borderWidth</code> 的 left／right 定死不交换；<code>overflow: hidden</code> 用 <code>clipPath</code>（9 以下离屏 <code>DST_IN</code>）；<code>elevation</code> 重写 <code>getOutline</code> 让投影跟随圆角。测试：三端各一台手机 + 用 RN 写一套相同用例跑第四台，Android 覆盖 6／9／10+ 与小米、三星、华为</td>
+<td>① 这次「照上游抄」抄得最正：抄的是职责划分不是代码，而且有一处比上游好——文档自己提出边框变更可以用观察者模式让 <code>CompositeBackgroundDrawable</code> 通知各 Drawable 刷新，RN 是逐个手动 <code>invalidate</code>；「抄得比上游好」的点应该显式写出来，它是自研从跟随变成有主张的地方。② 两处「技术已具备却判暂不实现」可以再收：单边 <code>borderStyle</code> 用的就是同一个 <code>clipPath</code> 手法，边际成本只剩增量；<code>borderWidth</code> 变更时手动 <code>invalidate</code> 六处实体，观察者模式能一起解决。③ 测试里的「RN 对照组」最该固化成流程——三端一致只能说明三端内部一致，与 RN 同机对照才能说明「和标准一致」</td>
+<td>启发：照上游抄要抄「职责划分」不抄「代码」；抄的过程里如果发现上游的做法更笨（手动逐个 <code>invalidate</code>），就用更好的写法并写下来。另一个动作：把上游跑成对照组——同一份用例、各一台设备，比「三端各测一遍」高一个证据等级</td>
 </tr>
 <tr>
 <td><strong>触摸新架构</strong>（1.35）</td>
-<td>旧架构依托 Android 原生分发（找最深的 View、向上冒泡到第一个设了 handler 的 View 返回 true），三条缺点：对原生有侵入（<code>ScrollView</code> 设 <code>OnTouchListener</code> 后返回 true 会阻碍滚动）、移出父布局范围的 View 点击不触发、热区只能在父 View 上设 <code>TouchDelegate</code></td>
-<td>改成 RN 形态：<code>RecceRootView</code> 统一观察 touch 流、<code>ACTION_DOWN</code> 锁定整段手势的 target，<code>RecceTouchTargetHelper</code> 从 root 递归 DFS（更深更靠上优先），<code>pointerEvents</code> 四种取值决定命中，边界考虑 <code>hitSlop</code>／<code>overflow</code>／<code>clipChildren</code>／<code>transform</code>（逆矩阵映射局部坐标）；native 只发 touch 流，click 与 longclick 交给 recce-ui。另补两处 RN 没专门管的：<code>move</code> 按帧回调（<code>Choreographer.postFrameCallback</code>）与双发去重。共存选「加开关不新增属性、由 recce-ui 统一向业务发事件」</td>
-<td>① 这是技术含量最高的一份，形态也对：不是抄 RN 的代码，而是在 Recce 里重实现 RN 的命中算法并补上 RN 没管的两处。② 接管成本没列全：多指与无障碍被列为 P0 未做，而这恰是「绕开原生」的必然代价，应显式列出接管清单（多指、无障碍、焦点、TV 遥控方向键）。③ <code>move</code> 按帧节流改变了事件语义（次数不再等于真实移动次数），应给「是否逐条收取」的开关。④ 共存方案选得对：差异收在 native 与 recce-ui 之间、不给业务加心智负担</td>
-<td>原生能力与上层期望冲突时「绕开原生自己做一套」是对的，但要一并接管原生的隐式收益（无障碍、多指、焦点）；接管清单不写全，下一轮就会以缺陷的形式补回来</td>
+<td>旧架构依托 Android 原生触摸（找点击范围内最深的 View，向上冒泡到第一个设了 onTouch／onClick 的 View 并返回 true），三条缺点：对原生响应有侵入（<code>ScrollView</code> 设 <code>OnTouchListener</code> 后返回 true 会阻碍滚动）、移出父布局范围的 View 点击不触发、点击热区只能在父 View 上设 <code>TouchDelegate</code></td>
+<td>改成 RN 形态：<code>RecceRootView</code> 统一观察 Android touch 流，<code>ACTION_DOWN</code> 锁定整段手势的 target，<code>MOVE</code>／<code>UP</code> 只更新坐标不换目标；<code>RecceTouchTargetHelper</code> 从 root 递归 DFS（更深更靠上的 child 优先）；<code>pointerEvents</code> 四种取值决定 self／children 能否命中；边界判断考虑 <code>hitSlop</code>、<code>overflow</code>、<code>clipChildren</code>、<code>transform</code>（用逆矩阵把触点映射到 child 局部坐标）；Text 这类复合 View 做二次命中；native 统一发 touch 流，click 与 longclick 交给 recce-ui；<code>ScrollView</code>／<code>HScrollView</code> 只在真正 <code>onInterceptTouchEvent</code> 拦截成功后发 <code>touchcancel</code>；WebView／Titans 的内部 native child 设为 <code>pointerEvents=none</code>。另有两处细节：<code>move</code> 按帧回调（<code>Choreographer.postFrameCallback</code>，每帧只发最新一次）、以及去重（新架构下 root 的 <code>onIntercept</code> 与 <code>onTouchEvent</code> 会双发）。新旧共存选「native 加开关 + env 桥加开关 A，统一向业务层发 <code>on_touch_xxx</code>」</td>
+<td>① 这是 18 份里技术含量最高的一份，形态也对：不是抄 RN 的代码，而是在 Recce 里重实现 RN 的命中算法，并补上 RN 没专门管的两处（双发去重、move 按帧节流）。② 接管成本没有列全：多指能力与无障碍影响都被列为 P0 未做，这两件事恰是「绕开原生自己做一套」的必然代价，应显式列一份「接管清单」（多指、无障碍、焦点、TV 遥控方向键）作为必须补的欠账。③ <code>move</code> 按帧节流改变了事件语义（业务收到的 move 次数不再等于真实移动次数），应给「是否逐条收取」的开关并写进文档。④ 共存方案选得对：加开关但不新增属性、由 recce-ui 统一向业务发事件，差异收在 native 与 recce-ui 之间，不给业务加心智负担</td>
+<td>启发：当平台原生能力（Android 触摸分发）和上层期望（RN 的 responder 语义）冲突时，「绕开原生自己做一套」是对的，但代价是要一并接管原生的那些隐式收益（无障碍、多指、焦点）；接管清单不写全，下一轮就会以缺陷的形式补回来</td>
 </tr>
 </tbody>
 </table></div>
@@ -847,7 +853,7 @@
 
   <text x="24" y="424" font-size="8.5" fill="#8a929c" dominant-baseline="central">新架构另有两处旧架构没有的处理：root 的 onIntercept 与 onTouchEvent 会双发，需要去重；move 事件按帧节流。</text>
   <text x="24" y="440" font-size="8.5" fill="#8a929c" dominant-baseline="central">这两处说明这次不是照抄 RN，而是在 Recce 里重实现之外，还补了上游没有专门管的边界。</text>
-</svg></div><figcaption>图 7：触摸事件新旧架构的调用链对照。左侧旧架构依托 Android 原生分发，从点击范围内最深的 View 向上冒泡到第一个设了 onTouch 或 onClick 的 View 就停；右侧 1.35 的新架构由 RootView 统一观察 touch 流、在 ACTION_DOWN 锁定 target，再由 RecceTouchTargetHelper 按 pointerEvents、hitSlop、overflow、transform 决定命中，native 只发 touch 流，click 与 longclick 交给 recce-ui。</figcaption></figure>
+</svg></div><figcaption>图 6：触摸事件新旧架构的调用链对照。左侧旧架构依托 Android 原生分发，从点击范围内最深的 View 向上冒泡到第一个设了 onTouch 或 onClick 的 View 就停；右侧 1.35 的新架构由 RootView 统一观察 touch 流、在 ACTION\_DOWN 锁定 target，再由 RecceTouchTargetHelper 按 pointerEvents、hitSlop、overflow、transform 决定命中，native 只发 touch 流，click 与 longclick 交给 recce-ui。</figcaption></figure>
 <h3>3.4 对齐与适配（4 份）</h3>
 <div class="tw"><table>
 <thead><tr>
@@ -860,31 +866,31 @@
 <tbody>
 <tr>
 <td><strong>字体路径</strong>（1.30）</td>
-<td>keeta 把字体文件目录从 assets 挪到 res，<code>fontFamily</code> 失效；短期让 keeta 在 assets 再放一套字体不解决根因</td>
-<td>三个方案（容器传「字体路径 + 名称到资源的映射」／「组装好的排列组合到 Typeface 的 map」／「字体文件到 FontFamily 的 map」）推荐第三个；随后 keeta 把文件名从大写改成小写，参数传递方案又改推第一个。多字体匹配只支持 Android 10 及以上。三个方案的差别其实是「谁负责把业务的字体标识解析成 Typeface」</td>
-<td>① 分歧点本可以消掉：先定 <code>FontResolver</code> 接口（res／font、assets、bundle 内、远端各一实现）再定数据形状，「从哪个目录取」「文件名大小写」就只是实现内部的细节——这也是方案选完紧接着又得再选一次的原因；1.33 字体加载实际做到了，只是晚了三个版本。② 用「多加一层映射」掩盖「命名不统一」是把问题往后推，命名该在约定层解决（命名规范 + 打包期校验）</td>
-<td>备选方案的分歧点是「复杂度放哪一层」时，先定接口再定数据形状；一个方案选完不久又在同一组选项里再选一次，基本可判定接口没抽出来</td>
+<td>keeta 把字体文件目录从 assets 挪到 res，<code>fontFamily</code> 设置失效；短期让 keeta 在 assets 再放一套字体不解决根因</td>
+<td>给了三个方案（容器传「字体路径 + 名称到资源的映射」／「组装好的排列组合到 Typeface 的 map」／「字体文件到 FontFamily 的 map」），推荐第三个；随后 keeta 把文件名从大写改成小写，参数传递方案又改推第一个。多字体匹配只支持 Android 10 及以上。三个方案的差别其实是「谁负责把业务的字体标识解析成 Typeface」</td>
+<td>① 三个方案的分歧点本可以消掉：先定一个 <code>FontResolver</code> 接口（res／font、assets、bundle 内、远端各一个实现）再定数据形状，接口稳定后「从哪个目录取」「文件名大小写」都只是实现内部的细节，不需要在容器契约层面再选一次——这就是方案选完紧接着又得选一次的原因；1.33 的字体加载实际做到了这一步，只是晚了三个版本。② 用「多加一层映射」掩盖「命名不统一」是把问题往后推：字体文件名大小写不一致本该在约定层解决（命名规范 + 打包期校验），而不是在加载层再引入一层映射</td>
+<td>启发：当备选方案的分歧点是「把复杂度放在哪一层」时，不要在几份具体数据形状里挑，先定接口再定数据形状；一个方案选完不久又要在同一组选项里再选一次，基本可以判定接口没抽出来</td>
 </tr>
 <tr>
 <td><strong>Image 二期</strong>（1.32）</td>
-<td>远程图被服务端判为非法源、需要在请求里补 headers；三端图片属性与 MRN 不对齐；QA 报的图片缺陷（背景边框类归到 1.34 背景重构）</td>
-<td>新增 <code>capInsets</code>、<code>fadeDuration</code>、<code>headers</code>、<code>onLoadStart</code>，<code>resizeMode</code> 值域做对齐；同时修一批差异：Android 用 state 作 source 会多触发一次 error、source 置空串时不响应、<code>capInsets</code> 越界产生灰区（改为直接失效）、Picasso 重绘前先把 drawable 置空导致闪白（保存上一张图 + 启用内存缓存）</td>
-<td>① 这批修复有同一个结构——状态机边界没覆盖全（没设过就报错、置空不响应、重绘前先清空、越界不校验），更优是一开始把 <code>source</code>／<code>style</code>／回调三者的状态机画出来统一实现。② Picasso 那条是「绕过库的语义缺失」，更优是用支持 placeholder／error 语义的加载器。③ <code>capInsets</code> 的降级规则对外可见，该写进接口约定而不是只写在实现里</td>
-<td>同一批 bug 反复落在「状态机边界」上，说明缺的是状态机不是补丁；「某条件下不触发／多触发一次」这类缺陷连着来，就该停手先画状态机</td>
+<td>三类：远程图被服务端判为非法源而拦截，需要在请求里补 headers；三端图片属性与 MRN 不对齐；QA 报的图片缺陷分两类，背景边框类归到 1.34 背景重构、图片特有属性类由本方案解决</td>
+<td>新增 <code>capInsets</code>、<code>fadeDuration</code>、<code>headers</code>、<code>onLoadStart</code>，<code>resizeMode</code> 值域对齐（三端默认值与兜底值此前各不相同）。同时修一批差异：Android 用 state 作 source 会多触发一次 error（加「source 是否初始化过」标志位）、点击把 source 置空串时 Android 不响应（放开限制）、普通图与 SVG 的加载回调代码合并（三个 PR）、<code>capInsets</code> 越界不校验（<code>left + right &gt;= width</code> 产生灰区，改为直接失效）、Picasso 重绘前会先把 drawable 置空导致闪白（重绘时保存上一张图并启用内存缓存）。属性表逐项标了各端现状</td>
+<td>① 这批修复有同一个结构——状态机的边界没覆盖全：source 没设过就报错、source 置空不响应、重绘前先清空、<code>capInsets</code> 越界不校验，都是「某个状态下该做什么」没定义，而不是逻辑写错；更优是一开始把 <code>source</code>／<code>style</code>／回调三者的状态机画出来统一实现（文档里「普通图与 SVG 回调合并」已是朝这个方向收口的第一步）。② Picasso 那条是「绕过库的语义缺失」而不是修 bug：手动保存上一张图 + 手动开内存缓存能跑，但把图片状态管理继续留在自己手里；更优是用支持 placeholder／error 语义的加载器，让「旧图还在」由库保证。③ <code>capInsets</code> 的降级规则（越界则整体失效）对外可见，该写进接口约定与属性文档，而不是只写在实现里</td>
+<td>启发：同一批 bug 反复出现在「状态机边界」上，说明缺的是状态机不是补丁；看到「某条件下不触发／多触发一次」这类缺陷连着来，就该停手先画状态机</td>
 </tr>
 <tr>
 <td><strong>Android 17 适配</strong>（1.35）</td>
-<td>Android 17 于 2026-06-16 发布，收紧了隐私安全、后台行为与开发规范；美团 App 安卓 17 设备 DAU 约 8000（7 月 1 日）</td>
-<td>梳理被删 API：<code>StaticLayout</code> 旧版多参构造（影响 <code>RecceSwitchButton</code>、<code>RecceTextShadowNode</code>）、<code>TextView.mCursorDrawableRes</code> 反射被删（影响 <code>RecceTextInputManager</code>）。逐项判：label 与 input 早已适配（API 23+ 走 <code>StaticLayout.Builder</code>）无需改；SwitchButton 需修，但线上没有业务使用，跟美团主版本即可</td>
-<td>① 「线上没有业务在用」是关键判据，该显式固化成规则：适配看线上流量，不看代码引用。② 反射 API 被删是确定趋势，该一次改掉而不是加版本判断——换成语义等价的公开途径（主题属性 <code>android:textCursorDrawable</code>）或自绘光标。③ 更彻底的是出「删除清单」而不是「适配清单」：无流量的组件从 SDK 摘出去，适配成本直接归零</td>
-<td>系统版本适配的第一问不是「怎么改」，而是「这段代码线上还有没有流量」；没流量的引用不该进适配清单，该进删除清单</td>
+<td>Android 17 于 2026-06-16 正式发布，主要变化是隐私安全强化、后台行为限制与开发规范收紧；美团 App 安卓 17 设备 DAU 约 8000（7 月 1 日数据）。面向 Target37 的适配项本次只需了解、无需适配</td>
+<td>梳理被删 API：<code>android.text.StaticLayout</code> 旧版多参构造（影响 <code>RecceSwitchButton</code> 与 <code>RecceTextShadowNode</code>）、<code>android.widget.TextView.mCursorDrawableRes</code> 反射被删（影响 <code>RecceTextInputManager</code>）。逐项判：label 与 input 早已适配（API 23 以上走 <code>StaticLayout.Builder</code>）无需改；SwitchButton 需要修，但线上没有业务使用，跟美团主版本即可</td>
+<td>① 「线上没有业务在用」是本方案的关键判据，该显式固化成规则：要不要适配的依据是「线上有没有流量」，不是「代码里有没有引用」——Recce 里有一批没有流量的历史组件，每次系统升级都要为它们花人力。② 反射 API 被删是确定趋势，该一次改掉而不是加版本判断：<code>mCursorDrawableRes</code> 这类私有字段反射应换成语义等价的公开途径（主题属性 <code>android:textCursorDrawable</code>）或自绘光标。③ 更彻底的解法是出「删除清单」而不是「适配清单」：对确认无流量的组件（SwitchButton 这类）从 SDK 里摘出去，适配成本直接归零</td>
+<td>启发：系统版本适配的第一问不是「怎么改」，而是「这段代码线上还有没有流量」；没有流量的引用不该进适配清单，该进删除清单——每次系统升级都给死代码做适配，是维护成本里最不划算的一块</td>
 </tr>
 <tr>
 <td><strong>补属性</strong>（1.35）</td>
-<td><code>ScrollView</code> 缺 <code>maintainVisibleContentPosition</code>、<code>scrollsChildToFocus</code>；<code>View</code> 缺 <code>removeClippedSubviews</code>、<code>needsOffscreenAlphaCompositing</code>、一组 <code>nextFocus*</code>、<code>focusable</code>／<code>tabIndex</code>、<code>hitSlop</code>、<code>pointerEvents</code> 等</td>
-<td>分两类。<strong>真补行为</strong>：<code>maintainVisibleContentPosition</code>（属性设了才懒创建 helper、布局变化记首个可见锚点、内容插入后按锚点反向调 offset、接近顶部自动回顶）、<code>scrollsChildToFocus</code>、<code>removeClippedSubviews</code>。<strong>只补协议</strong>：<code>focusable</code>／<code>tabIndex</code>／<code>hitSlop</code>／<code>pointerEvents</code>／<code>renderToHardwareTextureAndroid</code> 只补定义与读写入口、预留实现点。分界本质是「行为依赖别的工作」（<code>hitSlop</code>／<code>pointerEvents</code> 依赖触摸重构，这正是需求把触摸重构列 P0、属性对齐列 P1 的原因）</td>
-<td>① 「先补协议、后补行为」手法本身对，危险在可观测性：属性收下却不生效，业务会以为已经支持，该给可观测标记（显式标 no-op、或首次下发打一次性日志）。② 依赖关系要反过来驱动排期，否则会先交付一批注定返工的 no-op。③ <code>removeClippedSubviews</code> 从 <code>ScrollView</code> 专属上移为 <code>View</code> 通用、导入路径变了，这类变更要单独列一节「升级需知」</td>
-<td>「补齐属性」真正的危险不是漏做，而是属性收下了但不生效；补协议与补行为要显式分开标注，行为依赖另一项架构改动时必须同批排期</td>
+<td><code>ScrollView</code> 缺 <code>maintainVisibleContentPosition</code>、<code>scrollsChildToFocus</code>；<code>View</code> 缺 <code>removeClippedSubviews</code>、<code>needsOffscreenAlphaCompositing</code>、一组 <code>nextFocus*</code>、<code>focusable</code>／<code>tabIndex</code>、<code>hitSlop</code>、<code>pointerEvents</code>、<code>renderToHardwareTextureAndroid</code></td>
+<td>分两类处理。<strong>真补行为</strong>：<code>maintainVisibleContentPosition</code>（属性设了才懒创建 helper、布局变化时记首个可见锚点、内容插入后按锚点反向调整 offset、接近顶部按阈值自动回顶）、<code>scrollsChildToFocus</code>（<code>requestChildFocus</code> 里按开关决定是否滚到 focused child，默认 true 保持原行为）、<code>removeClippedSubviews</code>（按可视区域裁剪，屏幕外子节点临时 detach）。<strong>只补协议</strong>：<code>focusable</code>／<code>tabIndex</code>／<code>hitSlop</code>／<code>pointerEvents</code>／<code>renderToHardwareTextureAndroid</code> 只补齐属性定义、二进制读写与 visitor 默认入口，Android 预留实现点、iOS／鸿蒙补空方法。分界本质是「行为依赖别的工作」（<code>hitSlop</code>／<code>pointerEvents</code> 依赖 1.35 的触摸重构，这正是需求把触摸重构列 P0、属性对齐列 P1 的原因）。注意项：给 <code>ScrollView</code> 设 <code>removeClippedSubviews</code> 时必须同时给 <code>scrollContentview</code> 设</td>
+<td>① 「先补协议、后补行为」的手法本身是对的，危险在可观测性：属性收下了但不生效，业务会以为已经支持；更优是同时给可观测标记（显式标 no-op、或首次下发时打一条一次性日志），让「没生效」和「没实现」能区分开。② 依赖关系要反过来驱动排期而不是写在备注里：<code>hitSlop</code> 依赖触摸重构决定了这两项必须同批排期，否则会先交付一批注定返工的 no-op。③ <code>removeClippedSubviews</code> 从 <code>ScrollView</code> 专属属性上移为 <code>View</code> 通用属性、导入路径变了，这类变更要有迁移说明，否则业务升级后直接编译不过</td>
+<td>启发：「补齐属性」真正的危险不是漏做，而是「属性收下了但不生效」；补协议和补行为要显式分开标注，当某个属性的行为依赖另一项架构改动时，两项必须同批次排期</td>
 </tr>
 </tbody>
 </table></div>
@@ -936,7 +942,7 @@
 
   <rect x="24" y="318" width="632" height="24" rx="6" fill="#F2F4F7" stroke="#D9DDE3" stroke-width="0.5"/>
   <text x="36" y="330" font-size="8.5" fill="#5b6470" dominant-baseline="central">两层必须同批次排期：只按 P0 / P1 分开推进，上层会先交付一批注定返工的 no-op 属性。</text>
-</svg></div><figcaption>图 6：属性「补协议」与「补行为」的分层，以及它与触摸重构的依赖关系。上层是 1.35 补属性方案里只补齐定义与读写入口的一批属性，下层是真正补上行为的一批；hitSlop 与 pointerEvents 悬在两层之间并指向 1.35 的触摸新架构，说明它们的行为依赖那一项工作，两类排期不能拆开。</figcaption></figure>
+</svg></div><figcaption>图 7：属性「补协议」与「补行为」的分层，以及它与触摸重构的依赖关系。上层是 1.35 补属性方案里只补齐定义与读写入口的一批属性，下层是真正补上行为的一批；hitSlop 与 pointerEvents 悬在两层之间并指向 1.35 的触摸新架构，说明它们的行为依赖那一项工作，两类排期不能拆开。</figcaption></figure>
 <h3>3.5 机制与扫描（3 份）</h3>
 <div class="tw"><table>
 <thead><tr>
@@ -950,23 +956,23 @@
 <tr>
 <td><strong>实名调研</strong>（1.35）</td>
 <td>实名认证业务要在 Recce 里做相册网格、图片预览、裁剪等对性能和系统能力要求高的区域</td>
-<td>把「自定义业务 Native View」做成一项能力交付：业务自建组件仓库，走 pdef 声明（组件名、属性、事件、版本 feature）→ <code>generate.sh</code> 生成 native 与 Rust 产物 → 实现 <code>View</code>／<code>ViewManager</code>／<code>ShadowNode</code>／<code>Plugin</code> → 业务依赖并在 <code>rsx!</code> 里使用。同时划边界：文案、资源位、弹窗、实验策略留 Recce；相册网格、预览、裁剪、复杂手势、高性能列表做 Native View；权限、拍照、上传、OCR、路由、埋点走 Bridge。风险列了协议稳定性、别把业务流程写死、图片不走 Base64、Native View 名需预置、组件包与 crate 版本配套</td>
-<td>① 这是「能力交付型」方案，验收标准该不同：功能型看「功能对不对」，机制型看「没参与过的人能不能照着独立接入一次」。文档只有步骤与一个示例仓库链接，缺最小可跑样例 + 生成脚本校验（CI 里跑 <code>generate.sh</code> 比对产物），而后者才是机制型交付的成立条件。② 「客户端低版本没集成、业务自行版控」最容易出事故，该让 Recce 对未注册组件给可观测降级（占位视图 + 上报）。③ pdef 作为唯一协议源头是最值钱的设计，可反过来推广到内部组件——新能力优先走 pdef，不手写三端属性</td>
-<td>能力交付型（交机制）与功能交付型（交特性）要分开写；机制型的验收标准是「外部团队能独立接入一次」，产出必须含可运行样例与生成校验，光有步骤说明不算交付</td>
+<td>结论是把「自定义业务 Native View」做成一项能力交付：业务自建组件仓库，走 pdef 声明（组件名、属性、事件、版本 feature）→ 执行 <code>generate.sh</code> 生成 native 与 Rust 产物 → 实现 <code>View</code>、<code>ViewManager</code>、<code>ShadowNode</code>、<code>ViewManagerProvider</code>、<code>Plugin</code> → 暴露 Rust crate（依赖与业务工程一致的 Recce／recce_props 版本）→ 业务仓库依赖并在 <code>rsx!</code> 里使用标签。同时划边界：文案、资源位、按钮、弹窗、实验策略放 Recce 侧；相册网格、图片预览、裁剪、复杂手势、高性能列表做 Native View；权限、拍照、上传、OCR、路由、埋点走 Bridge。风险列了协议稳定性、不要把业务流程写死在 Native View、图片不要走 Base64、新增 Native View 名需客户端预置、组件包与 Rust crate 需版本配套</td>
+<td>① 这是「能力交付型」方案，与前面的「功能交付型」不是一个物种，验收标准也该不同：功能型看「功能对不对」，机制型看「没参与过的人能不能照着独立接入一次」。文档只给了步骤与一个示例仓库链接，缺一个最小可跑样例 + 生成脚本校验（CI 里跑一遍 <code>generate.sh</code> 并比对产物），而后者才是机制型交付的成立条件。② 「客户端低版本没有集成 Native View、业务方需要自行做好版控」是最容易出事故的一条：更优是让 Recce 在遇到未注册组件时给出可观测的降级（占位视图 + 上报），而不是把「业务会不会漏判」当成前提。③ pdef 作为唯一协议源头是这个方案里最值钱的设计，把属性、事件、三端产物收口到一处生成，正好回应了「把差异收口到一处」；这一点可以反过来推广到内部组件——新能力优先走 pdef，不手写三端属性</td>
+<td>启发：能力交付型方案（交机制）和功能交付型方案（交特性）要分开写；机制型的验收标准是「外部团队能独立接入一次」，所以产出里必须包含可运行样例与生成校验，光有步骤说明不算交付</td>
 </tr>
 <tr>
 <td><strong>差异扫描</strong>（1.35）</td>
 <td>Recce 的 Android 组件是从 RN 抄来改造的，长期分叉后不知道差在哪</td>
-<td>Recce 的 <code>views</code> 目录与 RN 的 <code>views</code> 目录逐文件对读，只记高置信的 bug 或行为差异（未支持属性、无 RN core 对照的不纳入），得 14 条（ScrollView 5、TextInput 5、Modal 2、Text 1、ViewGroup 1），每条给「Recce 文件:行／RN 文件:行／影响／建议」；已修 4 条、待修 10 条，并给了修复顺序</td>
-<td>① 这套「逐文件对读 + 行号级证据 + 已修／待修状态表」是最可复用的工作方法，该固化成周期任务（每个 RN 大版本发布后跑一次）。② 最关键的自觉是作者主动标注的那条：<code>maxLength</code> 注明「RN main 同位置也是同样写法，不是相对 RN 的差异，但确实是崩溃点」——等于说 diff 只能识别「与对照物不同」，识别不了「两边都错」，必须配一路不看对照物的审查（边界用例、静态分析）。③ 待修里的 Modal 生命周期、ViewGroup clipping 焦点保护，与触摸新架构的接管清单一脉，应合成一条主线排期</td>
-<td>与上游 diff 是查差异的利器，但盲区是「两边都错」；差异扫描要配一路不依赖对照物的审查，否则修完一轮剩下的全是共同错误</td>
+<td>把 Recce 的 <code>views</code> 目录与 RN 的 <code>views</code> 目录逐文件对读，只记高置信的 bug 或行为差异（未支持属性、无 RN core 对照的能力不纳入）。得 14 条：ScrollView 5、TextInput 5、Modal 2、Text 1、ViewGroup 1，每条给「Recce 文件:行／RN 对应文件:行／影响／建议」。已修 4 条（<code>snapToAlignment</code> 未参与 <code>flingAndSnap</code>、纵向 <code>snapToOffsets=[]</code> 崩溃、<code>scrollTo</code>／<code>scrollToEnd</code> 未先 <code>abortAnimation</code>、TextInput selection 未 clamp），待修 10 条（含 <code>maxLength</code> 追加 <code>LengthFilter</code> 数组越界、Modal 生命周期缺失、ViewGroup clipping 缺少焦点与转场保护），并给了修复顺序</td>
+<td>① 这套「逐文件对读 + 行号级证据 + 已修／待修状态表」是 18 份里最可复用的工作方法，应该固化成周期任务（例如每个 RN 大版本发布后跑一次），产出形态也固定为「问题—状态—修复后表现—影响范围—测试重点」。② 最关键的自觉是作者主动标注的那一条：<code>maxLength</code> 那条注明「RN main 同位置仍能看到类似写法，因此这不是 Recce 相对 RN 的差异，但它是确定崩溃点，建议一起修」——等于说 diff 只能识别「与对照物不同」，识别不了「两边都错」；要覆盖这个盲区，必须配一路不看对照物、只看自身正确性的审查（边界用例、静态分析、fuzz）。③ 待修清单里 Modal 生命周期、ViewGroup clipping 的焦点与转场保护，都属于「绕开原生后接管不全」的欠账，和触摸新架构那份接管清单是同一批东西，应合成一条「补齐原生隐式收益」的主线排期</td>
+<td>启发：「和上游 diff」是查差异的利器，但盲区是「两边都错的地方看不出来」；差异扫描要配一路不依赖对照物的审查，否则修完一轮，剩下的全是共同错误</td>
 </tr>
 <tr>
 <td><strong>安全区域</strong>（1.33，排期跟随 1.30 小版本／主版本 1.32）</td>
-<td>iOS 已有 <code>safeAreaDidChange</code> 把安全区域值传给 recce-ui，Android 没有；核心问题是 Recce 内核无法判断当前页面是否沉浸式，所以返回的 safeArea-top 一直有高度</td>
-<td>结论是「Recce 暂不改动，改容器侧」：短期由容器自己维护沉浸式状态并自己发事件；长期由容器在 url 里携带安全区域信息（是否沉浸式、top 和 bottom）。实现列了四个候选（<code>setOnApplyWindowInsetsListener</code> 挂 <code>RecceRootView</code>／挂 <code>DecorView</code>／重写 <code>onApplyWindowInsets</code>／在 <code>onGlobalLayout</code> 里追加检查），逐个标了「首次加载／旋转／键盘弹出是否触发」</td>
-<td>① 这是 18 份里「边界划得最清醒」的一份：没在错误的层硬凑，而是把「内核不知道沉浸式」这个信息缺口写成结论。② 长期方案用 url 传参会把会变的状态做成一次性快照，更优是把沉浸式作为「可查询属性 + 变化事件」暴露，形式与 iOS 已有的 <code>safeAreaDidChange</code> 一致，顺手对齐双端语义。③ 候选取舍标准该从「触发时机全不全」扩到「每帧成本」，明确只在 insets 变化时计算</td>
-<td>一个值算不对时，先问「这个信息在哪一层是已知的」，答案不在自己这层就明确划出去，不要在错误的层叠补丁；一次性信息走 url，会变的状态走属性 + 事件</td>
+<td>iOS 已有 <code>safeAreaDidChange</code> 事件回调把安全区域值传给 recce-ui，Android 没有；核心问题是 Recce 内核无法判断当前页面是否沉浸式（内容延伸到状态栏），所以 recce 返回的 safeArea-top 一直有高度</td>
+<td>结论是「Recce 暂不改动，改容器侧」：短期由容器自己维护当前页面的沉浸式状态、自己发事件给业务；长期由容器在 url 里携带安全区域信息（是否沉浸式、top 和 bottom），双端都要改造。实现上列了四个候选（<code>setOnApplyWindowInsetsListener</code> 挂 <code>RecceRootView</code>／挂 <code>DecorView</code>／重写 <code>onApplyWindowInsets</code>／在 <code>CustomGlobalLayoutListener.onGlobalLayout</code> 里追加 <code>checkForSafeAreaChanges</code>、<code>onAttachedToWindow</code> 时发），逐个标了「首次加载／旋转／键盘弹出是否触发」的差异</td>
+<td>① 这是 18 份里「边界划得最清醒」的一份：没有在错误的层硬凑，而是把「内核不知道沉浸式」这个信息缺口直接写成结论，把方案推回容器侧。② 长期方案用 url 传参会把会变的瞬时状态做成一次性快照：沉浸式是一个会变的状态（页面切换、旋转、键盘），url 传参只适合初始化一次的静态信息；更优是把沉浸式状态作为「可查询属性 + 变化事件」由容器暴露给 Recce，形式与 iOS 已有的 <code>safeAreaDidChange</code> 一致，也就顺手把双端语义对齐了。③ 四个候选的取舍标准该从「触发时机全不全」扩到「每帧成本」：<code>onGlobalLayout</code> 覆盖面最全但每次布局变化都执行，方案里用「与上次值比对后再发」方向对，更优是明确只在 insets 变化时计算</td>
+<td>启发：一个值算不对时，先问「这个信息在哪一层是已知的」，答案不在自己这层就明确划出去，不要在错误的层叠补丁；传参方式要匹配信息的生命周期——一次性信息走 url，会变的状态走属性 + 事件</td>
 </tr>
 </tbody>
 </table></div>
@@ -1006,7 +1012,7 @@
 <tr>
 <td>5</td>
 <td>重构类方案把「清债」写进立项收益</td>
-<td>立项只写「支持 BoxShadow」「支持 hitSlop」时，这类方案在评审中很难拿到优先级，而三份重构的收益大头都在清债</td>
+<td>立项只写「支持 BoxShadow」「支持 hitSlop」时，这类方案在评审中很难拿到优先级，而三份重构的实际收益大头都在清债</td>
 <td>立项页里把「顺带修掉的历史问题清单」与能力目标并列</td>
 </tr>
 <tr>
@@ -1086,7 +1092,65 @@
 
   <text x="24" y="428" font-size="8.5" fill="#8a929c" dominant-baseline="central">这 18 条里，一半以上是同一类：把「看起来是加法的事」当成「要先定契约的事」来做。</text>
 </svg></div><figcaption>图 8：18 份方案的可带走规则。每行一份方案，右侧是一句能在下一次同类工作里直接用的判断，例如 Yoga 引入的「把补属性重定义成换依赖」、字体加载的「缓存 key 必须能区分版本」、Android 17 适配的「先问线上有没有流量」、差异扫描的「diff 查不出两边都错」。</figcaption></figure>
-<h2>五、待核实</h2>
+<h2>五、把「更优解」那一列拿去对账</h2>
+<p>第三节的「2026 视角：更优解」是本文的分析结论。这一节把其中最有后果的几条拿到公开上游去核一遍：哪些被坐实、哪些要修正、哪些仍然只是判断。出处为公开上游源码与发布说明（2026-10-14 抓取）。</p>
+<div class="tw"><table>
+<thead><tr>
+<th>环节</th>
+<th>上游/业界的事实（附出处）</th>
+<th>对那一列的影响</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>触摸命中</strong>（3.3 触摸新架构、3.4 补属性）</td>
+<td>RN 的命中判定在平台层而非共享层：Android 是 <code>TouchTargetHelper</code> 自根向下 DFS（pointerEvents 四值在 <code>findTouchTargetViewWithPointerEvents</code>，hitSlop 在 <code>isTouchPointInView</code>，overflow 与 clipChildren 在 <code>findTouchTargetView</code>，transform 用矩阵求逆在 <code>getChildPoint</code>）；修「父容器外的子视图可点」的上游 commit 是 <a href="https://github.com/facebook/react-native/commit/e35a963bfb9" target="_blank" rel="noopener">e35a963</a>（#29039）。新架构下 Android 仍是这套 Kotlin 实现（<code>JSPointerDispatcher</code> 调它），iOS 用 UIKit 的 <code>hitTest</code>；<strong>C++ 层没有命中实现</strong>，只有事件类型。W3C Pointer Events 自 RN 0.71 起以 opt-in 提供（需 Fabric + 开关），四个 <code>pointerEvents</code> 取值与官方文档一致，<code>onGotPointerCapture</code>/<code>onLostPointerCapture</code> 当时仍标「Yet to be Implemented」（<a href="https://reactnative.dev/blog/2023/01/12/version-071" target="_blank" rel="noopener">0.71 发布说明</a>、<a href="https://reactnative.dev/blog/2022/12/13/pointer-events-in-react-native" target="_blank" rel="noopener">Pointer Events 专文</a>、<a href="https://raw.githubusercontent.com/facebook/react-native/main/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/uimanager/TouchTargetHelper.kt" target="_blank" rel="noopener">TouchTargetHelper.kt</a>）</td>
+<td><strong>坐实两条</strong>：① 「在 Recce 里重实现 RN 的命中算法」不是绕远路，上游确实没给出可复用的共享层命中实现；② <code>hitSlop</code> / <code>pointerEvents</code> 依赖触摸重构，是因为在上游它们本来就是同一个命中函数里的参数，不是两个独立属性 —— 「两类必须同批排期」这条判断成立</td>
+</tr>
+<tr>
+<td><strong>父容器抢手势</strong>（3.3）</td>
+<td>RNGH 3.3.0 的 <code>NativeViewGestureHandler</code>：用 <code>view.onInterceptTouchEvent()</code> 决定是否激活，包裹时调 <code>requestDisallowInterceptTouchEvent(true)</code>，子手势用 <code>blocksExternalGesture</code> 反向压制父滚动容器，「可否被抢占」由 <code>disallowInterruption</code> 显式声明（<a href="https://docs.swmansion.com/react-native-gesture-handler/docs/gestures/native-gesture/" target="_blank" rel="noopener">RNGH 文档</a>）</td>
+<td>与我们在 1.35 里「ScrollView 只在真正拦截成功后发 touchcancel」同向；可借的是判据形态——父容器可否被抢应由子视图声明</td>
+</tr>
+<tr>
+<td><strong>背景/边框绘制</strong>（3.3 背景重构）</td>
+<td>RN 新架构 Android 侧已把这类绘制拆成一组 Kotlin Drawable：<code>BorderDrawable</code>、<code>CompositeBackgroundDrawable</code>、<code>BackgroundDrawable</code>、<code>BackgroundImageDrawable</code>、<code>InsetBoxShadowDrawable</code>/<code>OutsetBoxShadowDrawable</code>、<code>OutlineDrawable</code>（目录 <code>com.facebook.react.uimanager.drawable</code>）（<a href="https://github.com/facebook/react-native/tree/main/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/uimanager/drawable" target="_blank" rel="noopener">目录</a>）</td>
+<td><strong>坐实「方向对」</strong>：收口到一个组合 Drawable 与上游同名同位置。但「我们用观察者模式、上游是逐个手动 <code>invalidate</code>」这条<strong>仍是我们的判断</strong>——<code>BorderDrawable.kt</code> 有 42KB，本次抓取失败，没读到上游现状；「RN 用不规则四边形、我们用 clipPath 裁梯形」的实现差异同样未核实</td>
+</tr>
+<tr>
+<td><strong>图片加载</strong>（3.3 图片重构、3.4 Image 二期）</td>
+<td>上游 Android 侧的 <code>resizeMode</code> 可选值是 <code>contain/cover/stretch/center/repeat/none</code> 六个，绘制层默认 <code>CENTER_CROP</code>，JS 层两端默认值都是 <code>'cover'</code>；依赖的图片库是 Fresco（RN 版本表里固定 <code>fresco = &quot;3.9.0&quot;</code>），加载状态由 Drawee 的层级表达。社区替代 <code>react-native-fast-image</code> 10.0.0（2026-10-12）已改成新架构组件、用 <code>objectFit</code> 取代 <code>resizeMode</code>（<code>stretch→fill</code>、<code>center→scale-down</code>），Android 用 Glide（<a href="https://raw.githubusercontent.com/facebook/react-native/main/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/views/image/ImageResizeMode.kt" target="_blank" rel="noopener">ImageResizeMode.kt</a>、<a href="https://raw.githubusercontent.com/facebook/react-native/main/packages/react-native/gradle/libs.versions.toml" target="_blank" rel="noopener">libs.versions.toml</a>）</td>
+<td><strong>坐实一条、修正一条</strong>：① 「Picasso 重绘前先清空导致闪白」的更优解确实是换带 placeholder/error 语义的层级化加载器（上游 Drawee 就是这么做的），判断成立，代价是包体与三端一致性；② <strong>修正</strong>：「<code>fit_start</code>/<code>fit_end</code> 未支持」本来就不是 RN 语义的缺口——RN 没有这两个值，它们来自 Android 的 <code>ImageView.ScaleType</code>，对齐目标写错了对象</td>
+</tr>
+<tr>
+<td><strong>Yoga 跟版与兼容开关</strong>（3.1 三份）</td>
+<td>3.0 引入 <code>AbsolutePositioningIncorrect</code>、<code>AbsolutePercentAgainstInnerSize</code> 两个 erratum，3.2 进一步移除 legacy absolute positioning 路径、改用新 erratum <code>AbsolutePositionWithoutInsetsExcludesPadding</code>，且官方明确说明<strong>React Native 中默认开启旧行为</strong>；发布节奏上 1.18.0 是 2019-11-08、1.19.0 到 2021-05-21，之后停到 2.0（2023-07），最新 tag 仍是 v3.2.1（2024-12-13）（<a href="https://www.yogalayout.dev/blog/announcing-yoga-3.0" target="_blank" rel="noopener">3.0</a>、<a href="https://www.yogalayout.dev/blog/announcing-yoga-3.2" target="_blank" rel="noopener">3.2</a>、<a href="https://github.com/react/yoga/tags" target="_blank" rel="noopener">tags</a>）</td>
+<td><strong>坐实两条</strong>：① 「等上游发新版」不是选项 —— 引擎五年只发了几版，最新的也停在 2024-12；② 鸿蒙那份「拿到了 <code>YGErrata</code> 却没用」的批评有了更硬的依据：errata 就是上游为下游保留旧行为的正规手段，<strong>RN 自己就在用</strong>，不用它等于把已到手的确定性还回去。另附一条对照：上游把 Yoga vendor 在 <code>ReactCommon/yoga/</code> 随 RN 发版，不存在「同一份引擎进包两次」，双 so 共存是自建依赖的固有代价</td>
+</tr>
+<tr>
+<td><strong>字体加载 / 文本渐变</strong>（3.2、3.4 字体路径）</td>
+<td>Android 官方机制是 DownloadableFonts（API 26 起 AndroidX Core 全面支持，<code>FontRequest</code> + <code>FontsContractCompat</code>，可走 <code>res/font</code> XML 与 manifest 的 <code>preloaded_fonts</code> 预声明以避开首次布局延迟）；iOS 对应 <code>CTFontManagerRegisterFontsForURL</code>（<a href="https://developer.android.com/guide/topics/ui/look-and-feel/downloadable-fonts" target="_blank" rel="noopener">DownloadableFonts</a>、<a href="https://developer.apple.com/documentation/coretext/1499468-ctfontmanagerregisterfontsforurl" target="_blank" rel="noopener">CTFontManagerRegisterFontsForURL</a>）。文本渐变在 Android 侧的基件就是 <code>LinearGradient extends Shader</code>，设到 <code>TextPaint</code> 上即可；RN 生态的通行组合是 masked-view（0.3.2）+ linear-gradient（2.8.3，peer 依赖仍停在很旧的 RN 版本）（<a href="https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/main/graphics/java/android/graphics/LinearGradient.java" target="_blank" rel="noopener">AOSP</a>）</td>
+<td><strong>坐实两条</strong>：① 「缓存 key 最优在构建期」与 <code>preloaded_fonts</code> 预声明是同一思路，判断成立；远端字体若将来要支持，官方路径存在，不必自造；② 「Shader 方案十行以内就够」与上游一致 —— Android 侧本来就有直路，<code>MaskedView</code> 那套是 iOS/跨端通用才需要的成本</td>
+</tr>
+<tr>
+<td><strong>SVG / Lottie</strong>（3.2）</td>
+<td><code>resvg</code>/<code>usvg</code> 最新 0.48.1（2026-08-02），0.48 起文本栈从 <code>ttf-parser</code>+<code>rustybuzz</code> 换成 <code>skrifa</code>+<code>harfrust</code>，官方提示体积可能 +500KB；<code>thorvg</code> v1.1.2（2026-09-18）；<code>react-native-svg</code> 15.15.5（Fabric 自 13.0.0 起，<code>&gt;=15.13.0</code> 对应 RN <code>&gt;=0.78</code>）；Skia 的 <code>SkSVGDOM</code> 需显式注入字体管理器，不注入就不显示文本。Lottie 侧 <code>lottie-android</code> 6.7.1、<code>lottie-ios</code> 4.6.1（4.6.0 起要求 Xcode 16 / Swift 6）；LottieFiles 官方的 Rust 运行时 <code>dotlottie-rs</code> v0.1.58 <strong>渲染器就是 ThorVG</strong>，但 README 写明 crates.io 上的是过期 alpha、要用 git 依赖并带 C++ 工具链</td>
+<td><strong>坐实并给「回头看」一个落点</strong>：① 当初否掉 resvg / thorvg 的理由到 2026 仍是理由（resvg 的文本栈刚换过一轮、体积又上一档；thorvg 的 Rust 绑定自述不可生产）；② 「Lottie 与 SVG 本可共用引擎」这条现在有具体形态了 —— 官方 Rust 运行时确实用 ThorVG 同时吃两者，属上游在生产里用的路线，但分发形态说明代价不小</td>
+</tr>
+<tr>
+<td><strong>安全区域与取窗口尺寸</strong>（3.5）</td>
+<td>官方口径：多数场景用 <code>getCurrentWindowMetrics()</code>（API 30+，非全屏也正确），返回的 bounds <strong>不扣除</strong> <code>WindowInsets</code>、要自己减，密度取 <code>Configuration#densityDpi</code>；<code>Display.getSize</code>/<code>getRealSize</code> 分别自 API 30/31 弃用。RN 的 <code>DeviceInfoModule</code> 走 Jetpack <code>WindowMetricsCalculator.computeCurrentWindowMetrics</code>，并处理 edge-to-edge 与 insets 未就绪时的回落（<a href="https://developer.android.com/reference/kotlin/android/view/WindowManager" target="_blank" rel="noopener">WindowManager</a>、<a href="https://raw.githubusercontent.com/facebook/react-native/main/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/deviceinfo/DeviceInfoModule.kt" target="_blank" rel="noopener">DeviceInfoModule.kt</a>）</td>
+<td><strong>结论仍成立</strong>（内核判断不了沉浸式这条同样成立：窗口尺寸与 insets 是两回事，官方明说 bounds 不含 insets）；可补一处更准：取 insets 的官方入口正是我们列的第一个候选 <code>setOnApplyWindowInsetsListener</code>，RN 那套「insets 未就绪时回落 displayMetrics」的兜底同样必要</td>
+</tr>
+<tr>
+<td><strong>差异扫描</strong>（3.5）</td>
+<td>业界对「实现与参照实现是否一致」有一个更便宜的形态：让参照实现自己产期望值。Yoga / taffy / Flutter 都是这套（HTML fixture 在 Chrome 里渲染出期望布局再比结果）；taffy 还有 <code>scripts/diff-test-fixtures-with-yoga.sh</code> 直接拿 Yoga 的用例做差异对照。而「两边都错」这个盲区，上游各有一路不看对照物的检查：Blink 每次修 bug 补一个 WPT、Flutter 走 golden 基准回归（<a href="https://github.com/DioxusLabs/taffy/tree/main/scripts" target="_blank" rel="noopener">taffy scripts</a>、<a href="https://chromium.googlesource.com/chromium/src/+/main/docs/testing/web_tests.md" target="_blank" rel="noopener">Web Tests</a>、<a href="https://api.flutter.dev/flutter/flutter_test/goldenFileComparator.html" target="_blank" rel="noopener">goldenFileComparator</a>）</td>
+<td>第四节第 4 条那条建议有了可执行形态：把「每个 RN 大版本跑一轮 diff」升级成「fixture + 参照实现产期望值」，再把待修清单固化成用例；「不依赖对照物的审查」上游也是独立一路，与本文的判断一致</td>
+</tr>
+</tbody>
+</table></div>
+<p>落到动作，这一轮对账只产生三条修改：</p>
+<ol><li><strong><code>fit_start</code>/<code>fit_end</code> 的对齐目标写错了对象</strong>（3.3 图片重构）。它们是 Android <code>ImageView.ScaleType</code> 的值，RN 的 <code>resizeMode</code> 只有六个值、不含这两个；这一项的验收应以 RN 为准，而不是以原生 ImageView 为准。</li><li><strong><code>YGErrata</code> 的价值在 3.1 里被低估了</strong>。它不只是「鸿蒙没用上的一个开关」，而是上游为下游保留旧行为的正规机制、RN 自己在用；「直接升级无 AB」的端最该拿它当安全网。</li><li><strong>「比上游做得好」的两条要标注证据等级</strong>（3.3 背景重构）。观察者模式优于手动 <code>invalidate</code>、clipPath 裁梯形替代不规则四边形，这两条本次都没读到上游源码，应按「我们的判断」表述，不能写成已核实的对照结论。</li></ol>
+<h2>六、待核实</h2>
 <div class="tw"><table>
 <thead><tr>
 <th>事项</th>
@@ -1099,7 +1163,7 @@
 </tr>
 <tr>
 <td>「更优解」的性质</td>
-<td>是分析结论不是原文内容。其中两条外部事实已核实：Yoga 最新发布版仍是 3.2.1（2024-12-13）；thorvg 的 Rust 绑定 2026 年已发到 0.5.1 但自述尚不可生产。其余属工程取舍分析，没有实测支撑</td>
+<td>是分析结论不是原文内容。其中两条外部事实已核实：Yoga 最新发布版仍是 3.2.1（2024-12-13）；thorvg 的 Rust 绑定 2026 年已发到 0.5.1 但自述尚不可生产。第五节另核了一批（RN 命中实现、上游 Drawable 目录、resizeMode 取值、errata 机制、字体与 SVG/Lottie 版本），其余属工程取舍分析，没有实测支撑</td>
 </tr>
 <tr>
 <td>部分表格有截断</td>
@@ -1112,6 +1176,10 @@
 <tr>
 <td>未纳入分析的同批材料</td>
 <td>提测报告、自测用例、上下线记录、问题排查见附录；其中排查类文档里可能还有可提炼的技术判断，未逐份展开</td>
+</tr>
+<tr>
+<td>第五节两处未取到源码</td>
+<td><code>BorderDrawable.kt</code>（42KB，抓取失败）与 <code>ReactViewBackgroundDrawable.java</code>（main 分支 404），因此「我们的绘制手法优于上游」与「两边边框实现差异」两条都只写到「未核实」，没有上升为结论</td>
 </tr>
 </tbody>
 </table></div>

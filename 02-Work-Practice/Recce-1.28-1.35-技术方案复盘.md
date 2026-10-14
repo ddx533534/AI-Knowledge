@@ -27,9 +27,21 @@
 | 1.35 | **实名调研**           | 《Recce x 实名认证方案调研》                          |
 | 1.35 | **差异扫描**           | 《Recce 与 React Native Android 组件实现差异扫描》     |
 
-## 一、结论：这八份版本下来，最大的启发是什么
+**一句话结论：1.28 到 1.35 做的主要不是「加功能」，而是「把借来的东西收回来」。**
 
-一句话：**1.28 到 1.35 做的主要不是「加功能」，而是「把借来的东西收回来」。** 顺着这句有五条判断，对应的动作放在第四节。
+![图 1：按版本与类别排布的技术方案全景。横轴是 1.28 到 1.35 八个版本，纵轴是五类工作：换依赖、新增能力、重构、对齐与适配、机制与扫描。换依赖集中在 1.28 与 1.31；新增能力从 1.29 的 Lottie 一路加到 1.35 的补充属性；重构集中在 1.31、1.34、1.35；对齐与适配贯穿 1.30 到 1.35；机制与扫描只在 1.33 与 1.35 出现。](fig1-solution-map.svg)
+
+| 类别 | 方案 | 共同点 |
+| --- | --- | --- |
+| 换依赖（3） | Yoga 引入、Android 升 yoga、鸿蒙升 yoga | 借来的引擎要收回自己手里；代价是包体与双引擎共存 |
+| 新增能力（5） | Lottie、SVG、字体加载、文本渐变、Touch 指针 | 每个能力都要先定「资源从哪来、数据长什么样」 |
+| 重构（3） | 图片重构、背景重构、触摸新架构 | 立项理由写「加能力」，实际收益大头是「清历史债」 |
+| 对齐与适配（4） | 字体路径、Image 二期、Android 17、补属性 | 判据从「代码里有」换成「线上有流量」 |
+| 机制与扫描（3） | 实名调研、差异扫描、安全区域 | 交的是机制或边界判断，不是功能，验收标准与功能型方案不同 |
+
+## 一、这八份版本下来，最大的启发是什么
+
+顺着开头那句话有五条判断，对应的动作放在第四节。
 
 | # | 判断                                  | 证据                                                                                                                                                                                                                          |
 | - | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -39,25 +51,21 @@
 | 4 | 重构类方案的收益大头是「清历史债」，立项理由却只写「加能力」      | 图片重构顺带修掉 `ResizeMode` 一串问题与继承链的重复实现；背景重构一次收口 14 条三端不一致；触摸新架构顺手解锁了依赖它的一批点击属性                                                                                                                                                 |
 | 5 | 最弱的一环不是技术判断，是证据强度                   | 18 份里能在文档内给出可复核数字的只有 5 份（Yoga 引入的耗时对照、Android 升 yoga 的包体明细、SVG 的耗时与包体、字体加载的缓存耗时、Android 17 适配的 DAU 口径）；多数的「风险」章节写的是 todo 或「待定」，Benchmark 多为单机单次、无对照                                                                         |
 
+## 二、五条判断的配图
+
+判断 1（对标锚点从 MRN 换成 RN）见开头的全景图，其余四条各配一张：
+
+**判断 2 —— 凡是「多端不一致」，最后都是收口到一处，不是三端各修一遍。**
 ![图 2：三类「多端不一致」问题的收敛点。三行分别是背景渲染、触摸分发、属性协议，每行左边是三端各自修的旧形态，右边是 1.34 与 1.35 之后收口成的唯一入口：CompositeBackgroundDrawable、RecceTouchTargetHelper、pdef 生成。](fig2-convergence.svg)
 
+**判断 3 —— 选型的分水岭是宿主 App 的包体余量，不是技术优劣。**
 ![图 3：选型的分水岭。三个圆角矩形分别是 Yoga、SVG、Lottie 的选型落点，横轴是包体代价，纵轴是多端一致性收益；三个「一致性最高」的候选（保留文本 feature 的 resvg、thorvg、双 so 共存的 Yoga）都被包体余量否掉或改写，结论一律倒向包体可控的一侧。](fig3-budget-line.svg)
 
+**判断 4 —— 重构类方案的收益大头是「清历史债」，立项理由却只写「加能力」。**
 ![图 4：重构类方案的共同形态。三列分别是 1.31 图片重构、1.34 背景重构、1.35 触摸新架构，上行是立项时写的能力目标，下行是这次重构顺带清掉的历史债；三份方案的收益大头都在「清债」一侧，但立项理由里写的都是「加能力」。](fig4-refactor-debt.svg)
 
+**判断 5 —— 最弱的一环不是技术判断，是证据强度。**
 ![图 5：18 份方案的证据强度分级。绿格是文档内给出了可复核的实测或对照数据，橙格是给了数字但无对照或单点测量，红格是结论有、风险章节为 todo 或待定；字体加载、SVG、背景重构、Touch 指针、差异扫描这五份证据最完整，风险章节写 todo 的集中在早期几份。](fig5-evidence-grade.svg)
-
-## 二、全景
-
-![图 1：按版本与类别排布的技术方案全景。横轴是 1.28 到 1.35 八个版本，纵轴是五类工作：换依赖、新增能力、重构、对齐与适配、机制与扫描。换依赖集中在 1.28 与 1.31；新增能力从 1.29 的 Lottie 一路加到 1.35 的补充属性；重构集中在 1.31、1.34、1.35；对齐与适配贯穿 1.30 到 1.35；机制与扫描只在 1.33 与 1.35 出现。](fig1-solution-map.svg)
-
-| 类别       | 方案                              | 共同点                          |
-| -------- | ------------------------------- | ---------------------------- |
-| 换依赖（3）   | Yoga 引入、Android 升 yoga、鸿蒙升 yoga | 借来的引擎要收回自己手里；代价是包体与双引擎共存     |
-| 新增能力（5）  | Lottie、SVG、字体加载、文本渐变、Touch 指针   | 每个能力都要先定「资源从哪来、数据长什么样」       |
-| 重构（3）    | 图片重构、背景重构、触摸新架构                 | 立项理由写「加能力」，实际收益大头是「清历史债」     |
-| 对齐与适配（4） | 字体路径、Image 二期、Android 17、补属性    | 判据从「代码里有」换成「线上有流量」           |
-| 机制与扫描（3） | 实名调研、差异扫描、安全区域                  | 交的是机制或边界判断，不是功能，验收标准与功能型方案不同 |
 
 ## 三、逐方案复盘
 
@@ -90,7 +98,7 @@
 | **触摸新架构**（1.35） | 旧架构依托 Android 原生触摸（找点击范围内最深的 View，向上冒泡到第一个设了 onTouch／onClick 的 View 并返回 true），三条缺点：对原生响应有侵入（`ScrollView` 设 `OnTouchListener` 后返回 true 会阻碍滚动）、移出父布局范围的 View 点击不触发、点击热区只能在父 View 上设 `TouchDelegate`                         | 改成 RN 形态：`RecceRootView` 统一观察 Android touch 流，`ACTION_DOWN` 锁定整段手势的 target，`MOVE`／`UP` 只更新坐标不换目标；`RecceTouchTargetHelper` 从 root 递归 DFS（更深更靠上的 child 优先）；`pointerEvents` 四种取值决定 self／children 能否命中；边界判断考虑 `hitSlop`、`overflow`、`clipChildren`、`transform`（用逆矩阵把触点映射到 child 局部坐标）；Text 这类复合 View 做二次命中；native 统一发 touch 流，click 与 longclick 交给 recce-ui；`ScrollView`／`HScrollView` 只在真正 `onInterceptTouchEvent` 拦截成功后发 `touchcancel`；WebView／Titans 的内部 native child 设为 `pointerEvents=none`。另有两处细节：`move` 按帧回调（`Choreographer.postFrameCallback`，每帧只发最新一次）、以及去重（新架构下 root 的 `onIntercept` 与 `onTouchEvent` 会双发）。新旧共存选「native 加开关 + env 桥加开关 A，统一向业务层发 `on_touch_xxx`」 | ① 这是 18 份里技术含量最高的一份，形态也对：不是抄 RN 的代码，而是在 Recce 里重实现 RN 的命中算法，并补上 RN 没专门管的两处（双发去重、move 按帧节流）。② 接管成本没有列全：多指能力与无障碍影响都被列为 P0 未做，这两件事恰是「绕开原生自己做一套」的必然代价，应显式列一份「接管清单」（多指、无障碍、焦点、TV 遥控方向键）作为必须补的欠账。③ `move` 按帧节流改变了事件语义（业务收到的 move 次数不再等于真实移动次数），应给「是否逐条收取」的开关并写进文档。④ 共存方案选得对：加开关但不新增属性、由 recce-ui 统一向业务发事件，差异收在 native 与 recce-ui 之间，不给业务加心智负担           | 启发：当平台原生能力（Android 触摸分发）和上层期望（RN 的 responder 语义）冲突时，「绕开原生自己做一套」是对的，但代价是要一并接管原生的那些隐式收益（无障碍、多指、焦点）；接管清单不写全，下一轮就会以缺陷的形式补回来 |
 
 
-![图 7：触摸事件新旧架构的调用链对照。左侧旧架构依托 Android 原生分发，从点击范围内最深的 View 向上冒泡到第一个设了 onTouch 或 onClick 的 View 就停；右侧 1.35 的新架构由 RootView 统一观察 touch 流、在 ACTION\_DOWN 锁定 target，再由 RecceTouchTargetHelper 按 pointerEvents、hitSlop、overflow、transform 决定命中，native 只发 touch 流，click 与 longclick 交给 recce-ui。](fig7-touch-arch.svg)
+![图 6：触摸事件新旧架构的调用链对照。左侧旧架构依托 Android 原生分发，从点击范围内最深的 View 向上冒泡到第一个设了 onTouch 或 onClick 的 View 就停；右侧 1.35 的新架构由 RootView 统一观察 touch 流、在 ACTION\_DOWN 锁定 target，再由 RecceTouchTargetHelper 按 pointerEvents、hitSlop、overflow、transform 决定命中，native 只发 touch 流，click 与 longclick 交给 recce-ui。](fig6-touch-arch.svg)
 
 ### 3.4 对齐与适配（4 份）
 
@@ -101,7 +109,7 @@
 | **Android 17 适配**（1.35） | Android 17 于 2026-06-16 正式发布，主要变化是隐私安全强化、后台行为限制与开发规范收紧；美团 App 安卓 17 设备 DAU 约 8000（7 月 1 日数据）。面向 Target37 的适配项本次只需了解、无需适配                                                                                                                  | 梳理被删 API：`android.text.StaticLayout` 旧版多参构造（影响 `RecceSwitchButton` 与 `RecceTextShadowNode`）、`android.widget.TextView.mCursorDrawableRes` 反射被删（影响 `RecceTextInputManager`）。逐项判：label 与 input 早已适配（API 23 以上走 `StaticLayout.Builder`）无需改；SwitchButton 需要修，但线上没有业务使用，跟美团主版本即可                                                                                                                                                                                                                                                                                      | ① 「线上没有业务在用」是本方案的关键判据，该显式固化成规则：要不要适配的依据是「线上有没有流量」，不是「代码里有没有引用」——Recce 里有一批没有流量的历史组件，每次系统升级都要为它们花人力。② 反射 API 被删是确定趋势，该一次改掉而不是加版本判断：`mCursorDrawableRes` 这类私有字段反射应换成语义等价的公开途径（主题属性 `android:textCursorDrawable`）或自绘光标。③ 更彻底的解法是出「删除清单」而不是「适配清单」：对确认无流量的组件（SwitchButton 这类）从 SDK 里摘出去，适配成本直接归零                                                               | 启发：系统版本适配的第一问不是「怎么改」，而是「这段代码线上还有没有流量」；没有流量的引用不该进适配清单，该进删除清单——每次系统升级都给死代码做适配，是维护成本里最不划算的一块 |
 | **补属性**（1.35）           | `ScrollView` 缺 `maintainVisibleContentPosition`、`scrollsChildToFocus`；`View` 缺 `removeClippedSubviews`、`needsOffscreenAlphaCompositing`、一组 `nextFocus*`、`focusable`／`tabIndex`、`hitSlop`、`pointerEvents`、`renderToHardwareTextureAndroid` | 分两类处理。**真补行为**：`maintainVisibleContentPosition`（属性设了才懒创建 helper、布局变化时记首个可见锚点、内容插入后按锚点反向调整 offset、接近顶部按阈值自动回顶）、`scrollsChildToFocus`（`requestChildFocus` 里按开关决定是否滚到 focused child，默认 true 保持原行为）、`removeClippedSubviews`（按可视区域裁剪，屏幕外子节点临时 detach）。**只补协议**：`focusable`／`tabIndex`／`hitSlop`／`pointerEvents`／`renderToHardwareTextureAndroid` 只补齐属性定义、二进制读写与 visitor 默认入口，Android 预留实现点、iOS／鸿蒙补空方法。分界本质是「行为依赖别的工作」（`hitSlop`／`pointerEvents` 依赖 1.35 的触摸重构，这正是需求把触摸重构列 P0、属性对齐列 P1 的原因）。注意项：给 `ScrollView` 设 `removeClippedSubviews` 时必须同时给 `scrollContentview` 设 | ① 「先补协议、后补行为」的手法本身是对的，危险在可观测性：属性收下了但不生效，业务会以为已经支持；更优是同时给可观测标记（显式标 no-op、或首次下发时打一条一次性日志），让「没生效」和「没实现」能区分开。② 依赖关系要反过来驱动排期而不是写在备注里：`hitSlop` 依赖触摸重构决定了这两项必须同批排期，否则会先交付一批注定返工的 no-op。③ `removeClippedSubviews` 从 `ScrollView` 专属属性上移为 `View` 通用属性、导入路径变了，这类变更要有迁移说明，否则业务升级后直接编译不过                                                                             | 启发：「补齐属性」真正的危险不是漏做，而是「属性收下了但不生效」；补协议和补行为要显式分开标注，当某个属性的行为依赖另一项架构改动时，两项必须同批次排期              |
 
-![图 6：属性「补协议」与「补行为」的分层，以及它与触摸重构的依赖关系。上层是 1.35 补属性方案里只补齐定义与读写入口的一批属性，下层是真正补上行为的一批；hitSlop 与 pointerEvents 悬在两层之间并指向 1.35 的触摸新架构，说明它们的行为依赖那一项工作，两类排期不能拆开。](fig6-protocol-vs-behavior.svg)
+![图 7：属性「补协议」与「补行为」的分层，以及它与触摸重构的依赖关系。上层是 1.35 补属性方案里只补齐定义与读写入口的一批属性，下层是真正补上行为的一批；hitSlop 与 pointerEvents 悬在两层之间并指向 1.35 的触摸新架构，说明它们的行为依赖那一项工作，两类排期不能拆开。](fig7-protocol-vs-behavior.svg)
 
 ### 3.5 机制与扫描（3 份）
 
@@ -124,15 +132,38 @@
 
 ![图 8：18 份方案的可带走规则。每行一份方案，右侧是一句能在下一次同类工作里直接用的判断，例如 Yoga 引入的「把补属性重定义成换依赖」、字体加载的「缓存 key 必须能区分版本」、Android 17 适配的「先问线上有没有流量」、差异扫描的「diff 查不出两边都错」。](fig8-takeaways.svg)
 
-## 五、待核实
+## 五、把「更优解」那一列拿去对账
+
+第三节的「2026 视角：更优解」是本文的分析结论。这一节把其中最有后果的几条拿到公开上游去核一遍：哪些被坐实、哪些要修正、哪些仍然只是判断。出处为公开上游源码与发布说明（2026-10-14 抓取）。
+
+| 环节 | 上游/业界的事实（附出处） | 对那一列的影响 |
+| --- | --- | --- |
+| **触摸命中**（3.3 触摸新架构、3.4 补属性） | RN 的命中判定在平台层而非共享层：Android 是 `TouchTargetHelper` 自根向下 DFS（pointerEvents 四值在 `findTouchTargetViewWithPointerEvents`，hitSlop 在 `isTouchPointInView`，overflow 与 clipChildren 在 `findTouchTargetView`，transform 用矩阵求逆在 `getChildPoint`）；修「父容器外的子视图可点」的上游 commit 是 [e35a963](https://github.com/facebook/react-native/commit/e35a963bfb9)（#29039）。新架构下 Android 仍是这套 Kotlin 实现（`JSPointerDispatcher` 调它），iOS 用 UIKit 的 `hitTest`；**C++ 层没有命中实现**，只有事件类型。W3C Pointer Events 自 RN 0.71 起以 opt-in 提供（需 Fabric + 开关），四个 `pointerEvents` 取值与官方文档一致，`onGotPointerCapture`/`onLostPointerCapture` 当时仍标「Yet to be Implemented」（[0.71 发布说明](https://reactnative.dev/blog/2023/01/12/version-071)、[Pointer Events 专文](https://reactnative.dev/blog/2022/12/13/pointer-events-in-react-native)、[TouchTargetHelper.kt](https://raw.githubusercontent.com/facebook/react-native/main/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/uimanager/TouchTargetHelper.kt)） | **坐实两条**：① 「在 Recce 里重实现 RN 的命中算法」不是绕远路，上游确实没给出可复用的共享层命中实现；② `hitSlop` / `pointerEvents` 依赖触摸重构，是因为在上游它们本来就是同一个命中函数里的参数，不是两个独立属性 —— 「两类必须同批排期」这条判断成立 |
+| **父容器抢手势**（3.3） | RNGH 3.3.0 的 `NativeViewGestureHandler`：用 `view.onInterceptTouchEvent()` 决定是否激活，包裹时调 `requestDisallowInterceptTouchEvent(true)`，子手势用 `blocksExternalGesture` 反向压制父滚动容器，「可否被抢占」由 `disallowInterruption` 显式声明（[RNGH 文档](https://docs.swmansion.com/react-native-gesture-handler/docs/gestures/native-gesture/)） | 与我们在 1.35 里「ScrollView 只在真正拦截成功后发 touchcancel」同向；可借的是判据形态——父容器可否被抢应由子视图声明 |
+| **背景/边框绘制**（3.3 背景重构） | RN 新架构 Android 侧已把这类绘制拆成一组 Kotlin Drawable：`BorderDrawable`、`CompositeBackgroundDrawable`、`BackgroundDrawable`、`BackgroundImageDrawable`、`InsetBoxShadowDrawable`/`OutsetBoxShadowDrawable`、`OutlineDrawable`（目录 `com.facebook.react.uimanager.drawable`）（[目录](https://github.com/facebook/react-native/tree/main/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/uimanager/drawable)） | **坐实「方向对」**：收口到一个组合 Drawable 与上游同名同位置。但「我们用观察者模式、上游是逐个手动 `invalidate`」这条**仍是我们的判断**——`BorderDrawable.kt` 有 42KB，本次抓取失败，没读到上游现状；「RN 用不规则四边形、我们用 clipPath 裁梯形」的实现差异同样未核实 |
+| **图片加载**（3.3 图片重构、3.4 Image 二期） | 上游 Android 侧的 `resizeMode` 可选值是 `contain/cover/stretch/center/repeat/none` 六个，绘制层默认 `CENTER_CROP`，JS 层两端默认值都是 `'cover'`；依赖的图片库是 Fresco（RN 版本表里固定 `fresco = "3.9.0"`），加载状态由 Drawee 的层级表达。社区替代 `react-native-fast-image` 10.0.0（2026-10-12）已改成新架构组件、用 `objectFit` 取代 `resizeMode`（`stretch→fill`、`center→scale-down`），Android 用 Glide（[ImageResizeMode.kt](https://raw.githubusercontent.com/facebook/react-native/main/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/views/image/ImageResizeMode.kt)、[libs.versions.toml](https://raw.githubusercontent.com/facebook/react-native/main/packages/react-native/gradle/libs.versions.toml)） | **坐实一条、修正一条**：① 「Picasso 重绘前先清空导致闪白」的更优解确实是换带 placeholder/error 语义的层级化加载器（上游 Drawee 就是这么做的），判断成立，代价是包体与三端一致性；② **修正**：「`fit_start`/`fit_end` 未支持」本来就不是 RN 语义的缺口——RN 没有这两个值，它们来自 Android 的 `ImageView.ScaleType`，对齐目标写错了对象 |
+| **Yoga 跟版与兼容开关**（3.1 三份） | 3.0 引入 `AbsolutePositioningIncorrect`、`AbsolutePercentAgainstInnerSize` 两个 erratum，3.2 进一步移除 legacy absolute positioning 路径、改用新 erratum `AbsolutePositionWithoutInsetsExcludesPadding`，且官方明确说明**React Native 中默认开启旧行为**；发布节奏上 1.18.0 是 2019-11-08、1.19.0 到 2021-05-21，之后停到 2.0（2023-07），最新 tag 仍是 v3.2.1（2024-12-13）（[3.0](https://www.yogalayout.dev/blog/announcing-yoga-3.0)、[3.2](https://www.yogalayout.dev/blog/announcing-yoga-3.2)、[tags](https://github.com/react/yoga/tags)） | **坐实两条**：① 「等上游发新版」不是选项 —— 引擎五年只发了几版，最新的也停在 2024-12；② 鸿蒙那份「拿到了 `YGErrata` 却没用」的批评有了更硬的依据：errata 就是上游为下游保留旧行为的正规手段，**RN 自己就在用**，不用它等于把已到手的确定性还回去。另附一条对照：上游把 Yoga vendor 在 `ReactCommon/yoga/` 随 RN 发版，不存在「同一份引擎进包两次」，双 so 共存是自建依赖的固有代价 |
+| **字体加载 / 文本渐变**（3.2、3.4 字体路径） | Android 官方机制是 DownloadableFonts（API 26 起 AndroidX Core 全面支持，`FontRequest` + `FontsContractCompat`，可走 `res/font` XML 与 manifest 的 `preloaded_fonts` 预声明以避开首次布局延迟）；iOS 对应 `CTFontManagerRegisterFontsForURL`（[DownloadableFonts](https://developer.android.com/guide/topics/ui/look-and-feel/downloadable-fonts)、[CTFontManagerRegisterFontsForURL](https://developer.apple.com/documentation/coretext/1499468-ctfontmanagerregisterfontsforurl)）。文本渐变在 Android 侧的基件就是 `LinearGradient extends Shader`，设到 `TextPaint` 上即可；RN 生态的通行组合是 masked-view（0.3.2）+ linear-gradient（2.8.3，peer 依赖仍停在很旧的 RN 版本）（[AOSP](https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/main/graphics/java/android/graphics/LinearGradient.java)） | **坐实两条**：① 「缓存 key 最优在构建期」与 `preloaded_fonts` 预声明是同一思路，判断成立；远端字体若将来要支持，官方路径存在，不必自造；② 「Shader 方案十行以内就够」与上游一致 —— Android 侧本来就有直路，`MaskedView` 那套是 iOS/跨端通用才需要的成本 |
+| **SVG / Lottie**（3.2） | `resvg`/`usvg` 最新 0.48.1（2026-08-02），0.48 起文本栈从 `ttf-parser`+`rustybuzz` 换成 `skrifa`+`harfrust`，官方提示体积可能 +500KB；`thorvg` v1.1.2（2026-09-18）；`react-native-svg` 15.15.5（Fabric 自 13.0.0 起，`>=15.13.0` 对应 RN `>=0.78`）；Skia 的 `SkSVGDOM` 需显式注入字体管理器，不注入就不显示文本。Lottie 侧 `lottie-android` 6.7.1、`lottie-ios` 4.6.1（4.6.0 起要求 Xcode 16 / Swift 6）；LottieFiles 官方的 Rust 运行时 `dotlottie-rs` v0.1.58 **渲染器就是 ThorVG**，但 README 写明 crates.io 上的是过期 alpha、要用 git 依赖并带 C++ 工具链 | **坐实并给「回头看」一个落点**：① 当初否掉 resvg / thorvg 的理由到 2026 仍是理由（resvg 的文本栈刚换过一轮、体积又上一档；thorvg 的 Rust 绑定自述不可生产）；② 「Lottie 与 SVG 本可共用引擎」这条现在有具体形态了 —— 官方 Rust 运行时确实用 ThorVG 同时吃两者，属上游在生产里用的路线，但分发形态说明代价不小 |
+| **安全区域与取窗口尺寸**（3.5） | 官方口径：多数场景用 `getCurrentWindowMetrics()`（API 30+，非全屏也正确），返回的 bounds **不扣除** `WindowInsets`、要自己减，密度取 `Configuration#densityDpi`；`Display.getSize`/`getRealSize` 分别自 API 30/31 弃用。RN 的 `DeviceInfoModule` 走 Jetpack `WindowMetricsCalculator.computeCurrentWindowMetrics`，并处理 edge-to-edge 与 insets 未就绪时的回落（[WindowManager](https://developer.android.com/reference/kotlin/android/view/WindowManager)、[DeviceInfoModule.kt](https://raw.githubusercontent.com/facebook/react-native/main/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/deviceinfo/DeviceInfoModule.kt)） | **结论仍成立**（内核判断不了沉浸式这条同样成立：窗口尺寸与 insets 是两回事，官方明说 bounds 不含 insets）；可补一处更准：取 insets 的官方入口正是我们列的第一个候选 `setOnApplyWindowInsetsListener`，RN 那套「insets 未就绪时回落 displayMetrics」的兜底同样必要 |
+| **差异扫描**（3.5） | 业界对「实现与参照实现是否一致」有一个更便宜的形态：让参照实现自己产期望值。Yoga / taffy / Flutter 都是这套（HTML fixture 在 Chrome 里渲染出期望布局再比结果）；taffy 还有 `scripts/diff-test-fixtures-with-yoga.sh` 直接拿 Yoga 的用例做差异对照。而「两边都错」这个盲区，上游各有一路不看对照物的检查：Blink 每次修 bug 补一个 WPT、Flutter 走 golden 基准回归（[taffy scripts](https://github.com/DioxusLabs/taffy/tree/main/scripts)、[Web Tests](https://chromium.googlesource.com/chromium/src/+/main/docs/testing/web_tests.md)、[goldenFileComparator](https://api.flutter.dev/flutter/flutter_test/goldenFileComparator.html)） | 第四节第 4 条那条建议有了可执行形态：把「每个 RN 大版本跑一轮 diff」升级成「fixture + 参照实现产期望值」，再把待修清单固化成用例；「不依赖对照物的审查」上游也是独立一路，与本文的判断一致 |
+
+落到动作，这一轮对账只产生三条修改：
+
+1. **`fit_start`/`fit_end` 的对齐目标写错了对象**（3.3 图片重构）。它们是 Android `ImageView.ScaleType` 的值，RN 的 `resizeMode` 只有六个值、不含这两个；这一项的验收应以 RN 为准，而不是以原生 ImageView 为准。
+2. **`YGErrata` 的价值在 3.1 里被低估了**。它不只是「鸿蒙没用上的一个开关」，而是上游为下游保留旧行为的正规机制、RN 自己在用；「直接升级无 AB」的端最该拿它当安全网。
+3. **「比上游做得好」的两条要标注证据等级**（3.3 背景重构）。观察者模式优于手动 `invalidate`、clipPath 裁梯形替代不规则四边形，这两条本次都没读到上游源码，应按「我们的判断」表述，不能写成已核实的对照结论。
+
+## 六、待核实
 
 | 事项         | 说明                                                                                                                |
 | ---------- | ----------------------------------------------------------------------------------------------------------------- |
 | 数字全部照抄原文   | 18 份方案引用的数字未复算；Yoga 包体存在两个口径（428.52KB 与 489.52KB），本文沿用原文各自写法，未做取舍                                                 |
-| 「更优解」的性质   | 是分析结论不是原文内容。其中两条外部事实已核实：Yoga 最新发布版仍是 3.2.1（2024-12-13）；thorvg 的 Rust 绑定 2026 年已发到 0.5.1 但自述尚不可生产。其余属工程取舍分析，没有实测支撑 |
+| 「更优解」的性质   | 是分析结论不是原文内容。其中两条外部事实已核实：Yoga 最新发布版仍是 3.2.1（2024-12-13）；thorvg 的 Rust 绑定 2026 年已发到 0.5.1 但自述尚不可生产。第五节另核了一批（RN 命中实现、上游 Drawable 目录、resizeMode 取值、errata 机制、字体与 SVG/Lottie 版本），其余属工程取舍分析，没有实测支撑 |
 | 部分表格有截断    | 1.32 Image 二期与 1.35 补属性两份文档里，部分属性表来自折叠块，简化版 Markdown 有截断，本文只引用能完整读到的部分                                            |
 | 落地状态未确认    | 触摸新架构文档标注「已评审」，落地情况未在本次材料中体现；补属性方案里「只补协议」那批属性的实际生效状态，需按上线后的版本复核                                                   |
 | 未纳入分析的同批材料 | 提测报告、自测用例、上下线记录、问题排查见附录；其中排查类文档里可能还有可提炼的技术判断，未逐份展开                                                                |
+| 第五节两处未取到源码 | `BorderDrawable.kt`（42KB，抓取失败）与 `ReactViewBackgroundDrawable.java`（main 分支 404），因此「我们的绘制手法优于上游」与「两边边框实现差异」两条都只写到「未核实」，没有上升为结论 |
 
 ## 附录：同期的落单与排查记录（非方案类）
 

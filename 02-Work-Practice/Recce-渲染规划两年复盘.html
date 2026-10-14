@@ -85,27 +85,88 @@
 <h1>Recce 渲染规划两年复盘</h1>
 <p>核实日期：2026-10-13。所有材料均在同日通过学城 CLI 直读原文核对，未引用二手转述。</p>
 <h2>写在开头：这两年真正长出来的是什么</h2>
-<p>读完两年规划与三十余份子文档，最值得带走的不是补齐了多少属性，而是这个团队<strong>两次给自己划边界，而第二次划的方式变了</strong>。</p>
-<p><strong>第一次，把模糊的问题变成可数的清单。</strong> 25 规划的起点是一句抱怨——「属性支持度不够，业务临时来要会排期紧张」——这句话里没有一个可执行项。它的落点却是两个都算过钱的方案：按业务方代码反推，缺 24 项、约 144PD；直接对齐 RN 全集，缺 178 项、600PD。选了前者，并把没选的那个留在表里。从「不够用」到「缺 24 项」，是整件事由模糊变清晰的临界点。</p>
-<p>这一步的手法值得单独记下来：<strong>当清单大到做不完时，不是更努力地做完它，而是换一个更锋利的参照物，把清单重新切一遍。</strong> 178 项是按「RN 文档列了什么」切的，24 项是按「业务方代码真的用了什么」切的；同一个问题，换参照物，规模差七倍。同一个动作在 26 规划里又出现一次——新增一列「RN 实现层」，把「RN 列了这个属性」与「这个属性需要原生实现」拆开，Image 专表里 14 个未支持项因此全部判「不需要支持」。</p>
-<p><strong>第二次，承认清单有尽头。</strong> 26 规划把口径从「补够用」改成「以 RN 为基线，补其短板，探其边界」，目标写成 157 项、各组件从 50%~62% 提到 100%。但真正的方法论进步不在这句口号里，而在于它同时承认：补完清单不等于没有问题了。背景重构那份需求结尾写得很直接：</p>
-<blockquote>这些问题是已知的，当然还有很多未知的问题，如何主动识别并解决这些问题才是更重要的。</blockquote>
-<p>这句话把目标从「清单清零」换成了「建一套能持续发现问题的机制」。前者有终点，后者没有。</p>
-<p><strong>这两件事不是二选一，是同一件事的先后。</strong> 不先把边界划清楚，就没有「已知清单」这个基数，也就无法定义什么是「未知」，顺序不能颠倒。反过来，只做第一步会掉进一个陷阱：把清单当成全部，清单之外的问题只能等 QA 来撞——背景重构那 14 条里，9 条是 QA 或开发在真实业务里撞出来才登记的，没有一条是靠属性清单推出来的。</p>
-<p>而「主动识别」的落点，材料里也已经给出了样板，只是被放进了暂停状态。差异扫描把 Recce 与 RN 的 Android 源码逐文件对读，一次捞出 14 条高置信 bug——其中 <code>snapToAlignment</code> 在属性表上是绿的（值收得到、三端都支持），但它在 <code>flingAndSnap</code> 里根本没参与计算，三种对齐方式全部失效。这类问题盯着 RN 的属性文档看一辈子也发现不了，因为<strong>它换的不是努力程度，是对照面：从「RN 的文档」换成了「RN 的源码」。</strong></p>
-<p>把两年合起来，可以带走一句话：</p>
-<blockquote>清单失控时，换参照物；清单做完时，换对照面。</blockquote>
-<p>前半句解决「不知道要做多少」，后半句解决「不知道还差多少」。</p>
+<p><strong>一句话结论：不是补齐了多少属性，而是这个团队两次给自己划边界，而第二次划的方式变了 —— 清单失控时换参照物，清单做完时换对照面。</strong></p>
+<ul><li><strong>第一次，把模糊的问题变成可数的清单。</strong> 25 规划的起点是一句抱怨——「属性支持度不够，业务临时来要会排期紧张」——这句话里没有一个可执行项；它的落点却是两个都算过钱的方案：按业务方代码反推缺 24 项、约 144PD，直接对齐 RN 全集缺 178 项、600PD。选了前者，并把没选的那个留在表里。从「不够用」到「缺 24 项」，是整件事由模糊变清晰的临界点。手法值得单独记：<strong>清单大到做不完时，不是更努力地做完它，而是换一个更锋利的参照物，把清单重新切一遍。</strong> 178 项按「RN 文档列了什么」切，24 项按「业务方代码真的用了什么」切，同一个问题规模差七倍。</li><li><strong>第二次，承认清单有尽头。</strong> 26 规划把口径从「补够用」改成「以 RN 为基线，补其短板，探其边界」，目标写成 157 项、各组件从 50%~62% 提到 100%。真正的方法论进步不在这句口号里，而在于它同时承认补完清单不等于没有问题，把目标从「清单清零」换成了「建一套能持续发现问题的机制」——前者有终点，后者没有。样板也已经做出来了，只是被放进了暂停状态：差异扫描逐文件对读 Recce 与 RN 的 Android 源码，一次捞出 14 条高置信 bug，其中 <code>snapToAlignment</code> 在属性表上是绿的，但在 <code>flingAndSnap</code> 里根本没参与计算，三种对齐方式全部失效——<strong>它换的不是努力程度，是对照面：从「RN 的文档」换成了「RN 的源码」。</strong></li></ul>
+<p>这两件事不是二选一，是同一件事的先后：不先把边界划清楚，就没有「已知清单」这个基数，也就无法定义什么是「未知」。反过来，只做第一步会掉进一个陷阱——背景重构那 14 条里，9 条是 QA 或开发在真实业务里撞出来才登记的，没有一条是靠属性清单推出来的。</p>
+<blockquote><p>清单失控时，换参照物；清单做完时，换对照面。</p></blockquote>
+<h3>一张表看完</h3>
+<div class="tw"><table>
+<thead><tr>
+<th>判断</th>
+<th>证据</th>
+<th>细节在</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>换参照物：同一个问题换切法，规模差七倍</td>
+<td>178 项按「RN 文档列了什么」切，24 项按「业务方代码真的用了什么」切；两个口径都算了钱（600PD 与 144PD）</td>
+<td>2.1</td>
+</tr>
+<tr>
+<td>换参照物还能直接省工作量</td>
+<td>26 规划新增一列「RN 实现层」，把「RN 列了这个属性」与「这个属性需要原生实现」拆开，Image 专表 14 个未支持项因此全部判「不需要支持」</td>
+<td>2.1</td>
+</tr>
+<tr>
+<td>换对照面：从 RN 的文档换成 RN 的源码</td>
+<td>差异扫描逐文件对读 <code>android/recce/views</code> 与 RN 的 <code>ReactAndroid/.../views</code>，一次得到 14 条高置信 bug（4 条已修、10 条待修）</td>
+<td>2.2</td>
+</tr>
+<tr>
+<td>属性矩阵只回答「有没有」，回答不了「对不对」</td>
+<td><code>snapToAlignment</code> 值收得到、三端都支持，但 <code>pagingEnabled</code> 下 start / center / end 全部退化成普通分页</td>
+<td>2.2</td>
+</tr>
+<tr>
+<td>「主动识别」的样板已经做出来了，但被暂停</td>
+<td>差异扫描不用跑设备、不用判定基线，只要对读源码；而 26 规划 KR 里「借助 AI 建自动化测试」到核实时仍停在纸面</td>
+<td>2.5</td>
+</tr>
+<tr>
+<td>对齐的是 RN 的语义，不是 RN 的实现细节</td>
+<td>不采纳的判例理由都不是「做不了」，而是「采纳后比现在差」或「Recce 的编译期约束已经挡在前面」</td>
+<td>2.2</td>
+</tr>
+</tbody>
+</table></div>
 <h2>读了什么</h2>
-<p>两期规划正文：《Recce Native 渲染规划(2025)》（下称 <strong>25 规划</strong>，基线 Recce 1.25 / RN 0.72）、《Recce Native 渲染规划(2026)》（下称 <strong>26 规划</strong>，子文档已按 RN 0.86 / Recce 1.34）。</p>
+<p>两期规划正文：《Recce Native 渲染规划(2025)》（<strong>25 规划</strong>，基线 Recce 1.25 / RN 0.72）、《Recce Native 渲染规划(2026)》（<strong>26 规划</strong>，子文档已按 RN 0.86 / Recce 1.34）。</p>
 <ul><li><strong>25 侧 22 份子文档</strong>：《Yoga 引入方案调研》（<strong>选型调研</strong>）、《引入3.2.1版本 Yoga 需求和方案》（<strong>Yoga 方案</strong>）、《Recce 布局计算引擎(Yoga)升级 - B端上线》（<strong>上线记录</strong>）、《Recce - RN Changelog 同步机制》（<strong>Changelog 机制</strong>）、《其他框架的业务属性调研情况》（<strong>业务方调研</strong>）、《Recce VS RN 缺失属性对齐》（<strong>属性对齐总表</strong>）、三端逐组件的 0.72 对齐进展、1.29 / 1.30 / 1.32 三期技术方案。</li><li><strong>26 侧 6 份子文档</strong>：《1.3x Recce native 背景逻辑重构需求》（<strong>背景重构</strong>，下含《iOS 文本继承关系》）、《1.32 Image缺失能力完善（二期）》（<strong>Image 二期</strong>，下含《Recce SVG技术方案》即 <strong>SVG 方案</strong>、《自测用例》）、《组件渲染属性对齐RN0.86版本》（<strong>0.86 总表</strong>）。</li><li><strong>2026 年落地侧</strong>：《Recce 1.35版本需求》（<strong>1.35 需求</strong>）及其下 7 份组件 / 样式专表（View、ScrollView、Image、Shadow、Label、Layout、TextInput，统称<strong>组件专表</strong>）、《Recce 1.34 版本需求》、《Recce 与 React Native Android 组件实现差异扫描》（<strong>差异扫描</strong>）、《【iOS】1.35 渲染属性对齐》；另引《05-客户诉求池》（<strong>诉求池</strong>，密级，读不到原文）。</li></ul>
 <h2>词表</h2>
-<ul><li><strong>补齐 / 对齐</strong>：补齐＝新增 Recce 不支持的属性；对齐＝属性已支持但行为与 RN 不一致，把它改过来。成本结构与验收方式完全不同，两年里分在两张表里排期。</li><li><strong>口径一 / 口径二</strong>：25 规划里对「最终要支持多少属性」的两种定义。口径一按业务方代码反推（缺 24 项），口径二直接对齐 RN 全集（缺 178 项）。</li><li><strong>native prop / JS 层属性</strong>：RN 属性里一部分由原生侧实现，一部分只在 JS 层处理（吸顶、下拉刷新、键盘收起策略都是这一类）。只有前者才需要 Recce 原生侧补。</li><li><strong>放量（灰度）</strong>：按 uuid 比例分批放开新能力，观察一档稳定后再进下一档。</li><li><strong>存量异常归因</strong>：判断线上异常是新版本引入还是旧版本本来就有，避免把存量问题算到新改动头上。</li></ul>
+<div class="tw"><table>
+<thead><tr>
+<th>词</th>
+<th>意思</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>补齐 / 对齐</td>
+<td>补齐＝新增 Recce 不支持的属性；对齐＝属性已支持但行为与 RN 不一致，把它改过来。成本结构与验收方式完全不同，两年里分在两张表里排期</td>
+</tr>
+<tr>
+<td>口径一 / 口径二</td>
+<td>25 规划里对「最终要支持多少属性」的两种定义。口径一按业务方代码反推（缺 24 项），口径二直接对齐 RN 全集（缺 178 项）</td>
+</tr>
+<tr>
+<td>native prop / JS 层属性</td>
+<td>RN 属性里一部分由原生侧实现，一部分只在 JS 层处理（吸顶、下拉刷新、键盘收起策略都是这一类）。只有前者才需要 Recce 原生侧补</td>
+</tr>
+<tr>
+<td>放量（灰度）</td>
+<td>按 uuid 比例分批放开新能力，观察一档稳定后再进下一档</td>
+</tr>
+<tr>
+<td>存量异常归因</td>
+<td>判断线上异常是新版本引入还是旧版本本来就有，避免把存量问题算到新改动头上</td>
+</tr>
+</tbody>
+</table></div>
 <h2>一、两年的问题定义变了</h2>
 <p>25 规划的起点是「属性支持度不够，业务临时来要会排期紧张，且影响 Recce 其他渲染工作进度」，落成三条目标：集中补齐新增属性、已有属性与 RN 对齐、制定 RN Changelog Fixed 同步机制。</p>
 <p>26 规划把起点换成一句自问自答：</p>
-<blockquote>Q：Recce 渲染要做成什么样子？对比现在缺少了哪些能力？怎么去更好地实现这些能力？<br>A：如果要完全对标 Web 那样的渲染能力，恐怕不是很现实……以 RN 为基线，补其短板，探其边界。即不追求 Web 全集，追求在 Native 约束下的最优解。后续进行自绘制开发时，再去打破这个约束。</blockquote>
-<p>从「补够用的属性」到「承认边界、只求 Native 约束下的最优解」，是这两年最大的一次口径变化。它有两个直接后果：补齐从「按业务代码反推、够用就行」改成「按需全部支持完」（157 项，各组件从 50%~62% 提到 100%）；「已有属性对齐」被升级成「三端渲染一致性」，验收对象从 RN 换成 iOS / Android / 鸿蒙三端。</p>
+<blockquote><p>Q：Recce 渲染要做成什么样子？对比现在缺少了哪些能力？怎么去更好地实现这些能力？
+A：如果要完全对标 Web 那样的渲染能力，恐怕不是很现实……以 RN 为基线，补其短板，探其边界。即不追求 Web 全集，追求在 Native 约束下的最优解。后续进行自绘制开发时，再去打破这个约束。</p></blockquote>
+<p>从「补够用的属性」到「承认边界、只求 Native 约束下的最优解」，是这两年最大的一次口径变化。两个直接后果：补齐从「按业务代码反推、够用就行」改成「按需全部支持完」（157 项，各组件从 50%~62% 提到 100%）；「已有属性对齐」升级成「三端渲染一致性」，验收对象从 RN 换成 iOS / Android / 鸿蒙三端。</p>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 448" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>Recce 渲染规划的五个方向在 2025 与 2026 两年的状态对照</title>
   <desc>五行三列的对照表。第一列是方向，共五个：基础属性补齐、已有属性对齐、布局引擎、高级表现力、Changelog 同步。第二列是 2025 规划里的状态，第三列是 2026 规划里的状态。基础属性补齐从按业务代码反推的口径一，扩到按需全部支持的 157 项，并新增 RN 实现层甄别；已有属性对齐从逐组件对 RN 0.72 做行为 diff，升级为三端一致性验收、对齐基线提到 RN 0.86；布局引擎在 2025 引入 Yoga 3.2.1 并用 horn 切双引擎放量，2026 只把 Taffy 留作备选、未给切换触发条件；高级表现力 2025 未立项，2026 立为独立方向并落地了 P0 三项；Changelog 同步在 2025 立了机制，2026 规划里没有这条。</desc>
@@ -182,7 +243,7 @@
 </svg></div><figcaption>图 1：五个方向在 2025 与 2026 两年的状态对照</figcaption></figure>
 <h2>二、逐个方向走了一遍</h2>
 <h3>2.1 基础属性补齐：口径从「业务反推」走到「按需全量」</h3>
-<p>这是 25 规划的主线，也是唯一一个两年都在做的方向。</p>
+<p>25 规划的主线，也是唯一一个两年都在做的方向。</p>
 <div class="tw"><table>
 <thead><tr>
 <th>组件</th>
@@ -251,8 +312,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>25 规划给两个口径都算了成本：口径一缺 24 项、约 144PD；口径二缺 178 项、600PD、平均 200PD/端。选了口径一，理由（贴近具体业务、工作量小）与代价（不能百分百保证未来需要某些奇特属性）都写在正文里。优先级按业务紧急程度切，近期要用的通用布局与阴影定 P0、其余 P1，三端 owner 明确到人。</p>
-<p>分母这件事两年里都没定死，所以前后不能横着比。</p>
+<p>25 规划给两个口径都算了成本：口径一缺 24 项、约 144PD；口径二缺 178 项、600PD、平均 200PD/端。选了口径一，理由（贴近具体业务、工作量小）与代价（不能百分百保证未来需要某些奇特属性）都写在正文里。优先级按业务紧急程度切，近期要用的通用布局与阴影定 P0、其余 P1，三端 owner 明确到人。<strong>分母这件事两年里都没定死，所以前后不能横着比。</strong></p>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 424" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>同一批组件在 2025 与 2026 两份规划里的属性支持数对照</title>
   <desc>七行六列的对照表。列依次是组件、2025 的已支持数与总数、2025 的比例、2026 的已支持数与总数、2026 的比例、已支持数的变化。通用布局从 52/56 到 56/56，通用阴影从 0/4 到 4/4，ScrollView 从 27/61 到 38/59，Image 从 24/50 到 16/30，Label 从 31/69 到 17/42，View 与 Input 在 2026 那份表里留空。图下方的说明指出：Image 的比例从 48% 升到 53%，但已支持数从 24 掉到 16，Label 从 31 掉到 17，原因是 2026 按 RN 实现层把 JS 层属性从分母里剔掉了，而 2025 没有剔，因此两年的比例不能横向比较。</desc>
@@ -339,7 +399,7 @@
 </svg></div><figcaption>图 2：同一批组件在 2025 与 2026 两份规划里的属性支持数对照</figcaption></figure>
 <p>比分母更值钱的，是 26 规划新增的那一列「RN 实现层」——它把「RN 文档里列了这个属性」和「这个属性需要 native 实现」拆开了，于是大量条目判「否」，而不是继续往 native 侧堆工作量：</p>
 <ul><li>Image 专表 30 项里未支持的 14 项全部判「不需要支持」：<code>defaultSource</code>、<code>loadingIndicatorSource</code>、<code>onProgress</code> 是「属性鸡肋」，<code>src</code> 是「source 已有」，<code>crossOrigin</code>、<code>referrerPolicy</code> 可以走 headers，<code>resizeMethod</code> 一族因为「recce 用 picasso、rn 用 fresco，两套图片机制」。</li><li>ScrollView 专表把 11 个非 native prop 逐条写了 JS 层怎么实现：<code>stickyHeaderIndices</code> 是遍历 children 把子节点包成 <code>ScrollViewStickyHeader</code>；<code>refreshControl</code> 在 iOS 是当子节点放进去、在 Android 是包裹 ScrollView；<code>onContentSizeChange</code> 是转 <code>onLayout</code> 出来的。</li></ul>
-<p>这一列的价值超过补齐本身：它把「对齐 RN」从一个无底洞变成了一个有边界的清单，也是 2.2 里那些「不采纳」结论的方法基础。</p>
+<p>这一列把「对齐 RN」从一个无底洞变成了一个有边界的清单，也是 2.2 里那些「不采纳」结论的方法基础。</p>
 <p>2026 年这条线换了组织形式——不再是规划里的一张总表，而是每个组件 / 样式一份专表，标题带状态前缀，统一挂在 1.35 需求下，共 7 份（View 那份含 Props 与 Style Props 两张表）。实际状态是 Image、Shadow 收口，<strong>View 与 ScrollView 今年也已经对齐</strong>，但这两份标题至今仍写【对齐中】。Label、Layout、TextInput 标【暂停】，其中 Label 那份只有标题、没有结论。</p>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 534" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>1.35 那一批组件属性对齐专表的状态与卡点</title>
@@ -447,8 +507,8 @@
   <text x="56" y="478" font-size="9.5" fill="#5b6470" dominant-baseline="central"><tspan font-weight="500" fill="#1f2328">依赖触摸事件重构</tspan>：hitSlop / pointerEvents / focusable / tabIndex 与 10 个 onResponder*</text>
   <text x="56" y="492" font-size="9.5" fill="#5b6470" dominant-baseline="central">全部押在触摸事件重构上，这就是 1.35 里触摸事件重构是 P0、属性对齐是 P1 的原因</text>
 </svg></div><figcaption>图 3：1.35 那一批组件属性专表的状态、属性数与卡点</figcaption></figure>
-<p>专表比总表更有用的地方，是它把「不支持」拆成了性质不同的几类，而这几类的解法完全不一样：</p>
-<ul><li><strong>上游压根不是 native prop</strong>——判否的主要依据，也是省下工作量最多的一类。<code>aria-*</code> 全系 11 项判「没必要，有等价属性」，<code>collapsable</code>、<code>testID</code>、<code>id</code>、<code>nativeID</code> 判「框架已有能力支持」。</li><li><strong>目标平台没这个能力</strong>——View 的 11 项无障碍属性全部判否，理由都是同一条「鸿蒙不支持无障碍」。这类不是「不做」，是做了也没有落点。</li><li><strong>依赖别的工作</strong>——<code>hitSlop</code>、<code>pointerEvents</code>、<code>focusable</code>、<code>tabIndex</code> 与 10 个 <code>onResponder*</code> 都判「需要，但依赖触摸事件重构，本期不支持」。这解释了 1.35 里为什么触摸事件重构排 P0、属性对齐只排 P1——属性对齐有一截排在触摸事件重构后面。</li><li><strong>剩下才是真工作量</strong>——View 侧 23＋15 项、ScrollView 侧 10 项 native 加 10 项待 recce-ui 配合、TextInput 侧 33 项、Layout 侧 20 项。</li></ul>
+<p>专表比总表更有用的地方，是它把「不支持」拆成了性质不同的几类，解法完全不一样：</p>
+<ul><li><strong>上游压根不是 native prop</strong>——判否的主要依据，也是省下工作量最多的一类。<code>aria-*</code> 全系 11 项判「没必要，有等价属性」，<code>collapsable</code>、<code>testID</code>、<code>id</code>、<code>nativeID</code> 判「框架已有能力支持」。</li><li><strong>目标平台没这个能力</strong>——View 的 11 项无障碍属性全部判否，理由都是同一条「鸿蒙不支持无障碍」。这类不是「不做」，是做了也没有落点。</li><li><strong>依赖别的工作</strong>——<code>hitSlop</code>、<code>pointerEvents</code>、<code>focusable</code>、<code>tabIndex</code> 与 10 个 <code>onResponder*</code> 都判「需要，但依赖触摸事件重构，本期不支持」。这解释了 1.35 里为什么触摸事件重构排 P0、属性对齐只排 P1。</li><li><strong>剩下才是真工作量</strong>——View 侧 23＋15 项、ScrollView 侧 10 项 native 加 10 项待 recce-ui 配合、TextInput 侧 33 项、Layout 侧 20 项。</li></ul>
 <p>这批专表也顺带补上了 26 规划总表里 View、Input 两行留空的问题。</p>
 <h3>2.2 已有属性对齐：逐属性 diff，对的是 RN 的语义而非实现细节</h3>
 <p>25 规划把这件事排进了月表：2 月 View 与 Image、3 月 Input 与 Label、4 月 ScrollView 与 HorizontalScrollView，基线 RN 0.72.0。做法是逐属性 diff，每条给「采纳 / 不采纳」加影响面，不采纳的也给理由。判例最能说明这套方法：</p>
@@ -496,7 +556,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>注意后面几条不采纳的理由：都不是「做不了」，而是「采纳后比现在差」或「Recce 的编译期约束已经把它挡在前面了」。<strong>对齐的目标是 RN 的语义，不是 RN 的实现细节</strong>——这一点两年材料里没被显式写出来，但所有判例都按这个口径判，值得补成一条原则。</p>
+<p>注意后面几条不采纳的理由：都不是「做不了」，而是「采纳后比现在差」或「Recce 的编译期约束已经把它挡在前面了」。<strong>对齐的目标是 RN 的语义，不是 RN 的实现细节</strong>——这点两年材料里没被显式写出来，但所有判例都按这个口径判，值得补成一条原则。</p>
 <p><strong>第三种做法：直接对源码。</strong> 属性清单那条路是在文档层面做对照，2026 年多了一条更硬的路——差异扫描把 Recce 的 <code>android/recce/views</code> 与 RN 的 <code>ReactAndroid/.../views</code> 逐文件对读，只收高置信的行为差异，一次得到 14 条，4 条已修、10 条待修。它回答的是「做得对不对」，而属性矩阵只回答「有没有」：<code>snapToAlignment</code> 在属性表里是绿的（值收得到、三端都支持），但它在 <code>flingAndSnap</code> 里根本没参与计算，<code>pagingEnabled</code> 下 start / center / end 三种对齐全部退化成普通分页。这种问题盯着 RN 的属性文档看一辈子也发现不了。</p>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 424" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>Recce 与 RN 的 Android 源码级差异扫描结果</title>
@@ -570,10 +630,10 @@
 <p>它还留了一条别处没写过的口径：第 10 条 <code>maxLength</code> 追加 <code>LengthFilter</code> 时数组下标写错、会抛 <code>ArrayIndexOutOfBoundsException</code>，作者注明「react-native-main 同位置仍能看到类似写法，因此这条不是 Recce 相对 RN main 的差异」，但仍建议顺手修。也就是说这类扫描只能识别「与对照物不同」，识别不了「两边都错」。</p>
 <p>25 规划的最后一条目标是 Changelog 机制。背景写得很直白：Platform 层的实现对标的是 RN 0.63.x，而 RN 平均 2~3 个月发一个大版本，那两个已暴露的问题在 0.78.0 就修了、Recce 没跟，「实际上可能还有很多新版本中已经解决但我们未能察觉的潜在问题」。机制只审 Changelog 的 Fixed 部分，重点是 crash 相关的稳定性修复与组件样式渲染修复；节奏给了两套，选了简单那套（从 0.64.0 起每个迭代审 3 个大版本、约 6 个月追上），双线并行那套 5 个月能追上但被否，理由是「跟进压力较大、可能出现重复更新」。</p>
 <h3>2.3 布局引擎：Yoga 3.2.1，唯一跑完全程的一件</h3>
-<p>这是 25 规划里动作最完整的一件，也是唯一把「调研 → 选型 → 方案 → 集成 → 分档放量 → 数据验收 → 回滚预案」跑完的。</p>
+<p>25 规划里动作最完整的一件，也是唯一把「调研 → 选型 → 方案 → 集成 → 分档放量 → 数据验收 → 回滚预案」跑完的。</p>
 <p>选型先把四个候选（yoga / taffy / blink / stylo）的工程规模与 issue 数摊开，再逐项对照属性支持，结论是「核心属性支持程度 taffy 和 yoga 持平，属性支持的值 taffy 比 yoga 多」，但 taffy 当时不支持 <code>position: static</code> 与 RTL。三个方案里否掉「新增组件引入」（要过平台审批），选定「融合进 Recce 已有组件」，把「换成 Taffy」留作长期备选，原话是「这个事情可以等到布局计算迁移之后」。</p>
 <p>落地上有几个细节值得记：三端各自引入 <code>release/3.2.1</code> 分支；Android 必须改包名（yoga 编译时用的包名是 <code>com.facebook.yoga</code>，<code>mrn:yoga</code> 也是，不改会冲突，改成 <code>com.meituan.android.recce.yoga</code>）；so 引入选「脚本拉仓库编译后取中间产物」而不是「把文件复制进工程」，理由是更新成本低、源码分离，代价是构建时间长；先保留 <code>mrn:yoga</code> 依赖做兜底；horn 开关默认 false，按 bundleName 白名单放量；双端所有埋点加通用字段 <code>use_new_yoga</code>。</p>
-<p>上线载体选外卖商家端 7.16——C / Keeta 对稳定性与性能要求都高、不好做实验，所以找流量小的 B 端做验证。放量与观测结果见图 5。两个需要留意的数字口径：包体增量在两年里出现过两种说法（见待核实第 2 条）；benchmark 只在华为 Mate 30 上跑过，结论是「耗时上没有明显差距」，样本很薄，不能当性能结论用。</p>
+<p>上线载体选外卖商家端 7.16——C / Keeta 对稳定性与性能要求都高、不好做实验，所以找流量小的 B 端做验证。放量与观测结果见图 5。两个数字口径要留意：包体增量在两年里出现过两种说法（见待核实第 2 条）；benchmark 只在华为 Mate 30 上跑过，结论是「耗时上没有明显差距」，样本很薄，不能当性能结论用。</p>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 452" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>Yoga 3.2.1 在外卖商家端 7.16 上线验证的五档放量节奏</title>
   <desc>竖向时间轴。左侧是日期与放量档位，右侧是该档位的观测结论。6 月 30 日按 uuid 放 1%，因为叠加 App 自带灰度后基本没量、收数太慢，当天改到 30%；7 月 3 日放 30%，无 crash，Android 新 yoga 异常比例 0.044%、老版 0.0032%，iOS 新 0.08%、老版 0.14%，都没有新类型异常；7 月 8 日放 50%，截至 7 月 13 日 TTI 稳定，Android 的异常都是存量 subview_empty，iOS 的都是离线包降级；7 月 16 日放 80%，截至 7 月 21 日确认支付转化率双端稳定、无线上 crash；7 月 21 日全量。图底说明验证载体是外卖商家端 7.16，埋点带 use_new_yoga 字段形成对照，benchmark 显示新旧 yoga 耗时无明显差距，以及三端包体增量。</desc>
@@ -630,7 +690,6 @@
 </svg></div><figcaption>图 5：Yoga 3.2.1 在外卖商家端 7.16 上线验证的五档放量节奏</figcaption></figure>
 <h3>2.4 高级表现力：2026 新开的方向，P0 三项已落地</h3>
 <p>25 规划里这件事还不成方向，只是通用阴影从 0%（0/4）补到 100%（4/4），BoxShadow 挂在 1.32 排期上标「待完成」。26 规划把它单列为一条，理由是「全球化拉高 UI 水平」。</p>
-<p>七项能力的支持情况：</p>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 408" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>2026 规划里高级表现力七项能力在 Recce、MRN、RN 三侧的支持情况</title>
   <desc>七行五列的矩阵。列依次是优先级、能力、Recce 是否支持、MRN 是否支持、RN 是否支持。P0 的 SVG 图片、BoxShadow 阴影、蒙层-文本渐变三项 Recce 已支持，MRN 与 RN 也支持；P1 的基础点击能力 Recce 已支持，复杂手势能力 Recce 未支持而 MRN 与 RN 支持；P2 的高级动画能力只有 RN 支持；P3 的高性能列表只有 RN 支持，且原文注明 RN 没有原生实现、只有 JS 侧封装。Recce 一列用橙色底表示自研。图底说明剩下的三项在 RN 侧分别由 gesture-handler、reanimated 和 FlatList / SectionList 承担，要补的不是属性而是一整套运行时。</desc>
@@ -708,7 +767,7 @@
   <text x="40" y="362" font-size="9.5" fill="#5b6470" dominant-baseline="central">后三项在 RN 侧分别由 react-native-gesture-handler、react-native-reanimated 和 FlatList / SectionList 承担，</text>
   <text x="40" y="380" font-size="9.5" fill="#5b6470" dominant-baseline="central">原文还写明高性能列表「没有原生实现，只有 js 侧封装，这块 React Native 是个短板」。</text>
 </svg></div><figcaption>图 6：2026 规划里高级表现力七项能力在 Recce、MRN、RN 三侧的支持情况</figcaption></figure>
-<p>其中 SVG 的选型过程值得单独看，五个方案的取舍依据很清楚：</p>
+<p>其中 SVG 的选型过程值得单独看：</p>
 <div class="tw"><table>
 <thead><tr>
 <th>方案</th>
@@ -749,8 +808,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>benchmark 数据（Android）：复杂图 thorvg 52ms、native 70ms、rust &gt;1000ms 且无法稳定加载；包体 native 最小 &lt; thorvg 约 600KB &lt; rust（优化 feature 后 Android release 增量 2.0MB，再去掉文本支持降到 1.0MB）。最终结论是从「像素级一致」退到了「性能与包体可控」。</p>
-<p>source 上有一条硬约束：只支持 utf8 与 base64 两种带前缀的字符串，不支持本地文件和远程图片；recce-ui 的宽高与其他样式都不作用到 svg 上。两条都是被业务实际用法顶出来的边界，写清楚比不写强。</p>
+<p>benchmark 数据（Android）：复杂图 thorvg 52ms、native 70ms、rust &gt;1000ms 且无法稳定加载；包体 native 最小 &lt; thorvg 约 600KB &lt; rust（优化 feature 后 Android release 增量 2.0MB，再去掉文本支持降到 1.0MB）。最终结论是从「像素级一致」退到了「性能与包体可控」。source 上有一条硬约束：只支持 utf8 与 base64 两种带前缀的字符串，不支持本地文件和远程图片；recce-ui 的宽高与其他样式都不作用到 svg 上。两条都是被业务实际用法顶出来的边界。</p>
 <p>BoxShadow 的调研侧做得比较足：对齐 RN 0.83，把 Recce 的 elevation 方案、MRN 的 <code>shadow*</code> 方案、社区的 <code>@mrn/react-native-shadow-view</code>、Web CSS 的 <code>box-shadow</code> 摆在一起对照，兼容性写了 Android 9+（外阴影）/ 10+（内阴影）、iOS 13+，性能风险写了「低端 Android 设备上帧率可能从 60 FPS 下降到 15-20 FPS」。但「三、方案」的三端小节是空的。</p>
 <h3>2.5 背景与边框逻辑重构：三端一致性从口号变成了清单</h3>
 <p>26 侧真正的工程量在这里，但它在规划正文里没有独立条目，藏在子文档里。两个动因是「Recce 需要支持 BoxShadow」和「Recce 目前的背景渲染存在很多与 RN 不一致的问题，其中有开发梳理发现的，也有 QA 测试发现的」，一口气列了 14 条：</p>
@@ -820,11 +878,11 @@
 </svg></div><figcaption>图 7：背景与边框重构需求里 14 条已知三端不一致问题的分布</figcaption></figure>
 <p>清单里两类特别值得记：一是<strong>同名不同义</strong>，比如 <code>borderStyle</code> 在非图片场景下，Recce-Android 是「有圆角时视图被 border 挤、没圆角时 border 盖在视图上」，而 RN 不管有没有圆角都是盖在视图上；到了图片场景，Android / iOS 是 border 盖在图上、鸿蒙是视图被 border 挤，而 RN 是被挤。二是<strong>属性互相干扰</strong>，比如图片设了圆角时 <code>resizeMode</code> 失效。</p>
 <p>结尾那句话是这两年材料里方法论价值最高的一句：</p>
-<blockquote>这些问题是已知的，当然还有很多未知的问题，如何主动识别并解决这些问题才是更重要的。</blockquote>
+<blockquote><p>这些问题是已知的，当然还有很多未知的问题，如何主动识别并解决这些问题才是更重要的。</p></blockquote>
 <p>它和 26 规划关键结果里的「借助 AI 建立自动化测试，扩充测试用例，充分覆盖所有属性，提前发现潜在的不一致性问题」是同一件事的两面。到核实时，关键结果那一侧仍然只停在纸面上（用例从哪来、判定标准是什么都没写），但主动识别已经有一份样板做出来了，就是 2.2 里那份源码级差异扫描。</p>
 <p>同一批工作还有个连带产物：为了支持 label 的 border 能力，iOS 侧把 <code>RECTextView</code> 的继承链从 <code>UIView</code> 改成 <code>RECView</code>，文字绘制交给新增的 <code>RECTextContentView</code>，并给出 15 条影响面清单（P0 四条：纯文字渲染、padding 生效、嵌套 Text、onClick 点击命中）。这类改动的影响面写法是这两年文档质量最高的一处。</p>
 <h3>2.6 版本维度：1.34 与 1.35 这两期在做什么</h3>
-<p>规划是按方向写的，实际落地是按版本排的，两套口径之间没有总表。把两期需求表并起来看，2026 年后半年的形状比较清楚：</p>
+<p>规划是按方向写的，实际落地是按版本排的，两套口径之间没有总表。把两期需求表并起来看：</p>
 <div class="tw"><table>
 <thead><tr>
 <th>版本</th>
@@ -846,7 +904,50 @@
 </table></div>
 <p>这张表也解释了一个读表时会困惑的点：<strong>属性对齐在需求表里只是 P1</strong>，P0 让给了触摸事件重构与平台适配。原因就在 2.1 里那 14 个 <code>onResponder*</code> 与 <code>hitSlop</code>、<code>pointerEvents</code> 一类属性——它们不是「没做」，是必须等触摸事件重构落地才能做。1.35 需求表的行序是有依赖依据的，只是这个依据没写在表里，得翻到专表才看得见。</p>
 <h2>三、值得抄走的七个动作</h2>
-<ol><li><strong>两个口径都算成本再选，并把没选的那个留在表里。</strong> 144PD 与 600PD 摆在一起，选了便宜的，理由与代价都写在正文。决策依据可复查——这是规划类文档里最先丢的东西。</li><li><strong>需求是扫业务方代码扫出来的，不是拍出来的。</strong> 业务方调研逐个给了调研对象与搜索方式（MRN 侧搜 <code>StyleSheet.create</code>、<code>remStyleSheet</code>、<code>.scss</code>，MachPro 侧搜 <code>index.css</code>），每处配截图与代码包附件。清单有出处，别人能复核。</li><li><strong>高风险改动选低流量载体，放量有明确节奏。</strong> Yoga 不在 C / Keeta 上做实验，改用外卖商家端 7.16，1% → 30% → 50% → 80% → 全量，每档给观察期与结论；第一档发现「叠加 App 自带灰度后基本没量」当天就调档，这个反应比节奏本身更有价值。</li><li><strong>数据三件套：埋点带维度、指标先定口径、存量先归因。</strong> 双端所有事件加 <code>use_new_yoga</code> 字段，同一天就能比新旧，不受大盘波动影响；技术指标与业务指标的 SQL、关联键（<code>trade_no</code>）、过滤条件（<code>isDevMode</code>、<code>isRebuild</code>）都写进文档，换个人跑得出的是一组数；<code>subview_empty</code> 与 <code>offline_downgrade</code> 两条异常都先确认是存量、给了排除依据，没有算到新改动头上。</li><li><strong>肯写「不采纳」与「暂时不实现」，也肯承认边界。</strong> 单边 <code>borderStyle</code> 明确判「暂时不需要支持，保证三端一致即可」；26 规划直接写明高性能列表「没有原生实现，只有 js 侧封装，这块 React Native 是个短板」，蒙层借鉴 <code>masked-view</code>、手势借鉴 <code>gesture-handler</code>。只列「要做什么」的规划没法判断边界，这份能。</li><li><strong>目标变得可度量了。</strong> 26 规划的 KR 写了具体数字与分期：高级表现力 0.7 达 75%（6/8）、1.0 达 100%（8/8），核心组件 0.7 达 70%、1.0 达 100%。比 25 规划的「完成补齐」可考核得多。</li><li><strong>方案与用例成对交付。</strong> Yoga 有集成测试计划、测试账号、测试重点；SVG 有《自测用例》8 组 source × 存在性组合；iOS 文本继承有 15 条影响面清单。这些是让改动可验收的前提。</li></ol>
+<div class="tw"><table>
+<thead><tr>
+<th>#</th>
+<th>动作</th>
+<th>证据 / 为什么值钱</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>两个口径都算成本再选，并把没选的那个留在表里</td>
+<td>144PD 与 600PD 摆在一起，选了便宜的，理由与代价都写在正文。决策依据可复查——这是规划类文档里最先丢的东西</td>
+</tr>
+<tr>
+<td>2</td>
+<td>需求是扫业务方代码扫出来的，不是拍出来的</td>
+<td>业务方调研逐个给了调研对象与搜索方式（MRN 侧搜 <code>StyleSheet.create</code>、<code>remStyleSheet</code>、<code>.scss</code>，MachPro 侧搜 <code>index.css</code>），每处配截图与代码包附件。清单有出处，别人能复核</td>
+</tr>
+<tr>
+<td>3</td>
+<td>高风险改动选低流量载体，放量有明确节奏</td>
+<td>Yoga 不在 C / Keeta 上做实验，改用外卖商家端 7.16，1% → 30% → 50% → 80% → 全量，每档给观察期与结论；第一档发现「叠加 App 自带灰度后基本没量」当天就调档，这个反应比节奏本身更有价值</td>
+</tr>
+<tr>
+<td>4</td>
+<td>数据三件套：埋点带维度、指标先定口径、存量先归因</td>
+<td>双端所有事件加 <code>use_new_yoga</code> 字段，同一天就能比新旧，不受大盘波动影响；技术指标与业务指标的 SQL、关联键（<code>trade_no</code>）、过滤条件（<code>isDevMode</code>、<code>isRebuild</code>）都写进文档，换个人跑得出的是一组数；<code>subview_empty</code> 与 <code>offline_downgrade</code> 两条异常都先确认是存量、给了排除依据</td>
+</tr>
+<tr>
+<td>5</td>
+<td>肯写「不采纳」与「暂时不实现」，也肯承认边界</td>
+<td>单边 <code>borderStyle</code> 明确判「暂时不需要支持，保证三端一致即可」；26 规划直接写明高性能列表「没有原生实现，只有 js 侧封装，这块 React Native 是个短板」，蒙层借鉴 <code>masked-view</code>、手势借鉴 <code>gesture-handler</code>。只列「要做什么」的规划没法判断边界，这份能</td>
+</tr>
+<tr>
+<td>6</td>
+<td>目标变得可度量了</td>
+<td>26 规划的 KR 写了具体数字与分期：高级表现力 0.7 达 75%（6/8）、1.0 达 100%（8/8），核心组件 0.7 达 70%、1.0 达 100%。比 25 规划的「完成补齐」可考核得多</td>
+</tr>
+<tr>
+<td>7</td>
+<td>方案与用例成对交付</td>
+<td>Yoga 有集成测试计划、测试账号、测试重点；SVG 有《自测用例》8 组 source × 存在性组合；iOS 文本继承有 15 条影响面清单。这些是让改动可验收的前提</td>
+</tr>
+</tbody>
+</table></div>
 <h2>四、还能更好的地方</h2>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 440" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>建议把属性矩阵、三端差异清单、自动化用例、回归与对账串成一条闭环</title>
@@ -890,16 +991,174 @@
   <text x="80" y="386" font-size="9.5" fill="#5b6470" dominant-baseline="central">只能等。第 2 到第 4 步把「等」换成「扫」，第 5 步保证数字不会被分母偷换。</text>
   <text x="80" y="406" font-size="9.5" fill="#5b6470" dominant-baseline="central">起步也不需要新工具：清单有 14 条三端不一致与 14 条源码差异，用例有《自测用例》8 组 source 组合。</text>
 </svg></div><figcaption>图 8：建议把属性矩阵、三端差异清单、自动化用例、回归与对账串成一条闭环</figcaption></figure>
-<p><strong>1. 分母要定死，并且和 RN 版本一起冻结。</strong> 这是本文最想指出的一条。同一个组件在两年里出现过三套分母（Image 从 50 到 30、Label 从 69 到 42、ScrollView 从 61 到专表的 59、而 26 规划总表那处又写 62），叠了「RN 基线从 0.72 升到 0.86」和「是否剔除 JS 层属性」两个变量，外界无法判断进度是真涨还是分母换了。更麻烦的是比例列看起来是手写的、没和分数联动：25 规划里 Input 写「53%（41/67）」，41/67 是 61.2%；Label 写「46%（31/69）」，是 44.9%；26 规划里 ScrollView 写「52%（38/59）」，是 64.4%。三处比例与分数对不上。建议把属性矩阵做成四列——属性 × 冻结的 RN 版本 × 三端现状 × 是否 native prop——并单独记一列「因 RN 升级新增 / 删除的属性数」，让分子分母都有解释。</p>
-<p><strong>2. 26 规划的 157 项要给出算法和成本。</strong> 25 规划给了 PD，26 规划只给完成率。0.7 达 70%、1.0 达 100% 这两个 KR 没有人力口径，就判断不了是否排得下，也没法在中期判断要不要调目标。</p>
-<p><strong>3. 三端差异清单要从一次性文档升格成常驻资产。</strong> 现在它躺在背景重构那份需求里，差异扫描那 14 条又是一份新的一次性清单。建议合成一份常驻表：属性 × 端 × 现状 × 期望 × 发现来源（业务反馈 / 属性矩阵 / 源码扫描）× 状态，并把它当作主指标（差异数）、完成率当辅指标——差异数不会因为分母变化而失真，完成率会。</p>
-<p><strong>4. 「借助 AI 建自动化测试」要落成第一批可执行用例，但性价比最高的第一步不是搭框架。</strong> 素材已经有三批：SVG 方案的 5 项用例（base64 / utf8 加载与回调、固定宽高、自适应宽高、resizeMode、错误加载）、《自测用例》的 8 组 source × 存在性组合、7 份专表里判「需支持」的条目（每一条都是一句可断言的行为）。建议先落两级判据——语义断言（回调触发次数与顺序、默认值、属性是否生效）加截图 diff，不要一上来追像素级，否则低端机与字体差异会淹掉真实缺陷。但如果只算一步，应该是<strong>把差异扫描从暂停里放出来</strong>：它不需要跑设备、不需要判定基线，只要对读源码，10 条待修里每条都写好了风险场景与测试重点。</p>
-<p><strong>5. Changelog 同步机制要分层，不能拿一条 6 个月的队列追到底。</strong> 从 0.63 追到 0.72 再追到 0.86，说明「每迭代审 3 个大版本」这个速度跟不上上游。建议把 Fixed 里的 crash 与渲染两类定为必须当期跟，其余按季度批量扫；否则永远在追身位，而这两类恰恰是线上最贵的。</p>
-<p><strong>6. 对齐基线的切换与备选方案都要带触发条件。</strong> 25 规划定 RN 0.72 的理由写得很清楚（「该版本是鸿蒙所能支持的最新版本」），26 规划的子文档已经在按 0.86 对齐，但两次切换只写了目标版本，没写「为什么现在可以升」和「鸿蒙跟不跟」；Taffy 那张完整的 Yoga vs Taffy 对照也没写什么情况下值得换。建议把基线当决策记录来写，给备选方案一个可观察的触发条件（例如「需要 grid 布局的业务方达到 N 个」或「RN 侧 grid 提案落地」），否则这张表每版重抄一遍而不产生决策。</p>
-<p><strong>7. 状态标签要从标题里挪出来，另设一张总表。</strong> 「1.29 补 View/Image/ScrollView」「1.30 补 Input/Label」「1.32 BoxShadow」「1.34 对齐 RN 0.86」现在散在各文档标题里，两年后的读者要从几十份文档里拼。一张版本 × 方向 × 状态的总表就能省掉这件事，也是上面第 1 条那张属性矩阵的天然入口。附带一个真实踩到的例子：View 与 ScrollView 的属性对齐今年已经完成，两份专表标题却还写着【对齐中】——状态写进标题就没有人负责更新它，本文第一次成稿正是照标题判的，把已完成的两项读成了在途。</p>
-<p><strong>8. 两个小约定：高百分位要标样本量，留空要标「待补」。</strong> Yoga 上线数据里 <code>recce_run_tp999</code> 在 1151 / 4053 / 8191 / 10239 之间跳，是样本不足的表现，建议这类数字直接标「样本不足，不参考」，或把长周期性能结论交给 C 端小流量、崩溃类结论留在 B 端；BoxShadow 的「三、方案」与背景重构的「3. 具体规划」都留空了，留空容易被后来人读成「已评估、无问题」。</p>
-<h2>五、待核实</h2>
-<ol><li><strong>成本对不上 10PD，排期表没写年份。</strong> 25 规划表里口径一写「总成本 144PD」，注释拆出来是研发 109PD 加测试 25PD＝134PD。分月表表头只有「1月～6月」，而 Yoga 实际是 2025-07 随 1.28 上线的，与表里「1月完成 yoga 引入」的对应关系无法从文档确认。</li><li><strong>Yoga 包体增量有两个口径。</strong> 选型调研与上线记录把 Android「489.52KB / 压缩后 194KB」写成增加量；Yoga 方案的包体表把这两行标成「老版本 yoga 的体积」，新版本是「428.52KB / 168.4KB」。</li><li><strong>26 规划的 157 项是怎么加出来的。</strong> 25 规划的全量口径是 178 项，两者差 21 项，中间 RN 基线还升过级，判断不了这个差额是「按需裁剪」还是「口径重整」。View 与 Input 原来留空的两行现在由专表补上了（View Props 61 项、Style Props 43 项，TextInput 68 项），但两处口径是否一致没交代。</li><li><strong>高级表现力的分母对不上，统计维度也不全。</strong> 表里列了 7 项能力，KR 写的是「6/8」与「8/8」；「Recce 是否支持」只有一列，没分端也没写落地版本；复杂手势、高级动画、高性能列表三项只有优先级，没有版本与跟进人。</li><li><strong>专表自身有几处对不上。</strong> TextInput 同节既写「3 项没必要 / 33 项需支持」又写「本期支持 31 / 5 项没必要」，差 2 项；ScrollView 专表写 59 项、26 规划总表写 62 项，分子分母都取自专表而总数列来源不明；Layout 专表没给总数（只写「未支持的 21 个中支持 20 个」），算不出完成率。</li><li><strong>对齐进展那份文档正文是空的。</strong> 《Recce现有属性对齐0.72版本 RN 进展》只有标题、下挂三份 Android 子文档，iOS 与鸿蒙侧的对应结论没找到。</li><li><strong>业务调研原文读不到。</strong> 26 规划引用的《业务调研》是密级文档，返回「当前内容含高密文档，需在安全屋环境中访问」。文中的业务诉求引用来自 26 规划转录的诉求分布图（基础属性 7、手势能力 3、文本渐变 1、高级动画 1、canvas 1、复杂列表 1，共 14 条）。</li><li><strong>平台层对标版本有两说。</strong> Changelog 机制写「Platform 层实现对标的是 RN 一个较老的版本 - 0.63.x」，25 规划写属性对齐基线是 0.72.0。语境不同但文档没点明，容易被读成矛盾。</li><li><strong>状态标签与标题不同步。</strong> View 与 ScrollView 的属性对齐今年已完成，两份专表标题仍写【对齐中】，判断状态的唯一依据是标题，容易读错。</li><li><strong>Label 专表只有标题。</strong> 暂停的原因（缺人力、缺业务需求，还是等别的前置重构）没有记录，后来人只能重新问。</li></ol>
+<div class="tw"><table>
+<thead><tr>
+<th>#</th>
+<th>建议</th>
+<th>现状</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>分母要定死，并且和 RN 版本一起冻结。</strong> 建议把属性矩阵做成四列——属性 × 冻结的 RN 版本 × 三端现状 × 是否 native prop——并单独记一列「因 RN 升级新增 / 删除的属性数」，让分子分母都有解释</td>
+<td>同一个组件两年里出现过三套分母（Image 50→30、Label 69→42、ScrollView 61→专表 59，26 规划总表那处又写 62），叠了「RN 基线 0.72→0.86」与「是否剔除 JS 层属性」两个变量，外界无法判断进度是真涨还是分母换了。比例列似乎还是手写、没和分数联动：Input「53%（41/67）」实为 61.2%、Label「46%（31/69）」实为 44.9%、ScrollView「52%（38/59）」实为 64.4%，三处都对不上</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>26 规划的 157 项要给出算法和成本</strong></td>
+<td>25 规划给了 PD，26 规划只给完成率。0.7 达 70%、1.0 达 100% 这两个 KR 没有人力口径，判断不了是否排得下，也没法在中期判断要不要调目标</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>三端差异清单要从一次性文档升格成常驻资产</strong>，合成一份「属性 × 端 × 现状 × 期望 × 发现来源 × 状态」的表，并把它当作主指标（差异数）、完成率当辅指标</td>
+<td>差异清单现在躺在背景重构那份需求里，差异扫描那 14 条又是一份新的一次性清单。差异数不会因为分母变化而失真，完成率会</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>「借助 AI 建自动化测试」先落第一批可执行用例，级差从语义断言起。</strong> 先落语义断言（回调触发次数与顺序、默认值、属性是否生效）加截图 diff，不要一上来追像素级，否则低端机与字体差异会淹掉真实缺陷</td>
+<td>素材已经有三批：SVG 方案的 5 项用例（base64 / utf8 加载与回调、固定宽高、自适应宽高、resizeMode、错误加载）、《自测用例》的 8 组 source × 存在性组合、7 份专表里判「需支持」的条目（每条都是一句可断言的行为）。但如果只算一步，应该是把差异扫描从暂停里放出来：它不需要跑设备、不需要判定基线，10 条待修里每条都写好了风险场景与测试重点</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Changelog 同步机制要分层。</strong> 建议把 Fixed 里的 crash 与渲染两类定为必须当期跟，其余按季度批量扫</td>
+<td>从 0.63 追到 0.72 再追到 0.86，说明「每迭代审 3 个大版本」跟不上上游。否则永远在追身位，而这两类恰是线上最贵的</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>对齐基线的切换与备选方案都要带触发条件</strong>，把基线当决策记录来写，给备选方案一个可观察的触发条件（例如「需要 grid 布局的业务方达到 N 个」或「RN 侧 grid 提案落地」）</td>
+<td>25 规划定 RN 0.72 的理由写得很清楚（「该版本是鸿蒙所能支持的最新版本」），26 规划的子文档已经在按 0.86 对齐，但两次切换只写了目标版本，没写「为什么现在可以升」和「鸿蒙跟不跟」；Taffy 那张 Yoga vs Taffy 对照也没写什么情况下值得换，否则每版重抄一遍而不产生决策</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>状态标签要从标题里挪出来，另设一张版本 × 方向 × 状态总表</strong></td>
+<td>「1.29 补 View/Image/ScrollView」「1.30 补 Input/Label」「1.32 BoxShadow」「1.34 对齐 RN 0.86」现在散在各文档标题里，两年后的读者要从几十份文档里拼。真实踩到的例子：View 与 ScrollView 的属性对齐今年已经完成，两份专表标题却还写着【对齐中】——状态写进标题就没人负责更新，本文第一次成稿正是照标题判的，把已完成的两项读成了在途</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>两个小约定：高百分位要标样本量，留空要标「待补」</strong></td>
+<td>Yoga 上线数据里 <code>recce_run_tp999</code> 在 1151 / 4053 / 8191 / 10239 之间跳，是样本不足的表现，这类数字应直接标「样本不足，不参考」，或把长周期性能结论交给 C 端小流量、崩溃类结论留在 B 端；BoxShadow 的「三、方案」与背景重构的「3. 具体规划」都留空了，留空容易被后来人读成「已评估、无问题」</td>
+</tr>
+</tbody>
+</table></div>
+<h2>五、放回上游坐标系里看</h2>
+<p>前面评的是这两年做得怎么样。这一章只做一件事：把文中几处关键选择放到上游/业界的现状里对齐，看有没有现成更省的路。出处为公开上游来源（2026-10-14 抓取）。</p>
+<h3>5.1 差异扫描这条路，业界有一个更便宜的形态</h3>
+<p>我们做的是「逐文件对读两个实现」。业界回答同一个问题（「我的实现和参照实现是否一致」）用的是<strong>让参照实现自己产出期望值</strong>：</p>
+<div class="tw"><table>
+<thead><tr>
+<th>做法</th>
+<th>怎么落地</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>布局引擎自带的 fixture 对照（Yoga / taffy / stretch 都是这一套）</td>
+<td>用 HTML fixture 描述节点结构，在 Chrome 里渲染出<strong>期望布局</strong>，再拿本地实现跑同一组 fixture 比结果。Yoga 的 fixture 在 <code>gentest/fixtures</code>，<code>yarn gentest</code> 重新生成（<a href="https://github.com/react/yoga" target="_blank" rel="noopener">react/yoga</a>）。taffy 的 CONTRIBUTING 写明「Flexbox layouts are tested by validating that layouts written in this crate perform the same as in Chrome」，脚本会自动下载一对匹配的 Chrome for Testing 与 ChromeDriver；仓库里另有 <code>scripts/import-yoga-tests</code> 与 <code>scripts/diff-test-fixtures-with-yoga.sh</code>，<strong>直接拿 Yoga 的用例做逐条差异对照</strong>（<a href="https://raw.githubusercontent.com/DioxusLabs/taffy/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING</a>、<a href="https://github.com/DioxusLabs/taffy/tree/main/scripts" target="_blank" rel="noopener">scripts</a>）</td>
+</tr>
+<tr>
+<td>浏览器的 Web 测试</td>
+<td>在 content_shell 里加载页面，把渲染输出或 JS 输出与已有 expected 文件比对（官方已把 LayoutTests 更名 Web Tests）；官方说明每次修 bug 都补一个 WPT（<a href="https://chromium.googlesource.com/chromium/src/+/main/docs/testing/web_tests.md" target="_blank" rel="noopener">Web Tests</a>）</td>
+</tr>
+<tr>
+<td>Flutter 的 golden</td>
+<td><code>matchesGoldenFile</code> + <code>LocalFileComparator</code> 做<strong>逐像素</strong>比对，<code>flutter test --update-goldens</code> 刷基准；框架自身用 SkiaGold 把基准图放到集中服务。已知脆弱点官方自己写了：字体在不同平台/版本渲染不同，默认用 'Ahem' 方块字体，换 SDK 常要重出基准图（<a href="https://api.flutter.dev/flutter/flutter_test/goldenFileComparator.html" target="_blank" rel="noopener">goldenFileComparator</a>）</td>
+</tr>
+</tbody>
+</table></div>
+<p>对我们最直接的启发有两条。<strong>第一条</strong>：第四章第 3 条那个「属性 × 端 × 现状 × 期望」的表，在业界的可执行对应物是「期望值不由人写、由参照实现跑出来」。差异扫描那 14 条里，<code>snapToAlignment</code> 在 <code>flingAndSnap</code> 里没参与计算这种问题，恰好就是 fixture 对照能自动抓到的类型（输入相同、输出不同）。<strong>第二条</strong>：第四章第 4 条建议「不要一上来追像素级」，上游给了依据——Flutter 自己承认像素级 golden 会被字体差异污染，所以才默认换成方块字体。</p>
+<h3>5.2 高级表现力这几项，上游这一年走到哪了</h3>
+<div class="tw"><table>
+<thead><tr>
+<th>能力</th>
+<th>上游/业界现状</th>
+<th>与我们的选择对照</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>SVG</td>
+<td><code>resvg</code>/<code>usvg</code>（Rust）最新 0.48.1（2026-08-02），0.48 起把文本栈从 <code>ttf-parser</code> + <code>rustybuzz</code> 换成 <code>skrifa</code> + <code>harfrust</code>，官方提示二进制体积可能增加约 500KB；<code>thorvg</code>（C++）最新 v1.1.2（2026-09-18），CPU / OpenGL / WebGPU 三后端；<code>react-native-svg</code> 15.15.5，Fabric 支持自 13.0.0 起、<code>&gt;=15.13.0</code> 对应 RN <code>&gt;=0.78</code>；Skia 侧有 <code>SkSVGDOM</code>，但<strong>文本必须显式注入字体管理器，不注入就不显示</strong></td>
+<td>2.4 里最终选 androidsvg 纯原生，理由是性能与包体可控 —— 与「三端像素级一致的库都带包体代价」这条规律吻合，resvg 换一次字体栈就 +500KB 量级，可对上那张表里的 +2.5MB 预估口径。另需注意：选这类库等于跟它的大版本走</td>
+</tr>
+<tr>
+<td>Lottie</td>
+<td><code>lottie-android</code> 6.7.1（2025-10-31）、<code>lottie-ios</code> 4.6.1（2026-06-13，4.6.0 起要求 Xcode 16 / Swift 6）、<code>lottie-react-native</code> 7.5.0；LottieFiles 官方的 Rust 运行时 <code>dotlottie-rs</code> v0.1.58（渲染器为 ThorVG），但 README 明确写了 crates.io 上那个版本是过期的 alpha、要用 git 依赖并带 C++ 工具链</td>
+<td>两年材料里「Lottie 已支持」只有一句，没记版本与跟版方式。业界这一年的变化是渲染器向 ThorVG 收敛，这会影响后续选跨端矢量方案时的复用空间</td>
+</tr>
+<tr>
+<td>字体加载</td>
+<td>Android 官方机制是 DownloadableFonts（API 26 起 AndroidX Core 全面支持，<code>FontRequest</code> + <code>FontsContractCompat</code>，可走 <code>res/font</code> XML 声明与 manifest 的 <code>preloaded_fonts</code> 预声明以避开首次布局延迟）；iOS 对应 <code>CTFontManagerRegisterFontsForURL</code>（scope 有 Process / User，注册后可通过字体描述符匹配发现）；RN 生态走 <code>expo-font</code>（<code>Font.loadAsync</code>）或构建期 <code>react-native-asset</code></td>
+<td>两年材料里字体这条只留了「字体路径」。上游已经是「按需下载 + 预声明」的成熟机制，值得在补齐清单里单列，而不是当样式细节带过</td>
+</tr>
+<tr>
+<td>文本渐变</td>
+<td>Android 的基件就是 <code>LinearGradient extends Shader</code>，把 Shader 设到 <code>TextPaint</code> 上即得文字渐变（<a href="https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/main/graphics/java/android/graphics/LinearGradient.java" target="_blank" rel="noopener">AOSP</a>）；RN 的通行组合是 <code>@react-native-masked-view/masked-view</code>（0.3.2）+ <code>react-native-linear-gradient</code>（2.8.3，已较久未发版）；iOS 用 <code>CAGradientLayer</code> 上色、label 的 layer 当 mask，且 mask 要在 <code>layoutSubviews</code> 里设</td>
+<td>26 规划的诉求分布里文本渐变只有 1 条诉求。它的落点取决于 Shader 能不能进我们现有的文本绘制链路，属需要单独评估的一类</td>
+</tr>
+<tr>
+<td>背景与边框</td>
+<td>RN 新架构在 Android 侧已把这类绘制拆成一组 Kotlin Drawable：<code>BorderDrawable</code>、<code>CompositeBackgroundDrawable</code>、<code>BackgroundDrawable</code>、<code>BackgroundImageDrawable</code>、<code>InsetBoxShadowDrawable</code>/<code>OutsetBoxShadowDrawable</code>、<code>OutlineDrawable</code>（目录 <code>com.facebook.react.uimanager.drawable</code>）</td>
+<td>2.5 那批重构最后收口成 <code>CompositeBackgroundDrawable</code> —— <strong>上游同名类也在同一个位置上</strong>，说明「背景 + 边框 + 阴影」分三层再合并是所有实现走到后面都会收敛的结构，这条可以当「我们没走偏」的旁证</td>
+</tr>
+</tbody>
+</table></div>
+<h3>5.3 一条会往回影响 2.1 的数字</h3>
+<p>Yoga 3.2（2024-12）才补上 <code>box-sizing</code> 与 <code>display: contents</code>；3.0 把 <code>PointScaleFactor</code> 从 root-only 改为 per-node，并移除了 <code>UseLegacyStretchBehaviour</code> 等一批 API；上游 RN 0.86（2026-06-11）的发布说明里仍列着 Yoga 布局回归修复（Android 绝对定位元素文本换行 #56651 等）。意思是：2.1 那张能力对照表按 3.2.1 与 RN 0.86 重算是对的，但引擎侧还会持续有回归修复进来，<strong>跟版是常态动作，不是一次性收尾</strong>（<a href="https://www.yogalayout.dev/blog/announcing-yoga-3.0" target="_blank" rel="noopener">Yoga 3.0</a>、<a href="https://www.yogalayout.dev/blog/announcing-yoga-3.2" target="_blank" rel="noopener">Yoga 3.2</a>、<a href="https://reactnative.dev/blog/2026/06/11/react-native-0.86" target="_blank" rel="noopener">RN 0.86</a>）。</p>
+<h2>六、待核实</h2>
+<div class="tw"><table>
+<thead><tr>
+<th>#</th>
+<th>事项</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>成本对不上 10PD，排期表没写年份。</strong> 25 规划表里口径一写「总成本 144PD」，注释拆出来是研发 109PD 加测试 25PD＝134PD。分月表表头只有「1月～6月」，而 Yoga 实际是 2025-07 随 1.28 上线的，与表里「1月完成 yoga 引入」的对应关系无法从文档确认</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Yoga 包体增量有两个口径。</strong> 选型调研与上线记录把 Android「489.52KB / 压缩后 194KB」写成增加量；Yoga 方案的包体表把这两行标成「老版本 yoga 的体积」，新版本是「428.52KB / 168.4KB」</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>26 规划的 157 项是怎么加出来的。</strong> 25 规划的全量口径是 178 项，两者差 21 项，中间 RN 基线还升过级，判断不了这个差额是「按需裁剪」还是「口径重整」。View 与 Input 原来留空的两行现在由专表补上了（View Props 61 项、Style Props 43 项，TextInput 68 项），但两处口径是否一致没交代</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>高级表现力的分母对不上，统计维度也不全。</strong> 表里列了 7 项能力，KR 写的是「6/8」与「8/8」；「Recce 是否支持」只有一列，没分端也没写落地版本；复杂手势、高级动画、高性能列表三项只有优先级，没有版本与跟进人</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>专表自身有几处对不上。</strong> TextInput 同节既写「3 项没必要 / 33 项需支持」又写「本期支持 31 / 5 项没必要」，差 2 项；ScrollView 专表写 59 项、26 规划总表写 62 项，分子分母都取自专表而总数列来源不明；Layout 专表没给总数（只写「未支持的 21 个中支持 20 个」），算不出完成率</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>对齐进展那份文档正文是空的。</strong> 《Recce现有属性对齐0.72版本 RN 进展》只有标题、下挂三份 Android 子文档，iOS 与鸿蒙侧的对应结论没找到</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>业务调研原文读不到。</strong> 26 规划引用的《业务调研》是密级文档，返回「当前内容含高密文档，需在安全屋环境中访问」。文中的业务诉求引用来自 26 规划转录的诉求分布图（基础属性 7、手势能力 3、文本渐变 1、高级动画 1、canvas 1、复杂列表 1，共 14 条）</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>平台层对标版本有两说。</strong> Changelog 机制写「Platform 层实现对标的是 RN 一个较老的版本 - 0.63.x」，25 规划写属性对齐基线是 0.72.0。语境不同但文档没点明，容易被读成矛盾</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>状态标签与标题不同步。</strong> View 与 ScrollView 的属性对齐今年已完成，两份专表标题仍写【对齐中】，判断状态的唯一依据是标题，容易读错</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Label 专表只有标题。</strong> 暂停的原因（缺人力、缺业务需求，还是等别的前置重构）没有记录，后来人只能重新问</td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong>第五章与 Recce 的对应关系未逐处核实。</strong> 5.2 里「背景重构收口成 <code>CompositeBackgroundDrawable</code>、与上游同名同位置」这句，依据是类名与职责分工，没有逐行比对两边各层的具体行为；结论只到「形态同源」</td>
+</tr>
+<tr>
+<td>12</td>
+<td><strong>resvg / thorvg 的文本渲染能力只有间接证据。</strong> 两者都没有取到官方「支持文本」的一手声明（resvg 有 skrifa + harfrust 字体栈的事实、ThorVG 有 CID-keyed CFF 字体的发布说明），5.2 里按间接证据使用</td>
+</tr>
+</tbody>
+</table></div>
 </div>
 </body>
 </html>
