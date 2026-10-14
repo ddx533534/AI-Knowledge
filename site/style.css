@@ -273,7 +273,12 @@ main {
   text-align: left;
   vertical-align: top;
   line-height: 1.7;
+  /* 中文的最小内容宽度只有一个字宽，表格挤不下时会把短列压成「一字一行」。
+     抬住每列下限，宁可让宽表在 .table-wrap 里横向滚动。 */
+  min-width: 12em;
 }
+/* 首列多是 #／版本号／短标签，给它更低的下限，别把宽度浪费在序号列上 */
+.prose th:first-child, .prose td:first-child { min-width: 6em; width: 1px; }
 .prose thead th { background: #f7f8fa; font-weight: 630; white-space: nowrap; }
 .prose tbody tr:last-child td { border-bottom: none; }
 

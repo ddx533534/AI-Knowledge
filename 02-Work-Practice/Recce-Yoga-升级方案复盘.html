@@ -58,7 +58,9 @@
   li { margin: 8px 0; }
   .tw { overflow-x: auto; margin: 18px 0; }
   table { border-collapse: collapse; width: 100%; font-size: 14.5px; background: var(--panel); }
-  th, td { border: 1px solid var(--line); padding: 9px 11px; text-align: left; vertical-align: top; }
+  th, td { border: 1px solid var(--line); padding: 9px 11px; text-align: left; vertical-align: top; min-width: 12em; }
+  /* 中文的最小内容宽度只有一个字宽，窄容器里短列会被压成一字一行；抬住下限，超出由 .tw 横滚 */
+  th:first-child, td:first-child { min-width: 6em; width: 1px; }
   th { background: var(--accent-soft); color: #1b3a56; font-weight: 600; white-space: nowrap; }
   tbody tr:nth-child(even) { background: #fafbfc; }
   .fig { margin: 24px 0; }
