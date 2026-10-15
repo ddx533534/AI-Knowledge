@@ -60,6 +60,7 @@
 | `2026-10-12.md` | AI 日报 | — | 2026-10-12 |
 | `2026-10-13.md` | AI 日报：多智能体成本、受约束渲染与 AG-UI 事件协议 | 8 张 | 2026-10-13 |
 | `2026-10-14.md` | AI 日报：动态工作流、ChatGPT 智能界面的 DIL、Genkit Dart 1.0 与 agent-device | 6 张 | 2026-10-14 |
+| `2026-10-15.md` | AI 日报：OpenUI Lang 1.0、Gemini 4 Argon 定价、LangGraph 差量落点、SDK 流式容错、RN Skia 连发与 assistant-ui | 6 张 | 2026-10-15 |
 | `2026-10-13-LLM推理不确定性-全文翻译.md` | Thinking Machines Lab《Defeating Nondeterminism in LLM Inference》全文中文翻译 | 19 张 | 2026-10-13 |
 | `2026-10-13-LLM推理不确定性-总结分析.md` | 同一篇材料的总结分析：归因怎么改的、一年后落地到哪一步、代价与口径核对 | 4 张 | 2026-10-13 |
 

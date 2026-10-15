@@ -1,0 +1,29 @@
+<svg viewBox="0 0 680 356" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>LangGraph 1.2.15 这版 17 条改动都在修什么</title>
+  <desc>这版列了 17 条，其中 1 条发版提交、1 条依赖升级，剩下 15 条是修复。15 条里有 12 条精确到差量通道的写入落点：缓存节点的写入、update_state 的写入存在哪张 checkpoint、差量重放的顺序、被重置或被 fork 时的快照、写入失败时 checkpoint 不落。另外 3 条是中断与恢复：drain 时停在 interrupt_before、ToolNode 吞掉无效的 resume 值、astream_events 丢控制事件。</desc>
+
+  <text x="24" y="28" font-size="12" font-weight="500" fill="#2C2C2A">1.2.15，2026-10-12 发布，共 17 条</text>
+
+  <rect x="24" y="44" width="196" height="60" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="122" y="66" text-anchor="middle" font-size="20" font-weight="500" fill="#0C447C" dominant-baseline="central">12</text>
+  <text x="122" y="88" text-anchor="middle" font-size="11.5" fill="#185FA5" dominant-baseline="central">差量通道的写入与落点</text>
+
+  <rect x="242" y="44" width="196" height="60" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="340" y="66" text-anchor="middle" font-size="20" font-weight="500" fill="#27500A" dominant-baseline="central">3</text>
+  <text x="340" y="88" text-anchor="middle" font-size="11.5" fill="#3B6D11" dominant-baseline="central">中断与恢复</text>
+
+  <rect x="460" y="44" width="196" height="60" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="558" y="66" text-anchor="middle" font-size="20" font-weight="500" fill="#2C2C2A" dominant-baseline="central">2</text>
+  <text x="558" y="88" text-anchor="middle" font-size="11.5" fill="#444441" dominant-baseline="central">发版提交与依赖升级</text>
+
+  <text x="24" y="136" font-size="12" font-weight="500" fill="#444441">那 12 条里可以读出的一类问题</text>
+
+  <rect x="24" y="152" width="632" height="42" rx="8" fill="#FFFFFF" stroke="#C9C7BE" stroke-width="0.5"/>
+  <text x="44" y="173" font-size="11.5" fill="#2C2C2A" dominant-baseline="central">缓存的节点，它写出去的东西要按真的跑过一样存（#9259）</text>
+  <rect x="24" y="200" width="632" height="42" rx="8" fill="#FFFFFF" stroke="#C9C7BE" stroke-width="0.5"/>
+  <text x="44" y="221" font-size="11.5" fill="#2C2C2A" dominant-baseline="central">update_state 写进去的东西，要落在它改的那张 checkpoint 上（#9258）</text>
+  <rect x="24" y="248" width="632" height="42" rx="8" fill="#FFFFFF" stroke="#C9C7BE" stroke-width="0.5"/>
+  <text x="44" y="269" font-size="11.5" fill="#2C2C2A" dominant-baseline="central">差量重放要按 task 路径排，恢复的 run 要按当时的顺序重放（#8544、#9114）</text>
+  <rect x="24" y="296" width="632" height="42" rx="8" fill="#FFFFFF" stroke="#C9C7BE" stroke-width="0.5"/>
+  <text x="44" y="317" font-size="11.5" fill="#2C2C2A" dominant-baseline="central">差量写失败就不许把 checkpoint 存到它后面去（#9235）</text>
+</svg>

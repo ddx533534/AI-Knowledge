@@ -1,0 +1,38 @@
+<svg viewBox="0 0 680 344" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>Gemini 4 Argon 的价目表，标准档和 Batch 档各三个价格，12 月 1 日起翻倍</title>
+  <desc>官方定价页上的数字，每 100 万 token 美元。标准档输入 2 美元、输出含思考 token 10 美元、上下文缓存 0.10 美元，2026 年 12 月 1 日起分别变成 4、20、0.20 美元。Batch 档是标准档的一半：输入 1 美元、输出 5 美元，12 月 1 日起变成 2、10 美元。缓存只有隐式模式，不支持显式缓存。</desc>
+
+  <text x="24" y="30" font-size="12" font-weight="500" fill="#2C2C2A">每 100 万 token 的美元价，厂商口径，2026-10-15 从官方定价页读</text>
+
+  <rect x="24" y="48" width="304" height="28" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="176" y="62" text-anchor="middle" font-size="12" font-weight="500" fill="#0C447C" dominant-baseline="central">标准档</text>
+  <rect x="352" y="48" width="304" height="28" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="504" y="62" text-anchor="middle" font-size="12" font-weight="500" fill="#27500A" dominant-baseline="central">Batch 档</text>
+
+  <rect x="24" y="76" width="304" height="56" fill="#FFFFFF" stroke="#C9C7BE" stroke-width="0.5"/>
+  <text x="44" y="96" font-size="11.5" fill="#444441" dominant-baseline="central">输入</text>
+  <text x="44" y="116" font-size="12.5" font-weight="500" fill="#2C2C2A" dominant-baseline="central">$2.00 → $4.00</text>
+  <rect x="352" y="76" width="304" height="56" fill="#FFFFFF" stroke="#C9C7BE" stroke-width="0.5"/>
+  <text x="372" y="96" font-size="11.5" fill="#444441" dominant-baseline="central">输入</text>
+  <text x="372" y="116" font-size="12.5" font-weight="500" fill="#2C2C2A" dominant-baseline="central">$1.00 → $2.00</text>
+
+  <rect x="24" y="132" width="304" height="56" fill="#FFFFFF" stroke="#C9C7BE" stroke-width="0.5"/>
+  <text x="44" y="152" font-size="11.5" fill="#444441" dominant-baseline="central">输出，含思考 token</text>
+  <text x="44" y="172" font-size="12.5" font-weight="500" fill="#2C2C2A" dominant-baseline="central">$10.00 → $20.00</text>
+  <rect x="352" y="132" width="304" height="56" fill="#FFFFFF" stroke="#C9C7BE" stroke-width="0.5"/>
+  <text x="372" y="152" font-size="11.5" fill="#444441" dominant-baseline="central">输出，含思考 token</text>
+  <text x="372" y="172" font-size="12.5" font-weight="500" fill="#2C2C2A" dominant-baseline="central">$5.00 → $10.00</text>
+
+  <rect x="24" y="188" width="304" height="56" fill="#FFFFFF" stroke="#C9C7BE" stroke-width="0.5"/>
+  <text x="44" y="208" font-size="11.5" fill="#444441" dominant-baseline="central">上下文缓存，只有隐式模式</text>
+  <text x="44" y="228" font-size="12.5" font-weight="500" fill="#2C2C2A" dominant-baseline="central">$0.10 → $0.20</text>
+  <rect x="352" y="188" width="304" height="56" fill="#F1EFE8" stroke="#C9C7BE" stroke-width="0.5"/>
+  <text x="372" y="208" font-size="11.5" fill="#444441" dominant-baseline="central">上下文缓存</text>
+  <text x="372" y="228" font-size="11.5" fill="#444441" dominant-baseline="central">Batch 档没单列这一项</text>
+
+  <text x="24" y="264" font-size="11.5" fill="#888780">箭头左边是 2026-11-30 前的价，右边是 2026-12-01 起的价，两边都是同一份官方页面的写法</text>
+
+  <rect x="24" y="280" width="632" height="52" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="44" y="298" font-size="11.5" fill="#633806" dominant-baseline="central">免费层和 Google AI Pro 都不能用这个模型；长解码支持到 100 万 token；带 Google 搜索的接地是</text>
+  <text x="44" y="316" font-size="11.5" fill="#633806" dominant-baseline="central">每月 5000 次免费（Gemini 3 及更新的模型共用），超出后每 1000 次 14 美元</text>
+</svg>

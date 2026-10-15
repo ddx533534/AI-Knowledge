@@ -1,0 +1,37 @@
+<svg viewBox="0 0 680 336" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>OpenUI Lang 1.0 里 root 语句的位置决定流式期间能不能看见东西</title>
+  <desc>左边是 root 语句写在最后的程序，流式过程中界面一直是空的，直到最后一行 root 到达才显示；右边是 1.0 提示词要求的写法，root 写最前，每来一段就能显示一部分。输出被截断、没走到 root 语句时，1.0 起渲染成空白，1.0 之前会渲染出半棵树。</desc>
+
+  <rect x="24" y="24" width="308" height="104" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="44" y="50" font-size="13" font-weight="500" fill="#633806" dominant-baseline="central">root 语句写在最后</text>
+  <text x="44" y="74" font-size="11.5" fill="#854F0B" dominant-baseline="central">流式过程中界面一直是空的</text>
+  <text x="44" y="94" font-size="11.5" fill="#854F0B" dominant-baseline="central">直到最后一行 root 到达才显示</text>
+  <text x="44" y="114" font-size="11.5" fill="#854F0B" dominant-baseline="central">中间收到多少段都白等</text>
+
+  <rect x="348" y="24" width="308" height="104" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="368" y="50" font-size="13" font-weight="500" fill="#0C447C" dominant-baseline="central">root 写最前，1.0 的提示词要求这么写</text>
+  <text x="368" y="74" font-size="11.5" fill="#185FA5" dominant-baseline="central">第一行就有根节点</text>
+  <text x="368" y="94" font-size="11.5" fill="#185FA5" dominant-baseline="central">每来一段就长出来一部分</text>
+  <text x="368" y="114" font-size="11.5" fill="#185FA5" dominant-baseline="central">流的顺序和显示的先后一致</text>
+
+  <rect x="24" y="148" width="632" height="56" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="44" y="168" font-size="12" font-weight="500" fill="#2C2C2A" dominant-baseline="central">输出被截断、始终没走到 root 语句</text>
+  <text x="44" y="188" font-size="11.5" fill="#444441" dominant-baseline="central">1.0 起渲染成空白；1.0 之前会渲染出半棵树，看起来像界面坏了</text>
+
+  <text x="24" y="228" font-size="12" font-weight="500" fill="#444441">同一批必须一起升，版本对不上就不执行</text>
+
+  <rect x="24" y="244" width="200" height="72" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="124" y="266" text-anchor="middle" font-size="12" font-weight="500" fill="#27500A" dominant-baseline="central">lang-core 1.0 + react-lang 1.0</text>
+  <text x="124" y="288" text-anchor="middle" font-size="11.5" fill="#3B6D11" dominant-baseline="central">服务端生成提示词的那份</text>
+  <text x="124" y="304" text-anchor="middle" font-size="11.5" fill="#3B6D11" dominant-baseline="central">server 也要待在 0.3</text>
+
+  <rect x="240" y="244" width="200" height="72" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="340" y="266" text-anchor="middle" font-size="12" font-weight="500" fill="#633806" dominant-baseline="central">vue / svelte / angular-lang</text>
+  <text x="340" y="288" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">还留在 0.4</text>
+  <text x="340" y="304" text-anchor="middle" font-size="11.5" fill="#854F0B" dominant-baseline="central">配 lang-core ^0.4 用</text>
+
+  <rect x="456" y="244" width="200" height="72" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="556" y="266" text-anchor="middle" font-size="12" font-weight="500" fill="#2C2C2A" dominant-baseline="central">1.0 提示词教的动作写法</text>
+  <text x="556" y="288" text-anchor="middle" font-size="11.5" fill="#444441" dominant-baseline="central">单个动作写裸步骤</text>
+  <text x="556" y="304" text-anchor="middle" font-size="11.5" fill="#444441" dominant-baseline="central">0.x 客户端不会执行</text>
+</svg>
