@@ -1,22 +1,23 @@
-<svg viewBox="0 0 680 336" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
-  <title>三组选型的候选与落点，包体与依赖规范是共同的否决线</title>
-  <desc>九行表格，四列是选型、候选、包体增量、多端一致性与结论。Yoga 引擎一组：直接依赖开源 yoga 被否，原因是包名与 mrn:yoga 冲突且不允许直接依赖开源组件；引入源码改包名自编译 so 入选，压缩后约增 194KB；换 Taffy 留作备选，因为缺 RTL 与 Position Static。SVG 渲染一组：RN-SVG 三端一致性高但视图节点数随子标签增长被否；androidsvg 纯原生包体最小、一致性中等而入选；rust-resvg 像素级一致但包体增加约 2.0MB 且复杂图耗时超过 1000ms 被否；thorvg 像素级一致、性能最好但增加约 600KB 被否。动画引擎一组：参考 lottie-react-native 与公司内 MRN 实现入选，按需集成；若当时与 SVG 共用 thorvg 则一致性与包体都更优，但这一条当时未评估。</desc>
+<svg viewBox="0 0 680 356" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>三组选型的历史取舍：当期包体约束与长期维护成本</title>
+  <desc>九行五列表格，列出 Yoga、SVG 和 Lottie 的候选、当时包体或成本、一致性目标与决策。ThorVG 单项约增加 600KB 是历史记录，不代表今天的实装增量或已经验证三端像素完全相同。SVG 与 Lottie 共用引擎当时没有同批评估，净增量与兼容性仍待测。包体是当期约束，重评还要计入三端维护成本。</desc>
 
-  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">三组选型，一条共同的否决线</text>
-  <text x="24" y="32" font-size="9" fill="#8a929c" dominant-baseline="central">结论列：绿＝入选，红＝否掉，灰＝备选或当时未评估</text>
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">三组选型的当时取舍；统一引擎仍值得重新评估</text>
+  <text x="24" y="32" font-size="9" fill="#8a929c" dominant-baseline="central">历史记录与目标，非本轮实测。绿＝入选，红＝未选，灰＝备选或未同批评估</text>
 
   <rect x="24" y="44" width="632" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
   <text x="32" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">选型</text>
   <text x="120" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">候选</text>
-  <text x="326" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">包体增量</text>
-  <text x="424" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">多端一致性</text>
+  <text x="326" y="56" font-size="9" font-weight="500" fill="#5b6470" dominant-baseline="central">当时包体／成本</text>
+  <text x="424" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">一致性目标</text>
   <text x="512" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">结论</text>
 
-  <rect x="24" y="68" width="632" height="168" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
-  <rect x="24" y="68" width="88" height="168" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
-  <text x="68" y="152" font-size="10" font-weight="500" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">布局引擎</text>
+  <rect x="24" y="68" width="632" height="216" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <rect x="24" y="68" width="88" height="72" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
+  <text x="68" y="104" font-size="10" font-weight="500" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">布局引擎</text>
   <line x1="112" y1="92" x2="656" y2="92" stroke="#eceff3" stroke-width="0.5"/>
   <line x1="112" y1="116" x2="656" y2="116" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="112" y1="140" x2="656" y2="140" stroke="#eceff3" stroke-width="0.5"/>
   <line x1="112" y1="164" x2="656" y2="164" stroke="#eceff3" stroke-width="0.5"/>
   <line x1="112" y1="188" x2="656" y2="188" stroke="#eceff3" stroke-width="0.5"/>
   <line x1="112" y1="212" x2="656" y2="212" stroke="#eceff3" stroke-width="0.5"/>
@@ -33,8 +34,8 @@
   <text x="424" y="128" font-size="8.5" fill="#5b6470" dominant-baseline="central">高</text>
   <text x="512" y="128" font-size="8.5" fill="#5b6470" dominant-baseline="central">备选 · 缺 RTL 与 Static</text>
 
-  <rect x="24" y="152" width="88" height="168" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
-  <text x="68" y="236" font-size="10" font-weight="500" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">SVG 渲染</text>
+  <rect x="24" y="140" width="88" height="96" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="68" y="188" font-size="10" font-weight="500" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">SVG 渲染</text>
   <text x="120" y="152" font-size="8.5" fill="#5b6470" dominant-baseline="central">RN-SVG（recce-ui 解析生成节点）</text>
   <text x="326" y="152" font-size="8.5" fill="#5b6470" dominant-baseline="central">视图节点随子标签涨</text>
   <text x="424" y="152" font-size="8.5" fill="#5b6470" dominant-baseline="central">高</text>
@@ -42,27 +43,29 @@
   <text x="120" y="176" font-size="8.5" fill="#5b6470" dominant-baseline="central">androidsvg 纯原生</text>
   <text x="326" y="176" font-size="8.5" fill="#5b6470" dominant-baseline="central">最小</text>
   <text x="424" y="176" font-size="8.5" fill="#5b6470" dominant-baseline="central">中</text>
-  <text x="512" y="176" font-size="8.5" fill="#1F7A3D" dominant-baseline="central">入选 · 用一致性换包体</text>
+  <text x="512" y="176" font-size="8.5" fill="#1F7A3D" dominant-baseline="central">入选 · 当期包体可控</text>
   <text x="120" y="200" font-size="8.5" fill="#5b6470" dominant-baseline="central">rust-resvg</text>
   <text x="326" y="200" font-size="8.5" fill="#5b6470" dominant-baseline="central">+2.0MB（保留文本）</text>
-  <text x="424" y="200" font-size="8.5" fill="#5b6470" dominant-baseline="central">像素级</text>
+  <text x="424" y="200" font-size="8.5" fill="#5b6470" dominant-baseline="central">统一引擎</text>
   <text x="512" y="200" font-size="8.5" fill="#C0392B" dominant-baseline="central">否 · 包体与复杂图耗时</text>
   <text x="120" y="224" font-size="8.5" fill="#5b6470" dominant-baseline="central">thorvg（C++）</text>
   <text x="326" y="224" font-size="8.5" fill="#5b6470" dominant-baseline="central">+600KB</text>
-  <text x="424" y="224" font-size="8.5" fill="#5b6470" dominant-baseline="central">像素级</text>
-  <text x="512" y="224" font-size="8.5" fill="#C0392B" dominant-baseline="central">否 · 包体</text>
+  <text x="424" y="224" font-size="8.5" fill="#5b6470" dominant-baseline="central">统一引擎</text>
+  <text x="512" y="224" font-size="8.5" fill="#C0392B" dominant-baseline="central">未选 · 包体约束</text>
 
-  <rect x="24" y="236" width="88" height="72" fill="#EEF5FC" stroke="#C9DFF2" stroke-width="0.5"/>
-  <text x="68" y="272" font-size="10" font-weight="500" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">动画引擎</text>
+  <rect x="24" y="236" width="88" height="48" fill="#EEF5FC" stroke="#C9DFF2" stroke-width="0.5"/>
+  <text x="68" y="260" font-size="10" font-weight="500" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">动画引擎</text>
+  <line x1="112" y1="260" x2="656" y2="260" stroke="#eceff3" stroke-width="0.5"/>
   <text x="120" y="248" font-size="8.5" fill="#5b6470" dominant-baseline="central">参考 lottie-react-native 与公司内 MRN</text>
   <text x="326" y="248" font-size="8.5" fill="#5b6470" dominant-baseline="central">新增 module</text>
   <text x="424" y="248" font-size="8.5" fill="#5b6470" dominant-baseline="central">中</text>
   <text x="512" y="248" font-size="8.5" fill="#1F7A3D" dominant-baseline="central">入选 · 按需集成</text>
-  <text x="120" y="284" font-size="8.5" fill="#5b6470" dominant-baseline="central">若与 SVG 共用 thorvg</text>
-  <text x="326" y="284" font-size="8.5" fill="#5b6470" dominant-baseline="central">+600KB（一次）</text>
-  <text x="424" y="284" font-size="8.5" fill="#5b6470" dominant-baseline="central">高</text>
-  <text x="512" y="284" font-size="8.5" fill="#8a929c" dominant-baseline="central">当时未评估</text>
+  <text x="120" y="272" font-size="8.5" fill="#5b6470" dominant-baseline="central">若与 SVG 共用 ThorVG</text>
+  <text x="326" y="272" font-size="8.5" fill="#5b6470" dominant-baseline="central">净增量待测</text>
+  <text x="424" y="272" font-size="8.5" fill="#5b6470" dominant-baseline="central">待对照</text>
+  <text x="512" y="272" font-size="8.5" fill="#8a929c" dominant-baseline="central">未同批评估</text>
 
-  <rect x="24" y="308" width="632" height="24" rx="6" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
-  <text x="32" y="320" font-size="8.5" fill="#8A4B00" dominant-baseline="central">包体余量是硬约束：点评 Android 当时余量约 1.09MB，候选方案的增量在 194KB 到 2.5MB 之间。</text>
+  <rect x="24" y="296" width="632" height="48" rx="6" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
+  <text x="32" y="311" font-size="8.5" fill="#8A4B00" dominant-baseline="central">历史数据：点评 Android 余量约 1.09MB；ThorVG 单项约 +600KB。</text>
+  <text x="32" y="329" font-size="8.5" fill="#8A4B00" dominant-baseline="central">重评：实装净增量、三端维护成本与兼容性一起算；共用引擎的净减包仍待测。</text>
 </svg>

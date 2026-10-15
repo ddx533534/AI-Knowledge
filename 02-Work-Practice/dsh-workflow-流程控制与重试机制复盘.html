@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dsh-workflow 实践复盘：让 Agent 做判断，让程序管流程</title>
+<style>
+  :root {
+    --bg: #fbfbfc;
+    --panel: #ffffff;
+    --ink: #1c1f24;
+    --ink-soft: #4a5158;
+    --line: #e5e7eb;
+    --line-soft: #eef0f3;
+    --accent: #2f5d8a;
+    --accent-soft: #eef3f8;
+    --code-bg: #f4f5f7;
+    --quote-bg: #f7f8fa;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.8 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 40px 22px 96px; }
+  h1 { font-size: 30px; line-height: 1.35; margin: 0 0 18px; letter-spacing: .2px; }
+  h2 {
+    font-size: 22px; line-height: 1.45; margin: 52px 0 18px;
+    padding-top: 20px; border-top: 1px solid var(--line);
+  }
+  h3 { font-size: 18px; line-height: 1.5; margin: 34px 0 12px; color: #14171b; }
+  p { margin: 12px 0; }
+  strong { color: #10131a; font-weight: 600; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(47,93,138,.28); }
+  a:hover { border-bottom-color: var(--accent); }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+  blockquote {
+    margin: 0 0 8px; padding: 14px 18px; background: var(--quote-bg);
+    border-left: 3px solid #c9d4e0; border-radius: 4px;
+    color: var(--ink-soft); font-size: 15px;
+  }
+  code {
+    background: var(--code-bg); border: 1px solid var(--line-soft);
+    border-radius: 4px; padding: 1px 5px; font-size: 13.5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    word-break: break-word;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--line-soft);
+    border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 16px 0;
+  }
+  pre code { background: none; border: 0; padding: 0; font-size: 13.5px; line-height: 1.7; }
+  ul, ol { margin: 12px 0; padding-left: 24px; }
+  li { margin: 8px 0; }
+  .tw { overflow-x: auto; margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; background: var(--panel); }
+  th, td { border: 1px solid var(--line); padding: 9px 11px; text-align: left; vertical-align: top; min-width: 12em; }
+  /* 中文的最小内容宽度只有一个字宽，窄容器里短列会被压成一字一行；抬住下限，超出由 .tw 横滚 */
+  th:first-child, td:first-child { min-width: 6em; width: 1px; }
+  th { background: var(--accent-soft); color: #1b3a56; font-weight: 600; white-space: nowrap; }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  .fig { margin: 24px 0; }
+  .fig-box, .fig img { display: block; width: 100%; max-width: 680px; margin: 0 auto; }
+  .fig img { height: auto; }
+  .fig svg { display: block; width: 100%; height: auto; }
+  .fig figcaption {
+    margin-top: 9px; text-align: center; font-size: 13.5px; color: var(--ink-soft);
+  }
+  .fig-missing {
+    border: 1px dashed #d9a3a3; border-radius: 6px; padding: 12px; color: #a32d2d;
+  }
+  @media (max-width: 620px) {
+    body { font-size: 15.5px; }
+    .wrap { padding: 26px 16px 72px; }
+    h1 { font-size: 25px; }
+    h2 { font-size: 20px; }
+    th, td { padding: 7px 9px; font-size: 13.5px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>dsh-workflow 实践复盘：让 Agent 做判断，让程序管流程</h1>
+<p>核实日期：2026-10-15。</p>
+<p><strong>这个工程最值得带走的经验：承认 Agent 会犯错，把能明确检查的条件交给程序；需要理解和分析的事情继续交给 Agent。</strong> 失败以后，系统要把证据交给合适的修复步骤，再重新验收。</p>
+<p>本文提炼了一次围绕 dsh-workflow 的工程讨论：从「Harness 是什么」，一路追问到「流程为什么可信、失败以后怎么修」。讨论确认了设计原则，也通过源码和临时流程复现了一些问题。<strong>修复方案仍在讨论，本文不代表这些问题已经解决。</strong></p>
+<h2>一、先把几个词说清楚</h2>
+<div class="tw"><table>
+<thead><tr>
+<th>名称</th>
+<th>大白话</th>
+<th>在这个工程里的对应</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>大模型</td>
+<td>分析问题，判断下一步，生成方案和代码</td>
+<td>planner、coder、verifier 执行任务时使用的模型能力</td>
+</tr>
+<tr>
+<td>工具</td>
+<td>真正读取文件、执行命令、修改代码的能力</td>
+<td>Agent 通过宿主调用的工具</td>
+</tr>
+<tr>
+<td>底层 Harness</td>
+<td>把模型调用、工具执行、结果反馈组织成持续工作的过程</td>
+<td>Codex 等宿主提供的 Agent 运行机制</td>
+</tr>
+<tr>
+<td>Workflow</td>
+<td>这件事有哪些步骤，步骤怎样衔接</td>
+<td>需求澄清、设计、编码、审查、测试和判定</td>
+</tr>
+<tr>
+<td>业务 Harness</td>
+<td>让业务流程实际运行，并管理状态、审批、回退和记录</td>
+<td>工作流声明、单步引擎、调度约定及相关规则共同组成的这一层</td>
+</tr>
+</tbody>
+</table></div>
+<p>「底层 Harness / 业务 Harness」是本次讨论采用的职责划分，用来解释工程，不作为统一的行业术语分类。多个 Agent 可以共用一套底层运行机制；各自的任务和会话仍可独立。</p>
+<p>OpenAI 的官方说明将模型周围的执行系统称为 Harness，并描述了应用掌管业务上下文与规则、Codex 提供通用执行能力的组合方式。以上定位与这份说明相符。<a href="https://developers.openai.com/blog/codex-as-a-platform" target="_blank" rel="noopener">官方说明</a></p>
+<figure class="fig"><div class="fig-box"><svg xmlns="http://www.w3.org/2000/svg" width="600" height="655" viewBox="0 0 600 655" role="img" aria-labelledby="fig1-title fig1-desc">
+<title id="fig1-title">两层 Harness：各自管什么</title>
+<desc id="fig1-desc">上层是研发业务流程的控制职责，下层是模型与工具的通用执行循环。图示职责不代表当前全部约束已经程序实现。</desc>
+<defs><marker id="fig1-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#7b8794" stroke-width="1.4"/></marker></defs>
+<g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+<rect width="600" height="655" fill="#ffffff"/>
+<text x="300" y="43" text-anchor="middle" font-size="28" font-weight="600" fill="#1c252e">两层 Harness：各自管什么</text>
+<text x="300" y="78" text-anchor="middle" font-size="20" font-weight="400" fill="#606a75">职责定位图 · 业务约束尚未全部补齐</text><rect x="40" y="110" width="520" height="145" rx="12" fill="#fff7ed" stroke="#d59a51" stroke-width="1.5"/><text x="300" y="150" text-anchor="middle" font-size="27" font-weight="600" fill="#965014">你的业务 Harness</text><text x="300" y="190" text-anchor="middle" font-size="24" font-weight="400" fill="#303842">安排步骤 · 审批 · 回退 · 验收</text><text x="300" y="227" text-anchor="middle" font-size="22" font-weight="400" fill="#965014">部分约束仍待程序落实</text><path d="M300 257 V291" fill="none" stroke="#7b8794" stroke-width="2" marker-end="url(#fig1-arrow)"/><rect x="40" y="300" width="520" height="140" rx="12" fill="#f5f6f8" stroke="#d9dee5" stroke-width="1.5"/><text x="300" y="340" text-anchor="middle" font-size="26" font-weight="600" fill="#303842">底层运行机制（如 Codex）</text><text x="300" y="382" text-anchor="middle" font-size="23" font-weight="400" fill="#303842">模型调用 → 工具执行 → 结果反馈</text><text x="300" y="415" text-anchor="middle" font-size="22" font-weight="400" fill="#606a75">管理会话、工具与运行边界</text><path d="M300 443 V475" fill="none" stroke="#7b8794" stroke-width="2" marker-end="url(#fig1-arrow)"/><rect x="40" y="485" width="520" height="100" rx="12" fill="#f5f6f8" stroke="#d9dee5" stroke-width="1.5"/><text x="300" y="525" text-anchor="middle" font-size="24" font-weight="600" fill="#303842">模型负责判断，工具负责执行</text><text x="300" y="561" text-anchor="middle" font-size="23" font-weight="400" fill="#303842">多个 Agent 可共用底层机制</text><text x="300" y="625" text-anchor="middle" font-size="24" font-weight="600" fill="#38634b">规则可以确定，实际路径可以动态</text>
+</g></svg></div><figcaption>图 1：两层 Harness 的职责定位。底层机制组织模型与工具的执行循环；dsh-workflow 在上层管理研发步骤、审批、回退和验收。这是职责划分，图中业务约束尚未全部成为程序保证。</figcaption></figure>
+<h2>二、核心边界：模型判断什么，程序管住什么</h2>
+<p>假设测试失败，需要先搞清楚：实现错了、设计有问题，还是测试误解了需求。这个分析可以交给 Agent。随后，引擎检查恢复方案是否合法，并执行流程变更。</p>
+<div class="tw"><table>
+<thead><tr>
+<th>事情</th>
+<th>由谁负责</th>
+<th>负责到什么程度</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>分析失败原因、选择修复位置</td>
+<td>Agent</td>
+<td>提供理由和证据，允许保留「原因未知」</td>
+</tr>
+<tr>
+<td>检查目标任务、材料、审批与预算</td>
+<td>引擎</td>
+<td>按明确规则接受或拒绝，不靠模型口头保证</td>
+</tr>
+<tr>
+<td>改变流程状态、保存历史、使旧结果失效</td>
+<td>引擎</td>
+<td>留下可核查记录，并按规则调度</td>
+</tr>
+<tr>
+<td>判断修复是否有效</td>
+<td>对应的验证过程</td>
+<td>重新执行检查；需要语义判断的部分仍由 Agent 或人审查</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>流程规则可以确定，实际执行路径可以动态变化。</strong> 工作流中可以有一个「请 Agent 分析该回到哪一步」的节点；它的答案不固定，但可选范围、请求格式、审批要求和次数限制仍然明确。</p>
+<p>引擎能证明「这次回退符合规则」，不能仅凭一段 JSON 就证明「Agent 对根因的判断正确」。修复后仍要验证。</p>
+<p>本次讨论中已经确认的原则是：Agent 的不可靠性需要作为设计前提；引擎核验推进条件，条件缺失或不符合预期时，要明确反馈，并进入相应处理路径。</p>
+<h2>三、把设计承诺拿到代码面前核对</h2>
+<p>以下结论限定于本次核实的源码快照。前三项已通过临时流程复现，后两项由源码确认，其中固定回退优先的行为也做了最小复现。</p>
+<div class="tw"><table>
+<thead><tr>
+<th>要核对的承诺</th>
+<th>实际发现</th>
+<th>证据位置</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>编码前必须完成审批</td>
+<td>引擎先返回 <code>NEED_APPROVAL</code>；不批准，直接回填 <code>--output</code>，编码任务仍可记为成功，审批状态仍是 <code>null</code></td>
+<td><code>loop.js</code>：1432、1482、1492 行；规则 R001</td>
+</tr>
+<tr>
+<td>收到的结果属于刚才派发的任务</td>
+<td>连续提交两次 design 的同一份结果，第二次会被记到 code；code 未经派发也可被记为成功</td>
+<td><code>loop.js</code>：1341、1452、1492 行</td>
+</tr>
+<tr>
+<td>验收失败就无法成功结束</td>
+<td>在默认七步模板中，审查报告有 blocker、测试报告记录 1 项失败，最后判定漏填顶层 <code>passed</code>；引擎仍报告工作流成功</td>
+<td>模板未配置任务输出 schema；<code>loop.js</code>：582、827、1473、1492 行</td>
+</tr>
+<tr>
+<td>失败回退能让 coder 有针对性地修复</td>
+<td>code 的结构化输入只有技术设计和测试用例设计，没有保证送达本轮失败报告；coder 仍可能主动查文件</td>
+<td><code>workflow_template.json</code>：60 行；<code>gatherInput</code>：550 行</td>
+</tr>
+<tr>
+<td>Agent 可以选择验证失败后回到哪一步</td>
+<td>已有 <code>request_backtrack</code>，但固定 loop 先执行；默认「判定失败 → code」会盖过 Agent 提出的其他回退目标</td>
+<td><code>checkRequestBacktrack</code>：894 行；<code>postTaskSettlement</code>：1189 行</td>
+</tr>
+</tbody>
+</table></div>
+<p>这些问题集中指向一件事：<strong>规则写得很严格，不等于程序已经检查了所有入口。</strong> 审批检查、结果接收、验收判定和恢复调度需要共同维护同一组约束。</p>
+<p>尤其要分清下面三种状态。一个测试完全可能正常运行、发现失败，然后等待修复；它不应因此被描述为整个任务通过。</p>
+<figure class="fig"><div class="fig-box"><svg xmlns="http://www.w3.org/2000/svg" width="600" height="590" viewBox="0 0 600 590" role="img" aria-labelledby="fig2-title fig2-desc">
+<title id="fig2-title">任务跑完 ≠ 验收通过</title>
+<desc id="fig2-desc">执行完成、验收通过和流程动作需要分开记录。该图展示建议判定，并不声称当前引擎已经这样处理。</desc>
+<defs><marker id="fig2-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#7b8794" stroke-width="1.4"/></marker></defs>
+<g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+<rect width="600" height="590" fill="#ffffff"/>
+<text x="300" y="43" text-anchor="middle" font-size="28" font-weight="600" fill="#1c252e">任务跑完 ≠ 验收通过</text>
+<text x="300" y="80" text-anchor="middle" font-size="23" font-weight="400" fill="#606a75">示例：测试跑完，发现 1 项失败</text><rect x="40" y="115" width="520" height="105" rx="12" fill="#f0f7f2" stroke="#9fb9a9" stroke-width="1.5"/><text x="300" y="154" text-anchor="middle" font-size="26" font-weight="600" fill="#38634b">执行情况：已完成</text><text x="300" y="190" text-anchor="middle" font-size="23" font-weight="400" fill="#303842">测试已运行，并返回了结果</text><path d="M300 223 V253" fill="none" stroke="#7b8794" stroke-width="2" marker-end="url(#fig2-arrow)"/><rect x="40" y="265" width="520" height="105" rx="12" fill="#fcf1ef" stroke="#d7a29b" stroke-width="1.5"/><text x="300" y="304" text-anchor="middle" font-size="26" font-weight="600" fill="#a34338">验收情况：未通过</text><text x="300" y="340" text-anchor="middle" font-size="23" font-weight="400" fill="#303842">报告里仍有 1 项失败</text><path d="M300 373 V403" fill="none" stroke="#7b8794" stroke-width="2" marker-end="url(#fig2-arrow)"/><rect x="40" y="415" width="520" height="105" rx="12" fill="#fff7ed" stroke="#d59a51" stroke-width="1.5"/><text x="300" y="455" text-anchor="middle" font-size="26" font-weight="600" fill="#965014">流程动作：进入恢复</text><text x="300" y="491" text-anchor="middle" font-size="23" font-weight="400" fill="#303842">携带失败证据，修复后重新验收</text><text x="300" y="560" text-anchor="middle" font-size="22" font-weight="400" fill="#606a75">建议的判定方式 · 三种状态分别记录</text>
+</g></svg></div><figcaption>图 2：执行完成与验收通过是两个判断。测试已运行并返回结果，代表执行完成；发现 1 项失败，代表验收未通过；流程应携带失败证据进入恢复。此图展示建议采用的判定方式。</figcaption></figure>
+<h2>四、重试机制：先说清楚谁来修什么</h2>
+<p>重试次数只能限制花费。要让下一轮有针对性，还需要明确失败原因、修复对象、输入材料和重新验收的条件。下面是基于本次讨论提出的设计建议，尚未全部确认或实现。</p>
+<h3>1. 能明确识别的错误直接处理，需要分析的错误交给 Agent</h3>
+<div class="tw"><table>
+<thead><tr>
+<th>失败情况</th>
+<th>建议处理方式</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>结果缺字段、类型不对</td>
+<td>引擎返回具体校验错误，要求当前 Agent 修正提交</td>
+</tr>
+<tr>
+<td>读取或查询遇到可识别的临时失败</td>
+<td>按配置等待后有限重试</td>
+</tr>
+<tr>
+<td>测试失败、设计矛盾、实现不符合需求</td>
+<td>Agent 基于证据提出恢复方案，包括回到哪一步、修改什么</td>
+</tr>
+<tr>
+<td>缺少用户才能提供的信息</td>
+<td>说明缺口，进入等待输入的状态</td>
+</tr>
+<tr>
+<td>暂时无法确定原因</td>
+<td>先诊断、补证据，保留「未知」</td>
+</tr>
+</tbody>
+</table></div>
+<p>这与 LangGraph 官方说明中区分临时错误、模型可恢复错误和需要用户补充信息的思路相通；这里采用的是针对本项目的设计建议。<a href="https://docs.langchain.com/oss/javascript/langgraph/thinking-in-langgraph#handle-errors-appropriately" target="_blank" rel="noopener">错误处理说明</a></p>
+<h3>2. 每次恢复都要拿到一份明确的材料</h3>
+<p>保留正常的 <code>depends_on</code> 输入，再由引擎动态附加恢复材料：</p>
+<ul><li>本次失败属于哪次运行、哪个任务、哪次尝试。</li><li>当时使用的需求、设计、代码和测试版本。</li><li>预期结果、实际结果、日志与失败报告路径。</li><li>前面试过什么，得到什么结果。</li><li>本轮修复目标，以及修完后必须重新通过哪些检查。</li></ul>
+<p>材料应交给实际负责修复的步骤。失败文档可以作为证据，但要标明它是待修复的旧版本；不能直接把它当成后续任务的有效设计。</p>
+<p>报告路径也要指向具体那次尝试。若一个文件名不断被新结果覆盖，修复者可能读到不同轮次的内容。</p>
+<h3>3. Agent 选方案，引擎核验后执行，再重新验收</h3>
+<figure class="fig"><div class="fig-box"><svg xmlns="http://www.w3.org/2000/svg" width="600" height="925" viewBox="0 0 600 925" role="img" aria-labelledby="fig3-title fig3-desc">
+<title id="fig3-title">建议的纠错闭环</title>
+<desc id="fig3-desc">失败先记录，再选恢复方案；引擎核验后携带反馈修复，再重新验收。额度耗尽时明确停止，不能把未解决的失败直接放行。</desc>
+<defs><marker id="fig3-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#7b8794" stroke-width="1.4"/></marker></defs>
+<g font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+<rect width="600" height="925" fill="#ffffff"/>
+<text x="300" y="43" text-anchor="middle" font-size="28" font-weight="600" fill="#1c252e">建议的纠错闭环</text>
+<text x="300" y="80" text-anchor="middle" font-size="22" font-weight="400" fill="#965014">设计建议 · 尚未落地</text><rect x="40" y="110" width="520" height="105" rx="12" fill="#f5f6f8" stroke="#d9dee5" stroke-width="1.5"/><text x="300" y="150" text-anchor="middle" font-size="26" font-weight="600" fill="#303842">1  保存失败事实</text><text x="300" y="187" text-anchor="middle" font-size="22" font-weight="400" fill="#303842">任务、尝试、版本、预期与实际</text><path d="M300 218 V246" fill="none" stroke="#7b8794" stroke-width="2" marker-end="url(#fig3-arrow)"/><rect x="40" y="255" width="520" height="105" rx="12" fill="#f5f6f8" stroke="#d9dee5" stroke-width="1.5"/><text x="300" y="295" text-anchor="middle" font-size="26" font-weight="600" fill="#303842">2  选择恢复方案</text><text x="300" y="332" text-anchor="middle" font-size="22" font-weight="400" fill="#303842">明确错误按规则；业务问题由 Agent 分析</text><path d="M300 363 V391" fill="none" stroke="#7b8794" stroke-width="2" marker-end="url(#fig3-arrow)"/><rect x="40" y="400" width="520" height="105" rx="12" fill="#fff7ed" stroke="#d59a51" stroke-width="1.5"/><text x="300" y="440" text-anchor="middle" font-size="26" font-weight="600" fill="#303842">3  引擎核验方案</text><text x="300" y="477" text-anchor="middle" font-size="22" font-weight="400" fill="#303842">检查目标、审批、材料与剩余预算</text><path d="M300 508 V536" fill="none" stroke="#7b8794" stroke-width="2" marker-end="url(#fig3-arrow)"/><rect x="40" y="545" width="520" height="105" rx="12" fill="#fff7ed" stroke="#d59a51" stroke-width="1.5"/><text x="300" y="585" text-anchor="middle" font-size="26" font-weight="600" fill="#303842">4  携带反馈修复</text><text x="300" y="622" text-anchor="middle" font-size="22" font-weight="400" fill="#303842">原始输入 + 失败证据 + 修复目标</text><path d="M300 653 V681" fill="none" stroke="#7b8794" stroke-width="2" marker-end="url(#fig3-arrow)"/><rect x="40" y="690" width="520" height="105" rx="12" fill="#f0f7f2" stroke="#9fb9a9" stroke-width="1.5"/><text x="300" y="730" text-anchor="middle" font-size="26" font-weight="600" fill="#303842">5  重新验收</text><text x="300" y="767" text-anchor="middle" font-size="22" font-weight="400" fill="#303842">针对当前有效版本，检查修复是否有效</text><text x="300" y="854" text-anchor="middle" font-size="23" font-weight="600" fill="#38634b">通过 → 推进；未过 → 在预算内继续</text><text x="300" y="893" text-anchor="middle" font-size="23" font-weight="400" fill="#606a75">额度耗尽或需外部信息 → 明确停下</text>
+</g></svg></div><figcaption>图 3：建议的纠错闭环。保存失败事实，选择恢复方案，引擎核验目标、审批、材料和预算，携带反馈执行修复，再重新验收。通过才推进；仍失败时在预算内继续；额度耗尽则明确停下。该机制尚未落地。</figcaption></figure>
+<p>恢复方案可以先只表达几种动作：重试当前任务、回退修复、等待信息、停止并报告。引擎检查请求身份、有效版本、允许目标、审批与剩余额度。</p>
+<p>方案不合法时，应把拒绝原因交回，让 Agent 有限次修正方案；未解决的失败不能因为恢复请求被拒绝而自动放行。</p>
+<h3>4. 重试需要预算，也需要检查已经发生的动作</h3>
+<p>建议同时设置「同一个问题的恢复预算」和「整次工作流的总预算」，避免通过切换任务不断重置额度。具体次数与时间上限仍需用真实任务确定。</p>
+<p>改文件、启动服务、调用外部写接口以后，恢复前还要检查当前状态。超时可能只代表没有收到结果，动作本身可能已经发生。能够安全重复的操作才直接重试；其他操作先核对结果或提供去重机制。AWS 的安全重试说明也讨论了重复执行与幂等请求标识的问题。<a href="https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/" target="_blank" rel="noopener">安全重试说明</a></p>
+<h2>五、这次实践真正带走的经验</h2>
+<p><strong>第一，用反例检查可靠性承诺。</strong> 对「必须审批」「不能跳步」「失败就回退」这类表述，逐条找对应代码，再尝试漏做、重复做、乱序做。正常路径能跑通，只覆盖了一部分承诺。</p>
+<p><strong>第二，把事实、判断和动作分开。</strong> 日志记录了什么是事实，为什么出错是判断，回到哪一步是动作。将三者分开保存，才有机会检查判断是否有依据、动作是否有效。</p>
+<p><strong>第三，纠错闭环同时需要控制流和数据流。</strong> 修复步骤既要被重新调度，也要收到对应证据；重新验收还必须针对当前有效版本。路径、材料和版本需要一起管理。</p>
+<p>这个工程的价值，正在于把「希望 Agent 按流程做事」逐渐拆成可检查的条件。确定性能够覆盖的部分由程序承担，模型继续负责需要理解、探索和权衡的部分。</p>
+<h2>六、已经确认、仍属建议、尚未决定</h2>
+<div class="tw"><table>
+<thead><tr>
+<th>状态</th>
+<th>本次讨论的真实进展</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>已确认</td>
+<td>Agent 会犯错；由引擎核验推进条件，缺失或不满足条件时必须明确反馈</td>
+</tr>
+<tr>
+<td>已确认的问题</td>
+<td>固定重试路径缺乏灵活性，修复步骤的失败输入配置不足</td>
+</tr>
+<tr>
+<td>设计建议</td>
+<td>Agent 在允许范围内选恢复方案，引擎核验后执行；补恢复材料、身份绑定、验收检查及预算</td>
+</tr>
+<tr>
+<td>待确认</td>
+<td>修改用户需求、放宽验收条件是否必须人工确认；现有审批规则如何与自动恢复衔接</td>
+</tr>
+<tr>
+<td>待验证</td>
+<td>恢复次数与总预算；语义诊断的质量；真实宿主中的会话恢复和权限边界</td>
+</tr>
+<tr>
+<td>本次未完成</td>
+<td>没有修改 dsh-workflow 业务代码，没有运行完整的真实需求开发与验证闭环</td>
+</tr>
+</tbody>
+</table></div>
+<h2>七、来源与核实边界</h2>
+<ul><li>来源工程：<code>/Users/dudongxu/Desktop/dsh-workflow</code>。核实时 HEAD 为 <code>96588aef23a70c3137577b67780319af27f74ece</code>，工作区无未提交改动。本文所有实现结论均限定于这一快照。</li><li>本地直接证据：<a href="/Users/dudongxu/Desktop/dsh-workflow/verification-workflow-v1/SKILL.md" target="_blank" rel="noopener">工作流入口说明</a>、<a href="/Users/dudongxu/Desktop/dsh-workflow/verification-workflow-v1/templates/workflow_template.json" target="_blank" rel="noopener">默认模板</a>、<a href="/Users/dudongxu/Desktop/dsh-workflow/verification-workflow-v1/engine/loop.js" target="_blank" rel="noopener">单步引擎</a>、<a href="/Users/dudongxu/Desktop/dsh-workflow/verification-workflow-v1/rules.json" target="_blank" rel="noopener">规则文件</a>。具体函数和行号见第三节。</li><li>最小复现使用临时流程与模拟任务输出，验证的是协议和调度行为，没有证明真实 Agent 一定会触发这些错误，也没有测量生产发生率。临时文件位置记入本知识库的维护记录。</li><li>Harness 概念来源：OpenAI《Codex as a platform: build on the open agent harness》，发布于 2026-08-19，本次核实于 2026-10-15。</li><li>错误处理与安全重试的两份官方资料于 2026-10-15 读取；本次未核实它们的原始发布日期。</li><li>本文依据对话提炼需求与已确认原则，依据源码和复现说明实现行为；对话中的设计建议没有被写成已实现能力。</li><li>本地证据链接仅供本机复查。通用概念另见知识库已有笔记《Agent Harness：底层运行机制与业务工作流》，本文集中记录工程里遇到的问题与讨论结果。</li></ul>
+</div>
+</body>
+</html>

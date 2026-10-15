@@ -85,7 +85,7 @@
 <body>
 <div class="wrap">
 <h1>Recce 1.28–1.35 技术方案复盘（Android 侧）</h1>
-<p>核实日期：2026-10-13</p>
+<p>核实日期：2026-10-13（原始材料）；2026-10-15（ThorVG 专项复核，10 月 14 日开始）</p>
 <p>材料是内网学城《02-Recce Changelog》目录下 v1.28.x 到 v1.35 各版本的子树（读取日期 2026-10-13）。整棵树 234 份文档，本人创建 67 份，按「技术方案」筛出 18 份逐份分析，其余提测报告、自测用例、排查记录见文末附录。</p>
 <p><strong>阅读约定</strong>：数字照抄原文未复算；「更优解」是本文的分析结论，不是文档原文；18 份方案在下文一律用简称指代，对照表如下。</p>
 <div class="tw"><table>
@@ -329,8 +329,8 @@
 </tr>
 <tr>
 <td>3</td>
-<td>选型的分水岭永远是宿主 App 的包体余量，不是技术优劣</td>
-<td>点评当时的 Android 余量约 1.09MB，而候选方案的增量在 194KB 到 2.5MB 之间；Yoga 走自打包 so、SVG 从 resvg 退回原生、thorvg 因 +600KB 落选，三次选型都倒在这条线上</td>
+<td>当期包体是硬约束，长期选型还要计入三端实现的维护成本</td>
+<td>点评当时的 Android 余量约 1.09MB，候选增量在 194KB 到 2.5MB 之间；SVG 最终回退原生、ThorVG 因约 +600KB 未采用。这能说明当时的取舍，不能推出统一引擎不值得做；原生方案保留了三端分别实现与消差异的成本，重新评估时必须一起算</td>
 </tr>
 <tr>
 <td>4</td>
@@ -424,26 +424,27 @@
 
   <text x="24" y="394" font-size="8.5" fill="#8a929c" dominant-baseline="central">三份方案各定一套资源规则，是同一个抽象缺失被付了三次成本。</text>
 </svg></div><figcaption>图 2：三类「多端不一致」问题的收敛点。三行分别是背景渲染、触摸分发、属性协议，每行左边是三端各自修的旧形态，右边是 1.34 与 1.35 之后收口成的唯一入口：CompositeBackgroundDrawable、RecceTouchTargetHelper、pdef 生成。</figcaption></figure></p>
-<p><strong>判断 3 —— 选型的分水岭是宿主 App 的包体余量，不是技术优劣。</strong>
-<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 336" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
-  <title>三组选型的候选与落点，包体与依赖规范是共同的否决线</title>
-  <desc>九行表格，四列是选型、候选、包体增量、多端一致性与结论。Yoga 引擎一组：直接依赖开源 yoga 被否，原因是包名与 mrn:yoga 冲突且不允许直接依赖开源组件；引入源码改包名自编译 so 入选，压缩后约增 194KB；换 Taffy 留作备选，因为缺 RTL 与 Position Static。SVG 渲染一组：RN-SVG 三端一致性高但视图节点数随子标签增长被否；androidsvg 纯原生包体最小、一致性中等而入选；rust-resvg 像素级一致但包体增加约 2.0MB 且复杂图耗时超过 1000ms 被否；thorvg 像素级一致、性能最好但增加约 600KB 被否。动画引擎一组：参考 lottie-react-native 与公司内 MRN 实现入选，按需集成；若当时与 SVG 共用 thorvg 则一致性与包体都更优，但这一条当时未评估。</desc>
+<p><strong>判断 3 —— 当期包体是硬约束，长期还要算三端维护成本。</strong>
+<figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 356" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <title>三组选型的历史取舍：当期包体约束与长期维护成本</title>
+  <desc>九行五列表格，列出 Yoga、SVG 和 Lottie 的候选、当时包体或成本、一致性目标与决策。ThorVG 单项约增加 600KB 是历史记录，不代表今天的实装增量或已经验证三端像素完全相同。SVG 与 Lottie 共用引擎当时没有同批评估，净增量与兼容性仍待测。包体是当期约束，重评还要计入三端维护成本。</desc>
 
-  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">三组选型，一条共同的否决线</text>
-  <text x="24" y="32" font-size="9" fill="#8a929c" dominant-baseline="central">结论列：绿＝入选，红＝否掉，灰＝备选或当时未评估</text>
+  <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">三组选型的当时取舍；统一引擎仍值得重新评估</text>
+  <text x="24" y="32" font-size="9" fill="#8a929c" dominant-baseline="central">历史记录与目标，非本轮实测。绿＝入选，红＝未选，灰＝备选或未同批评估</text>
 
   <rect x="24" y="44" width="632" height="24" rx="6" fill="#f2f4f7" stroke="#d9dde3" stroke-width="0.5"/>
   <text x="32" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">选型</text>
   <text x="120" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">候选</text>
-  <text x="326" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">包体增量</text>
-  <text x="424" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">多端一致性</text>
+  <text x="326" y="56" font-size="9" font-weight="500" fill="#5b6470" dominant-baseline="central">当时包体／成本</text>
+  <text x="424" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">一致性目标</text>
   <text x="512" y="56" font-size="10" font-weight="500" fill="#5b6470" dominant-baseline="central">结论</text>
 
-  <rect x="24" y="68" width="632" height="168" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
-  <rect x="24" y="68" width="88" height="168" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
-  <text x="68" y="152" font-size="10" font-weight="500" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">布局引擎</text>
+  <rect x="24" y="68" width="632" height="216" fill="#fbfcfd" stroke="#d9dde3" stroke-width="0.5"/>
+  <rect x="24" y="68" width="88" height="72" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
+  <text x="68" y="104" font-size="10" font-weight="500" fill="#8A4B00" text-anchor="middle" dominant-baseline="central">布局引擎</text>
   <line x1="112" y1="92" x2="656" y2="92" stroke="#eceff3" stroke-width="0.5"/>
   <line x1="112" y1="116" x2="656" y2="116" stroke="#eceff3" stroke-width="0.5"/>
+  <line x1="112" y1="140" x2="656" y2="140" stroke="#eceff3" stroke-width="0.5"/>
   <line x1="112" y1="164" x2="656" y2="164" stroke="#eceff3" stroke-width="0.5"/>
   <line x1="112" y1="188" x2="656" y2="188" stroke="#eceff3" stroke-width="0.5"/>
   <line x1="112" y1="212" x2="656" y2="212" stroke="#eceff3" stroke-width="0.5"/>
@@ -460,8 +461,8 @@
   <text x="424" y="128" font-size="8.5" fill="#5b6470" dominant-baseline="central">高</text>
   <text x="512" y="128" font-size="8.5" fill="#5b6470" dominant-baseline="central">备选 · 缺 RTL 与 Static</text>
 
-  <rect x="24" y="152" width="88" height="168" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
-  <text x="68" y="236" font-size="10" font-weight="500" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">SVG 渲染</text>
+  <rect x="24" y="140" width="88" height="96" fill="#EAF2FB" stroke="#B9D4F0" stroke-width="0.5"/>
+  <text x="68" y="188" font-size="10" font-weight="500" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">SVG 渲染</text>
   <text x="120" y="152" font-size="8.5" fill="#5b6470" dominant-baseline="central">RN-SVG（recce-ui 解析生成节点）</text>
   <text x="326" y="152" font-size="8.5" fill="#5b6470" dominant-baseline="central">视图节点随子标签涨</text>
   <text x="424" y="152" font-size="8.5" fill="#5b6470" dominant-baseline="central">高</text>
@@ -469,30 +470,32 @@
   <text x="120" y="176" font-size="8.5" fill="#5b6470" dominant-baseline="central">androidsvg 纯原生</text>
   <text x="326" y="176" font-size="8.5" fill="#5b6470" dominant-baseline="central">最小</text>
   <text x="424" y="176" font-size="8.5" fill="#5b6470" dominant-baseline="central">中</text>
-  <text x="512" y="176" font-size="8.5" fill="#1F7A3D" dominant-baseline="central">入选 · 用一致性换包体</text>
+  <text x="512" y="176" font-size="8.5" fill="#1F7A3D" dominant-baseline="central">入选 · 当期包体可控</text>
   <text x="120" y="200" font-size="8.5" fill="#5b6470" dominant-baseline="central">rust-resvg</text>
   <text x="326" y="200" font-size="8.5" fill="#5b6470" dominant-baseline="central">+2.0MB（保留文本）</text>
-  <text x="424" y="200" font-size="8.5" fill="#5b6470" dominant-baseline="central">像素级</text>
+  <text x="424" y="200" font-size="8.5" fill="#5b6470" dominant-baseline="central">统一引擎</text>
   <text x="512" y="200" font-size="8.5" fill="#C0392B" dominant-baseline="central">否 · 包体与复杂图耗时</text>
   <text x="120" y="224" font-size="8.5" fill="#5b6470" dominant-baseline="central">thorvg（C++）</text>
   <text x="326" y="224" font-size="8.5" fill="#5b6470" dominant-baseline="central">+600KB</text>
-  <text x="424" y="224" font-size="8.5" fill="#5b6470" dominant-baseline="central">像素级</text>
-  <text x="512" y="224" font-size="8.5" fill="#C0392B" dominant-baseline="central">否 · 包体</text>
+  <text x="424" y="224" font-size="8.5" fill="#5b6470" dominant-baseline="central">统一引擎</text>
+  <text x="512" y="224" font-size="8.5" fill="#C0392B" dominant-baseline="central">未选 · 包体约束</text>
 
-  <rect x="24" y="236" width="88" height="72" fill="#EEF5FC" stroke="#C9DFF2" stroke-width="0.5"/>
-  <text x="68" y="272" font-size="10" font-weight="500" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">动画引擎</text>
+  <rect x="24" y="236" width="88" height="48" fill="#EEF5FC" stroke="#C9DFF2" stroke-width="0.5"/>
+  <text x="68" y="260" font-size="10" font-weight="500" fill="#1B5FA8" text-anchor="middle" dominant-baseline="central">动画引擎</text>
+  <line x1="112" y1="260" x2="656" y2="260" stroke="#eceff3" stroke-width="0.5"/>
   <text x="120" y="248" font-size="8.5" fill="#5b6470" dominant-baseline="central">参考 lottie-react-native 与公司内 MRN</text>
   <text x="326" y="248" font-size="8.5" fill="#5b6470" dominant-baseline="central">新增 module</text>
   <text x="424" y="248" font-size="8.5" fill="#5b6470" dominant-baseline="central">中</text>
   <text x="512" y="248" font-size="8.5" fill="#1F7A3D" dominant-baseline="central">入选 · 按需集成</text>
-  <text x="120" y="284" font-size="8.5" fill="#5b6470" dominant-baseline="central">若与 SVG 共用 thorvg</text>
-  <text x="326" y="284" font-size="8.5" fill="#5b6470" dominant-baseline="central">+600KB（一次）</text>
-  <text x="424" y="284" font-size="8.5" fill="#5b6470" dominant-baseline="central">高</text>
-  <text x="512" y="284" font-size="8.5" fill="#8a929c" dominant-baseline="central">当时未评估</text>
+  <text x="120" y="272" font-size="8.5" fill="#5b6470" dominant-baseline="central">若与 SVG 共用 ThorVG</text>
+  <text x="326" y="272" font-size="8.5" fill="#5b6470" dominant-baseline="central">净增量待测</text>
+  <text x="424" y="272" font-size="8.5" fill="#5b6470" dominant-baseline="central">待对照</text>
+  <text x="512" y="272" font-size="8.5" fill="#8a929c" dominant-baseline="central">未同批评估</text>
 
-  <rect x="24" y="308" width="632" height="24" rx="6" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
-  <text x="32" y="320" font-size="8.5" fill="#8A4B00" dominant-baseline="central">包体余量是硬约束：点评 Android 当时余量约 1.09MB，候选方案的增量在 194KB 到 2.5MB 之间。</text>
-</svg></div><figcaption>图 3：选型的分水岭。三个圆角矩形分别是 Yoga、SVG、Lottie 的选型落点，横轴是包体代价，纵轴是多端一致性收益；三个「一致性最高」的候选（保留文本 feature 的 resvg、thorvg、双 so 共存的 Yoga）都被包体余量否掉或改写，结论一律倒向包体可控的一侧。</figcaption></figure></p>
+  <rect x="24" y="296" width="632" height="48" rx="6" fill="#FDF3E7" stroke="#E8C79B" stroke-width="0.5"/>
+  <text x="32" y="311" font-size="8.5" fill="#8A4B00" dominant-baseline="central">历史数据：点评 Android 余量约 1.09MB；ThorVG 单项约 +600KB。</text>
+  <text x="32" y="329" font-size="8.5" fill="#8A4B00" dominant-baseline="central">重评：实装净增量、三端维护成本与兼容性一起算；共用引擎的净减包仍待测。</text>
+</svg></div><figcaption>图 3：三组选型的历史取舍。表格列出 Yoga、SVG 与 Lottie 的候选、当时记录的包体和一致性目标；SVG 的 ThorVG 约 +600KB 是历史数据，SVG/Lottie 共用引擎的净增量未测。当期包体约束能解释落点，重新评估还要计入三端维护成本。</figcaption></figure></p>
 <p><strong>判断 4 —— 重构类方案的收益大头是「清历史债」，立项理由却只写「加能力」。</strong>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 344" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>三份重构方案的共同形态：立项写的是加能力，收益大头是清历史债</title>
@@ -738,15 +741,15 @@
 <td><strong>Lottie</strong>（1.29）</td>
 <td>keeta 反馈竞品 talabat 动画表现好，Recce 动画能力有限；外卖在优化首页到提单的黄金链路，动画需求会持续增加</td>
 <td>新增 <code>recce-lottie</code> module（按需集成，集成到美团／点评要走新增 module 审批）；思路参考 <code>lottie-react-native</code> 与公司内 MRN；实现 ViewManager／View（继承 <code>LottieView</code>）／ShadowNode／属性工具类；规定业务动画 json 必须放在 bundle 根的 <code>dist/lottie</code> 下，用 <code>DioBundleUtil</code> 拼全路径读取。属性支持 8 项、不支持 4 项，其中 3 项有理由（Android 独有、iOS 的 lottie 版本太低），<code>AutoPlay</code> 标了未支持但没写理由</td>
-<td>① 硬编码 <code>/dist/lottie</code> 是可以避免的耦合：1.29 就该抽出「Recce 资源解析」一层（本地 bundle／data URI／远端各一个来源实现），后面 1.32 的 SVG 前缀规则、1.33 的 bundle 内字体都是同一层能力，被各写了一遍。② 「表里列了却不做」的项必须写理由，否则后来者分不出「有意不做」和「漏了」。③ Lottie 与 SVG 本可共用引擎（thorvg 两者都支持），两个决策分开做就看不到这个交集</td>
-<td>启发：相近版本窗口内的一批新能力，先看能不能共用一层（引擎／资源解析／属性协议）再逐个决策；按需求逐个立项最容易重复造轮子——Lottie、SVG、字体加载三份方案各定义一套资源来源规则，就是同一个坑踩了三次</td>
+<td>① 硬编码 <code>/dist/lottie</code> 是可以避免的耦合：1.29 就该抽出「Recce 资源解析」一层（本地 bundle／data URI／远端各一个来源实现），后面 1.32 的 SVG 前缀规则、1.33 的 bundle 内字体都是同一层能力，被各写了一遍。② 「表里列了却不做」的项必须写理由，否则后来者分不出「有意不做」和「漏了」。③ Lottie 与 SVG 本可共用引擎（thorvg 两者都支持）。<strong>本人复核时确认这条成立，但归因要改</strong>：1.32 做 SVG 时确实评估过 thorvg（它就在五方案候选表里、报价 +600KB），信息并不缺；缺的是横向对账的时机——两个立项相隔 3 个版本，各做各的选型表，没人把它们放进同一张表。两次决策的颗粒度也不同：1.29 留下的记录只到「参考 lottie-react-native 与公司内 MRN」，没落到引擎这一层，1.32 才第一次做引擎级评估</td>
+<td>启发：相近版本窗口内的一批新能力，先看能不能共用一层（引擎／资源解析／属性协议）再逐个决策；判「相近」不能凭版本号的感知——1.29 到 1.32 只隔 3 个版本、评估 SVG 时 thorvg 就在候选表里，仍然会错过，对账必须发生在立项阶段。按需求逐个立项最容易重复造轮子——Lottie、SVG、字体加载三份方案各定义一套资源来源规则，就是同一个坑踩了三次</td>
 </tr>
 <tr>
 <td><strong>SVG</strong>（1.32）</td>
 <td>业务需要 SVG 能力</td>
 <td>五方案对比（RN-SVG／androidsvg 纯原生／rust-resvg／rust 解析 + native 渲染／thorvg），初选 resvg，最终改原生；source 只支持 <code>data:image/svg+xml;utf8,</code> 与 <code>;base64,</code> 两种前缀，不支持本地文件与远程图片；recce-ui 的宽高不作用到 SVG 上。取舍：包体是决定项——resvg 保留文本 feature 加 2.0MB、去掉文本 1MB，thorvg +600KB，原生最小；复杂图耗时 thorvg 52ms、native 70ms、resvg &gt;1000ms 且无法稳定加载</td>
-<td>① 回退原生的结论到 2026-10 仍然成立，但理由该换：thorvg 的 Rust 绑定已发到 0.5.1（2026-08），crate 自己标着「尚未可用于生产」，即「三端像素级一致」两年后仍未成熟。② 真正的缺口不是选型是共同契约：没把「支持的标签／属性白名单 + 逐项三端用例」写下来，「三端不一致」这个被否掉的风险其实原样保留，只是从选型风险变成长期维护风险。③ 同一个 <code>source</code> 字段两套规则会让业务困惑，SVG 应走与其它图片相同的 source 解析链，只在拿到字节后分流到不同解码器</td>
-<td>启发：「像素级一致」和「包体」在移动端常常不可兼得，判据是宿主包体余量而不是技术优劣；选完要留一条「回头看」——当初否掉的那条路现在成熟了没有。成熟了切换成本会从「重新选型」降到「换一个实现」</td>
+<td>① 当时回退原生有包体约束，但不能沿用「ThorVG 的 Rust 绑定尚不可生产，所以三端统一渲染仍未成熟」的推论；绑定只是一条接入路径，需分别评估引擎、绑定与 Recce 集成（第五节给直接证据）。② 长期目标仍是一份 SVG 解析与光栅化核心，三端只接宿主视图、生命周期与显示；用统一引擎减少各端重复实现，收益应与包体一起评估。③ 共同契约要包含支持的 SVG 子集、资源与字体规则及逐项三端用例；<code>source</code> 解析先收口，拿到字节后再分流到不同解码器</td>
+<td>启发：包体是当期约束，三端一致与一份核心实现仍是长期目标；选原生意味着接受三套实现的维护成本。给未采用的统一引擎留重评条件：实装净增量、素材兼容性、三端输出与性能。只有接口、资源规则和回归用例已收口，后续切换才可能主要落在换实现；引擎成熟不会自动消除迁移成本</td>
 </tr>
 <tr>
 <td><strong>字体加载</strong>（1.33）</td>
@@ -989,15 +992,15 @@
 <tbody>
 <tr>
 <td>1</td>
-<td>把「资源从哪来」抽成一层</td>
-<td>Lottie、SVG、bundle 内字体三份方案各自定义路径或前缀规则，是同一个抽象缺失被付了三次成本</td>
-<td>定一个资源来源接口（bundle／data URI／远端／宿主 assets），新能力只注册来源，不再发明路径约定</td>
+<td>把「资源从哪来」抽成一层；相近窗口的同类立项合并评估</td>
+<td>Lottie、SVG、bundle 内字体各自定义路径或前缀，是同一抽象缺失被付了三次成本；引擎层也应合并看——1.29 Lottie 与 1.32 SVG 相隔 3 个版本，1.32 已评估 ThorVG，但未与既有 Lottie 方案合并对账</td>
+<td>定一个资源来源接口（bundle／data URI／远端／宿主 assets），新能力只注册来源，不再发明路径约定；同一版本窗口内要一起选型的立项，先合并排一次评估再各自决策</td>
 </tr>
 <tr>
 <td>2</td>
-<td>给所有包体相关的方案建一份共享的体积清单</td>
-<td>Yoga 的体积在两个文档里出现 428KB 与 489.52KB 两个口径，本身就是「没有唯一出处」的证据</td>
-<td>清单写清测法（构建类型、abi、压缩前后），方案里只引用不重算</td>
+<td>共用体积清单；重评时同时核算三端维护成本</td>
+<td>Yoga 的包体有两个口径；ThorVG 的历史 +600KB 不等于今天的实装增量，共用 SVG/Lottie 也不自动减包</td>
+<td>按版本、功能集、ABI、压缩与链接方式记录实装增量；列清能移除和必须共存的旧依赖，再比较迁移投入与三端长期维护成本</td>
 </tr>
 <tr>
 <td>3</td>
@@ -1027,7 +1030,7 @@
 </table></div>
 <figure class="fig"><div class="fig-box"><svg viewBox="0 0 680 440" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
   <title>18 份方案各一句可带走的判断</title>
-  <desc>十八行两列的清单。左列是方案，右列是这句话能在下一次同类工作里直接用上的判断。Yoga 引入：把补一个属性重定义成换掉一个依赖，一个动作拿三份收益。Lottie：相近窗口出现的新能力先看能否共用一层再逐个决策。字体路径：分歧点是复杂度放在哪一层时，先定接口再定数据形状。图片重构：本地版继承开源版的失效信号是子类里出现大量 super 调用。Android 升 yoga：引入原生库必须用 readelf 把 so 依赖链列出来。鸿蒙升 yoga：上游给了兼容开关就等于拿到安全网，不用它等于没升级。SVG：选型判据是宿主包体余量而不是技术优劣，被否掉的路要回头看成熟没有。Image 二期：同一批 bug 反复出在状态机边界上，说明缺的是状态机不是补丁。字体加载：缓存 key 必须能区分版本，最优解常常在构建期而不是运行期。文本渐变：搬开源实现先列出它的平台假设，把假设换成结构性判断而不是机型名单。安全区域：一个值算不对时先问信息在哪一层已知，不在自己这层就明确划出去。背景重构：照上游抄要抄职责划分，发现上游的写法更笨时就用更好的写法并写下来。Touch 指针：协议要按以后一定有的形态定结构，MVP 只在数量上做减法。Android 17 适配：适配的第一问是线上还有没有流量，没有流量的该进删除清单。补属性：危险不是漏做而是属性收下了却不生效，补协议与补行为要同批排期。触摸新架构：绕开原生就要一并接管它的隐式收益，接管清单不写全就会以缺陷的形式回来。实名调研：交机制的方案验收标准是外人能独立接入一次，所以要有可运行样例。差异扫描：diff 查得出不同，查不出两边都错，要配一路不依赖对照物的审查。</desc>
+  <desc>十八行两列的清单。左列是方案，右列是这句话能在下一次同类工作里直接用上的判断。Yoga 引入：把补一个属性重定义成换掉一个依赖，一个动作拿三份收益。Lottie：相近窗口出现的新能力先看能否共用一层再逐个决策。字体路径：分歧点是复杂度放在哪一层时，先定接口再定数据形状。图片重构：本地版继承开源版的失效信号是子类里出现大量 super 调用。Android 升 yoga：引入原生库必须用 readelf 把 so 依赖链列出来。鸿蒙升 yoga：上游给了兼容开关就等于拿到安全网，不用它等于没升级。SVG：包体与三端维护成本一起算，统一引擎要按实装与兼容性重评。Image 二期：同一批 bug 反复出在状态机边界上，说明缺的是状态机不是补丁。字体加载：缓存 key 必须能区分版本，最优解常常在构建期而不是运行期。文本渐变：搬开源实现先列出它的平台假设，把假设换成结构性判断而不是机型名单。安全区域：一个值算不对时先问信息在哪一层已知，不在自己这层就明确划出去。背景重构：照上游抄要抄职责划分，发现上游的写法更笨时就用更好的写法并写下来。Touch 指针：协议要按以后一定有的形态定结构，MVP 只在数量上做减法。Android 17 适配：适配的第一问是线上还有没有流量，没有流量的该进删除清单。补属性：危险不是漏做而是属性收下了却不生效，补协议与补行为要同批排期。触摸新架构：绕开原生就要一并接管它的隐式收益，接管清单不写全就会以缺陷的形式回来。实名调研：交机制的方案验收标准是外人能独立接入一次，所以要有可运行样例。差异扫描：diff 查得出不同，查不出两边都错，要配一路不依赖对照物的审查。</desc>
 
   <text x="24" y="16" font-size="12" font-weight="500" fill="#1f2328" dominant-baseline="central">每份方案各留一句能带走的判断</text>
 
@@ -1050,7 +1053,7 @@
     <text x="32" y="167" font-size="9" dominant-baseline="central">1.31 鸿蒙升 yoga</text>
     <text x="164" y="167" dominant-baseline="central">上游给了兼容开关就等于拿到安全网，不用它等于没升级</text>
     <text x="32" y="187" font-size="9" dominant-baseline="central">1.32 SVG</text>
-    <text x="164" y="187" dominant-baseline="central">选型判据是宿主包体余量而非技术优劣；被否掉的路要回头看成熟没有</text>
+    <text x="164" y="187" dominant-baseline="central">包体与三端维护成本一起算；统一引擎要按实装与兼容性重评</text>
     <text x="32" y="207" font-size="9" dominant-baseline="central">1.32 Image 二期</text>
     <text x="164" y="207" dominant-baseline="central">同一批 bug 反复出在状态机边界上，说明缺的是状态机不是补丁</text>
     <text x="32" y="227" font-size="9" dominant-baseline="central">1.33 字体加载</text>
@@ -1135,8 +1138,8 @@
 </tr>
 <tr>
 <td><strong>SVG / Lottie</strong>（3.2）</td>
-<td><code>resvg</code>/<code>usvg</code> 最新 0.48.1（2026-08-02），0.48 起文本栈从 <code>ttf-parser</code>+<code>rustybuzz</code> 换成 <code>skrifa</code>+<code>harfrust</code>，官方提示体积可能 +500KB；<code>thorvg</code> v1.1.2（2026-09-18）；<code>react-native-svg</code> 15.15.5（Fabric 自 13.0.0 起，<code>&gt;=15.13.0</code> 对应 RN <code>&gt;=0.78</code>）；Skia 的 <code>SkSVGDOM</code> 需显式注入字体管理器，不注入就不显示文本。Lottie 侧 <code>lottie-android</code> 6.7.1、<code>lottie-ios</code> 4.6.1（4.6.0 起要求 Xcode 16 / Swift 6）；LottieFiles 官方的 Rust 运行时 <code>dotlottie-rs</code> v0.1.58 <strong>渲染器就是 ThorVG</strong>，但 README 写明 crates.io 上的是过期 alpha、要用 git 依赖并带 C++ 工具链</td>
-<td><strong>坐实并给「回头看」一个落点</strong>：① 当初否掉 resvg / thorvg 的理由到 2026 仍是理由（resvg 的文本栈刚换过一轮、体积又上一档；thorvg 的 Rust 绑定自述不可生产）；② 「Lottie 与 SVG 本可共用引擎」这条现在有具体形态了 —— 官方 Rust 运行时确实用 ThorVG 同时吃两者，属上游在生产里用的路线，但分发形态说明代价不小</td>
+<td>上轮记录的其它生态版本：<code>resvg</code>/<code>usvg</code> 0.48.1、<code>react-native-svg</code> 15.15.5、<code>lottie-android</code> 6.7.1、<code>lottie-ios</code> 4.6.1，本次不重核它们。ThorVG 本轮核实为 <a href="https://github.com/thorvg/thorvg/releases/tag/v1.1.2" target="_blank" rel="noopener">v1.1.2</a>（2026-09-18）；其 C++ 核心同时提供 SVG 与 Lottie loader。LottieFiles 的 <a href="https://github.com/LottieFiles/dotlottie-rs/blob/main/README.md" target="_blank" rel="noopener">dotlottie-rs README</a> 确认使用 ThorVG，但运行时的格式能力不能直接等同于底层引擎的全部能力</td>
+<td><strong>修正前轮判断</strong>：① 第三方 Rust 绑定的 WIP 声明只限定该绑定，不能推出引擎或三端统一渲染不可行。② SVG/Lottie 可共用核心的证据来自 ThorVG 自身的 loader 与 API；dotlottie-rs 仅在此证明 Lottie 的接入路线，不据此断言它也接收 SVG。③ 共用引擎是值得重评的方向，是否兼容现有素材、能否移除旧依赖、净增多少包体都待实测；当年错过的是合并评估的时机（见 3.2），不是缺少 ThorVG 信息</td>
 </tr>
 <tr>
 <td><strong>安全区域与取窗口尺寸</strong>（3.5）</td>
@@ -1150,8 +1153,54 @@
 </tr>
 </tbody>
 </table></div>
-<p>落到动作，这一轮对账只产生三条修改：</p>
-<ol><li><strong><code>fit_start</code>/<code>fit_end</code> 的对齐目标写错了对象</strong>（3.3 图片重构）。它们是 Android <code>ImageView.ScaleType</code> 的值，RN 的 <code>resizeMode</code> 只有六个值、不含这两个；这一项的验收应以 RN 为准，而不是以原生 ImageView 为准。</li><li><strong><code>YGErrata</code> 的价值在 3.1 里被低估了</strong>。它不只是「鸿蒙没用上的一个开关」，而是上游为下游保留旧行为的正规机制、RN 自己在用；「直接升级无 AB」的端最该拿它当安全网。</li><li><strong>「比上游做得好」的两条要标注证据等级</strong>（3.3 背景重构）。观察者模式优于手动 <code>invalidate</code>、clipPath 裁梯形替代不规则四边形，这两条本次都没读到上游源码，应按「我们的判断」表述，不能写成已核实的对照结论。</li></ol>
+<p>落到动作，这一轮对账与复核一共产生五条修改：</p>
+<ol><li><strong><code>fit_start</code>/<code>fit_end</code> 的对齐目标写错了对象</strong>（3.3 图片重构）。它们是 Android <code>ImageView.ScaleType</code> 的值，RN 的 <code>resizeMode</code> 只有六个值、不含这两个；这一项的验收应以 RN 为准，而不是以原生 ImageView 为准。</li><li><strong><code>YGErrata</code> 的价值在 3.1 里被低估了</strong>。它不只是「鸿蒙没用上的一个开关」，而是上游为下游保留旧行为的正规机制、RN 自己在用；「直接升级无 AB」的端最该拿它当安全网。</li><li><strong>「比上游做得好」的两条要标注证据等级</strong>（3.3 背景重构）。观察者模式优于手动 <code>invalidate</code>、clipPath 裁梯形替代不规则四边形，这两条本次都没读到上游源码，应按「我们的判断」表述，不能写成已核实的对照结论。</li><li><strong>「共用引擎」那条的归因要改（复核时补充）</strong>（3.2 Lottie）。原文写「两个决策分开做就看不到这个交集」，复核时确认信息并不缺——1.32 的 SVG 选型表里就列着 thorvg。真正缺的是横向对账的动作，所以下面的规则要落在「相近版本窗口内合并评估」，而不是「下次多调研」。</li><li><strong>ThorVG 的绑定状态不能代替引擎与三端集成的判断（2026-10-15 复核）</strong>（3.2 SVG）。保留当年包体约束，撤回「三端统一渲染仍未成熟」和「成熟后自动降为换实现」两条推论；重评要同时覆盖实装净增量、共用核心的维护收益、业务素材与三端输出。</li></ol>
+<h3>5.1 ThorVG 回头看：保留统一渲染目标，重新验证落地条件</h3>
+<p><strong>本轮结论：ThorVG 值得重新进入候选，现有证据还不足以决定替换。</strong> 一份 SVG 解析与光栅化核心能减少各端重复实现；平台视图、生命周期、缓冲区展示仍要适配。这里评估的是 SVG 能力，不能据此扩大为整个 Recce UI 已经三端统一。下表的一手材料在 2026-10-15 读取；稳定版源码锁定 v1.1.2，建议与验收动作均未在宿主中执行。</p>
+<div class="tw"><table>
+<thead><tr>
+<th>判断</th>
+<th>直接证据与边界</th>
+<th>重评动作</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>引擎与 Rust 绑定要分开判</strong></td>
+<td>官方正式版是 <a href="https://github.com/thorvg/thorvg/releases/tag/v1.1.2" target="_blank" rel="noopener">ThorVG 1.1.2</a>（2026-09-18）。第三方 <a href="https://github.com/goyox86/thorvg-rs/releases/tag/thorvg-v0.6.0" target="_blank" rel="noopener">thorvg-rs 0.6.0</a> 已于北京时间 2026-10-14 发布，跟踪 ThorVG 1.1.2；其 <a href="https://github.com/goyox86/thorvg-rs/blob/thorvg-v0.6.0/README.md" target="_blank" rel="noopener">README</a> 仍提示尚不可用于生产，且明确不隶属 ThorVG 项目</td>
+<td>不再以「0.5.1 的绑定未成熟」否决整个方向。分别评估第三方绑定与自有最小 C API 封装的维护代价；后者也要承担内存所有权、线程与错误处理</td>
+</tr>
+<tr>
+<td><strong>共享核心有直接接口支撑</strong></td>
+<td><a href="https://github.com/thorvg/thorvg/blob/v1.1.2/src/bindings/capi/thorvg_capi.h" target="_blank" rel="noopener">官方 C API</a> 提供 <code>tvg_picture_load_data</code>、<code>tvg_swcanvas_set_target</code>，输入字节、输出调用方持有的像素缓冲区；它不是要求各端再实现一遍 SVG 标签</td>
+<td>验证「统一资源字节 → 共用 ThorVG 解析与 CPU 光栅化 → 各端显示缓冲区」这条路径；把业务属性和资源规则留在同一个组件契约里</td>
+</tr>
+<tr>
+<td><strong>Android/iOS 有构建入口；鸿蒙仍缺接入证明</strong></td>
+<td>v1.1.2 内有 <a href="https://github.com/thorvg/thorvg/blob/v1.1.2/.github/workflows/build_android.yml" target="_blank" rel="noopener">Android 构建工作流</a> 与 <a href="https://github.com/thorvg/thorvg/blob/v1.1.2/.github/workflows/build_ios.yml" target="_blank" rel="noopener">iOS 构建工作流</a>。本次未取得鸿蒙 Native 构建、Recce 集成及真机运行的直接证据；C++ 可移植性不能代替验证</td>
+<td>鸿蒙先交最小样例：编译、加载、输入同一 SVG、展示输出并正确释放；与另两端统一版本和功能配置，再测生命周期与线程行为</td>
+</tr>
+<tr>
+<td><strong>一套核心更利于一致；像素完全相同仍要验收</strong></td>
+<td>C API 明确暴露宽高、stride、颜色格式和字体加载入口；API 文档中对输出一致的预期不是 Recce 三端实测结果。不同后端、字体和宿主合成条件需要分别控制</td>
+<td>先用相同版本、CPU 后端、素材与字体字节、物理像素尺寸及颜色格式比较输出缓冲区；再比最终显示，单独定位缩放与合成差异。记录差异指标和阈值，不预先许诺零差异</td>
+</tr>
+<tr>
+<td><strong>SVG 支持子集必须覆盖真实素材</strong></td>
+<td><a href="https://github.com/thorvg/thorvg/blob/v1.1.2/README.md#svg" target="_blank" rel="noopener">稳定版说明</a> 以 SVG Tiny 为目标，并列出动画、交互、多媒体等限制；<a href="https://github.com/thorvg/thorvg/wiki/SVG-Support" target="_blank" rel="noopener">官方支持表</a> 列标签和属性，不能当作完整浏览器 SVG 实现</td>
+<td>用业务素材逐项验 path、渐变、clip/mask、文字、内嵌图片等实际用法；同测现有 Native 输出，区分「三端一致」与「兼容旧表现」，不把图标样例通过当作全部通过</td>
+</tr>
+<tr>
+<td><strong>包体可以裁剪，实装净增量必须重测</strong></td>
+<td><a href="https://github.com/thorvg/thorvg/blob/v1.1.2/meson_options.txt" target="_blank" rel="noopener">v1.1.2 构建选项</a> 可选 CPU、loader、C API、线程与 SIMD；<code>extra</code> 默认含 <code>lottie_exp</code> 和 <code>openmp</code>。官方约 170KB 是核心库自述，未给出可与当年约 +600KB 对齐的宿主增量口径</td>
+<td>先测 CPU + SVG 的所需功能集，按素材保留字体/图片 loader；显式关闭不需要的功能。按 ABI、release、链接方式、压缩前后记录宿主增量，检查 C++ 运行库、封装与新旧库共存，不能只看库文件</td>
+</tr>
+<tr>
+<td><strong>SVG/Lottie 共用要算替换后的净账</strong></td>
+<td><a href="https://github.com/thorvg/thorvg/blob/v1.1.2/meson_options.txt" target="_blank" rel="noopener">稳定版构建选项</a> 同时列出 <code>svg</code> 与 <code>lottie</code> loader，证明可以共用引擎；它不证明已有动画资源与播放行为兼容，也不证明旧库能被移除</td>
+<td>分开测 SVG 单用和 SVG/Lottie 共用两种集成；列清实际可删除的依赖。连同三端维护、回归与迁移投入比较，保留切换开关和回退路径</td>
+</tr>
+</tbody>
+</table></div>
 <h2>六、待核实</h2>
 <div class="tw"><table>
 <thead><tr>
@@ -1161,11 +1210,15 @@
 <tbody>
 <tr>
 <td>数字全部照抄原文</td>
-<td>18 份方案引用的数字未复算；Yoga 包体存在两个口径（428.52KB 与 489.52KB），本文沿用原文各自写法，未做取舍</td>
+<td>18 份方案的历史数字未复算；Yoga 包体有两个口径（428.52KB 与 489.52KB），沿用原文各自写法。ThorVG 约 +600KB、复杂图 52ms 也仅是当年记录；本次没有宿主移动端构建或性能复测</td>
 </tr>
 <tr>
 <td>「更优解」的性质</td>
-<td>是分析结论不是原文内容。其中两条外部事实已核实：Yoga 最新发布版仍是 3.2.1（2024-12-13）；thorvg 的 Rust 绑定 2026 年已发到 0.5.1 但自述尚不可生产。第五节另核了一批（RN 命中实现、上游 Drawable 目录、resizeMode 取值、errata 机制、字体与 SVG/Lottie 版本），其余属工程取舍分析，没有实测支撑</td>
+<td>是分析结论不是原文内容。Yoga 与 RN 等上游事实沿用前次复核；ThorVG 的版本、接入路径与构建选项在 2026-10-15 重核，绑定的 WIP 声明只能限定该绑定，不能否定引擎。「Lottie 与 SVG 可共用引擎」有引擎层证据且经当事人确认，但迁移兼容性、净减包与 Recce 三端像素一致均未实测。其余工程取舍仍不等于实测结论</td>
+</tr>
+<tr>
+<td>ThorVG 重新评估的缺口</td>
+<td>尚缺当前宿主包体预算、三端固定版本与裁剪配置的实装增量、真实业务 SVG/字体资源集、鸿蒙接入验证，以及渲染缓冲区和最终显示两层的三端对照；切换前还要验证旧组件契约与灰度回退</td>
 </tr>
 <tr>
 <td>部分表格有截断</td>
