@@ -17,3 +17,6 @@ site/dist/
 .env
 .edgeone/*
 .tef_dist/*
+
+# Obsidian 插件程序与本地凭据由各设备安装和保管
+.obsidian/plugins/
