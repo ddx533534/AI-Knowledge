@@ -1,0 +1,36 @@
+<svg viewBox="0 0 680 382" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>react-native-executorch 的分层与三个执行上下文</title>
+  <desc>上层是 hooks 目录下的 18 个 hook，大部分是 use 加任务名的形式，另有 useModel 和 useResourceDownload 这类工具 hook，负责模型下载、缓存与生命周期。中间是 TypeScript 写的任务管线，分布在 llm、cv、nlp、speech 四个扩展下，直接建张量、跑算子、拼自定义流程。下层是 core 目录里的 runtime、model、tensor、schema。再往下是 JSI 与原生 C++ 堆，模型句柄就在原生内存里。三个执行上下文分别是主 JS 线程跑 React 渲染，后台 worklet runtime 跑模型加载与后台推理，UI worklet runtime 跑逐帧处理。Model 与 Tensor 是握着原生指针的 host object，跨 runtime 传句柄零拷贝，并发跑同一个模型会直接抛 RESOURCE_BUSY 而不是写坏内存。</desc>
+
+  <text x="24" y="30" font-size="13" font-weight="500" fill="#2C2C2A">分层与线程：两边都是你熟悉的东西</text>
+
+  <rect x="24" y="46" width="632" height="56" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="40" y="68" font-size="12" font-weight="500" fill="#633806">hooks/ 下 18 个 hook</text>
+  <text x="40" y="88" font-size="11.5" fill="#854F0B">useLLMChatSession、useTextToSpeech、useObjectDetector、usePrivacyFilter 等，管下载、缓存与生命周期</text>
+
+  <rect x="24" y="112" width="632" height="56" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="134" font-size="12" font-weight="500" fill="#0C447C">TypeScript 任务管线：llm / cv / nlp / speech</text>
+  <text x="40" y="154" font-size="11.5" fill="#185FA5">自己建张量、跑算子、拼自定义流程，等于把整条管线写成自己的</text>
+
+  <rect x="24" y="178" width="632" height="56" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="200" font-size="12" font-weight="500" fill="#0C447C">core：runtime、model、tensor、schema</text>
+  <text x="40" y="220" font-size="11.5" fill="#185FA5">核心 API 全部带 'worklet' 指令，wrapAsync 把同步函数派发到后台线程</text>
+
+  <rect x="24" y="244" width="632" height="42" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="270" font-size="12" font-weight="500" fill="#2C2C2A">JSI 与原生 C++ 堆：Model 与 Tensor 是握着原生指针的 host object</text>
+
+  <rect x="24" y="300" width="200" height="66" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="40" y="322" font-size="11.5" font-weight="500" fill="#27500A">主 JS 线程</text>
+  <text x="40" y="342" font-size="11" fill="#3B6D11">React 渲染与状态</text>
+  <text x="40" y="358" font-size="11" fill="#3B6D11">同步操作交给 wrapAsync</text>
+
+  <rect x="240" y="300" width="200" height="66" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="256" y="322" font-size="11.5" font-weight="500" fill="#27500A">后台 worklet runtime</text>
+  <text x="256" y="342" font-size="11" fill="#3B6D11">模型加载与后台推理</text>
+  <text x="256" y="358" font-size="11" fill="#3B6D11">默认 defaultWorkletRuntime</text>
+
+  <rect x="456" y="300" width="200" height="66" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="472" y="322" font-size="11.5" font-weight="500" fill="#27500A">UI worklet runtime</text>
+  <text x="472" y="342" font-size="11" fill="#3B6D11">逐帧处理，如相机帧处理器</text>
+  <text x="472" y="358" font-size="11" fill="#3B6D11">直接同步调用，不等 Promise</text>
+</svg>

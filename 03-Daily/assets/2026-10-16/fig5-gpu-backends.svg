@@ -1,0 +1,33 @@
+<svg viewBox="0 0 680 384" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>端侧推理与矢量渲染在同一天改同一批 GPU 后端</title>
+  <desc>llama.cpp v0.7.0 在 2026-10-16 01:15 发布，给留在主机内存里的 MoE 专家加了一层显存 LRU 缓存，参数是 moe-cache-mib，官方说专家被卸载到显存后解码最多快约 2.2 倍，这层缓存还跨多张 GPU 共享，服务端默认端口从 8080 改成 9931。ggml v0.27.0 在同一天早些时候发布，给各后端补快速路径，Vulkan 上做对 L2 友好的 coopmat2 调度，Metal 上加 BF16 的 flash attention，CPU 上加 KleidiAI SME2 与 AVX2，Hexagon 上重做 DMA 与 HVX 拷贝。ThorVG 1.1.3 在 2026-10-16 01:12 发布，加了锥形渐变和动态模糊，WebGPU 后端去掉冗余的 stencil 批次，描边最快提速约 30%，OpenGL 后端的不透明描边最快 2 倍，CPU 侧 SIMD 上到 AVX2 并默认开启。</desc>
+
+  <text x="24" y="30" font-size="13" font-weight="500" fill="#2C2C2A">2026-10-16 凌晨两小时里发的三个版本</text>
+
+  <rect x="24" y="48" width="308" height="176" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="72" font-size="12" font-weight="500" fill="#0C447C">llama.cpp v0.7.0</text>
+  <text x="40" y="90" font-size="11" fill="#185FA5">2026-10-16 01:15（GMT+8）</text>
+  <text x="40" y="116" font-size="11.5" fill="#0C447C">MoE 专家显存 LRU 缓存</text>
+  <text x="40" y="134" font-size="11" fill="#185FA5">参数 --moe-cache-mib</text>
+  <text x="40" y="158" font-size="11.5" fill="#0C447C">专家卸载到显存后解码最多快约 2.2 倍</text>
+  <text x="40" y="182" font-size="11.5" fill="#0C447C">这层缓存跨多张 GPU 共享</text>
+  <text x="40" y="206" font-size="11.5" fill="#0C447C">服务端默认端口 8080 改成 9931</text>
+
+  <rect x="348" y="48" width="308" height="176" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="364" y="72" font-size="12" font-weight="500" fill="#27500A">ggml v0.27.0</text>
+  <text x="364" y="90" font-size="11" fill="#3B6D11">2026-10-15 21:15（GMT+8）</text>
+  <text x="364" y="116" font-size="11.5" fill="#27500A">Vulkan：对 L2 友好的 coopmat2 调度</text>
+  <text x="364" y="140" font-size="11.5" fill="#27500A">Metal：BF16 的 flash attention 内核</text>
+  <text x="364" y="164" font-size="11.5" fill="#27500A">CPU：KleidiAI SME2 矩阵乘、AVX2 Q2_0</text>
+  <text x="364" y="188" font-size="11.5" fill="#27500A">Hexagon：DMA 与 HVX 拷贝重做</text>
+  <text x="364" y="212" font-size="11.5" fill="#27500A">SYCL：分组 MoE 的 XMX GEMM</text>
+
+  <rect x="24" y="238" width="632" height="88" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="40" y="262" font-size="12" font-weight="500" fill="#633806">ThorVG 1.1.3　2026-10-16 01:12（GMT+8）</text>
+  <text x="40" y="284" font-size="11.5" fill="#854F0B">新增锥形渐变与动态模糊场景效果；WebGPU 后端去掉冗余 stencil 批次，描边最快提速 约 30%</text>
+  <text x="40" y="304" font-size="11.5" fill="#854F0B">OpenGL 后端的不透明描边走 stencil 批次，最快 2 倍；CPU 侧 SIMD 上到 AVX2 并默认开启</text>
+  <text x="40" y="322" font-size="11.5" fill="#854F0B">另一个和渲染有关的接口：画布脏区域，用来做局部更新</text>
+
+  <rect x="24" y="338" width="632" height="36" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="360" font-size="11.5" fill="#2C2C2A">这两条线用的是同一批后端：Vulkan、Metal、WebGPU、SIMD，一边画矢量，一边跑模型</text>
+</svg>

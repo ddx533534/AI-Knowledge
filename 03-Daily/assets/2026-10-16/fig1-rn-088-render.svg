@@ -1,0 +1,43 @@
+<svg viewBox="0 0 680 400" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>React Native 0.88.0 里跟渲染有关的改动分三类</title>
+  <desc>第一类是去掉实验前缀的样式，backgroundSize、backgroundPosition、backgroundRepeat 三个属性名不再带 experimental_。第二类是补齐的能力，fontVariationSettings 在 Text 和 TextInput 上补齐并覆盖 Android 与 iOS，radial-gradient 的 at 位置修好。第三类是默认关闭的新挂载路径，pull model 在 C++ 里走通了但由 enableMountingCoordinatorPullModelAndroid 这个开关控制，Java 侧只摆了 PullTransactionMountItem 和 FabricUIManager.onTransactionAvailable 两个空管道。底部一行是同一版带上的 Metro、React 与 Hermes 版本。</desc>
+
+  <text x="24" y="30" font-size="13" font-weight="500" fill="#2C2C2A">React Native 0.88.0，2026-10-16 06:37（GMT+8）</text>
+
+  <rect x="24" y="46" width="200" height="196" rx="10" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="40" y="70" font-size="12" font-weight="500" fill="#27500A">去掉实验前缀</text>
+  <text x="40" y="96" font-size="11.5" fill="#3B6D11">backgroundSize</text>
+  <text x="40" y="118" font-size="11.5" fill="#3B6D11">backgroundPosition</text>
+  <text x="40" y="140" font-size="11.5" fill="#3B6D11">backgroundRepeat</text>
+  <text x="40" y="172" font-size="11" fill="#27500A">三个属性名不再带</text>
+  <text x="40" y="190" font-size="11" fill="#27500A">experimental_ 前缀</text>
+  <text x="40" y="220" font-size="11" fill="#3B6D11">改了名字，没改行为</text>
+
+  <rect x="240" y="46" width="200" height="196" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="256" y="70" font-size="12" font-weight="500" fill="#0C447C">补齐的能力</text>
+  <text x="256" y="96" font-size="11.5" fill="#185FA5">fontVariationSettings</text>
+  <text x="256" y="114" font-size="11" fill="#185FA5">Text / TextInput</text>
+  <text x="256" y="132" font-size="11" fill="#185FA5">Android 与 iOS 都覆盖</text>
+  <text x="256" y="158" font-size="11.5" fill="#185FA5">radial-gradient 的 at</text>
+  <text x="256" y="176" font-size="11" fill="#185FA5">位置之前被忽略</text>
+  <text x="256" y="202" font-size="11.5" fill="#185FA5">PlatformColor 加惰性回退</text>
+  <text x="256" y="220" font-size="11" fill="#185FA5">原生 token 解析不出来时兜底</text>
+
+  <rect x="456" y="46" width="200" height="196" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="472" y="70" font-size="12" font-weight="500" fill="#633806">默认关闭的新挂载路径</text>
+  <text x="472" y="96" font-size="11.5" fill="#854F0B">pull model 在 C++ 走通</text>
+  <text x="472" y="114" font-size="11" fill="#854F0B">开关是</text>
+  <text x="472" y="132" font-size="11" fill="#854F0B">enableMountingCoordinator</text>
+  <text x="472" y="148" font-size="11" fill="#854F0B">PullModelAndroid</text>
+  <text x="472" y="174" font-size="11.5" fill="#854F0B">Java 侧只摆了空管道</text>
+  <text x="472" y="192" font-size="11" fill="#854F0B">PullTransactionMountItem</text>
+  <text x="472" y="210" font-size="11" fill="#854F0B">挂载推迟到 root 附着之后</text>
+
+  <rect x="24" y="258" width="632" height="60" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="280" font-size="12" font-weight="500" fill="#2C2C2A">同一版带上的版本：Metro 最低 0.87.1、React 19.3.0、Hermes 260318099.0.4</text>
+  <text x="40" y="302" font-size="11.5" fill="#444441">修了一条布局相关的崩溃：ViewManager 用 ReactProp 实现 DimensionValue 属性时报 YogaValue 未识别</text>
+
+  <rect x="24" y="334" width="632" height="46" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="352" font-size="11.5" fill="#2C2C2A">升级要看的一句：三个样式属性改了名属于重命名，pull model 是开关控制的新路径，两条都不要求你立刻动代码</text>
+  <text x="40" y="370" font-size="11.5" fill="#444441">但 Metro 有最低版本要求，升级项目要跟着动构建链</text>
+</svg>

@@ -1,0 +1,34 @@
+<svg viewBox="0 0 680 372" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>两个编排框架在 2026-10-15 同一天改动「存下来的状态」</title>
+  <desc>左边是微软 agent-framework 的 python-1.22.0：1.22 的运行时装得下更早版本写的记录，但旧版本运行时读不了含 hosted 或 merge_mode 的新记录，滚动发布期间新旧 worker 不能共用同一个存储，回滚也不允许。右边是 OpenAI 的 openai-agents-python v0.24.0：RunState 快照的写入 schema 从 1.18 升到 1.21，一部分以前能读的 checkpoint 改成安全失败，存量的运行要用原来的 SDK 和原来的 agent 定义跑完。底部一行是两家的共同点：状态写出去之后，能不能读回来本身成了版本问题。</desc>
+
+  <text x="24" y="30" font-size="13" font-weight="500" fill="#2C2C2A">同一天，两个编排框架都在改「存下来的状态」</text>
+
+  <rect x="24" y="46" width="308" height="240" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="70" font-size="12" font-weight="500" fill="#0C447C">agent-framework python-1.22.0</text>
+  <text x="40" y="88" font-size="11" fill="#185FA5">2026-10-15 09:54Z</text>
+  <text x="40" y="114" font-size="11.5" fill="#0C447C">1.22 读得下更早版本写的记录</text>
+  <text x="40" y="140" font-size="11.5" fill="#0C447C">旧运行时读不了新记录</text>
+  <text x="40" y="158" font-size="11" fill="#185FA5">条件是记录里含 hosted 或 merge_mode</text>
+  <text x="40" y="184" font-size="11.5" fill="#0C447C">滚动发布期间不许新旧 worker 混跑</text>
+  <text x="40" y="202" font-size="11" fill="#185FA5">同一个受影响的存储</text>
+  <text x="40" y="228" font-size="11.5" fill="#0C447C">回滚也不允许，除非新状态被隔离或迁移过</text>
+  <text x="40" y="254" font-size="11.5" fill="#0C447C">两条破坏性改动</text>
+  <text x="40" y="272" font-size="11" fill="#185FA5">replay 与 stream-merge 语义统一；workflow 的续跑与中断绑到 resolved thread ID</text>
+
+  <rect x="348" y="46" width="308" height="240" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="364" y="70" font-size="12" font-weight="500" fill="#633806">openai-agents-python v0.24.0</text>
+  <text x="364" y="88" font-size="11" fill="#854F0B">2026-10-15 02:37Z</text>
+  <text x="364" y="114" font-size="11.5" fill="#633806">RunState 写入 schema 1.18 升到 1.21</text>
+  <text x="364" y="140" font-size="11.5" fill="#633806">一部分以前读得动的 checkpoint</text>
+  <text x="364" y="158" font-size="11" fill="#854F0B">现在改成安全失败，不再猜 agent 归属</text>
+  <text x="364" y="184" font-size="11.5" fill="#633806">存量运行要回到原来的 SDK 和 agent 代码</text>
+  <text x="364" y="202" font-size="11" fill="#854F0B">agent 定义和 hook 顺序都不能改</text>
+  <text x="364" y="228" font-size="11.5" fill="#633806">新任务起名要用不重复的名字</text>
+  <text x="364" y="254" font-size="11.5" fill="#633806">这一版整体规模</text>
+  <text x="364" y="272" font-size="11" fill="#854F0B">111 个文件改动，+15,444 / -1,412</text>
+
+  <rect x="24" y="302" width="632" height="54" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="324" font-size="12" font-weight="500" fill="#2C2C2A">两家动作相反，问题同一个：状态一旦落盘，读回来这件事就变成版本问题</text>
+  <text x="40" y="344" font-size="11.5" fill="#444441">一家保证新版读旧版，一家直接让读不动的旧快照报错，都不再默默将就</text>
+</svg>
