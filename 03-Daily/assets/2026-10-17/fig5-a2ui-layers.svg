@@ -1,0 +1,55 @@
+<svg viewBox="0 0 680 438" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>a2ui 的分层：一份载荷、一份可信组件清单、各端渲染实现</title>
+  <desc>最上面是模型产出的载荷，一份声明式 JSON，内容是扁平的组件列表加 ID 引用，这样模型可以一次只写变化的那几个组件。中间是客户端维护的可信组件清单，落在 catalogs/basic/v1/catalog.json，模型只能请求清单里有的组件，越界就渲染不出来。最下面是各端的渲染实现：TypeScript 侧有 renderers/react、lit、angular、markdown-it 四个，Dart 侧是 dart/a2ui_flutter 的 Flutter widget，Swift 侧是 swift/swiftui 的 SwiftUI view，Kotlin 下目前只有 agent_sdk_legacy。右侧是 2026-10-17 00:12Z 同批发的四个包：a2ui-core 0.4.0、a2ui-agent-sdk 0.9.0，以及从 agent SDK 里搬出去的 a2ui-adk 0.1.0 与 a2ui-a2a 0.1.0；agent SDK 从此不再依赖任何 agent 框架，整个 a2ui.schema 包被删掉。Catalog.with_peer_catalogs(peers) 返回链接到 peers 的新副本、不改原对象，所以 basic catalog 这种共用目录不会被改脏。</desc>
+
+  <text x="24" y="26" font-size="13" font-weight="500" fill="#2C2C2A">a2ui 的分层：载荷、可信清单、各端渲染</text>
+
+  <rect x="24" y="42" width="428" height="66" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="63" font-size="12" font-weight="500" fill="#0C447C">模型产出的载荷：一份声明式 JSON</text>
+  <text x="40" y="83" font-size="11" fill="#185FA5">扁平的组件列表，每个组件带 ID，靠 ID 互相引用</text>
+  <text x="40" y="100" font-size="11" fill="#185FA5">模型可以一次只写变化的那几个组件，客户端边收边画</text>
+
+  <rect x="24" y="118" width="428" height="66" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="40" y="139" font-size="12" font-weight="500" fill="#633806">客户端维护的可信组件清单</text>
+  <text x="40" y="159" font-size="11" fill="#854F0B">catalogs/basic/v1/catalog.json 是清单本体</text>
+  <text x="40" y="176" font-size="11" fill="#854F0B">模型只能请求清单里有的组件，越界就渲染不出来</text>
+
+  <rect x="24" y="194" width="428" height="150" rx="10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="40" y="215" font-size="12" font-weight="500" fill="#085041">各端的渲染实现</text>
+  <text x="40" y="237" font-size="11" fill="#085041">TypeScript：renderers/react · lit · angular · markdown-it</text>
+  <text x="40" y="255" font-size="11" fill="#085041">Dart：dart/a2ui_flutter（Flutter widget）</text>
+  <text x="40" y="273" font-size="11" fill="#085041">Swift：swift/swiftui（SwiftUI view）</text>
+  <text x="40" y="291" font-size="11" fill="#085041">Kotlin：目前只有 kotlin/agent_sdk_legacy</text>
+  <text x="40" y="313" font-size="11" fill="#0F6E56">一份载荷的落点由客户端决定，agent 只描述结构</text>
+  <text x="40" y="331" font-size="11" fill="#0F6E56">README 的说法：safe like data, but expressive like code</text>
+
+  <rect x="468" y="42" width="188" height="302" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="484" y="63" font-size="11.5" font-weight="500" fill="#2C2C2A">2026-10-17 00:12Z</text>
+  <text x="484" y="79" font-size="11" fill="#444441">同批四个包</text>
+  <line x1="484" y1="88" x2="640" y2="88" stroke="#D3D1C7" stroke-width="0.5"/>
+
+  <text x="484" y="108" font-size="11" fill="#0C447C">a2ui-core 0.4.0</text>
+  <text x="484" y="124" font-size="10" fill="#5F5E5A">对外部 $ref 与 peer catalog</text>
+  <text x="484" y="140" font-size="11" fill="#0C447C">a2ui-agent-sdk 0.9.0</text>
+  <text x="484" y="156" font-size="10" fill="#5F5E5A">不再依赖 agent 框架</text>
+  <text x="484" y="172" font-size="11" fill="#0C447C">a2ui-adk 0.1.0（新包）</text>
+  <text x="484" y="188" font-size="10" fill="#5F5E5A">a2ui.adk 搬过来</text>
+  <text x="484" y="204" font-size="11" fill="#0C447C">a2ui-a2a 0.1.0（新包）</text>
+  <text x="484" y="220" font-size="10" fill="#5F5E5A">a2ui.a2a 搬过来</text>
+
+  <line x1="484" y1="232" x2="640" y2="232" stroke="#D3D1C7" stroke-width="0.5"/>
+  <text x="484" y="252" font-size="10.5" fill="#444441">同一版里整个</text>
+  <text x="484" y="266" font-size="10.5" fill="#444441">a2ui.schema 包被删掉，</text>
+  <text x="484" y="280" font-size="10.5" fill="#444441">常量去 a2ui.constants，</text>
+  <text x="484" y="294" font-size="10.5" fill="#444441">工具函数去 a2ui.utils</text>
+
+  <line x1="484" y1="306" x2="640" y2="306" stroke="#D3D1C7" stroke-width="0.5"/>
+  <text x="484" y="326" font-size="10" fill="#A32D2D">两个新包的 release</text>
+  <text x="484" y="340" font-size="10" fill="#A32D2D">正文都写着 PyPI</text>
+  <text x="484" y="352" font-size="10" fill="#A32D2D">还没发布完成</text>
+
+  <text x="24" y="372" font-size="11" fill="#2C2C2A">跨 catalog 引用：catalog 可以引用别的 catalog 里的组件、属性 schema 与函数，</text>
+  <text x="24" y="390" font-size="11" fill="#2C2C2A">写法是 simplified_catalog_v1_0.json#/components/Text 这类外部 $ref。</text>
+  <text x="24" y="408" font-size="11" fill="#2C2C2A">Catalog.with_peer_catalogs(peers) 返回链接到 peers 的新副本，不改原对象；</text>
+  <text x="24" y="426" font-size="11" fill="#5F5E5A">原句：so shared catalogs such as the basic catalog stay unchanged</text>
+</svg>

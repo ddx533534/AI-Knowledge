@@ -1,0 +1,44 @@
+<svg viewBox="0 0 680 344" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>三处改动都在回答同一个问题：一段内容什么时候允许上屏</title>
+  <desc>左栏 assistant-ui 的 @assistant-ui/react 0.15.29：useAssistantFrameHost 在 iframe 被移出页面时销毁 host，frame 里的工具离开模型上下文，未结的调用立刻 reject；iframe 文档变化或重载时清掉 frame 工具与待处理调用。中栏 openui 的 @openuidev/react-ui 0.18.1：保存的侧边栏与主题偏好在 hydration 之后、绘制之前恢复，界面内容在此之前一直隐藏，第一个可见帧就是对的。右栏 AI SDK 的 ai@7.0.143：默认 chat ID 改成首次访问时才生成，渲染期不再读随机值，useChat 因此能预渲染；streamText 另加 experimental_lowMemory 单消费者模式，不要 replay buffer、不保留最终内容。</desc>
+
+  <text x="24" y="28" font-size="13" font-weight="500" fill="#2C2C2A">三处改动，都在往前提「什么时候允许上屏」</text>
+
+  <rect x="24" y="44" width="200" height="186" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="66" font-size="12" font-weight="500" fill="#0C447C">assistant-ui</text>
+  <text x="40" y="84" font-size="10.5" fill="#185FA5">@assistant-ui/react 0.15.29</text>
+  <text x="40" y="110" font-size="11.5" fill="#0C447C">依赖的东西</text>
+  <text x="40" y="128" font-size="11.5" fill="#0C447C">frame 里的工具还在不在</text>
+  <text x="40" y="154" font-size="11.5" fill="#0C447C">判据</text>
+  <text x="40" y="172" font-size="11" fill="#185FA5">绑到 iframe 的存活上</text>
+  <text x="40" y="196" font-size="11" fill="#185FA5">iframe 一移出页面就销毁 host，</text>
+  <text x="40" y="212" font-size="11" fill="#185FA5">工具离开模型上下文，未结调用</text>
+  <text x="40" y="228" font-size="11" fill="#185FA5">立刻 reject；文档重载也清一遍</text>
+
+  <rect x="240" y="44" width="200" height="186" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="256" y="66" font-size="12" font-weight="500" fill="#633806">openui</text>
+  <text x="256" y="84" font-size="10.5" fill="#854F0B">@openuidev/react-ui 0.18.1</text>
+  <text x="256" y="110" font-size="11.5" fill="#633806">依赖的东西</text>
+  <text x="256" y="128" font-size="11.5" fill="#633806">主题和侧边栏偏好对不对</text>
+  <text x="256" y="154" font-size="11.5" fill="#633806">判据</text>
+  <text x="256" y="172" font-size="11" fill="#854F0B">绑到水合完成</text>
+  <text x="256" y="196" font-size="11" fill="#854F0B">偏好在水合后、绘制前恢复，</text>
+  <text x="256" y="212" font-size="11" fill="#854F0B">界面内容在此之前一直藏着，</text>
+  <text x="256" y="228" font-size="11" fill="#854F0B">第一个可见帧就是对的</text>
+
+  <rect x="456" y="44" width="200" height="186" rx="10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="472" y="66" font-size="12" font-weight="500" fill="#085041">AI SDK</text>
+  <text x="472" y="84" font-size="10.5" fill="#0F6E56">ai@7.0.143</text>
+  <text x="472" y="110" font-size="11.5" fill="#085041">依赖的东西</text>
+  <text x="472" y="128" font-size="11.5" fill="#085041">chat ID 稳不稳</text>
+  <text x="472" y="154" font-size="11.5" fill="#085041">判据</text>
+  <text x="472" y="172" font-size="11" fill="#0F6E56">绑到首次访问</text>
+  <text x="472" y="196" font-size="11" fill="#0F6E56">默认 ID 改成首次访问才生成，</text>
+  <text x="472" y="212" font-size="11" fill="#0F6E56">渲染期不再读随机值，useChat</text>
+  <text x="472" y="228" font-size="11" fill="#0F6E56">因此能预渲染</text>
+
+  <rect x="24" y="246" width="632" height="74" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="268" font-size="12" font-weight="500" fill="#2C2C2A">同一个问法：这块界面第一次显示时依赖什么，那个依赖什么时候是确定值</text>
+  <text x="40" y="290" font-size="11.5" fill="#444441">assistant-ui 挑的是资源存活状态，openui 挑的是水合时机，AI SDK 挑的是随机数的时机</text>
+  <text x="40" y="308" font-size="11.5" fill="#444441">同一批还有：assistant-stream 0.3.52 保留服务端中断消息的不完整状态，并丢掉没写完的工具入参缓冲</text>
+</svg>

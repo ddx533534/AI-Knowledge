@@ -1,0 +1,44 @@
+<svg viewBox="0 0 680 416" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>a2ui 仓库里能直接借的四样东西</title>
+  <desc>第一件，把「可信」写成一份组件清单而不是文档：模型能用的组件由 catalogs/basic/v1/catalog.json 定义，位置跟 props 校验一样，只是校验对象从「组件收到什么」变成「模型能请求什么」。第二件，一份清单生成各端代码：tools/build_catalog 从清单产出各端绑定，配 docs/public/guides 下的 renderer-development.md 与 authoring-universal-components.md 成套。第三件，规范、一致性用例和评测数据放在同一个仓库：conformance/ 有 178 个文件，含 streaming_catalog_v0_9.json 与 streaming_parser.yaml；eval/datasets/ 有 core_v0_9_1.yaml、core_v1_0.yaml、multi_turn_conversation_dataset.yaml 加一份 dataset_schema.json，跑在 Inspect AI 上。第四件，编排接入做成可选依赖：agent SDK 不依赖任何框架，ADK 与 A2A 各自成包，a2ui.adk 对 A2A 相关转换器惰性导入，核心的 SendA2uiToClientToolset 不需要装那个 extra。底部一条：增量不靠差量算法，靠扁平组件列表加 ID 引用这个格式本身，catalogs/basic/v1/examples/00_incremental.json 与 31_incremental-dashboard.json 是两个现成用例。</desc>
+
+  <text x="24" y="26" font-size="13" font-weight="500" fill="#2C2C2A">a2ui 里能直接借的四样东西</text>
+
+  <rect x="24" y="40" width="308" height="128" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="62" font-size="12" font-weight="500" fill="#0C447C">1　把「可信」写成一份清单</text>
+  <text x="40" y="84" font-size="11" fill="#185FA5">模型能用的组件由 catalogs/basic/v1/</text>
+  <text x="40" y="100" font-size="11" fill="#185FA5">catalog.json 定义，越界就渲染不出来</text>
+  <text x="40" y="126" font-size="11" fill="#0C447C">位置跟你熟悉的 props 校验一样，</text>
+  <text x="40" y="142" font-size="11" fill="#0C447C">只是校验对象从「组件收到什么」</text>
+  <text x="40" y="158" font-size="11" fill="#0C447C">换成了「模型能请求什么」</text>
+
+  <rect x="348" y="40" width="308" height="128" rx="10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="364" y="62" font-size="12" font-weight="500" fill="#085041">2　一份清单生成各端代码</text>
+  <text x="364" y="84" font-size="11" fill="#0F6E56">tools/build_catalog 从清单产出各端绑定</text>
+  <text x="364" y="106" font-size="11" fill="#085041">省掉「三端的组件名和属性对不上」</text>
+  <text x="364" y="122" font-size="11" fill="#085041">这类对账</text>
+  <text x="364" y="144" font-size="11" fill="#0F6E56">配套文档：renderer-development.md</text>
+  <text x="364" y="158" font-size="11" fill="#0F6E56">与 authoring-universal-components.md</text>
+
+  <rect x="24" y="178" width="308" height="128" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="40" y="200" font-size="12" font-weight="500" fill="#633806">3　验收标准跟实现放一起</text>
+  <text x="40" y="222" font-size="11" fill="#854F0B">conformance/ 有 178 个文件，含</text>
+  <text x="40" y="238" font-size="11" fill="#854F0B">streaming_catalog_v0_9.json 与</text>
+  <text x="40" y="254" font-size="11" fill="#854F0B">streaming_parser.yaml</text>
+  <text x="40" y="276" font-size="11" fill="#633806">eval/datasets/ 三份 YAML 加一份</text>
+  <text x="40" y="292" font-size="11" fill="#633806">dataset_schema.json，跑在 Inspect AI 上</text>
+
+  <rect x="348" y="178" width="308" height="128" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="364" y="200" font-size="12" font-weight="500" fill="#2C2C2A">4　编排接入做成可选依赖</text>
+  <text x="364" y="222" font-size="11" fill="#444441">agent SDK 不依赖任何 agent 框架，</text>
+  <text x="364" y="238" font-size="11" fill="#444441">ADK 与 A2A 各自成包</text>
+  <text x="364" y="260" font-size="11" fill="#444441">a2ui.adk 对 A2A 转换器惰性导入，</text>
+  <text x="364" y="276" font-size="11" fill="#444441">核心的 SendA2uiToClientToolset</text>
+  <text x="364" y="292" font-size="11" fill="#444441">不装那个 extra 也能用</text>
+
+  <rect x="24" y="316" width="632" height="82" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="338" font-size="12" font-weight="500" fill="#0C447C">增量不靠差量算法，靠格式本身</text>
+  <text x="40" y="360" font-size="11" fill="#185FA5">组件是扁平的、每个带 ID，所以「改一个组件」和「加一个组件」在载荷上就是一条语句，不用算差量</text>
+  <text x="40" y="378" font-size="11" fill="#185FA5">用例：catalogs/basic/v1/examples/00_incremental.json 与 31_incremental-dashboard.json</text>
+  <text x="40" y="392" font-size="11" fill="#185FA5">react、lit、angular 的 renderer 里都有对应测试</text>
+</svg>

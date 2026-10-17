@@ -1,0 +1,55 @@
+<svg viewBox="0 0 680 468" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>display:none 的脏标记怎么传到根节点，以及修好之后每帧省下多少</title>
+  <desc>传播链四步：一、隐藏节点的父节点被布局时，zeroOutLayoutRecursively 把隐藏子树归零并把隐藏节点标 clean，但它后代的脏标记留着，Fabric 的 layout() 也不进 display:none 的节点。二、之后每一次克隆隐藏节点的 commit，updateYogaChildren 都会看到那个脏子节点，把隐藏节点和它到根的所有祖先都标脏。三、RootShadowNode::layoutIfNeeded 重跑 layoutTree，包括对整个 surface 每个节点做 roundLayoutResultsToPixelGrid。四、代价主要落在不走 React 的 commit 上：setNativeProps、JS 驱动的 Animated（Fabric 上就是走 setNativeProps）、原生状态更新，以及往 ShadowTree 提交的动画库。改法是跳过 display:none 节点的子节点比较，只保留节点自身的脏检查与子节点数量检查。底部是作者自测的每提交耗时，单位毫秒，取中位数 / p90，环境是 RN 0.87.1 源码编译、iOS 26.5 模拟器、Release、屏幕上 1000 行、120 个 commit 跑 9 次。</desc>
+
+  <text x="24" y="26" font-size="13" font-weight="500" fill="#2C2C2A">一个被隐藏的节点，为什么会把整个 surface 拖下水</text>
+
+  <rect x="24" y="40" width="632" height="44" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="60" font-size="11.5" fill="#0C447C">1　布局隐藏节点的父节点时，zeroOutLayoutRecursively 把隐藏子树归零、隐藏节点标 clean</text>
+  <text x="40" y="77" font-size="11" fill="#185FA5">但后代的脏标记留着；Fabric 的 layout() 同样不进 display:none 的节点</text>
+
+  <rect x="24" y="90" width="632" height="44" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="110" font-size="11.5" fill="#0C447C">2　之后每一次克隆该节点的 commit，updateYogaChildren 看到那个脏子节点</text>
+  <text x="40" y="127" font-size="11" fill="#185FA5">把隐藏节点标脏，连同它到根的所有祖先一起标脏</text>
+
+  <rect x="24" y="140" width="632" height="44" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="40" y="160" font-size="11.5" fill="#0C447C">3　RootShadowNode::layoutIfNeeded 重跑 layoutTree</text>
+  <text x="40" y="177" font-size="11" fill="#185FA5">包含对整个 surface 每个节点做 roundLayoutResultsToPixelGrid</text>
+
+  <rect x="24" y="190" width="632" height="44" rx="10" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+  <text x="40" y="210" font-size="11.5" fill="#791F1F">4　代价落在不走 React 的那类 commit 上</text>
+  <text x="40" y="227" font-size="11" fill="#A32D2D">setNativeProps、JS 驱动的 Animated（Fabric 上就是走 setNativeProps）、原生状态更新、递交 ShadowTree 的动画库</text>
+
+  <rect x="24" y="240" width="632" height="44" rx="10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="40" y="260" font-size="11.5" fill="#085041">改法：跳过 display:none 节点的子节点比较</text>
+  <text x="40" y="277" font-size="11" fill="#0F6E56">保留节点自身的脏检查与子节点数量检查；重新显示会改样式并在 updateYogaProps 里标脏，隐藏期间变过的子节点那时才布局</text>
+
+  <text x="24" y="306" font-size="12" font-weight="500" fill="#2C2C2A">作者自测的每提交耗时（毫秒，取中位数 / p90）</text>
+  <text x="24" y="322" font-size="11" fill="#5F5E5A">环境：RN 0.87.1 源码编译，iOS 26.5 模拟器，Release，屏幕上 1000 行，120 个 commit 跑 9 次</text>
+  <line x1="24" y1="330" x2="656" y2="330" stroke="#D3D1C7" stroke-width="0.5"/>
+  <text x="40" y="346" font-size="10.5" font-weight="500" fill="#5F5E5A">场景</text>
+  <text x="536" y="346" font-size="10.5" font-weight="500" fill="#5F5E5A" text-anchor="end">改前</text>
+  <text x="644" y="346" font-size="10.5" font-weight="500" fill="#5F5E5A" text-anchor="end">改后</text>
+
+  <text x="40" y="364" font-size="10.5" fill="#444441">setNativeProps 打在 display:'none' 父节点里创建的 view 上</text>
+  <text x="536" y="364" font-size="10.5" fill="#791F1F" text-anchor="end">1.06 / 2.02</text>
+  <text x="644" y="364" font-size="10.5" fill="#085041" text-anchor="end">0.15 / 0.21</text>
+
+  <text x="40" y="382" font-size="10.5" fill="#444441">…父节点隐藏期间 React 重渲染过一个兄弟节点之后</text>
+  <text x="536" y="382" font-size="10.5" fill="#791F1F" text-anchor="end">1.01 / 2.06</text>
+  <text x="644" y="382" font-size="10.5" fill="#085041" text-anchor="end">0.16 / 0.20</text>
+
+  <text x="40" y="400" font-size="10.5" fill="#444441">…在隐藏的 &lt;Activity&gt; 里，隐藏期间重渲染过</text>
+  <text x="536" y="400" font-size="10.5" fill="#791F1F" text-anchor="end">1.18 / 2.03</text>
+  <text x="644" y="400" font-size="10.5" fill="#085041" text-anchor="end">0.16 / 0.21</text>
+
+  <text x="40" y="418" font-size="10.5" fill="#444441">display:'none' 父节点里的 view 上跑 JS 驱动的 Animated.loop</text>
+  <text x="536" y="418" font-size="10.5" fill="#791F1F" text-anchor="end">1.09 / 1.95</text>
+  <text x="644" y="418" font-size="10.5" fill="#085041" text-anchor="end">0.13 / 0.17</text>
+
+  <text x="40" y="436" font-size="10.5" fill="#444441">对照：setNativeProps 打在可见父节点里的 view 上</text>
+  <text x="536" y="436" font-size="10.5" fill="#5F5E5A" text-anchor="end">0.19 / 0.23</text>
+  <text x="644" y="436" font-size="10.5" fill="#5F5E5A" text-anchor="end">0.19 / 0.24</text>
+
+  <text x="24" y="460" font-size="11" fill="#5F5E5A">改后的 0.13 到 0.17 毫秒，跟本来就正常的 0.19 毫秒一个量级：隐藏容器里的操作不再比可见容器贵。</text>
+</svg>

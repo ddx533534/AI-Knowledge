@@ -1,0 +1,43 @@
+<svg viewBox="0 0 680 400" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>langgraphjs 一版九个包，都指向 langgraph-sdk 1.12.5 的三处前端状态修复</title>
+  <desc>上层是四个前端框架包 @langchain/react、svelte、vue、angular 版本 1.2.5，它们这一版唯一的改动就是把 langgraph-sdk 升到 1.12.5；另有 langgraph-api 1.5.4、langgraph-cli 1.5.4、langgraph-ui 1.5.4。SDK 1.12.5 里三处修复都关于前端拿到的状态：被 stop() 截断的回复在 run 结束时丢弃、刷新与其它 tab 一致；打开线程时跳过 checkpoint 之前的事件不再重放；线程因多个 interrupt 暂停时 run.start 带 input 返回 invalid_argument。底部是 langgraph 1.5.1 里字段从 DeltaChannel 换成普通 reducer 时保住旧线程的值。</desc>
+
+  <text x="24" y="28" font-size="13" font-weight="500" fill="#2C2C2A">2026-10-17 04:54（GMT+8），langgraphjs 一版九个包</text>
+
+  <rect x="24" y="44" width="240" height="86" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="40" y="66" font-size="12" font-weight="500" fill="#633806">四个前端框架包 @1.2.5</text>
+  <text x="40" y="88" font-size="11.5" fill="#633806">@langchain/react · svelte</text>
+  <text x="40" y="106" font-size="11.5" fill="#633806">@langchain/vue · angular</text>
+  <text x="40" y="124" font-size="11" fill="#854F0B">这一版唯一改动是升级 SDK</text>
+
+  <rect x="24" y="142" width="240" height="60" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="164" font-size="12" font-weight="500" fill="#2C2C2A">另外三个包</text>
+  <text x="40" y="186" font-size="11.5" fill="#444441">langgraph-api 1.5.4 · cli 1.5.4 · ui 1.5.4</text>
+
+  <line x1="268" y1="118" x2="316" y2="118" stroke="#888780" stroke-width="0.8"/>
+  <polygon points="316,114 324,118 316,122" fill="#888780"/>
+  <text x="268" y="108" font-size="10.5" fill="#5F5E5A">升到</text>
+
+  <rect x="328" y="44" width="328" height="176" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="344" y="66" font-size="12" font-weight="500" fill="#0C447C">@langchain/langgraph-sdk@1.12.5</text>
+
+  <text x="344" y="92" font-size="11.5" fill="#0C447C">1 被 stop() 截断的回复不再赖在 useStream 的</text>
+  <text x="344" y="108" font-size="11.5" fill="#0C447C">　messages 里，run 一结束就丢；刷新后不回来，</text>
+  <text x="344" y="124" font-size="11.5" fill="#0C447C">　同一个线程的其它 tab 也一起丢</text>
+
+  <text x="344" y="150" font-size="11.5" fill="#0C447C">2 打开线程时跳过它加载的 checkpoint 之前的事件，</text>
+  <text x="344" y="166" font-size="11.5" fill="#0C447C">　不再把历史事件盖到刚加载的状态上重放</text>
+
+  <text x="344" y="192" font-size="11.5" fill="#0C447C">3 线程因多个 interrupt 暂停时，run.start 带 input</text>
+  <text x="344" y="208" font-size="11.5" fill="#0C447C">　返回 invalid_argument 并保持暂停</text>
+
+  <rect x="24" y="222" width="632" height="72" rx="10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="40" y="244" font-size="12" font-weight="500" fill="#085041">@langchain/langgraph@1.5.1</text>
+  <text x="40" y="266" font-size="11.5" fill="#085041">一个字段从 DeltaChannel 换成普通 reducer（比如 MessagesAnnotation）时，旧线程上已经存下的值要保住：</text>
+  <text x="40" y="284" font-size="11.5" fill="#085041">读的时候从存下来的 writes 重建，下一次 run 是往上加，不是覆盖。</text>
+
+  <rect x="24" y="310" width="632" height="72" rx="10" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="40" y="332" font-size="12" font-weight="500" fill="#2C2C2A">三处修的是一件事：前端拿到的那份状态，别在你看不见的地方被改</text>
+  <text x="40" y="352" font-size="11.5" fill="#444441">判据从「最后一次收到消息」换成「这次 run 还在不在」</text>
+  <text x="40" y="370" font-size="11.5" fill="#444441">子智能体那种作用域视图（useMessages）仍然收完整历史</text>
+</svg>
