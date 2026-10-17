@@ -1,0 +1,533 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2026-10-16 计算机基础复习：并发、TCP、幂等与事务 · Moting 技术笔记</title><style>:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --text: #16181d;
+  --text-2: #454b57;
+  --muted: #858d99;
+  --line: #e7e9ee;
+  --line-2: #d3d8e0;
+  --accent: #2563eb;
+  --accent-soft: #edf2ff;
+  --code-bg: #f5f7fa;
+  --radius: 12px;
+  --side-w: 252px;
+  --col-w: 900px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  font-size: 17px;
+  line-height: 1.85;
+  letter-spacing: .008em;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.skip { position: absolute; left: -9999px; }
+.skip:focus {
+  left: 12px;
+  top: 12px;
+  background: var(--surface);
+  padding: 8px 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  z-index: 9;
+}
+
+/* --------------------------------------------------------------- 骨架 */
+
+.shell { display: flex; align-items: flex-start; min-height: 100vh; }
+
+.col { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+
+main {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: var(--col-w);
+  margin: 0 auto;
+  padding: 56px 44px 0;
+}
+
+/* ------------------------------------------------------------- 左侧栏 */
+
+.side {
+  flex: 0 0 var(--side-w);
+  width: var(--side-w);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+}
+.side-in {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  min-height: 100%;
+  padding: 34px 18px 28px;
+}
+
+.brand { display: flex; align-items: center; gap: 11px; padding: 0 10px; }
+.brand:hover { text-decoration: none; }
+.brand-mark {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+.brand-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
+.brand-name { font-size: 16.5px; font-weight: 650; color: var(--text); }
+.brand-sub { font-size: 12px; color: var(--muted); }
+
+.nav { display: flex; flex-direction: column; gap: 3px; }
+.nav a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  font-size: 15.5px;
+  color: var(--text-2);
+}
+.nav a:hover { background: #f1f3f7; color: var(--text); text-decoration: none; }
+.nav a.on { background: var(--accent-soft); border-color: #dde5fb; color: var(--accent); font-weight: 600; }
+.nav a b { font-size: 12.5px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+.nav a.on b { color: var(--accent); }
+
+.side-foot { margin: auto 0 0; padding: 0 12px; font-size: 12.5px; color: var(--muted); }
+.side-foot b { color: var(--text-2); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------------- 首页 */
+
+.intro { padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.intro h1 { font-size: clamp(28px, 4.6vw, 36px); margin: 0 0 12px; letter-spacing: -.018em; line-height: 1.25; }
+.lede { margin: 0; font-size: 17px; line-height: 1.8; color: var(--text-2); }
+.stats { margin: 14px 0 0; font-size: 14px; color: var(--muted); }
+.stats b { color: var(--text-2); font-weight: 600; }
+.stats a { color: var(--text-2); }
+.stats a:hover { color: var(--accent); text-decoration: none; }
+
+.sec { padding: 42px 0 4px; }
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.sec-head h2 { font-size: 20px; margin: 0; letter-spacing: -.008em; }
+.sec-head h2 a { color: var(--text); }
+.sec-head h2 a:hover { color: var(--accent); text-decoration: none; }
+.sec-head .count { font-size: 13px; color: var(--muted); }
+.sec-intro { margin: 14px 0 0; font-size: 15px; line-height: 1.8; color: var(--text-2); }
+.more { margin: 18px 0 0; font-size: 15px; }
+
+.muted { color: var(--muted); font-size: 14px; margin: 0; }
+
+/* ------------------------------------------------------------ 列表条目 */
+
+.list { display: flex; flex-direction: column; }
+
+.item { display: flex; gap: 26px; padding: 26px 0; border-bottom: 1px solid var(--line); }
+.item:last-child { border-bottom: none; padding-bottom: 8px; }
+
+.item-d {
+  flex: 0 0 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding-top: 5px;
+}
+.item-d time {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.item-b { flex: 1 1 auto; min-width: 0; }
+.item-t { display: block; font-size: 19px; font-weight: 630; line-height: 1.55; color: var(--text); letter-spacing: -.006em; }
+.item-t:hover { color: var(--accent); text-decoration: none; }
+.item-s { margin: 9px 0 0; font-size: 15.5px; color: var(--text-2); line-height: 1.8; }
+.item-m { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
+
+.tag {
+  display: inline-block;
+  font-size: 12.5px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 999px;
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------- 栏目 / 文章 */
+
+.page-t { font-size: clamp(26px, 4.2vw, 32px); margin: 14px 0 10px; letter-spacing: -.018em; line-height: 1.3; }
+.crumb { margin: 0 0 20px; font-size: 13.5px; color: var(--muted); }
+.crumb a { color: var(--muted); }
+.crumb a:hover { color: var(--accent); text-decoration: none; }
+.crumb span { margin: 0 7px; }
+
+/* 文章正文区：把长文包进一块安静的白面，边缘留白撑开，降低四周干扰 */
+.post {
+  margin-top: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 40px 52px 52px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .03), 0 12px 32px -18px rgba(16, 24, 40, .12);
+}
+.post-t { font-size: clamp(27px, 4.4vw, 34px); line-height: 1.32; margin: 8px 0 14px; letter-spacing: -.02em; }
+.post-m {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 0 0 34px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+/* -------------------------------------------------------------- 正文 */
+
+.prose { font-size: 17.5px; line-height: 1.9; color: #1f2229; letter-spacing: .01em; }
+.prose > *:first-child { margin-top: 0; }
+.prose h1, .prose h2, .prose h3, .prose h4 { line-height: 1.45; margin: 2.1em 0 .8em; letter-spacing: -.012em; color: #14161a; }
+.prose h1 { font-size: 27px; }
+.prose h2 { font-size: 24px; padding-bottom: .35em; border-bottom: 1px solid var(--line); }
+.prose h3 { font-size: 20px; }
+.prose h4 { font-size: 17.5px; color: var(--text-2); }
+.prose p { margin: 0 0 1.3em; }
+.prose ul, .prose ol { margin: 0 0 1.3em; padding-left: 1.5em; }
+.prose li { margin: .5em 0; }
+.prose li > ul, .prose li > ol { margin: .5em 0; }
+.prose strong { font-weight: 650; color: #101216; }
+.prose hr { border: none; border-top: 1px solid var(--line); margin: 2.4em 0; }
+
+.prose blockquote {
+  margin: 1.4em 0;
+  padding: 6px 20px;
+  border-left: 3px solid var(--line-2);
+  border-radius: 0 8px 8px 0;
+  background: var(--code-bg);
+  color: var(--text-2);
+}
+.prose blockquote p { margin: .9em 0; }
+
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .88em;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: .12em .38em;
+  overflow-wrap: break-word;
+}
+.prose pre {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 1.4em 0;
+  overflow-x: auto;
+  line-height: 1.7;
+}
+.prose pre code { background: none; border: none; padding: 0; font-size: 14px; }
+
+.table-wrap {
+  margin: 1.5em 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  overflow-x: auto;
+}
+.prose table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.prose th, .prose td {
+  border-bottom: 1px solid var(--line);
+  padding: 11px 15px;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.7;
+  /* 中文的最小内容宽度只有一个字宽，表格挤不下时会把短列压成「一字一行」。
+     抬住每列下限，宁可让宽表在 .table-wrap 里横向滚动。 */
+  min-width: 12em;
+}
+/* 首列多是 #／版本号／短标签，给它更低的下限，别把宽度浪费在序号列上 */
+.prose th:first-child, .prose td:first-child { min-width: 6em; width: 1px; }
+.prose thead th { background: #f7f8fa; font-weight: 630; white-space: nowrap; }
+.prose tbody tr:last-child td { border-bottom: none; }
+
+.fig { margin: 2em 0; text-align: center; }
+.fig img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.fig figcaption { margin-top: 12px; font-size: 14px; color: var(--muted); line-height: 1.7; }
+.fig.missing {
+  border: 1px dashed var(--line-2);
+  border-radius: 10px;
+  padding: 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ------------------------------------------------------------ 上下篇 */
+
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 52px 0 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+.pg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.pg span { font-size: 12.5px; color: var(--muted); }
+.pg:hover { border-color: var(--line-2); text-decoration: none; }
+.pg.next { text-align: right; }
+.pg.off { border: none; background: none; }
+.back { margin: 26px 0 0; font-size: 15px; }
+
+/* -------------------------------------------------------------- 页脚 */
+
+.foot {
+  width: 100%;
+  max-width: var(--col-w);
+  margin: 0 auto;
+  padding: 36px 44px 56px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.foot p { margin: 0 0 5px; }
+
+/* ---------------------------------------------------------- 响应式 */
+
+@media (max-width: 1000px) {
+  .shell { display: block; }
+
+  .side {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    width: auto;
+    height: auto;
+    flex: none;
+    overflow: visible;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .side-in { gap: 12px; padding: 12px 18px 0; }
+  .brand { padding: 0 2px; }
+  .brand-sub { display: none; }
+
+  .nav {
+    flex-direction: row;
+    gap: 7px;
+    margin: 0 -18px;
+    padding: 0 18px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: 0 0 auto; border: 1px solid var(--line); padding: 6px 14px; font-size: 14.5px; }
+  .nav a b { margin-left: 6px; }
+
+  .side-foot { display: none; }
+
+  main { padding: 32px 22px 0; }
+  .foot { padding: 28px 22px 44px; }
+
+  .post { padding: 30px 28px 36px; border-radius: 14px; }
+  .crumb { margin-bottom: 16px; }
+
+  .sec { padding: 32px 0 2px; }
+  .prose { font-size: 17px; }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 16.5px; line-height: 1.85; }
+
+  main { padding: 22px 14px 0; }
+  .foot { padding: 24px 14px 40px; }
+
+  .post { padding: 24px 20px 30px; border-radius: 12px; }
+
+  .item { flex-direction: column; gap: 12px; padding: 22px 0; }
+  .item-b { order: 1; }
+  .item-d { order: 2; flex-direction: row; align-items: center; gap: 10px; padding-top: 0; }
+  .item-t { font-size: 18px; }
+  .item-s { font-size: 15px; }
+  .item-m { display: none; }
+
+  .pager { grid-template-columns: 1fr; gap: 10px; }
+  .pg.next { text-align: left; }
+
+  .prose { font-size: 16.5px; line-height: 1.85; }
+  .prose h1 { font-size: 23px; }
+  .prose h2 { font-size: 21px; }
+  .prose h3 { font-size: 18.5px; }
+  .prose th, .prose td { padding: 9px 12px; }
+}
+
+body{margin:0;padding:28px 18px;background:#f4f6f5}.standalone{max-width:960px;margin:0 auto;background:#fff;border:1px solid #dce4df;border-radius:12px;padding:34px}.standalone .post{margin:0}.standalone img{max-width:100%;height:auto}.standalone pre{overflow-x:auto}@media(max-width:700px){body{padding:12px}.standalone{padding:20px}}</style></head><body><main class="standalone"><article class="post">
+  <h1 class="post-t">2026-10-16 计算机基础复习：并发、TCP、幂等与事务</h1>
+  <p class="post-m"><span class="tag">技术实践</span><time>2026-10-16</time><span>约 21 分钟</span></p>
+  <div class="prose">
+<p>今天从并发复测接续 TCP 消息读取，随后扩展到请求幂等和数据库事务。重点是分清每一种机制保证什么，以及哪些问题仍需要上一层处理。</p>
+<ul><li>学习日期：2026-10-16，Asia/Shanghai。</li><li>内容来源：本次学习聊天；承接 10/15 未完成的并发与 TCP 训练。</li><li>计划：并发复测 5 分钟、TCP 接续 20 分钟、卡点整理 5 分钟；后来按用户要求增加新知识。实际未计时，不宣称完成固定时长。</li><li>核实日期：2026-10-16。Java 规则按 Java SE 25 官方资料核对；数据库并发示例按 PostgreSQL 18 文档说明，不能直接推广到所有数据库和隔离级别。</li><li>学习状态：能够口述的结论与讲解后尚未复测的结论分别记录；未运行 Java、网络或数据库实验。</li></ul>
+<h2 id="一今天的纠错总表">一、今天的纠错总表</h2>
+<div class="table-wrap"><table><thead><tr><th>起初的理解</th><th>校准后的结论</th><th>本次状态</th></tr></thead><tbody><tr><td>所有读写加同一把锁，可能还要 volatile</td><td>完整读改写都在同一把锁内，不必仅为可见性再加 volatile</td><td>能解释锁外旧值问题；完整口述待复测</td></tr><tr><td>局部变量 old 不受可见性保证，所以算错</td><td>old 保存的是此前读出的数值；它不会随 a 更新，不是局部变量可见性问题</td><td>已在引导下澄清</td></tr><tr><td>join 只是等待线程结束</td><td>成功等待结束还建立可见性保证，但不能修复丢失更新</td><td>等待部分能答出，可见性待复测</td></tr><tr><td>volatile ready 发布还需要 synchronized</td><td>B 读到 A 写入的 true 后，能看到 A 在该写入前完成的 result 写入</td><td>待脱稿复测</td></tr><tr><td>长度字段占 4 字节，消息体可能要 length × 4</td><td>本协议 length 的单位是字节，消息体数组长度就是 length</td><td>能独立解释</td></tr><tr><td>readFully 会把连接中的数据全部读完</td><td>它只填满指定数组；不识别业务消息边界</td><td>能解释边界和错读后果</td></tr><tr><td>把读取放子线程就是异步 I/O</td><td>只是转移阻塞位置，仍可能是同步阻塞 I/O</td><td>讲解后待复测</td></tr><tr><td>TCP 收到 ACK 就表示业务成功</td><td>ACK 不证明应用已处理；响应超时也不能证明业务失败</td><td>能解释结果未知与同号重试</td></tr><tr><td>加 synchronized 就能跨服务实例防重复</td><td>仅协调同一进程内使用同一把锁的线程</td><td>已讲解，待复测</td></tr><tr><td>事务原子性让不同事务自动排队</td><td>原子性保证全做或全撤；并发相互影响由隔离机制处理</td><td>本次重点卡点</td></tr><tr><td>两次查询就是两个事务</td><td>BEGIN 到 COMMIT 可以有多条 SQL、多次查询</td><td>已经引导确认，待独立判断</td></tr></tbody></table></div>
+<h2 id="二java-并发锁volatile局部值与-join">二、Java 并发：锁、volatile、局部值与 join</h2>
+<h3 id="21-同一把锁必须覆盖完整的读改写">2.1 同一把锁必须覆盖完整的读改写</h3>
+<p>初始 a = 5，两个线程各执行一次下面的代码，并使用同一个 lock：</p>
+<pre><code class="lang-java">synchronized (lock) {
+    int old = a;
+    a = old + 1;
+}</code></pre>
+<p>第一个线程读 5、写 6、释放锁；第二个线程取得同一把锁后读到 6、写 7。局部变量可以使用，关键是读取也在锁内。前一个线程释放监视器 happens-before 后续线程获取同一监视器。<a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.4.5" target="_blank" rel="noopener">JLS happens-before</a></p>
+<p>错误变体是先在锁外读取：</p>
+<pre><code class="lang-java">int old = a;
+synchronized (lock) {
+    a = old + 1;
+}</code></pre>
+<p>两个线程都可能先保存 old = 5，随后各写 6。即使 a 是 volatile，也不能改变已经读出的 old。基本类型赋值复制数值；对象变量赋值复制引用值，不能概括为“所有局部变量都不持有引用”。</p>
+<figure class="fig"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNDI4IiB2aWV3Qm94PSIwIDAgOTYwIDQyOCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLlkIzkuIDmiorplIHopoHopobnm5bor7vlj5bjgIHkv67mlLnlkozlhpnlm54iPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmYWZiZjkiLz48ZyBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLEFyaWFsLHNhbnMtc2VyaWYiPjx0ZXh0IHg9IjMyIiB5PSI0NiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzE3MmIyNSI+5ZCM5LiA5oqK6ZSB6KaB6KaG55uW6K+75Y+W44CB5L+u5pS55ZKM5YaZ5ZuePC90ZXh0PjxyZWN0IHg9IjI4IiB5PSI3NiIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4OCIgcng9IjQiIGZpbGw9IiNmZmYzZWIiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ4IiB5PSIxMDciIGZvbnQtc2l6ZT0iMTkiIGZpbGw9IiMxODNlMzEiPumUgeWkluWFiOivu++8mue6v+eoiyBBIOS/neWtmCBvbGQgPSA177yb57q/56iLIEIg5Lmf5L+d5a2YIG9sZCA9IDU8L3RleHQ+PHRleHQgeD0iNDgiIHk9IjEzOSIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzQ0NTY0ZSI+6ZqP5ZCO5ZCE6Ieq5ou/6ZSB5YaZ5YWlIG9sZCArIDHvvIzmnIDnu4jlj6/og73kuLogNuOAgjwvdGV4dD48cmVjdCB4PSIyOCIgeT0iMTgyIiB3aWR0aD0iOTA0IiBoZWlnaHQ9Ijg4IiByeD0iNCIgZmlsbD0iI2VkZjZlZiIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDgiIHk9IjIxMyIgZm9udC1zaXplPSIxOSIgZmlsbD0iIzE4M2UzMSI+5q2j56Gu77ya57q/56iLIEEg5ou/6ZSBIOKGkiDor7sgNSDihpIg5YaZIDYg4oaSIOmHiuaUvumUgTwvdGV4dD48dGV4dCB4PSI0OCIgeT0iMjQ1IiBmb250LXNpemU9IjE3IiBmaWxsPSIjNDQ1NjRlIj7nur/nqIsgQiDpmo/lkI7mi7/lkIzkuIDmiorplIEg4oaSIOivuyA2IOKGkiDlhpkgNyDihpIg6YeK5pS+6ZSB44CCPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSIyODgiIHdpZHRoPSI5MDQiIGhlaWdodD0iODgiIHJ4PSI0IiBmaWxsPSIjZmZmZmZmIiBzdHJva2U9IiNjYWQ1Y2YiLz48dGV4dCB4PSI0OCIgeT0iMzE5IiBmb250LXNpemU9IjE5IiBmaWxsPSIjMTgzZTMxIj7lsYDpg6jlj5jph4/lj6/ku6Xkvb/nlKjvvJvlhbPplK7mmK/or7vlj5blj5HnlJ/lnKjlk6rph4w8L3RleHQ+PHRleHQgeD0iNDgiIHk9IjM1MSIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzQ0NTY0ZSI+dm9sYXRpbGUg5LiN5Lya6Ieq5Yqo5pu05paw5bey57uP5aSN5Yi25YiwIG9sZCDnmoTmlbDlgLzjgII8L3RleHQ+PC9nPjwvc3ZnPg==" alt="图 1：锁外先读会让两个线程各自保存 5；把读取和写回都放在同一把锁内，才会依次写出 6 和 7。" loading="lazy"><figcaption>图 1：锁外先读会让两个线程各自保存 5；把读取和写回都放在同一把锁内，才会依次写出 6 和 7。</figcaption></figure>
+<h3 id="22-volatile-发布不要求两个线程整体排队">2.2 volatile 发布不要求两个线程整体排队</h3>
+<pre><code class="lang-java">int result = 0;
+volatile boolean ready = false;
+
+// A
+result = 42;
+ready = true;
+
+// B
+if (ready) {
+    System.out.println(result);
+}</code></pre>
+<p>仅 A 写这些变量、没有其他写入时，B 读到这次 ready = true 后，后续读取 result 保证得到 42。链路是：写 result → 写 volatile ready → 读到 ready → 读 result。A、B 可以并发，不必另外加 synchronized。若 B 读到 false，就不进入分支；若 A 先写 ready 再写 result，则该发布关系不能覆盖后面的 result 写入，B 可能读到 0。<a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.4.5" target="_blank" rel="noopener">JLS happens-before</a></p>
+<h3 id="23-join-能等待和提供可见性不能补回丢失更新">2.3 join 能等待和提供可见性，不能补回丢失更新</h3>
+<p>两个线程各执行一万次 count++，在没有正确同步时不保证得到两万；volatile 也不能把整个读改写变为原子操作。对两个线程成功 join、等待它们终止后，主线程可以看到相应操作的效果，但工作线程之间已经发生的丢失更新不会被修复。<a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.4.5" target="_blank" rel="noopener">JLS happens-before</a></p>
+<h2 id="三tcp字节流如何成为完整消息">三、TCP：字节流如何成为完整消息</h2>
+<h3 id="31-长度字段的宽度与数值是两回事">3.1 长度字段的宽度与数值是两回事</h3>
+<p>本次协议：前 4 字节保存一个整数，整数值表示后续消息体的字节数。示例采用 DataInputStream.readInt 的大端、有符号 32 位整数解析方式；不是所有协议都采用此编码。</p>
+<pre><code class="lang-text">[长度 100：4 字节][消息体：100 字节]
+[长度  50：4 字节][消息体： 50 字节]</code></pre>
+<p>第一条总长 104 字节。readInt 已消费前 4 字节，接下来读取 100 字节，不乘 4。TCP 提供有序字节流，不保留应用 write 的边界：发送两次，接收端可能一次读到，也可能多次读到。<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.7" target="_blank" rel="noopener">RFC 9293 §3.7</a></p>
+<h3 id="32-一次-read-不保证填满数组">3.2 一次 read 不保证填满数组</h3>
+<p>length = 100 时，一次 read 可能只返回 30。应检查实际读取数量并循环，或使用 readFully。原因不必是拥塞；API 本身就允许部分读取。</p>
+<pre><code class="lang-java">int length = in.readInt();
+if (length &lt; 0 || length &gt; MAX_BODY_BYTES) {
+    throw new ProtocolException(&quot;非法消息体长度&quot;);
+}
+byte[] body = new byte[length];
+in.readFully(body);
+processMessage(body);</code></pre>
+<p>这是接收片段，MAX_BODY_BYTES、超时、异常捕获和连接清理需由外围代码提供。readFully(body) 只填满 body，不会因为第二条数据已经到达就超出数组。若长度字段谎报 120，而第一条实际只有 100，它可能继续吞入下一条的长度字段与正文，因为 API 不认识业务边界。<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/io/DataInputStream.html" target="_blank" rel="noopener">DataInputStream API</a></p>
+<figure class="fig"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNDI4IiB2aWV3Qm94PSIwIDAgOTYwIDQyOCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJUQ1Ag5a2X6IqC5rWB77ya6ZW/5bqm5a2X5q615Yaz5a6a5raI5oGv5L2T55qE6K+75Y+W6IyD5Zu0Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmFmYmY5Ii8+PGcgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxBcmlhbCxzYW5zLXNlcmlmIj48dGV4dCB4PSIzMiIgeT0iNDYiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiMxNzJiMjUiPlRDUCDlrZfoioLmtYHvvJrplb/luqblrZfmrrXlhrPlrprmtojmga/kvZPnmoTor7vlj5bojIPlm7Q8L3RleHQ+PHJlY3QgeD0iMjgiIHk9Ijc2IiB3aWR0aD0iOTA0IiBoZWlnaHQ9Ijg4IiByeD0iNCIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDgiIHk9IjEwNyIgZm9udC1zaXplPSIxOSIgZmlsbD0iIzE4M2UzMSI+5a2X6IqC5rWB77yaW+mVv+W6piAxMDAgLyA0IOWtl+iKgl1b5q2j5paHIDEwMCDlrZfoioJdW+mVv+W6piA1MCAvIDQg5a2X6IqCXVvmraPmlocgNTAg5a2X6IqCXTwvdGV4dD48dGV4dCB4PSI0OCIgeT0iMTM5IiBmb250LXNpemU9IjE3IiBmaWxsPSIjNDQ1NjRlIj5yZWFkSW50IOa2iOi0ueesrOS4gOS4qumVv+W6puWtl+aute+8m2J5dGVbMTAwXSDnmoQgcmVhZEZ1bGx5IOWPquWhq+WFpSAxMDAg5a2X6IqC44CCPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSIxODIiIHdpZHRoPSI5MDQiIGhlaWdodD0iODgiIHJ4PSI0IiBmaWxsPSIjZmZmM2ViIiBzdHJva2U9IiNjYWQ1Y2YiLz48dGV4dCB4PSI0OCIgeT0iMjEzIiBmb250LXNpemU9IjE5IiBmaWxsPSIjMTgzZTMxIj7mlLbliLAgMzAgLyAxMDAg5a2X6IqC77ya6L+Y6ZyA6KaB6K+75Y+WIDcwIOWtl+iKgjwvdGV4dD48dGV4dCB4PSI0OCIgeT0iMjQ1IiBmb250LXNpemU9IjE3IiBmaWxsPSIjNDQ1NjRlIj7lvZPliY3mtojmga/mnKrlrozmiJDvvIzlkI7nu60gNCDlrZfoioLlj6/og73ku43mmK/mraPmlofvvIzkuI3og73lvZPkvZzkuIvkuIDkuKrplb/luqbjgII8L3RleHQ+PHJlY3QgeD0iMjgiIHk9IjI4OCIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4OCIgcng9IjQiIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ4IiB5PSIzMTkiIGZvbnQtc2l6ZT0iMTkiIGZpbGw9IiMxODNlMzEiPuaPkOWJjSBFT0Yg4oaSIOWksei0pe+8m+S4jeWGjeWPkemAgSDihpIg5Y+v6IO9562J5b6F5Yiw6LaF5pe2PC90ZXh0Pjx0ZXh0IHg9IjQ4IiB5PSIzNTEiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NDU2NGUiPuWPr+aBouWkjeaXtuS/neeVmeeyvuehrui/m+W6pu+8m+WQpuWImeWFs+mXrei/nuaOpe+8jOS4jeiDvemdoOi2heaXtumHjee9rua2iOaBr+i+ueeVjOOAgjwvdGV4dD48L2c+PC9zdmc+" alt="图 2：长度字段先被解析，再按声明长度读取消息体。收到 30 字节时仍欠 70 字节，不能把后续正文当成新长度字段。" loading="lazy"><figcaption>图 2：长度字段先被解析，再按声明长度读取消息体。收到 30 字节时仍欠 70 字节，不能把后续正文当成新长度字段。</figcaption></figure>
+<h3 id="33-不完整读取超时和长度校验">3.3 不完整读取、超时和长度校验</h3>
+<div class="table-wrap"><table><thead><tr><th>情况</th><th>正确理解与处理</th></tr></thead><tbody><tr><td>只收到 30/100 字节，对方有序关闭发送方向</td><td>readFully 遇到提前 EOF，抛 EOFException；不能处理为完整消息。连接重置等情况也可能产生其他 IOException</td></tr><tr><td>对方没关闭，也不再发送</td><td>没配置超时可能一直等待；Socket 读取超时需显式设置，0 表示无限等待</td></tr><tr><td>把读取移到工作线程</td><td>主线程不被该读取阻塞，但工作线程仍可能阻塞，不等于真正异步 I/O</td></tr><tr><td>对方持续慢速发送</td><td>单次底层读取超时不等于整条消息的总时限；可另设消息接收截止时间</td></tr><tr><td>已收 30 字节就超时</td><td>超时不会重置消息边界；应保留精确解析进度继续接收，或关闭连接</td></tr><tr><td>长度为负或巨大</td><td>分配数组之前拒绝非法长度，避免异常和资源耗尽</td></tr><tr><td>长度等于 0</td><td>是否有效由协议定义，不能一概认定无效</td></tr></tbody></table></div>
+<p>readFully 抛出超时异常时，调用者未必知道内部已经消费了多少字节。想恢复必须自行维护可恢复的读取进度；做不到时关闭连接更简单。单条长度上限也不能替代总连接数、并发分配量等资源限制。<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/io/DataInputStream.html" target="_blank" rel="noopener">DataInputStream API</a>、<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/net/Socket.html#setSoTimeout%28int%29" target="_blank" rel="noopener">Socket.setSoTimeout</a></p>
+<h3 id="34-tcp-可靠不等于业务处理成功">3.4 TCP 可靠不等于业务处理成功</h3>
+<p>write 成功通常只说明数据被本地网络栈接受；TCP ACK 确认相应字节被对端 TCP 接收，不证明应用已读取或处理。ACK 可以累计确认，不是每个报文都必须单独确认。TCP 会重传丢失数据，但断网、连接失败或响应延迟仍可能让应用超时。不能把“响应包丢了”理解为 TCP 永远不重传。<a href="https://www.rfc-editor.org/rfc/rfc9293.html" target="_blank" rel="noopener">RFC 9293</a></p>
+<p>应用超时后可能是：请求未到达、仍在处理、处理失败但结果未收到、处理成功但结果未收到。需要业务查询或安全重试机制，而不是直接认定失败。</p>
+<h2 id="四业务幂等同一次扣款重试不应再次扣钱">四、业务幂等：同一次扣款重试不应再次扣钱</h2>
+<p>本节是聊天案例的应用设计推导，不是完成支付系统实现或验证。</p>
+<h3 id="41-同一个编号只是入口服务端必须落实幂等">4.1 同一个编号只是入口，服务端必须落实幂等</h3>
+<p>同一次扣款重试复用 requestId，服务端核对账户、金额等参数。编号相同但金额从 100 改成 200，应拒绝冲突，不能返回“200 扣款成功”。操作号应标识一次具体扣款，一个订单允许多次支付时，订单号未必够用。</p>
+<p>下面的检查和执行分离，会让两个并发请求同时通过检查：</p>
+<pre><code class="lang-java">if (!exists(requestId)) {
+    deductMoney(100);
+    saveResult(requestId, &quot;success&quot;);
+}</code></pre>
+<p>synchronized 只有在同一进程、使用同一把锁且覆盖完整流程时才能解决这类线程竞争；不同实例各有自己的锁，不能靠它跨实例互斥。</p>
+<h3 id="42-唯一约束和同库事务共同保证">4.2 唯一约束和同库事务共同保证</h3>
+<p>假设幂等记录、账户余额、业务结果都在同一个支持事务的数据库内：</p>
+<pre><code class="lang-text">开始事务
+  插入操作记录，requestId 有唯一约束
+  只有获得该操作处理资格的请求继续扣款
+  保存结果
+提交事务</code></pre>
+<p>冲突处理应按数据库能力实现，不是出现唯一约束异常后仍在已失败的事务里随意继续执行。并发重复请求要等待已提交结果或按协议返回处理中。唯一约束保护操作号竞争，事务把相关数据库修改作为一个整体。</p>
+<div class="table-wrap"><table><thead><tr><th>故障位置</th><th>对应处理</th></tr></thead><tbody><tr><td>不用事务，插入编号后、扣款前崩溃</td><td>编号存在不能证明扣款成功，直接返回成功会误报</td></tr><tr><td>同库事务提交前失败</td><td>未提交的操作记录、扣款与结果一起回滚</td></tr><tr><td>提交成功，返回响应前崩溃</td><td>重试查询已提交结果，返回原成功结果，不再扣款</td></tr><tr><td>请求仍在处理中</td><td>不冒充成功，按协议等待或返回处理中</td></tr></tbody></table></div>
+<p>如果扣款发生在外部支付服务，本地事务不能把外部动作一起回滚；今天没有展开这类跨系统问题。</p>
+<h2 id="五余额约束与事务隔离">五、余额约束与事务隔离</h2>
+<h3 id="51-不同-requestid-仍会竞争同一个余额">5.1 不同 requestId 仍会竞争同一个余额</h3>
+<p>余额 150，两个不同操作各扣 100，幂等不会阻止它们各执行一次。应原子地判断余额并扣减，而不是普通查询后无条件更新：</p>
+<pre><code class="lang-sql">UPDATE accounts
+SET balance = balance - :amount
+WHERE id = :account_id
+  AND balance &gt;= :amount;</code></pre>
+<p>amount 必须先校验为正数，金额应使用合适的精确表示。更新 1 行表示本次扣减执行成功，但仍需最终提交；更新 0 行表示没有扣减，原因可能是账户不存在或余额不足。恰好扣至 0 合法。</p>
+<p>以 PostgreSQL 18 的 Read Committed 为例：同一行的另一个更新等待前者结束；前者提交后，后者会对更新版本重新检查 WHERE 条件。因此第一个扣完剩 50，第二个条件不成立，不会扣成负数。更高隔离级别可能报序列化失败并要求重试，不能把所有数据库行为一概说成等待后重查。<a href="https://www.postgresql.org/docs/18/transaction-iso.html" target="_blank" rel="noopener">PostgreSQL 事务隔离</a></p>
+<h3 id="52-业务失败可以作为结果提交">5.2 业务失败可以作为结果提交</h3>
+<p>余额不足时，条件 UPDATE 没改余额。可以在同一事务里把该 requestId 记为 FAILED 并提交，保留这次业务失败结果；也可以选择整体回滚，不保留记录。两种策略影响后续同号重试的语义，必须预先约定。</p>
+<p>数据库事务成功提交，不代表业务扣款成功；它也可以可靠地保存“扣款失败”。数据库异常通常要求回滚并按异常策略处理，不能随意伪装成确定的余额不足。</p>
+<h3 id="53-原子性不保证不同事务排队">5.3 原子性不保证不同事务排队</h3>
+<div class="table-wrap"><table><thead><tr><th>性质</th><th>本次要记住的含义</th></tr></thead><tbody><tr><td>原子性</td><td>一个事务的修改整体生效或撤销，不留下已提交的部分修改</td></tr><tr><td>隔离性</td><td>限制并发事务之间如何观察、影响彼此；保证程度由隔离级别与具体操作决定</td></tr></tbody></table></div>
+<p>两个事务都可以先用普通 SELECT 读到 150，再判断足够。某些隔离级别下，如果之后无条件执行 balance = balance - 100，可能先扣到 50，再扣到 -50。两个事务都完整提交，原子性仍成立，业务余额约束却被破坏。<a href="https://www.postgresql.org/docs/18/tutorial-transactions.html" target="_blank" rel="noopener">PostgreSQL 事务基础</a>、<a href="https://www.postgresql.org/docs/18/transaction-iso.html" target="_blank" rel="noopener">事务隔离</a></p>
+<p>要实现“对同一账户先等待再判断”，可采用行锁：</p>
+<pre><code class="lang-sql">BEGIN;
+SELECT balance FROM accounts
+WHERE id = :account_id
+FOR UPDATE;
+-- 取得行锁后判断，执行扣减与记录结果
+COMMIT;</code></pre>
+<p>数据库本来就提供隔离机制，可结合锁与 MVCC 等实现；不是只有手动加锁才有隔离性。应选能保护业务规则的操作方式与隔离级别，并处理必要的重试。</p>
+<figure class="fig"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTM0IiB2aWV3Qm94PSIwIDAgOTYwIDUzNCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLkuovliqHvvJrljp/lrZDmgKfkuI7pmpTnprvmgKflm57nrZTkuI3lkIzpl67popgiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmYWZiZjkiLz48ZyBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLEFyaWFsLHNhbnMtc2VyaWYiPjx0ZXh0IHg9IjMyIiB5PSI0NiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzE3MmIyNSI+5LqL5Yqh77ya5Y6f5a2Q5oCn5LiO6ZqU56a75oCn5Zue562U5LiN5ZCM6Zeu6aKYPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSI3NiIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4OCIgcng9IjQiIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ4IiB5PSIxMDciIGZvbnQtc2l6ZT0iMTkiIGZpbGw9IiMxODNlMzEiPuWOn+WtkOaAp++8muS6i+WKoeWGheeahOS/ruaUueaVtOS9k+aPkOS6pO+8jOaIluaVtOS9k+aSpOmUgDwvdGV4dD48dGV4dCB4PSI0OCIgeT0iMTM5IiBmb250LXNpemU9IjE3IiBmaWxsPSIjNDQ1NjRlIj5BIOaJo+asvuWQjuWbnua7mu+8jOaJo+asvuS/ruaUueS4jeS/neeVmeOAgjwvdGV4dD48cmVjdCB4PSIyOCIgeT0iMTgyIiB3aWR0aD0iOTA0IiBoZWlnaHQ9Ijg4IiByeD0iNCIgZmlsbD0iI2ZmZjNlYiIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDgiIHk9IjIxMyIgZm9udC1zaXplPSIxOSIgZmlsbD0iIzE4M2UzMSI+6ISP6K+777yaQiDnnIvliLDkuoYgQSDlsJrmnKrmj5DkuqTnmoTkv67mlLk8L3RleHQ+PHRleHQgeD0iNDgiIHk9IjI0NSIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzQ0NTY0ZSI+5L6L5aaC55yL5Yiw5L2Z6aKdIDUw77yM5L2GIEEg6ZqP5ZCO5Zue5rua77yM5a6e6ZmF5L2Z6aKd5LuN5Li6IDE1MOOAgjwvdGV4dD48cmVjdCB4PSIyOCIgeT0iMjg4IiB3aWR0aD0iOTA0IiBoZWlnaHQ9Ijg4IiByeD0iNCIgZmlsbD0iI2ZmZmZmZiIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDgiIHk9IjMxOSIgZm9udC1zaXplPSIxOSIgZmlsbD0iIzE4M2UzMSI+5LiN5Y+v6YeN5aSN6K+777yaQiDlkIzkuIDkuovliqHlhoXvvIzlkIzkuIDooYzliY3lkI7lgLzkuI3lkIw8L3RleHQ+PHRleHQgeD0iNDgiIHk9IjM1MSIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzQ0NTY0ZSI+56ys5LiA5qyh5L2Z6aKdIDE1MO+8m0Eg5o+Q5Lqk5omj5qy+77yb56ys5LqM5qyh5L2Z6aKdIDUw44CCPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSIzOTQiIHdpZHRoPSI5MDQiIGhlaWdodD0iODgiIHJ4PSI0IiBmaWxsPSIjZmZmZmZmIiBzdHJva2U9IiNjYWQ1Y2YiLz48dGV4dCB4PSI0OCIgeT0iNDI1IiBmb250LXNpemU9IjE5IiBmaWxsPSIjMTgzZTMxIj7lubvor7vvvJpCIOWQjOS4gOS6i+WKoeWGhe+8jOebuOWQjOadoeS7tueahOWMuemFjembhuWQiOWPmOWMljwvdGV4dD48dGV4dCB4PSI0OCIgeT0iNDU3IiBmb250LXNpemU9IjE3IiBmaWxsPSIjNDQ1NjRlIj7nrKzkuIDmrKHnrKblkIjmnaHku7bnmoTotKbmiLcgMyDkuKrvvJtBIOaPkuWFpeW5tuaPkOS6pO+8m+esrOS6jOasoSA0IOS4quOAgjwvdGV4dD48L2c+PC9zdmc+" alt="图 3：原子性关注提交或回滚的完整性；隔离性关注并发观察。脏读看未提交修改，不可重复读看同一行值变化，幻读看条件匹配记录集合变化。" loading="lazy"><figcaption>图 3：原子性关注提交或回滚的完整性；隔离性关注并发观察。脏读看未提交修改，不可重复读看同一行值变化，幻读看条件匹配记录集合变化。</figcaption></figure>
+<h3 id="54-脏读不可重复读与幻读">5.4 脏读、不可重复读与幻读</h3>
+<div class="table-wrap"><table><thead><tr><th>现象</th><th>场景</th><th>关键区别</th></tr></thead><tbody><tr><td>脏读</td><td>A 将 150 改成 50 未提交，B 读到 50，随后 A 回滚</td><td>B 读到了别人未提交的数据</td></tr><tr><td>不可重复读</td><td>B 同一事务先读余额 150，A 更新并提交，B 再读为 50</td><td>同一记录前后值不同，读到的是已提交修改</td></tr><tr><td>幻读</td><td>B 同一事务按余额大于 100 查询得 3 条，A 插入匹配账户并提交，B 再查得 4 条</td><td>相同条件匹配的记录集合发生变化</td></tr></tbody></table></div>
+<p>A 回滚后不保留其扣款，体现原子性；B 曾读到 A 未提交值，涉及隔离性。两件事可以同时成立。</p>
+<p>BEGIN → 查询 → 查询 → COMMIT 是一个事务。若两次查询属于两个不同事务，看到别人期间提交的新数据通常正常。注意自动提交模式下每条语句可能各成事务，不能只数查询次数。</p>
+<p>这些是现象定义，不是所有隔离级别都会发生。以 PostgreSQL 为例，Read Committed 不允许脏读，但允许不可重复读和幻读；它的 Repeatable Read 比 SQL 标准最低要求更强，不允许幻读。今天未展开隔离级别矩阵与 MVCC 原理。<a href="https://www.postgresql.org/docs/18/transaction-iso.html" target="_blank" rel="noopener">PostgreSQL 隔离级别</a></p>
+<h2 id="六下次复测清单">六、下次复测清单</h2>
+<div class="table-wrap"><table><thead><tr><th>主题</th><th>下次先不提示，独立回答</th></tr></thead><tbody><tr><td>锁与局部值</td><td>为什么 volatile a 不能修复锁外 old = a；局部变量能否放在锁内使用？</td></tr><tr><td>join</td><td>它除了等待，还保证什么；为什么不能修复 count++ 的丢失更新？</td></tr><tr><td>volatile 发布</td><td>B 读到 ready = true 后为什么能看到 result = 42；交换写入顺序为何不同？</td></tr><tr><td>TCP</td><td>用一段话解释长度字段、循环读取、超时和长度上限各解决什么</td></tr><tr><td>I/O</td><td>工作线程里阻塞读取与真正异步 I/O 有何区别？</td></tr><tr><td>幂等</td><td>提交成功但响应丢失如何重试；同号不同金额如何处理？</td></tr><tr><td>原子性与隔离性</td><td>为什么事务全做或全撤不意味着两个事务自动排队？</td></tr><tr><td>读取异常</td><td>在同一事务的前提下区分脏读、不可重复读与幻读</td></tr></tbody></table></div>
+<p>数据库部分到此暂停，不标记已掌握。最后一轮已能在提示下确认两次查询可以属于同一个事务；不可重复读和幻读仍需下一次独立判断。以上为聊天表现记录，不是考试测评。</p>
+<h2 id="附录开场偏离计划的硬件入门">附录：开场偏离计划的硬件入门</h2>
+<p>最初未读取昨天计划，误给了硬件入门内容，之后已纠正。为完整保存本次讨论，保留简要索引，不计入实际复习完成项。</p>
+<div class="table-wrap"><table><thead><tr><th>概念</th><th>入门理解</th></tr></thead><tbody><tr><td>CPU</td><td>执行指令、进行计算</td></tr><tr><td>RAM</td><td>保存运行中的指令和数据，通常断电丢失</td></tr><tr><td>SSD / 硬盘</td><td>持久保存程序与文件；容量与内存容量不同</td></tr><tr><td>操作系统</td><td>管理进程、内存、文件、设备与调度</td></tr><tr><td>程序与进程</td><td>程序是保存的指令资源，进程是运行实例；一个应用可能有多个进程</td></tr><tr><td>性能观察</td><td>任务管理器可观察 CPU、内存和磁盘；磁盘活动时间 100% 不表示容量已满</td></tr></tbody></table></div>
+<p>当时建议用 Ctrl + Shift + Esc 观察任务管理器，没有要求结束进程；也没有证据表明实际完成了这些操作。硬件部分只是基础概念摘要，本次主要核实范围为并发、TCP 和数据库规则。</p>
+<h2 id="来源与核实边界">来源与核实边界</h2>
+<p>本笔记基于当日问答整理，已将误解与后续纠正合并，不将错误说法作为结论。图均为根据正文绘制的示意图，没有运行数据。</p>
+<ul><li>Java SE 25：《JLS §17.4.5 Happens-before Order》，支持监视器、volatile、线程终止及 join 的保证。</li><li><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/io/DataInputStream.html" target="_blank" rel="noopener">DataInputStream API</a>：readInt、readFully、提前 EOF。</li><li><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/net/Socket.html#setSoTimeout%28int%29" target="_blank" rel="noopener">Socket API</a>：读取超时及 0 表示无限等待。</li><li><a href="https://www.rfc-editor.org/rfc/rfc9293.html" target="_blank" rel="noopener">RFC 9293</a>：TCP 字节流、确认与传输边界。</li><li><a href="https://www.postgresql.org/docs/18/tutorial-transactions.html" target="_blank" rel="noopener">PostgreSQL 18 事务基础</a>：事务的整体提交与回滚。</li><li><a href="https://www.postgresql.org/docs/18/transaction-iso.html" target="_blank" rel="noopener">PostgreSQL 18 事务隔离</a>：并发更新、隔离级别和读取现象。</li></ul>
+<p>幂等处理流程是基于聊天假设的设计推导，未做数据库唯一约束竞争、崩溃恢复或支付端到端测试；外部扣款与本地数据库不在同一个事务里的情况不适用本节简化方案。</p>
+  </div>
+</article></main></body></html>

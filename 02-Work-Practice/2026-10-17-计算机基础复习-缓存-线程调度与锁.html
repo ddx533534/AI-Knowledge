@@ -1,0 +1,742 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2026-10-17 计算机基础、概率与四道算法实践复盘 · Moting 技术笔记</title><style>:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --text: #16181d;
+  --text-2: #454b57;
+  --muted: #858d99;
+  --line: #e7e9ee;
+  --line-2: #d3d8e0;
+  --accent: #2563eb;
+  --accent-soft: #edf2ff;
+  --code-bg: #f5f7fa;
+  --radius: 12px;
+  --side-w: 252px;
+  --col-w: 900px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  font-size: 17px;
+  line-height: 1.85;
+  letter-spacing: .008em;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.skip { position: absolute; left: -9999px; }
+.skip:focus {
+  left: 12px;
+  top: 12px;
+  background: var(--surface);
+  padding: 8px 12px;
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  z-index: 9;
+}
+
+/* --------------------------------------------------------------- 骨架 */
+
+.shell { display: flex; align-items: flex-start; min-height: 100vh; }
+
+.col { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+
+main {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: var(--col-w);
+  margin: 0 auto;
+  padding: 56px 44px 0;
+}
+
+/* ------------------------------------------------------------- 左侧栏 */
+
+.side {
+  flex: 0 0 var(--side-w);
+  width: var(--side-w);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+}
+.side-in {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  min-height: 100%;
+  padding: 34px 18px 28px;
+}
+
+.brand { display: flex; align-items: center; gap: 11px; padding: 0 10px; }
+.brand:hover { text-decoration: none; }
+.brand-mark {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+.brand-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
+.brand-name { font-size: 16.5px; font-weight: 650; color: var(--text); }
+.brand-sub { font-size: 12px; color: var(--muted); }
+
+.nav { display: flex; flex-direction: column; gap: 3px; }
+.nav a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  font-size: 15.5px;
+  color: var(--text-2);
+}
+.nav a:hover { background: #f1f3f7; color: var(--text); text-decoration: none; }
+.nav a.on { background: var(--accent-soft); border-color: #dde5fb; color: var(--accent); font-weight: 600; }
+.nav a b { font-size: 12.5px; font-weight: 500; color: var(--muted); font-variant-numeric: tabular-nums; }
+.nav a.on b { color: var(--accent); }
+
+.side-foot { margin: auto 0 0; padding: 0 12px; font-size: 12.5px; color: var(--muted); }
+.side-foot b { color: var(--text-2); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------------- 首页 */
+
+.intro { padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.intro h1 { font-size: clamp(28px, 4.6vw, 36px); margin: 0 0 12px; letter-spacing: -.018em; line-height: 1.25; }
+.lede { margin: 0; font-size: 17px; line-height: 1.8; color: var(--text-2); }
+.stats { margin: 14px 0 0; font-size: 14px; color: var(--muted); }
+.stats b { color: var(--text-2); font-weight: 600; }
+.stats a { color: var(--text-2); }
+.stats a:hover { color: var(--accent); text-decoration: none; }
+
+.sec { padding: 42px 0 4px; }
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.sec-head h2 { font-size: 20px; margin: 0; letter-spacing: -.008em; }
+.sec-head h2 a { color: var(--text); }
+.sec-head h2 a:hover { color: var(--accent); text-decoration: none; }
+.sec-head .count { font-size: 13px; color: var(--muted); }
+.sec-intro { margin: 14px 0 0; font-size: 15px; line-height: 1.8; color: var(--text-2); }
+.more { margin: 18px 0 0; font-size: 15px; }
+
+.muted { color: var(--muted); font-size: 14px; margin: 0; }
+
+/* ------------------------------------------------------------ 列表条目 */
+
+.list { display: flex; flex-direction: column; }
+
+.item { display: flex; gap: 26px; padding: 26px 0; border-bottom: 1px solid var(--line); }
+.item:last-child { border-bottom: none; padding-bottom: 8px; }
+
+.item-d {
+  flex: 0 0 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding-top: 5px;
+}
+.item-d time {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.item-b { flex: 1 1 auto; min-width: 0; }
+.item-t { display: block; font-size: 19px; font-weight: 630; line-height: 1.55; color: var(--text); letter-spacing: -.006em; }
+.item-t:hover { color: var(--accent); text-decoration: none; }
+.item-s { margin: 9px 0 0; font-size: 15.5px; color: var(--text-2); line-height: 1.8; }
+.item-m { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
+
+.tag {
+  display: inline-block;
+  font-size: 12.5px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 999px;
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------- 栏目 / 文章 */
+
+.page-t { font-size: clamp(26px, 4.2vw, 32px); margin: 14px 0 10px; letter-spacing: -.018em; line-height: 1.3; }
+.crumb { margin: 0 0 20px; font-size: 13.5px; color: var(--muted); }
+.crumb a { color: var(--muted); }
+.crumb a:hover { color: var(--accent); text-decoration: none; }
+.crumb span { margin: 0 7px; }
+
+/* 文章正文区：把长文包进一块安静的白面，边缘留白撑开，降低四周干扰 */
+.post {
+  margin-top: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 40px 52px 52px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .03), 0 12px 32px -18px rgba(16, 24, 40, .12);
+}
+.post-t { font-size: clamp(27px, 4.4vw, 34px); line-height: 1.32; margin: 8px 0 14px; letter-spacing: -.02em; }
+.post-m {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 0 0 34px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+/* -------------------------------------------------------------- 正文 */
+
+.prose { font-size: 17.5px; line-height: 1.9; color: #1f2229; letter-spacing: .01em; }
+.prose > *:first-child { margin-top: 0; }
+.prose h1, .prose h2, .prose h3, .prose h4 { line-height: 1.45; margin: 2.1em 0 .8em; letter-spacing: -.012em; color: #14161a; }
+.prose h1 { font-size: 27px; }
+.prose h2 { font-size: 24px; padding-bottom: .35em; border-bottom: 1px solid var(--line); }
+.prose h3 { font-size: 20px; }
+.prose h4 { font-size: 17.5px; color: var(--text-2); }
+.prose p { margin: 0 0 1.3em; }
+.prose ul, .prose ol { margin: 0 0 1.3em; padding-left: 1.5em; }
+.prose li { margin: .5em 0; }
+.prose li > ul, .prose li > ol { margin: .5em 0; }
+.prose strong { font-weight: 650; color: #101216; }
+.prose hr { border: none; border-top: 1px solid var(--line); margin: 2.4em 0; }
+
+.prose blockquote {
+  margin: 1.4em 0;
+  padding: 6px 20px;
+  border-left: 3px solid var(--line-2);
+  border-radius: 0 8px 8px 0;
+  background: var(--code-bg);
+  color: var(--text-2);
+}
+.prose blockquote p { margin: .9em 0; }
+
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: .88em;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: .12em .38em;
+  overflow-wrap: break-word;
+}
+.prose pre {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 1.4em 0;
+  overflow-x: auto;
+  line-height: 1.7;
+}
+.prose pre code { background: none; border: none; padding: 0; font-size: 14px; }
+
+.table-wrap {
+  margin: 1.5em 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  overflow-x: auto;
+}
+.prose table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.prose th, .prose td {
+  border-bottom: 1px solid var(--line);
+  padding: 11px 15px;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.7;
+  /* 中文的最小内容宽度只有一个字宽，表格挤不下时会把短列压成「一字一行」。
+     抬住每列下限，宁可让宽表在 .table-wrap 里横向滚动。 */
+  min-width: 12em;
+}
+/* 首列多是 #／版本号／短标签，给它更低的下限，别把宽度浪费在序号列上 */
+.prose th:first-child, .prose td:first-child { min-width: 6em; width: 1px; }
+.prose thead th { background: #f7f8fa; font-weight: 630; white-space: nowrap; }
+.prose tbody tr:last-child td { border-bottom: none; }
+
+.fig { margin: 2em 0; text-align: center; }
+.fig img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.fig figcaption { margin-top: 12px; font-size: 14px; color: var(--muted); line-height: 1.7; }
+.fig.missing {
+  border: 1px dashed var(--line-2);
+  border-radius: 10px;
+  padding: 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ------------------------------------------------------------ 上下篇 */
+
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 52px 0 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+.pg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.pg span { font-size: 12.5px; color: var(--muted); }
+.pg:hover { border-color: var(--line-2); text-decoration: none; }
+.pg.next { text-align: right; }
+.pg.off { border: none; background: none; }
+.back { margin: 26px 0 0; font-size: 15px; }
+
+/* -------------------------------------------------------------- 页脚 */
+
+.foot {
+  width: 100%;
+  max-width: var(--col-w);
+  margin: 0 auto;
+  padding: 36px 44px 56px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.foot p { margin: 0 0 5px; }
+
+/* ---------------------------------------------------------- 响应式 */
+
+@media (max-width: 1000px) {
+  .shell { display: block; }
+
+  .side {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    width: auto;
+    height: auto;
+    flex: none;
+    overflow: visible;
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .side-in { gap: 12px; padding: 12px 18px 0; }
+  .brand { padding: 0 2px; }
+  .brand-sub { display: none; }
+
+  .nav {
+    flex-direction: row;
+    gap: 7px;
+    margin: 0 -18px;
+    padding: 0 18px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: 0 0 auto; border: 1px solid var(--line); padding: 6px 14px; font-size: 14.5px; }
+  .nav a b { margin-left: 6px; }
+
+  .side-foot { display: none; }
+
+  main { padding: 32px 22px 0; }
+  .foot { padding: 28px 22px 44px; }
+
+  .post { padding: 30px 28px 36px; border-radius: 14px; }
+  .crumb { margin-bottom: 16px; }
+
+  .sec { padding: 32px 0 2px; }
+  .prose { font-size: 17px; }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 16.5px; line-height: 1.85; }
+
+  main { padding: 22px 14px 0; }
+  .foot { padding: 24px 14px 40px; }
+
+  .post { padding: 24px 20px 30px; border-radius: 12px; }
+
+  .item { flex-direction: column; gap: 12px; padding: 22px 0; }
+  .item-b { order: 1; }
+  .item-d { order: 2; flex-direction: row; align-items: center; gap: 10px; padding-top: 0; }
+  .item-t { font-size: 18px; }
+  .item-s { font-size: 15px; }
+  .item-m { display: none; }
+
+  .pager { grid-template-columns: 1fr; gap: 10px; }
+  .pg.next { text-align: left; }
+
+  .prose { font-size: 16.5px; line-height: 1.85; }
+  .prose h1 { font-size: 23px; }
+  .prose h2 { font-size: 21px; }
+  .prose h3 { font-size: 18.5px; }
+  .prose th, .prose td { padding: 9px 12px; }
+}
+
+body{margin:0;padding:28px 18px;background:#f4f6f5}.standalone{max-width:960px;margin:0 auto;background:#fff;border:1px solid #dce4df;border-radius:12px;padding:34px}.standalone .post{margin:0}.standalone img{max-width:100%;height:auto}.standalone pre{overflow-x:auto}@media(max-width:700px){body{padding:12px}.standalone{padding:20px}}</style></head><body><main class="standalone"><article class="post">
+  <h1 class="post-t">2026-10-17 计算机基础、概率与四道算法实践复盘</h1>
+  <p class="post-m"><span class="tag">技术实践</span><time>2026-10-17</time><span>约 46 分钟</span></p>
+  <div class="prose">
+<p>今天完成基础问答、三轮作答与交卷纠错：基础选择全对，概率从条件样本空间混淆推进到变式全对；四道算法检验堆状态更新、累计费用上界、窗口不变量与图关系传播；滑动窗口原提交正确，其他题的修正与引导过程分别保留。前十节保留基础与公式，第十一至十六节补齐全天实操、代码、测试和下一次复测。</p>
+<ul><li>学习日期与核实日期：2026-10-17，Asia/Shanghai。</li><li>来源：今天的逐题口述、追问与纠错；Java 语义对照 Java SE 25，伪共享对照 Linux 内核文档。</li><li>原计划：周六混合笔试摸底。先完成计算机基础互动复习，随后提交混合试卷；概率批改与公式总结追加在第十节。</li><li>互动复习未计时，未运行 Java、网络或性能基准实验。后续混合试卷的导出用时为 37 分 42 秒，不含交卷后重交与讲解；示意图不是测量结果。</li><li>本文是当日学习记录；“本轮能回答”与“讲解后待复测”分别记录，不把提示下答对视为长期掌握。</li></ul>
+<h2 id="一开场五题旧知识复测">一、开场五题：旧知识复测</h2>
+<div class="table-wrap"><table><thead><tr><th>题目</th><th>本次回答与纠正</th><th>下次检查</th></tr></thead><tbody><tr><td>volatile count++，两个线程各加一万次，再 join</td><td>能解释两次读取同一个旧值导致丢失更新；结果不保证两万。join 不只等待终止，还建立相应可见性保证</td><td>脱稿说清 volatile 与 join 各自保证什么</td></tr><tr><td>TCP 长度 100，收到 30 字节后超时</td><td>知道不能直接 readInt 解析下一条；但发“不完整”通知不能自动恢复流边界</td><td>准确保留接收进度继续，或关闭连接；readFully 异常后未必知道消费字节数</td></tr><tr><td>同进程线程的资源</td><td>堆和地址空间共享，调用栈与寄存器执行状态各自独立</td><td>共享只读数据不一定需要加锁，冲突访问才要分析同步</td></tr><tr><td>按行连续存储的二维数组遍历</td><td>起初把下标层次与内存顺序混淆，后自行改为逐行更有利</td><td>根据相邻地址与缓存行推导，不能只看下标写法</td></tr><tr><td>同号扣款重试</td><td>相同参数时返回已有结果，不重复扣款；修改金额后曾提出重新扣款或回滚旧交易</td><td>同号不同参数应拒绝冲突；超时不能推断失败，已提交事务不能再用原 ROLLBACK 撤销</td></tr></tbody></table></div>
+<p>volatile 读写、监视器解锁后再加锁、线程终止与 join 的 happens-before 规则见 <a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.4.5" target="_blank" rel="noopener">JLS §17.4.5</a>。扣款题沿用昨天“记录、余额与结果位于同一数据库事务”的简化假设；本次没有实现支付系统或扩展数据库专题。</p>
+<h2 id="二缓存局部性重复访问与相邻访问">二、缓存局部性：重复访问与相邻访问</h2>
+<h3 id="21-时间局部性与空间局部性">2.1 时间局部性与空间局部性</h3>
+<div class="table-wrap"><table><thead><tr><th>类型</th><th>访问特点</th><th>例子</th></tr></thead><tbody><tr><td>时间局部性</td><td>刚访问过的数据，很快再次访问</td><td>循环反复使用同一个值</td></tr><tr><td>空间局部性</td><td>访问一个地址后，很快访问附近地址</td><td>顺序扫描连续数组</td></tr></tbody></table></div>
+<pre><code class="lang-java">for (int i = 0; i &lt; a.length; i++) {
+    sum += a[i];
+}</code></pre>
+<p>sum 的重复使用体现时间局部性，实际可能一直在寄存器中；连续数组的 a[i]、a[i+1] 体现空间局部性。只扫描一遍、每个元素只访问一次时，对数组元素本身没有明显的时间局部性，但仍可利用空间局部性。</p>
+<p>数组大于缓存，不等于缓存没有用。程序可以一条缓存行一条缓存行地使用数据，无须整个数组同时留在缓存里。缓存模型与局部性可参照 <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/vm-beyondphys-policy.pdf" target="_blank" rel="noopener">OSTEP 内存访问与缓存讨论</a>。</p>
+<h3 id="22-一次未命中加载整条缓存行">2.2 一次未命中加载整条缓存行</h3>
+<p>练习假设：元素 8 字节、缓存行 64 字节、起始地址对齐、缓存开始为空、忽略预取，期间没有其他访问造成相关行被替换。64 字节是本题参数，不是所有处理器的统一常量。</p>
+<p>一条行装 64 ÷ 8 = 8 个元素。顺序读前 16 个：</p>
+<div class="table-wrap"><table><thead><tr><th>读取位置</th><th>过程</th><th>结果</th></tr></thead><tbody><tr><td>a[0]</td><td>加载包含 a[0]～a[7] 的行</td><td>未命中</td></tr><tr><td>a[1]～a[7]</td><td>数据已一起带入</td><td>7 次命中</td></tr><tr><td>a[8]</td><td>加载包含 a[8]～a[15] 的行</td><td>未命中</td></tr><tr><td>a[9]～a[15]</td><td>数据已一起带入</td><td>7 次命中</td></tr></tbody></table></div>
+<p>总计 2 次未命中、14 次命中；只读前 8 个则是 1 次未命中、7 次命中。起初回答“8 次命中、8 次未命中”，纠正点是第一次未命中就把邻近 7 个元素一起带入。</p>
+<figure class="fig"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNDA1IiB2aWV3Qm94PSIwIDAgOTYwIDQwNSIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLnvJPlrZjooYzvvJrpppbmrKHorr/pl67liqDovb3pgrvov5HlhYPntKAiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmYWZiZjkiLz48ZyBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLEFyaWFsLHNhbnMtc2VyaWYiPjx0ZXh0IHg9IjMwIiB5PSI0NCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzE3M2IzMCI+57yT5a2Y6KGM77ya6aaW5qyh6K6/6Zeu5Yqg6L296YK76L+R5YWD57SgPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSI3MiIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4NCIgcng9IjQiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ2IiB5PSIxMDIiIGZvbnQtc2l6ZT0iMTkiIGZpbGw9IiMxNzNiMzAiPuWBh+iuvu+8mjY0IOWtl+iKguS4gOihjO+8jDgg5a2X6IqC5LiA5Liq5YWD57Sg77yM6LW35aeL5Zyw5Z2A5a+56b2QPC90ZXh0Pjx0ZXh0IHg9IjQ2IiB5PSIxMzIiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NjU4NGYiPue8k+WtmOW8gOWni+S4uuepuu+8jOW/veeVpemihOWPluWSjOWFtuS7luiuv+mXruWvvOiHtOeahOabv+aNouOAgjwvdGV4dD48cmVjdCB4PSIyOCIgeT0iMTcyIiB3aWR0aD0iOTA0IiBoZWlnaHQ9Ijg0IiByeD0iNCIgZmlsbD0iI2VkZjZlZiIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDYiIHk9IjIwMiIgZm9udC1zaXplPSIxOSIgZmlsbD0iIzE3M2IzMCI+YVswXSDmnKrlkb3kuK0g4oaSIOWKoOi9vSBhWzBd772eYVs3XTwvdGV4dD48dGV4dCB4PSI0NiIgeT0iMjMyIiBmb250LXNpemU9IjE3IiBmaWxsPSIjNDY1ODRmIj5hWzFd772eYVs3XSDlkb3kuK3vvJoxIOasoeacquWRveS4re+8jDcg5qyh5ZG95Lit44CCPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSIyNzIiIHdpZHRoPSI5MDQiIGhlaWdodD0iODQiIHJ4PSI0IiBmaWxsPSIjZWRmNmVmIiBzdHJva2U9IiNjYWQ1Y2YiLz48dGV4dCB4PSI0NiIgeT0iMzAyIiBmb250LXNpemU9IjE5IiBmaWxsPSIjMTczYjMwIj5hWzhdIOacquWRveS4rSDihpIg5Yqg6L29IGFbOF3vvZ5hWzE1XTwvdGV4dD48dGV4dCB4PSI0NiIgeT0iMzMyIiBmb250LXNpemU9IjE3IiBmaWxsPSIjNDY1ODRmIj5hWzld772eYVsxNV0g5ZG95Lit77yb5YmNIDE2IOasoeWQiOiuoSAyIOasoeacquWRveS4reOAgTE0IOasoeWRveS4reOAgjwvdGV4dD48L2c+PC9zdmc+" alt="图 1：8 字节元素与 64 字节缓存行的简化模型。顺序读取前 16 个元素时，在 a0 和 a8 各未命中一次，其余 14 次命中。" loading="lazy"><figcaption>图 1：8 字节元素与 64 字节缓存行的简化模型。顺序读取前 16 个元素时，在 a0 和 a8 各未命中一次，其余 14 次命中。</figcaption></figure>
+<p>若只读 a[0]、a[8]、a[16]、a[24]，四次访问落在不同的行，在上述冷缓存模型中都未命中。四条行仍保留时，再次读取 a[0] 会命中，体现时间局部性。</p>
+<h3 id="23-缓存行对应内存地址不按变量依赖拼装">2.3 缓存行对应内存地址，不按变量依赖拼装</h3>
+<p>起初疑问：x 计算需要 z，加载 z 会不会把同一行中的 y 覆盖？</p>
+<p>缓存行对应一段固定、连续、对齐的内存地址范围。x、y 是否同一行由地址决定，不由业务依赖决定。若 z 位于远处另一段内存，它属于另一条行；不会因为 x 依赖 z，就把 z 拼进 x、y 的这条行中。</p>
+<p>缓存空间有限，加载新行可能替换旧行，但这是缓存副本的替换，不是任意改写变量 y 的值。脏数据按一致性和写回等机制处理；具体行为取决于缓存架构。计算依赖与地址相邻是两件事。</p>
+<h2 id="三伪共享不同变量也可能争夺同一条缓存行">三、伪共享：不同变量也可能争夺同一条缓存行</h2>
+<p>假设线程 A 只写 x、线程 B 只写 y，彼此没有业务依赖，分别运行在不同核心上，但 x、y 位于同一条缓存行。频繁交替写入可能引起缓存行所有权迁移与副本失效，增加开销。</p>
+<pre><code class="lang-text">核心 A 写 x → 获得所在行的写权限
+核心 B 写 y → 又需要同一行的写权限
+核心 A 再写 x → 可能再次发生一致性协调</code></pre>
+<p>这叫伪共享。它主要是性能问题，并不自动等同于程序数据竞争；若业务上也有冲突访问，则还需另行处理正确性。所有线程只读、没有写入时，不存在这里由交替写入导致的伪共享开销。<a href="https://docs.kernel.org/kernel-hacking/false-sharing.html" target="_blank" rel="noopener">Linux 内核：False Sharing</a></p>
+<figure class="fig"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNDA1IiB2aWV3Qm94PSIwIDAgOTYwIDQwNSIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLkvKrlhbHkuqvvvJrkuJrliqHni6znq4vvvIznvJPlrZjooYzljbTlhbHkuqsiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmYWZiZjkiLz48ZyBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLEFyaWFsLHNhbnMtc2VyaWYiPjx0ZXh0IHg9IjMwIiB5PSI0NCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzE3M2IzMCI+5Lyq5YWx5Lqr77ya5Lia5Yqh54us56uL77yM57yT5a2Y6KGM5Y205YWx5LqrPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSI3MiIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4NCIgcng9IjQiIGZpbGw9IiNmZmYyZTkiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ2IiB5PSIxMDIiIGZvbnQtc2l6ZT0iMTkiIGZpbGw9IiMxNzNiMzAiPuWQjOS4gOihjO+8mlt4XVt5XVvlhbbku5bnm7jpgrvmlbDmja5dPC90ZXh0Pjx0ZXh0IHg9IjQ2IiB5PSIxMzIiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NjU4NGYiPuaguOW/gyBBIOWGmSB444CB5qC45b+DIEIg5YaZIHnvvIzlj6/og73lj43lpI3kuonlpLrlkIzkuIDooYznmoTlhpnmnYPpmZDjgII8L3RleHQ+PHJlY3QgeD0iMjgiIHk9IjE3MiIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4NCIgcng9IjQiIGZpbGw9IiNlZGY2ZWYiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ2IiB5PSIyMDIiIGZvbnQtc2l6ZT0iMTkiIGZpbGw9IiMxNzNiMzAiPuWIhuW8gOS4pOihjO+8mlt4XVvloavlhYXigKZdICAgIFt5XVvloavlhYXigKZdPC90ZXh0Pjx0ZXh0IHg9IjQ2IiB5PSIyMzIiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NjU4NGYiPuWIhuWIq+WGmeWFpeS4jeWQjOe8k+WtmOihjO+8jOWHj+Wwkei/meS4pOS4quWPmOmHj+S5i+mXtOeahOS8quWFseS6q+OAgjwvdGV4dD48cmVjdCB4PSIyOCIgeT0iMjcyIiB3aWR0aD0iOTA0IiBoZWlnaHQ9Ijg0IiByeD0iNCIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDYiIHk9IjMwMiIgZm9udC1zaXplPSIxOSIgZmlsbD0iIzE3M2IzMCI+5L6d6LWW5YWz57O75Yaz5a6a6L+Y6ZyA6KaB6K6/6Zeu6LCB77yb5YaF5a2Y5Zyw5Z2A5Yaz5a6a5bGe5LqO5ZOq5p2h6KGMPC90ZXh0Pjx0ZXh0IHg9IjQ2IiB5PSIzMzIiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NjU4NGYiPuWPquivu+aXtuayoeaciei/memHjOeahOWGmeadg+mZkOS6ieWkuu+8m+WIhuihjOS5n+S4jeiDveabv+S7o+S4muWKoeWQjOatpeOAgjwvdGV4dD48L2c+PC9zdmc+" alt="图 2：不同核心写同一缓存行中的独立变量，会引起行级一致性开销；把变量放到不同缓存行可减少这种伪共享干扰。" loading="lazy"><figcaption>图 2：不同核心写同一缓存行中的独立变量，会引起行级一致性开销；把变量放到不同缓存行可减少这种伪共享干扰。</figcaption></figure>
+<p>缓存里“以前有这个数据”不代表现在仍可直接使用，副本还必须有效，写入还需所需权限。把 x、y 分散到不同缓存行，可以缓解这两个变量之间的伪共享，但不能替代业务同步。该布局也可能增加占用，应以实际性能验证为依据。</p>
+<p>本轮表现：能够解释独立变量分行后减少写权限争夺；缓存内容、缓存槽位与变量内存值的区分仍建议间隔复测。</p>
+<h2 id="四线程调度就绪运行与阻塞">四、线程调度：就绪、运行与阻塞</h2>
+<h3 id="41-并发不等于并行">4.1 并发不等于并行</h3>
+<p>并发是在一段时间内多个任务交替或重叠推进；并行是同一时刻确实执行多个任务。讨论单 CPU 调度时，采用“一个逻辑 CPU”的前提。支持 SMT 的一个物理核心可能暴露多个逻辑 CPU，不能把物理核心和逻辑 CPU 混为一谈。</p>
+<p>线程与进程一样，能用运行、就绪、阻塞等抽象状态理解调度；它们不是 Java Thread.State 枚举的逐项对应。尤其 Java RUNNABLE 包含运行及等待处理器资源等情况。<a href="https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf" target="_blank" rel="noopener">OSTEP 线程入门</a>、<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Thread.State.html" target="_blank" rel="noopener">Java Thread.State</a></p>
+<div class="table-wrap"><table><thead><tr><th>状态</th><th>含义</th></tr></thead><tbody><tr><td>运行</td><td>正在 CPU 上执行</td></tr><tr><td>就绪</td><td>已具备运行条件，等待调度</td></tr><tr><td>阻塞／等待</td><td>等待 I/O、锁或条件等，暂不能继续相应执行</td></tr></tbody></table></div>
+<pre><code class="lang-text">A 运行 → 等网络，进入阻塞
+B 已就绪 → 调度执行 B
+A 数据到达 → A 就绪
+调度器选中 A → A 运行</code></pre>
+<p>数据到达不意味着马上运行。调度策略可能让 A 继续等待，也可能发生抢占；不能单凭 B 的时间片未耗尽断言 A 绝不会抢占。</p>
+<h3 id="42-阻塞等待不等于-cpu-空转">4.2 阻塞等待不等于 CPU 空转</h3>
+<p>A 阻塞等网络时，不占着逻辑 CPU 执行，系统可以运行 B。没有可运行工作时，CPU 才可能空闲。反复执行循环检查“数据到了没有”则属于忙等，会消耗 CPU。</p>
+<p>A 此刻等待 I/O，不足以证明整个任务是 I/O 密集型；B 就绪也不等于它必然是 CPU 密集型。分类要看主要时间花在计算还是等待。</p>
+<h3 id="43-上下文切换保存执行现场">4.3 上下文切换保存执行现场</h3>
+<p>从 B 切换到 A，需要保存 B、恢复 A 的相关执行状态，包括程序计数器、栈指针和通用寄存器等。局部值可能位于寄存器或栈中；调用栈通常保留在内存，无须每次复制整份栈。</p>
+<p>切换还可能影响缓存命中表现，但不是每次都必须重新加载全部缓存。上下文与线程资源共享的基础说明见 <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf" target="_blank" rel="noopener">OSTEP 线程入门</a>。</p>
+<h2 id="五多线程为什么不一定更快">五、多线程为什么不一定更快</h2>
+<div class="table-wrap"><table><thead><tr><th>条件</th><th>可能表现</th></tr></thead><tbody><tr><td>一个逻辑 CPU，纯计算任务从 2 线程增至 100</td><td>无法凭空增加计算资源，可能增加调度、切换与管理开销</td></tr><tr><td>多线程争用共享资源</td><td>可能等待、阻塞、重试或发生缓存一致性开销，不一定每个线程都阻塞</td></tr><tr><td>多个独立任务主要在等 I/O</td><td>请求等待可以重叠，缩短总体完成时间</td></tr><tr><td>多个可用核心，可拆分计算任务</td><td>可能通过并行计算加速，收益受串行部分与协调开销限制</td></tr></tbody></table></div>
+<p>I/O 场景不要求固定“一个线程请求、一个线程计算”。每个线程都可以执行请求、等待、处理结果，多个请求的等待阶段重叠。I/O 完成后的线程仍需调度，不保证立即处理。</p>
+<p>这些是条件化判断，不是性能测试结论。今天最后能独立说明上下文切换、资源竞争和 I/O 等待重叠；多核计算的并行收益由辅导补充，下次再复测。</p>
+<h2 id="六sleepwait-与通知让出-cpu-不等于释放锁">六、sleep、wait 与通知：让出 CPU 不等于释放锁</h2>
+<h3 id="61-三类操作的区别">6.1 三类操作的区别</h3>
+<div class="table-wrap"><table><thead><tr><th>操作</th><th>监视器锁行为</th><th>继续执行的条件</th></tr></thead><tbody><tr><td>Thread.sleep</td><td>不释放已经持有的监视器锁</td><td>休眠结束／被中断后按相应语义继续，还受调度影响</td></tr><tr><td>lock.wait</td><td>释放 lock 的监视器；不会自动释放其他对象的锁</td><td>正常返回前必须重新获得 lock</td></tr><tr><td>lock.notify / notifyAll</td><td>通知等待线程，不释放当前持有的 lock</td><td>当前持有者释放后，被通知线程才有机会重新取得锁</td></tr></tbody></table></div>
+<p>wait、notify、notifyAll 要由拥有对应监视器的线程调用，否则会出现 IllegalMonitorStateException；wait 还可能被中断，需要处理 InterruptedException。<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" target="_blank" rel="noopener">Object API</a>、<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Thread.html" target="_blank" rel="noopener">Thread API</a></p>
+<figure class="fig"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTA1IiB2aWV3Qm94PSIwIDAgOTYwIDUwNSIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLnrYnlvoXkuI7pgJrnn6XvvJrpgJrnn6XkuI3mmK/kuqTplIEiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmYWZiZjkiLz48ZyBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLEFyaWFsLHNhbnMtc2VyaWYiPjx0ZXh0IHg9IjMwIiB5PSI0NCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzE3M2IzMCI+562J5b6F5LiO6YCa55+l77ya6YCa55+l5LiN5piv5Lqk6ZSBPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSI3MiIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4NCIgcng9IjQiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ2IiB5PSIxMDIiIGZvbnQtc2l6ZT0iMTkiIGZpbGw9IiMxNzNiMzAiPkEg5oyB5pyJIGxvY2vvvIzlj5HnjrDpmJ/liJfkuLrnqbog4oaSIHdhaXQ8L3RleHQ+PHRleHQgeD0iNDYiIHk9IjEzMiIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzQ2NTg0ZiI+6YeK5pS+IGxvY2vvvIzov5vlhaXnrYnlvoXvvJvmraPluLjov5Tlm57liY3lv4Xpobvph43mlrDojrflvpflroPjgII8L3RleHQ+PHJlY3QgeD0iMjgiIHk9IjE3MiIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4NCIgcng9IjQiIGZpbGw9IiNmZmYyZTkiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ2IiB5PSIyMDIiIGZvbnQtc2l6ZT0iMTkiIGZpbGw9IiMxNzNiMzAiPkIg6I635b6XIGxvY2sg4oaSIOaUvuWFg+e0oCDihpIgbm90aWZ5QWxsIOKGkiDnu6fnu63miafooYw8L3RleHQ+PHRleHQgeD0iNDYiIHk9IjIzMiIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzQ2NTg0ZiI+QiDmraTliLvku43mjIHmnIkgbG9ja++8jEEg5LiN6IO956uL5Y2z6L+b5YWl44CCPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSIyNzIiIHdpZHRoPSI5MDQiIGhlaWdodD0iODQiIHJ4PSI0IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNjYWQ1Y2YiLz48dGV4dCB4PSI0NiIgeT0iMzAyIiBmb250LXNpemU9IjE5IiBmaWxsPSIjMTczYjMwIj5CIOmAgOWHuuWQjOatpeWdl+mHiuaUviBsb2NrIOKGkiBBIOS4juWFtuS7lue6v+eoi+ernuS6iTwvdGV4dD48dGV4dCB4PSI0NiIgeT0iMzMyIiBmb250LXNpemU9IjE3IiBmaWxsPSIjNDY1ODRmIj7osIHlhYjlj5blvpfplIHml6DlhazlubPpobrluo/kv53or4HjgII8L3RleHQ+PHJlY3QgeD0iMjgiIHk9IjM3MiIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4NCIgcng9IjQiIGZpbGw9IiNlZGY2ZWYiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ2IiB5PSI0MDIiIGZvbnQtc2l6ZT0iMTkiIGZpbGw9IiMxNzNiMzAiPkEg5ou/5YiwIGxvY2sg4oaSIHdoaWxlIOWGjeajgOafpemYn+WIlzwvdGV4dD48dGV4dCB4PSI0NiIgeT0iNDMyIiBmb250LXNpemU9IjE3IiBmaWxsPSIjNDY1ODRmIj7lj6/og73lt7LooqvliKvkurrlj5bnqbrvvJvkuLrnqbrlsLHlho3mrKEgd2FpdO+8jOmdnuepuuaJjea2iOi0ueOAgjwvdGV4dD48L2c+PC9zdmc+" alt="图 3：A wait 时释放 lock；B notify 后仍持有 lock，退出同步块才释放；A 重新取得 lock 后还要检查业务条件。" loading="lazy"><figcaption>图 3：A wait 时释放 lock；B notify 后仍持有 lock，退出同步块才释放；A 重新取得 lock 后还要检查业务条件。</figcaption></figure>
+<h3 id="62-通知不等于立即运行也不保证公平">6.2 通知不等于立即运行，也不保证公平</h3>
+<p>B 在 synchronized(lock) 内 notify 后，仍可以继续执行自己的代码；A 不能立即进入同一个监视器保护的区域。notify 选择哪个等待线程，Java 不保证按等待时长或优先级；notifyAll 通知所有，也不保证等待最久者先拿锁。</p>
+<p>必须区分“从等待集中被选中”“竞争监视器”“获得执行机会”，不是 CPU 硬件根据 Java 业务规则选择通知对象。<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" target="_blank" rel="noopener">Object.notify / notifyAll</a></p>
+<h3 id="63-为什么条件等待使用-while">6.3 为什么条件等待使用 while</h3>
+<p>下面是演示片段：queue 与 lock 已安全交给线程，所有队列访问使用同一把锁；方法把中断继续向上抛。实际业务中的消费处理是否放锁内，应按一致性和持锁成本另行设计。</p>
+<pre><code class="lang-java">void consumeOne() throws InterruptedException {
+    synchronized (lock) {
+        while (queue.isEmpty()) {
+            lock.wait();
+        }
+        consume(queue.remove());
+    }
+}</code></pre>
+<p>wait 返回时，队列可能已被另一个消费者取空；也可能发生虚假唤醒。while 会重新检查条件，if 则不会回头判断，可能直接从空队列取数据。三个消费者被通知、只有一个元素时，先拿锁者取走，后续消费者拿锁发现空，再次 wait 并释放锁。<a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.2" target="_blank" rel="noopener">JLS §17.2</a></p>
+<h3 id="64-同一把锁提供互斥与可见性">6.4 同一把锁提供互斥与可见性</h3>
+<p>全部队列读写遵守同一把 lock 时，不必仅为这些访问的可见性给 queue 引用额外加 volatile。前一个线程解锁前的写入，对随后获取同一把锁的线程可见。引用加 volatile 不会自动让队列内部 add/remove 线程安全。<a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.4.5" target="_blank" rel="noopener">JLS §17.4.5</a></p>
+<p>两段代码各自有 synchronized，但用的是不同锁，不能据此保证同一个 count++ 互斥，也不能依靠同一监视器的解锁／加锁规则建立相应可见性。某次结果碰巧正确，不等于实现有正确性保证。</p>
+<p>本轮最后能够独立说出“互斥＋可见性”，并明确不同锁无法保护同一计数器的完整读改写；等待通知的公平性与虚假唤醒仍需间隔复测。</p>
+<h2 id="七死锁活锁与饥饿">七、死锁、活锁与饥饿</h2>
+<div class="table-wrap"><table><thead><tr><th>现象</th><th>核心表现</th><th>本次示例</th></tr></thead><tbody><tr><td>死锁</td><td>相关线程互相等待，无法推进</td><td>A 持锁 1 等锁 2，B 持锁 2 等锁 1</td></tr><tr><td>活锁</td><td>线程持续动作、退让或重试，但没有实际进展</td><td>各拿一把锁，另一把拿不到便释放，反复同步重试</td></tr><tr><td>饥饿</td><td>系统中其他线程在推进，个别线程长期得不到服务</td><td>某线程持续参与竞争，却总拿不到资源</td></tr></tbody></table></div>
+<p>发生几次重试、最终完成，属于正常竞争，不能只凭重试认定活锁。死锁也不能等同于所有线程都处于 Java BLOCKED，具体等待状态取决于机制。</p>
+<p>活锁中的随机退避可以降低同步碰撞概率，但不自动提供严格进展保证。三种现象的概念对照见 <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/liveness.html" target="_blank" rel="noopener">Oracle 并发教程：Liveness</a>。</p>
+<figure class="fig"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNTA1IiB2aWV3Qm94PSIwIDAgOTYwIDUwNSIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLplIHpobrluo/vvJrpgb/lhY3ov5nph4znmoTlvqrnjq/nrYnlvoUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmYWZiZjkiLz48ZyBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLEFyaWFsLHNhbnMtc2VyaWYiPjx0ZXh0IHg9IjMwIiB5PSI0NCIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzE3M2IzMCI+6ZSB6aG65bqP77ya6YG/5YWN6L+Z6YeM55qE5b6q546v562J5b6FPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSI3MiIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4NCIgcng9IjQiIGZpbGw9IiNmZmYyZTkiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ2IiB5PSIxMDIiIGZvbnQtc2l6ZT0iMTkiIGZpbGw9IiMxNzNiMzAiPuWPjeWQke+8mkEg5oyB5pyJ6ZSBIDEg562J6ZSBIDLvvJtCIOaMgeaciemUgSAyIOetiemUgSAxPC90ZXh0Pjx0ZXh0IHg9IjQ2IiB5PSIxMzIiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NjU4NGYiPuWPjOaWuemDveS4jemHiuaUvu+8jOayoeaciemAgOWHuuacuuWItuaXtuaXoOazleaOqOi/m+OAgjwvdGV4dD48cmVjdCB4PSIyOCIgeT0iMTcyIiB3aWR0aD0iOTA0IiBoZWlnaHQ9Ijg0IiByeD0iNCIgZmlsbD0iI2VkZjZlZiIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDYiIHk9IjIwMiIgZm9udC1zaXplPSIxOSIgZmlsbD0iIzE3M2IzMCI+57uf5LiA77yaQeOAgUIg6YO95YWI6I635Y+W6ZSBIDHvvIzlho3ojrflj5bplIEgMjwvdGV4dD48dGV4dCB4PSI0NiIgeT0iMjMyIiBmb250LXNpemU9IjE3IiBmaWxsPSIjNDY1ODRmIj5BIOaMgeaciemUgSAxIOaXtu+8jEIg562J6ZSBIDHvvIzkuI3og73otorov4flroPlhYjmi7/plIEgMuOAgjwvdGV4dD48cmVjdCB4PSIyOCIgeT0iMjcyIiB3aWR0aD0iOTA0IiBoZWlnaHQ9Ijg0IiByeD0iNCIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDYiIHk9IjMwMiIgZm9udC1zaXplPSIxOSIgZmlsbD0iIzE3M2IzMCI+QSDlj5blvpfplIEgMiDihpIg5a6M5oiQ5pON5L2cIOKGkiDph4rmlL7kuKTmiorplIE8L3RleHQ+PHRleHQgeD0iNDYiIHk9IjMzMiIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzQ2NTg0ZiI+QiDpmo/lkI7lj5blvpfplIEgMe+8jOWGjeWPluW+l+mUgSAy44CCPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSIzNzIiIHdpZHRoPSI5MDQiIGhlaWdodD0iODQiIHJ4PSI0IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNjYWQ1Y2YiLz48dGV4dCB4PSI0NiIgeT0iNDAyIiBmb250LXNpemU9IjE5IiBmaWxsPSIjMTczYjMwIj7miYDmnInnm7jlhbPot6/lvoTpg73lv4XpobvpgbXlrojlkIzkuIDkuKrpobrluo88L3RleHQ+PHRleHQgeD0iNDYiIHk9IjQzMiIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzQ2NTg0ZiI+5a2Y5Zyo5LiA5p2h5Y+N5ZCR6I635Y+W6Lev5b6E77yM5bCx5LuN5LiN6IO95L+d6K+B6YG/5YWN6K+l5b6q546v44CCPC90ZXh0PjwvZz48L3N2Zz4=" alt="图 4：反向拿锁可能循环等待；所有相关路径遵守锁 1 再锁 2，且完成后释放，可破坏这个两锁场景的循环等待。" loading="lazy"><figcaption>图 4：反向拿锁可能循环等待；所有相关路径遵守锁 1 再锁 2，且完成后释放，可破坏这个两锁场景的循环等待。</figcaption></figure>
+<p>统一顺序的推导：A 拿到锁 1 时，B 在锁 1 上等待，还没有拿到锁 2；A 可以继续取得锁 2，完成后释放。这里假设 A 持有锁 1，直到相关两锁操作完成，不是 A、B 同时持有同一把锁 1 后再竞争锁 2。</p>
+<p>只要一条可能并发执行的相关路径仍按锁 2 → 锁 1 获取，就不能保证避开该循环。统一顺序针对这些锁消除这类循环，不证明整个复杂程序绝无其他死锁。</p>
+<h2 id="八本轮掌握记录与下一次复测">八、本轮掌握记录与下一次复测</h2>
+<div class="table-wrap"><table><thead><tr><th>内容</th><th>本轮证据</th><th>后续安排</th></tr></thead><tbody><tr><td>时间／空间局部性</td><td>能判断扫描一次无明显元素复用；再次读取 a0 属于时间局部性</td><td>独立解释两者区别</td></tr><tr><td>缓存行计算</td><td>经讲解后能答 8 元素为 1 未命中＋7 命中、跨 4 行均未命中</td><td>换元素大小与访问步长再算</td></tr><tr><td>伪共享</td><td>经讲解后能说明分行减少写权限干扰</td><td>检查是否仍混淆依赖关系与内存布局</td></tr><tr><td>就绪与运行</td><td>能解释 I/O 完成不意味着立即运行</td><td>区分 OS 抽象状态与 Java 枚举</td></tr><tr><td>上下文切换</td><td>独立指出寄存器保存恢复，补充栈指针后能复述</td><td>不把缓存影响说成必然全部重载</td></tr><tr><td>wait / notify</td><td>综合题能解释未释放锁不能取元素、需要重新竞争</td><td>独立画执行顺序与 while 条件循环</td></tr><tr><td>死锁／活锁／饥饿</td><td>能区分等待、持续无效重试、个别线程缺机会</td><td>换程序场景辨认，不只背比喻</td></tr><tr><td>同一把锁的作用</td><td>最后能独立说出互斥与可见性，能否定不同锁保护</td><td>保留为间隔复测，不连续重复追问</td></tr><tr><td>多线程效率</td><td>最后能独立讲切换、争用、I/O 重叠</td><td>补多核计算，并检查调度与“立即处理”的边界</td></tr><tr><td>旧题卡点</td><td>join 可见性、超时后的流恢复、同号不同金额仍需收紧</td><td>下次开场先复测，不重新展开数据库大专题</td></tr></tbody></table></div>
+<p>建议下一次先用旧题检查保持程度，再决定新主题；不把今天所有内容机械叠加到明天，不因未计时而编造完成时长。</p>
+<h2 id="九来源与适用范围">九、来源与适用范围</h2>
+<p>本文把口述误区与后续纠正合并展示，不逐字保存语音转写错误。缓存示例采用明确的简化模型；线程调度讲解不代表所有平台实现完全相同；Java API 的具体保证以规范为准。</p>
+<ul><li><a href="https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html" target="_blank" rel="noopener">Java SE 25 JLS §17</a>：监视器、等待集、通知与 happens-before。</li><li><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" target="_blank" rel="noopener">Object API</a>：wait、notify、notifyAll 的调用条件、重新竞争和虚假唤醒。</li><li><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Thread.html" target="_blank" rel="noopener">Thread API</a>：sleep 的监视器行为。</li><li><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Thread.State.html" target="_blank" rel="noopener">Thread.State</a>：Java 状态枚举与 OS 抽象状态的边界。</li><li><a href="https://docs.kernel.org/kernel-hacking/false-sharing.html" target="_blank" rel="noopener">Linux 内核 False Sharing</a>：缓存行级共享、写入与伪共享。</li><li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf" target="_blank" rel="noopener">OSTEP 线程入门</a>：线程共享地址空间、独立执行状态与切换。</li><li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/vm-beyondphys-policy.pdf" target="_blank" rel="noopener">OSTEP 缓存与替换</a>：局部性与缓存讨论。</li><li><a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/liveness.html" target="_blank" rel="noopener">Oracle Liveness</a>：死锁、饥饿、活锁；该教程面向 JDK 8，这里只用于基本概念。</li></ul>
+<p>核实方式为阅读一手资料、检查示例推导与页面构建；没有并发运行、硬件计数器或性能测量，因此不提供加速倍数、吞吐量或“已验证无死锁”等实验结论。</p>
+<h2 id="十补充复盘组合数联合概率与条件概率">十、补充复盘：组合数、联合概率与条件概率</h2>
+<p>补充日期：2026-10-17。来源是本次混合笔试答卷与交卷后的讲解。重点是先数清等可能情况，再确定已知条件缩小了哪个范围。以下数值由题设直接推导，不是外部测量数据。</p>
+<h3 id="101-组合数不计顺序地选取">10.1 组合数：不计顺序地选取</h3>
+<p>从 n 个不同对象中选 k 个，不计选取顺序，写作 C(n,k)，也常记作上下排列的组合符号。0 ≤ k ≤ n。</p>
+<pre><code class="lang-text">C(n,k) = n! / [k! × (n-k)!]
+
+n! = n × (n-1) × … × 1
+0! = 1</code></pre>
+<p>先数有顺序的取法，再除掉同一组内部重复的排列：</p>
+<pre><code class="lang-text">C(4,2)  = (4 × 3) / (2 × 1) = 6
+C(5,3)  = (5 × 4 × 3) / (3 × 2 × 1) = 10
+C(10,3) = (10 × 9 × 8) / (3 × 2 × 1) = 120</code></pre>
+<p>白球 1、2 与白球 2、1 是同一组球，只计一次。虽然颜色相同，每个球仍是不同实体，可以临时编号辅助计数。</p>
+<p>“1 白 2 黑、2 白 1 黑、3 白”是颜色分类，不是三个等可能结果；每一类包含的具体球组数量不同。只有确定基本结果等可能时，才能直接用有利结果数除以总结果数。</p>
+<h3 id="102-联合概率a-和-b-同时发生">10.2 联合概率：A 和 B 同时发生</h3>
+<p>P(A ∩ B) 表示 A、B 同时发生。乘法公式为：</p>
+<pre><code class="lang-text">P(A ∩ B) = P(A) × P(B ∣ A)    当 P(A) &gt; 0
+         = P(B) × P(A ∣ B)    当 P(B) &gt; 0
+
+若 A、B 独立：
+P(A ∩ B) = P(A) × P(B)</code></pre>
+<p>不能看到“同时发生”就直接把边缘概率相乘，独立性必须有依据。不放回抽样通常存在依赖：抽走一个白球后，下一次抽白球的概率会变化。</p>
+<p>例如，独立尝试每次成功概率 1/2，S 表示成功、F 表示失败：</p>
+<pre><code class="lang-text">P(FFS) = 1/2 × 1/2 × 1/2 = 1/8</code></pre>
+<p>这里数的是“前两次失败且第三次成功”这一完整过程。</p>
+<h3 id="103-条件概率已知-b再问-a">10.3 条件概率：已知 B，再问 A</h3>
+<pre><code class="lang-text">P(A ∣ B) = P(A ∩ B) / P(B)    要求 P(B) &gt; 0</code></pre>
+<p>分母是所有满足 B 的情况；分子是在这个范围内还满足 A 的情况。联合概率与条件概率问的是不同问题：</p>
+<div class="table-wrap"><table><thead><tr><th>问法</th><th>含义</th></tr></thead><tbody><tr><td>A 和 B 同时发生</td><td>在原样本空间中找交集</td></tr><tr><td>已知 B 发生，再问 A</td><td>先把范围缩小到 B，再看其中有多少属于 A</td></tr></tbody></table></div>
+<p>若 A 一定蕴含 B，则 A ∩ B = A，此时可写成 P(A) / P(B)。一般情况下不能直接如此简化。</p>
+<h3 id="104-抽球题至少一个白球不是先抽走一个白球">10.4 抽球题：至少一个白球，不是先抽走一个白球</h3>
+<p>题设：6 黑、4 白，等机会不放回抽取 3 个。设 A 为恰好 2 白，B 为至少 1 白。</p>
+<p>先数总球组，再按条件筛选：</p>
+<pre><code class="lang-text">所有三球组合：
+C(10,3) = 120
+
+不符合 B 的全黑组合：
+C(6,3) = 20
+
+符合 B 的组合：
+120 - 20 = 100
+
+恰好 2 白 1 黑：
+C(4,2) × C(6,1) = 6 × 6 = 36
+
+P(A ∣ B) = 36 / 100 = 9/25</code></pre>
+<p>每一种白球二元组合都能搭配 6 个黑球，所以目标组合数是乘法。已经按不计顺序的球组计数，不再乘“白白黑、白黑白、黑白白”的顺序数，否则会重复计算。</p>
+<figure class="fig"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNDMwIiB2aWV3Qm94PSIwIDAgOTYwIDQzMCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLmnaHku7bmpoLnjofvvJrnrZvpgInlt7Lnn6XmnaHku7blkI7nmoTojIPlm7QiPjxyZWN0IHdpZHRoPSI5NjAiIGhlaWdodD0iNDMwIiBmaWxsPSIjZmFmYmY5Ii8+PGcgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxBcmlhbCxzYW5zLXNlcmlmIj48dGV4dCB4PSIzMCIgeT0iNDMiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiMxNzNiMzAiPuadoeS7tuamgueOh++8muWIhuavjeaNouaIkOa7oei2s+W3suefpeadoeS7tueahOiMg+WbtDwvdGV4dD48cmVjdCB4PSIyOCIgeT0iNzQiIHdpZHRoPSI5MDQiIGhlaWdodD0iODIiIHJ4PSI0IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNjYWQ1Y2YiLz48dGV4dCB4PSI0OCIgeT0iMTA2IiBmb250LXNpemU9IjIwIiBmaWxsPSIjMTczYjMwIj7miYDmnInkuInnkIPnu4TlkIjvvJpDKDEwLDMpID0gMTIwPC90ZXh0Pjx0ZXh0IHg9IjQ4IiB5PSIxMzYiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NjU4NGYiPuavj+S4quWFt+S9k+eQg+e7hOetieWPr+iDve+8m+S4jeaYr+aKiueQg+iJsuWIhuexu+W9k+S9nOetieWPr+iDvee7k+aenOOAgjwvdGV4dD48cmVjdCB4PSIyOCIgeT0iMTc3IiB3aWR0aD0iOTA0IiBoZWlnaHQ9IjgyIiByeD0iNCIgZmlsbD0iI2ZmZjJlOSIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDgiIHk9IjIwOSIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzE3M2IzMCI+5o6S6Zmk5YWo6buR77yaQyg2LDMpID0gMjDvvJvmnaHku7bojIPlm7TvvJoxMjAg4oiSIDIwID0gMTAwPC90ZXh0Pjx0ZXh0IHg9IjQ4IiB5PSIyMzkiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NjU4NGYiPuW3suefpeiHs+WwkeS4gOS4queZveeQg++8jOWwseWPquWcqOi/mSAxMDAg5Liq55CD57uE5Lit6K6h566X44CCPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSIyODAiIHdpZHRoPSI5MDQiIGhlaWdodD0iMTE1IiByeD0iNCIgZmlsbD0iI2VkZjZlZiIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDgiIHk9IjMxMyIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzE3M2IzMCI+5YW25Lit5oGw5aW95Lik5Liq55m955CD77yaQyg0LDIpIMOXIEMoNiwxKSA9IDM2PC90ZXh0Pjx0ZXh0IHg9IjQ4IiB5PSIzNDciIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiMxNzZhNTQiPuadoeS7tuamgueOhyA9IDM2IC8gMTAwID0gOSAvIDI1PC90ZXh0Pjx0ZXh0IHg9IjQ4IiB5PSIzNzciIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NjU4NGYiPuS4jeaYr+WFiOaMh+WumuaKvei1sOS4gOS4queZveeQg++8jOWGjeWvueWJqeS4iyA5IOS4queQg+mHjeaWsOaKveagt+OAgjwvdGV4dD48L2c+PC9zdmc+" alt="图 5：先在 120 个等可能球组中排除 20 个全黑组合，得到条件范围 100；其中 36 个恰好两个白球，所以条件概率为 36/100。" loading="lazy"><figcaption>图 5：先在 120 个等可能球组中排除 20 个全黑组合，得到条件范围 100；其中 36 个恰好两个白球，所以条件概率为 36/100。</figcaption></figure>
+<p>原答卷的 4/9 不成立。把条件“至少 1 白”改成“已经取出 1 白，再从 9 个球中抽”改变了抽样过程；后面固定使用 2/3 和 1/3 相乘，也忽略了不放回抽样中数量会继续变化。</p>
+<h3 id="105-有限次尝试到第三次不等于第三次成功">10.5 有限次尝试：到第三次不等于第三次成功</h3>
+<p>每次独立成功概率 1/2，首次成功即停止，最多尝试 3 次。T 表示实际尝试次数。</p>
+<div class="table-wrap"><table><thead><tr><th>T</th><th>对应完整路径</th><th>概率</th></tr></thead><tbody><tr><td>1</td><td>S</td><td>1/2</td></tr><tr><td>2</td><td>FS</td><td>1/4</td></tr><tr><td>3</td><td>FFS 或 FFF</td><td>1/8 + 1/8 = 1/4</td></tr></tbody></table></div>
+<p>第三次无论成功还是失败，都会停止。因此 P(T=3) 只要求前两次失败，不必再乘一次成功概率。</p>
+<pre><code class="lang-text">P(第三次成功且尝试三次) = P(FFS) = 1/8
+
+P(最终成功 ∣ T=3)
+  = P(FFS) / [P(FFS) + P(FFF)]
+  = (1/8) / (1/4)
+  = 1/2</code></pre>
+<p>原答卷把两个问题都写成 1/8。口述已能指出第三次可能成功或失败，但公式没有把这两条路径都算进分母。优先练习“联合概率”和“给定条件后的概率”的区分。</p>
+<h3 id="106-离散期望与概率自检">10.6 离散期望与概率自检</h3>
+<p>离散随机变量的期望，是各个可能取值乘以对应概率，再求和：</p>
+<pre><code class="lang-text">E[X] = Σ x × P(X=x)
+
+E[T] = 1 × 1/2 + 2 × 1/4 + 3 × 1/4
+     = 7/4
+     = 1.75 次</code></pre>
+<p>原答卷漏答期望小问。计算前后检查：</p>
+<ul><li>所有互斥、穷尽的取值概率之和应为 1；本题 1/2 + 1/4 + 1/4 = 1。</li><li>概率应在 0 到 1 之间；条件分母必须非零。</li><li>本题 1 ≤ T ≤ 3，所以期望也应在 1 到 3 之间。</li><li>“第三次达到上限仍失败”不能漏算。</li><li>网页显示每题有填写，不代表每个小问都已作答完整。</li></ul>
+<h3 id="107-下一次怎么复测">10.7 下一次怎么复测</h3>
+<div class="table-wrap"><table><thead><tr><th>本次卡点</th><th>下一次先独立做什么</th></tr></thead><tbody><tr><td>组合数的除法</td><td>手列从 5 个不同球中选 2 个的组合，解释为何要除以 2</td></tr><tr><td>条件事件的分母</td><td>先写 A、B 分别是什么，再数 B 和 A ∩ B</td></tr><tr><td>不放回与独立</td><td>判断下一次概率是否因前一次结果改变，不能默认独立相乘</td></tr><tr><td>停止规则</td><td>列出 S、FS、FFS、FFF，再归类 T</td></tr><tr><td>联合与条件</td><td>对照问“FFS 的概率”和“已知 T=3 后成功的概率”</td></tr><tr><td>漏答检查</td><td>最后逐小问核对，不依赖“已作答题数”</td></tr></tbody></table></div>
+<p>截至上午公式讲解结束时，用户表示理解，但尚未进行新题检验。随后下午概率变式已正确完成，结果补记在第十四节；这仍不等于所有结构的概率题都已掌握。</p>
+<h2 id="十一全天实践过程与完成口径">十一、全天实践过程与完成口径</h2>
+<p>本节补齐 2026-10-17 后续的三轮作答、概率变式、四道算法与图建模追问。保留前面基础复习和公式总结，避免只剩答案而丢失错因。</p>
+<div class="table-wrap"><table><thead><tr><th>阶段</th><th>答卷记录</th><th>完成与局限</th></tr></thead><tbody><tr><td>早晨基础互动</td><td>未计时</td><td>并发、TCP、局部性、线程调度、锁与等待通知、死锁／活锁／饥饿；前文已有完整纠错</td></tr><tr><td>上午混合试卷</td><td>10:53:59 开始，11:31:42 交卷；导出记录 37 分 42 秒</td><td>基础 10 题全对；概率暴露条件样本空间、联合与条件概率、停止规则和漏答；算法做过同类题，不能作陌生题成绩</td></tr><tr><td>上午算法重交</td><td>交卷后修正，不计入原独立用时</td><td>堆更新错误修复；训练参考总分从 57 改为 67，仍缺正确性说明和自拟测试</td></tr><tr><td>下午专项</td><td>16:45:33—17:31:32，45 分 59 秒</td><td>两道概率变式结果全对，计数记法需修正；网格题独立建出双状态，代码有哨兵上界错误；参考训练分 84</td></tr><tr><td>晚饭前双题</td><td>18:34:28—19:34:28，60 分钟，自动交卷</td><td>连续区间原提交正确；冲突分组原提交不成立，后续经多轮引导理解图与染色；参考训练分 50</td></tr><tr><td>交卷后讲解</td><td>未计时</td><td>理解双向关系、连通部分、递归失败传递、已访问状态、二分组与实际安排的对应</td></tr></tbody></table></div>
+<p>评分是本聊天的过程分，不是公司正式评分；重交、引导后修正与独立作答分别记录。页面计时包括打开期间的等待，不等于纯编码耗时。晚饭前导出标记只填写 1/2，但用户随后在聊天补上第二题代码，复盘按实际提供内容判断。</p>
+<p>原计划晚上还有 AI 工作流项目追问，本聊天中没有其作答证据，不标记已完成。此前创建的 10:45 一次性提醒已触发并关闭；提醒不代表学习任务自动完成。</p>
+<h2 id="十二四道算法题意关键状态与实际错误">十二、四道算法：题意、关键状态与实际错误</h2>
+<h3 id="121-最少处理实例堆里必须保存更新后的结束时间">12.1 最少处理实例：堆里必须保存更新后的结束时间</h3>
+<p>题意：给定任意顺序的任务区间 [start,end)，一个实例同一时刻只处理一项任务；结束时刻等于下一任务开始时刻时允许复用。返回完成全部任务需要的最少实例数。任务数最多 100,000，空输入返回 0。</p>
+<p>按开始时间排序，用最小堆保存每个已分配实例最后一项任务的结束时间。最早结束的实例若已经空闲，就复用；否则新增一个实例。</p>
+<div class="table-wrap"><table><thead><tr><th>堆顶状态</th><th>动作</th><th>为什么</th></tr></thead><tbody><tr><td>最早结束时间 ≤ 当前开始时间</td><td>弹出旧结束时间，插入当前结束时间</td><td>至少一个实例可复用，实例总数不变</td></tr><tr><td>堆空或最早结束时间 &gt; 当前开始时间</td><td>插入当前结束时间</td><td>已分配实例均不能接当前任务，必须新增</td></tr></tbody></table></div>
+<p>这里堆保存已分配实例的最新结束时间，不是每一步只保存活动任务；因此可每次只复用一个实例，最终堆大小就是分配总数。</p>
+<p>原错误是复制出整数后只改局部变量：</p>
+<pre><code class="lang-rust">let mut top = heap.peek_mut().unwrap().0;
+top = jobs[i][1]; // 没有更新堆中的元素</code></pre>
+<p>虽然调用 peek_mut，取出的 i64 仍是复制值。重新提交改为 pop 后 push，真正更新了堆。</p>
+<div class="table-wrap"><table><thead><tr><th>自测输入</th><th>预期</th><th>原提交</th><th>修正后</th></tr></thead><tbody><tr><td>[]</td><td>0</td><td>0</td><td>0</td></tr><tr><td>[[0,1],[1,2],[2,3]]</td><td>1</td><td>1</td><td>1</td></tr><tr><td>[[0,1],[1,10],[2,3]]</td><td>2</td><td>1</td><td>2</td></tr><tr><td>三个 [0,5]</td><td>3</td><td>3</td><td>3</td></tr></tbody></table></div>
+<p>复杂度：时间 O(n log n)，空间 O(n)。原提交在 3,616 个小输入中有 441 个失败；重交修正后相同范围 0 失败。这个错误与前面“复制的局部值不会随原对象变化”的知识点有关，但并不是并发问题。</p>
+<h3 id="122-一次免费通行最优状态包含券是否使用">12.2 一次免费通行：最优状态包含券是否使用</h3>
+<p>题意：非负费用网格，从左上到右下，只能右移或下移。每个经过格子都计费，含起终点；最多用一次券，将一个经过格子的费用变为 0。网格最多 500×500，单格费用最多 10,000。</p>
+<p>用户独立建立的两个状态成立：</p>
+<div class="table-wrap"><table><thead><tr><th>状态</th><th>含义</th></tr></thead><tbody><tr><td>dp[i][j][0]</td><td>到当前位置，券已用掉的最小费用</td></tr><tr><td>dp[i][j][1]</td><td>到当前位置，券还没用的最小费用</td></tr></tbody></table></div>
+<p>初始化为 dp[0][0][0] = 0，dp[0][0][1] = grid[0][0]。已用券状态的来源：前面已使用则当前付费；前面未使用则当前免单。未用券状态必须当前付费。</p>
+<pre><code class="lang-text">used(i,j) = min(
+    used(上) + cost,
+    used(左) + cost,
+    unused(上),
+    unused(左)
+)
+unused(i,j) = min(unused(上), unused(左)) + cost</code></pre>
+<p>起点也可免单。所有费用非负，至少使用一次不会比不用更差，所以返回已使用状态可满足“最多一次”。</p>
+<p>原实现有两个独立的哨兵错误：</p>
+<div class="table-wrap"><table><thead><tr><th>位置</th><th>问题</th><th>反例与实际结果</th></tr></thead><tbody><tr><td>不存在的前驱标为 10001</td><td>它只大于单格费用，不大于累计路径费用</td><td>单行 [10000,10000,10000] 应为 20000，原代码返回 10001</td></tr><tr><td>min_in_vec 初值为 100001</td><td>当真实最小值超过它时，返回一个不存在的更小值</td><td>min([150000,160000]) 错返回 100001；只修前一处仍不足</td></tr><tr><td>12×12 全 10000</td><td>真实最短路径 23 格，免 1 格</td><td>应为 220000；原版及只修第一处都返回 100001</td></tr></tbody></table></div>
+<p>修复使用 i64::MAX / 4 表示无效状态，并从实际候选值取最小值；留出加法余量。最大网格的一条合法路径含 999 个格子，费用上界应从整条路径推导，不能只看单格。</p>
+<p>复杂度应按行列分别写：时间 O(mn)、空间 O(mn)，不笼统写 O(n²)。用户提交的两个自测，单列 [8,1,3,2] 应为 6，[[100,1],[2,3]] 应为 4；原记录没写预期输出和第三个测试。</p>
+<p>本聊天当时只修哨兵值的版本在 21,297 个小网格上与路径穷举一致。用户随后表示已修好，但没有提供新的完整代码和运行输出；本节下方的整理版由助手另外验证，不混记为用户重交证据。</p>
+<h3 id="123-最长稳定日志区间滑动窗口加两个单调队列">12.3 最长稳定日志区间：滑动窗口加两个单调队列</h3>
+<p>题意：找最长连续子数组，使最大值减最小值不超过 limit。长度最多 200,000，可含负数，空数组返回 0。</p>
+<p>用户陌生题原提交正确：一个递减候选队列维护最大值，一个递增候选队列维护最小值，保存下标以识别过期元素。窗口差值超限就推进左端，合法时更新长度。</p>
+<div class="table-wrap"><table><thead><tr><th>不变量或操作</th><th>解释</th></tr></thead><tbody><tr><td>最大值队列的值递减，最小值队列的值递增</td><td>队首分别提供当前极值</td></tr><tr><td>插入新右端时弹出失去竞争力的队尾</td><td>新值至少同样好且更晚过期，旧候选可以舍弃</td></tr><tr><td>丢弃小于 start 的下标</td><td>保证候选属于当前窗口</td></tr><tr><td>左端只向右移动</td><td>为当前右端找到合法范围，右端整体扫过数组</td></tr></tbody></table></div>
+<p>原代码在 end 不移动时重复入队，但比较包含等号，会先弹出同一 end 再加入，不破坏结果。每轮推进 start 或 end，总轮数 O(n)；总入队、出队次数也是 O(n)。因此原提交的 O(n) 时间、O(n) 空间判断成立，不应因为存在嵌套 while 就误判为 O(n²)。</p>
+<p>实际去掉 println 调试输出后，在 49,205 个小数组与阈值组合上与暴力枚举一致；另检查空数组、重复值、负数和数值边界。第一页“单调栈”的口述术语应更正为单调队列。</p>
+<div class="table-wrap"><table><thead><tr><th>输入</th><th>预期</th></tr></thead><tbody><tr><td>[8,2,4,7]，limit=4</td><td>2</td></tr><tr><td>[10,1,2,4,7,2]，limit=5</td><td>4</td></tr><tr><td>[]，limit=0</td><td>0</td></tr><tr><td>[3,3,3]，limit=0</td><td>3</td></tr><tr><td>[-1000000000,1000000000]，limit=2000000000</td><td>2</td></tr></tbody></table></div>
+<p>参考训练分 45/50，扣分来自没有提交自拟测试；算法实现本身正确。下方整理版把“加入右端一次—循环缩左端—更新答案”分开，减少重复入队，不是为修复原答案的正确性。</p>
+<h3 id="124-冲突任务分组从分组记录走到关系传播">12.4 冲突任务分组：从分组记录走到关系传播</h3>
+<p>题意：n 个任务，冲突 [a,b] 的两端必须分到不同组；判断能否满足全部约束。任务最多 100,000，关系最多 200,000；可能有不连通部分、重复边、自身冲突和孤立任务。</p>
+<div class="table-wrap"><table><thead><tr><th>迭代版本</th><th>当时问题</th><th>需要的修正</th></tr></thead><tbody><tr><td>两个 HashSet，冲突 a、b 同时塞入同组</td><td>直接违反“不同组”；按 0..n 索引冲突数组，还可能越界或漏边</td><td>区分任务数 n、边数 m，显式表达相邻组别不同</td></tr><tr><td>单次扫描边，未分组两端随意定 0、1</td><td>前面独立部分的任意方向可能在后面连接时发生假冲突</td><td>沿连通关系完成传播，不在每条边上重新选方向</td></tr><tr><td>HashMap 只存某一个方向</td><td>冲突无方向，DFS 可能漏掉本应同一片的任务</td><td>a→b、b→a 都记录</td></tr><tr><td>递归时删除 map、忽略返回值</td><td>缺少清晰访问状态，深处发现 false 无法上传</td><td>group 同时记录是否访问；每层检查递归返回值</td></tr><tr><td>最终递归理解版</td><td>双向边、外层多起点、异组传播、同组检查已正确</td><td>十万节点长链仍可能递归栈溢出，提交版改显式栈或队列</td></tr></tbody></table></div>
+<p>单次随意分组的反例：[[0,1],[2,3],[0,2]]。先各定两对方向，可能错误认为 0、2 同组就无解；实际可分成 [0,3] 与 [1,2]。</p>
+<p>单向关系的反例：[[0,1],[2,3],[3,1]]。仅沿输入方向时，0 无法通过 1 找到 3、2，导致把本来相关的任务当成独立部分起组；双向边则可从 0 走完 0→1→3→2。</p>
+<p>原提交的运行证据：</p>
+<div class="table-wrap"><table><thead><tr><th>输入</th><th>正确结果</th><th>原提交结果</th></tr></thead><tbody><tr><td>n=2，[[0,1]]</td><td>true</td><td>越界 panic</td></tr><tr><td>n=1，[[0,0]]</td><td>false</td><td>true</td></tr><tr><td>n=3，三次重复 [0,1]</td><td>true</td><td>false</td></tr><tr><td>n=2，[[0,1],[0,1],[0,0]]</td><td>false</td><td>true，末尾冲突被漏掉</td></tr><tr><td>n=3，无冲突</td><td>true</td><td>越界 panic</td></tr></tbody></table></div>
+<p>自身冲突在“邻居与自己同组”的检查中自然返回 false，不一定额外写特判。重复边只重复检查约束，不能因为见过这条边就判矛盾。</p>
+<h2 id="十三图建模到底在做什么">十三、图建模到底在做什么</h2>
+<p>把两个组看作两间教室，group 是座位表，neighbors 是每个人“不能同室”的名单。边表示限制，不是把两端组成一组。</p>
+<pre><code class="lang-text">group[v] = -1：还没安排
+group[v] =  0：教室 A
+group[v] =  1：教室 B</code></pre>
+<p>从任意未安排者开始选 A，然后沿名单传播：邻居必须放另一边。以 [[0,1],[1,2]] 为例，0 放 A，1 必须 B，2 必须 A；[0,2] 同组允许，因为两者没有冲突。若再加 [2,0]，则出现同组冲突，无解。</p>
+<figure class="fig"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NjAiIGhlaWdodD0iNDMwIiB2aWV3Qm94PSIwIDAgOTYwIDQzMCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLlhrLnqoHliIbnu4TmmK/msr/lhbPns7vkvKDmkq3nu4TliKsiPjxyZWN0IHdpZHRoPSI5NjAiIGhlaWdodD0iNDMwIiBmaWxsPSIjZmFmYmY5Ii8+PGcgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxBcmlhbCxzYW5zLXNlcmlmIj48dGV4dCB4PSIzMCIgeT0iNDQiIGZvbnQtc2l6ZT0iMjQiIGZpbGw9IiMxNzNiMzAiPuWGsueqgeWQjeWNleS4juW6p+S9jeihqO+8muS4gOatpeS4gOatpeS8oOaSree7hOWIqzwvdGV4dD48cmVjdCB4PSIyOCIgeT0iNzYiIHdpZHRoPSI5MDQiIGhlaWdodD0iODIiIHJ4PSI0IiBmaWxsPSIjZmZmIiBzdHJva2U9IiNjYWQ1Y2YiLz48dGV4dCB4PSI0OCIgeT0iMTA4IiBmb250LXNpemU9IjIwIiBmaWxsPSIjMTczYjMwIj7lhrLnqoHlhbPns7vvvJow4oCUMeOAgTHigJQy77yb5q+P5p2h5YWz57O755qE5Lik56uv5b+F6aG75byC57uEPC90ZXh0Pjx0ZXh0IHg9IjQ4IiB5PSIxMzgiIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NjU4NGYiPuS7u+mAiSAwIOS4uui1t+eCueaUviBB77yMMSDlj6rog70gQu+8jDIg5Y+q6IO9IEHjgII8L3RleHQ+PHJlY3QgeD0iMjgiIHk9IjE3OCIgd2lkdGg9IjkwNCIgaGVpZ2h0PSI4MiIgcng9IjQiIGZpbGw9IiNlZGY2ZWYiIHN0cm9rZT0iI2NhZDVjZiIvPjx0ZXh0IHg9IjQ4IiB5PSIyMTAiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiMxNzNiMzAiPkEg57uE77yaWzAsIDJdICAgIEIg57uE77yaWzFdIOKAlOKAlCDmu6HotrPlt7LmnInkuKTmnaHlhbPns7s8L3RleHQ+PHRleHQgeD0iNDgiIHk9IjI0MCIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzQ2NTg0ZiI+MOOAgTIg5rKh5pyJ5Yay56qB5pe25Y+v5Lul5ZCM57uE77yb57uE5Y+q5piv5Lik5Liq5Y+v6YCJ5a655Zmo55qE5ZCN5a2X44CCPC90ZXh0PjxyZWN0IHg9IjI4IiB5PSIyODAiIHdpZHRoPSI5MDQiIGhlaWdodD0iMTE0IiByeD0iNCIgZmlsbD0iI2ZmZjJlOSIgc3Ryb2tlPSIjY2FkNWNmIi8+PHRleHQgeD0iNDgiIHk9IjMxMyIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzE3M2IzMCI+6Iul5paw5aKeIDLigJQw77ya5Lik56uv6YO95ZyoIEHvvIzlj5HnjrDnn5vnm748L3RleHQ+PHRleHQgeD0iNDgiIHk9IjM0NyIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzQ2NTg0ZiI+5bey5YiG57uE5bCx5qOA5p+l77yM5LiN5YaN5qyh6YCS5b2S77yb5pyq5YiG57uE5omN5YiG6YWN5bm257un57ut6YGN5Y6G44CCPC90ZXh0Pjx0ZXh0IHg9IjQ4IiB5PSIzNzciIGZvbnQtc2l6ZT0iMTciIGZpbGw9IiM0NjU4NGYiPuWPjOWQkeiusOW9leS/neivgeS7juS7u+aEj+err+mDveiDveaJvuWIsOWGsueqgeWvueixoeOAgjwvdGV4dD48L2c+PC9zdmc+" alt="图 6：沿冲突名单传播组别。0 在 A，1 在 B，2 在 A；只有 0—1、1—2 时合法，新增 2—0 后产生同组冲突。" loading="lazy"><figcaption>图 6：沿冲突名单传播组别。0 在 A，1 在 B，2 在 A；只有 0—1、1—2 时合法，新增 2—0 后产生同组冲突。</figcaption></figure>
+<p>DFS 的白话过程是“安排完一个人，继续看他的冲突名单，处理完再回到原名单”。有双向边 0→1→0 时，从 1 看回 0，0 已有组别，只检查异组而不再次递归。因此 group 同时承担组别与已访问标记。</p>
+<div class="table-wrap"><table><thead><tr><th>代码动作</th><th>对应含义</th></tr></thead><tbody><tr><td>外层扫 0..n，跳过已经分组者</td><td>一片关系处理完，再找下一片或孤立任务</td></tr><tr><td>group[root]=0</td><td>这一片任取起始方向，组名本身没有优先级</td></tr><tr><td>group[neighbor]=1-group[target]</td><td>冲突邻居必须异组，仅适用于已确定为 0、1 的组别</td></tr><tr><td>邻居已有组别且与当前同组</td><td>检出矛盾，立即返回 false</td></tr><tr><td>已分组邻居异组</td><td>约束满足，不重新分组或递归</td></tr></tbody></table></div>
+<p>Rust 的 ! 对 bool 是逻辑取反，对整数是逐位取反；不能拿 !group 实现 0、1 互换。已知组号为 0 或 1 时，可用 1-group 或 group^1；-1 未分组状态不能直接转换。</p>
+<p>二分图判定适用于两个选择、边两端必须不同的约束。若改为三组，不能继续套同一规则；一般依赖图、可达性等也会用图遍历，但不是所有图问题都属于二分染色。该知识点本轮经多次引导与参考代码后理解，尚未独立实现无递归版本，不能标为已独立掌握。</p>
+<h2 id="十四概率变式与实际掌握变化">十四、概率变式与实际掌握变化</h2>
+<p>前面第十节保存上午错误与公式推导；本节保存下午迁移结果，避免只记住错误而漏掉进步。</p>
+<div class="table-wrap"><table><thead><tr><th>题目</th><th>正确结果</th><th>实际回答与纠正</th></tr></thead><tbody><tr><td>5 红 3 蓝，不放回取 3，已知至少 1 蓝，求恰好 2 蓝</td><td>条件组数 C(8,3)-C(5,3)=46，目标组数 C(3,2)C(5,1)=15，答案 15/46</td><td>结果正确；写 P(B)=46 不对，46 是计数，概率应为 46/56</td></tr><tr><td>成功率 1/3，首次成功或满 3 次停止</td><td>P(T=1)=1/3，P(T=2)=2/9，P(T=3)=4/9</td><td>全对，分布和为 1</td></tr><tr><td>上述 T 的期望</td><td>E[T]=1/3+2×2/9+3×4/9=19/9</td><td>正确，上午漏答的小问已补齐</td></tr><tr><td>前两次失败且第三次成功</td><td>4/27</td><td>正确识别联合路径</td></tr><tr><td>已知 T=3，最终成功</td><td>(4/27)/(4/9)=1/3</td><td>正确识别条件概率，不再直接填联合概率</td></tr></tbody></table></div>
+<p>这说明在相近结构变式上已能迁移。下一次应换条件、抽样方式或停止规则复测，不把一次全对扩大成所有概率题都掌握。</p>
+<h2 id="十五可复跑整理版-rust-与证据">十五、可复跑整理版 Rust 与证据</h2>
+<p>下面四个函数是助手整理并另外验证的参考实现，便于复盘；不是把用户原提交替换后声称全通过。最少实例版与用户重交同一策略；网格版修正两个哨兵；区间版规整循环；分组版改为显式栈，避免递归深度风险。</p>
+<pre><code class="lang-rust">use std::cmp::Reverse;
+use std::collections::{BinaryHeap, VecDeque};
+
+pub fn min_workers(mut jobs: Vec&lt;Vec&lt;i64&gt;&gt;) -&gt; usize {
+    jobs.sort_unstable_by_key(|job| job[0]);
+    let mut heap = BinaryHeap::&lt;Reverse&lt;i64&gt;&gt;::new();
+    for job in jobs {
+        if heap.peek().is_some_and(|end| end.0 &lt;= job[0]) {
+            heap.pop();
+        }
+        heap.push(Reverse(job[1]));
+    }
+    heap.len()
+}
+
+pub fn min_cost_with_pass(grid: Vec&lt;Vec&lt;i64&gt;&gt;) -&gt; i64 {
+    let (m, n) = (grid.len(), grid[0].len());
+    let inf = i64::MAX / 4;
+    // [0]：券已经用掉；[1]：券还没用
+    let mut dp = vec![vec![[inf; 2]; n]; m];
+    dp[0][0] = [0, grid[0][0]];
+    for i in 0..m {
+        for j in 0..n {
+            if i == 0 &amp;&amp; j == 0 { continue; }
+            let up = if i &gt; 0 { dp[i - 1][j] } else { [inf; 2] };
+            let left = if j &gt; 0 { dp[i][j - 1] } else { [inf; 2] };
+            let cost = grid[i][j];
+            dp[i][j][0] = (up[0] + cost)
+                .min(left[0] + cost)
+                .min(up[1])
+                .min(left[1]);
+            dp[i][j][1] = up[1].min(left[1]) + cost;
+        }
+    }
+    dp[m - 1][n - 1][0]
+}
+
+pub fn longest_stable(values: Vec&lt;i64&gt;, limit: i64) -&gt; usize {
+    let mut high = VecDeque::&lt;usize&gt;::new();
+    let mut low = VecDeque::&lt;usize&gt;::new();
+    let (mut start, mut best) = (0, 0);
+    for end in 0..values.len() {
+        while high.back().is_some_and(|&amp;i| values[i] &lt;= values[end]) {
+            high.pop_back();
+        }
+        high.push_back(end);
+        while low.back().is_some_and(|&amp;i| values[i] &gt;= values[end]) {
+            low.pop_back();
+        }
+        low.push_back(end);
+        while values[*high.front().unwrap()] - values[*low.front().unwrap()] &gt; limit {
+            if high.front() == Some(&amp;start) { high.pop_front(); }
+            if low.front() == Some(&amp;start) { low.pop_front(); }
+            start += 1;
+        }
+        best = best.max(end - start + 1);
+    }
+    best
+}
+
+pub fn can_split(n: usize, conflicts: Vec&lt;Vec&lt;usize&gt;&gt;) -&gt; bool {
+    let mut neighbors = vec![vec![]; n];
+    for edge in conflicts {
+        let (a, b) = (edge[0], edge[1]);
+        neighbors[a].push(b);
+        neighbors[b].push(a);
+    }
+    let mut group = vec![-1i8; n];
+    let mut stack = Vec::new();
+    for root in 0..n {
+        if group[root] != -1 { continue; }
+        group[root] = 0;
+        stack.push(root);
+        while let Some(target) = stack.pop() {
+            for &amp;neighbor in &amp;neighbors[target] {
+                if group[neighbor] == -1 {
+                    group[neighbor] = 1 - group[target];
+                    stack.push(neighbor);
+                } else if group[neighbor] == group[target] {
+                    return false;
+                }
+            }
+        }
+    }
+    true
+}</code></pre>
+<p>完整测试源码保存在同目录 assets/2026-10-17-计算机基础复习/algorithms-verified.rs，包含独立参照实现和可复跑测试。运行方式：</p>
+<pre><code class="lang-text">rustc --edition=2021 --test --crate-name practice_algorithms algorithms-verified.rs -o practice-tests
+./practice-tests --nocapture</code></pre>
+<p>Windows 下最后一条可执行 practice-tests.exe。本机核实使用 rustc 1.98.1，源码和测试在 2026-10-17 实际编译运行。</p>
+<div class="table-wrap"><table><thead><tr><th>整理版</th><th>独立核对方式</th><th>小规模覆盖数</th><th>结果</th></tr></thead><tbody><tr><td>min_workers</td><td>按开始／结束事件统计峰值重叠</td><td>3,616</td><td>一致</td></tr><tr><td>min_cost_with_pass</td><td>枚举小网格所有路径，路径和减路径最大格</td><td>21,297</td><td>一致</td></tr><tr><td>longest_stable</td><td>暴力枚举全部连续区间</td><td>49,205</td><td>一致</td></tr><tr><td>can_split</td><td>枚举所有两组分配，覆盖 n≤4 的所有无向图含自环</td><td>1,098</td><td>一致</td></tr></tbody></table></div>
+<p>合计 75,216 个小规模核对输入，四个测试函数均通过。另测 500×500 全 10000 网格（9980000）、200000 个相同数组元素（200000）、100000 节点链（可分组）、重复边、自环和不连通部分。小规模一致和规模边界测试提供具体证据，不替代一般正确性证明，不声称无限输入均已穷举。</p>
+<h2 id="十六收尾与下一次行动">十六、收尾与下一次行动</h2>
+<div class="table-wrap"><table><thead><tr><th>优先项</th><th>下次验收方式</th></tr></thead><tbody><tr><td>图分组</td><td>不看旧代码，先把任务／冲突／两组映射到点／边／颜色，再独立写显式栈或队列版</td></tr><tr><td>大费用状态</td><td>先推导累计上界，再选 INF；最小值函数不得用过小常量截断</td></tr><tr><td>代码状态更新</td><td>判断拿到的是副本、引用还是守卫；补能让旧状态暴露的反例</td></tr><tr><td>概率</td><td>换一个条件事件，先定义分子分母；严格区分计数、概率、联合与条件</td></tr><tr><td>自测习惯</td><td>提交时同时给输入、预期、实际结果，至少覆盖一个极端或退化场景</td></tr><tr><td>基础保持</td><td>间隔复测 join 可见性、wait 条件循环、缓存行与伪共享，不连续靠提示重复答</td></tr></tbody></table></div>
+<p>学习页面和答卷仍保留在来源项目 E:/AI-Personal，迁移不修改作答网页和浏览器保存数据。服务重启仅用于恢复本地页面，不是算法通过证据。原试卷与逐轮聊天是过程来源，本库保存复盘与验证整理版。</p>
+<p>截至本次整理，尚无独立 AI 项目口述，也没有不同结构概率新题的独立复测证据。后续记录应追加新的独立尝试，不把讲解后的点头理解当作完成测评。</p>
+  </div>
+</article></main></body></html>

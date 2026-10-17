@@ -36,9 +36,9 @@ const CAT_META = {
     intro: '一个主题一份文档，写清结论、依据与边界，不重复建文件。',
   },
   'Work-Practice': {
-    title: '工作实践',
+    title: '技术实践',
     nav: '实践',
-    intro: '工作中真实遇到的问题：怎么撞上的、比过哪些路、最后怎么落地、留下什么没解决。',
+    intro: '工作技术实践、学习与算法训练复盘，以及非日报技术专题：写清过程、证据与待验证项。',
   },
   Daily: {
     title: 'AI 日报',
@@ -683,3 +683,60 @@ ${html}
 }
 
 main();
+
+/**
+ * 迁移兼容：旧日报 URL 保留跳转；为迁移文档生成单文件阅读版。
+ * 原始内容只在实践目录维护，跳转不出现在日报文章列表。
+ */
+function writeMovedContentArtifacts() {
+  const manifestPath = path.join(SITE_DIR, 'content-moves.json');
+  if (!fs.existsSync(manifestPath)) return;
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  const standaloneCss = fs.readFileSync(path.join(SITE_DIR, 'style.css'), 'utf8') +
+    '\nbody{margin:0;padding:28px 18px;background:#f4f6f5}.standalone{max-width:960px;margin:0 auto;background:#fff;border:1px solid #dce4df;border-radius:12px;padding:34px}.standalone .post{margin:0}.standalone img{max-width:100%;height:auto}.standalone pre{overflow-x:auto}@media(max-width:700px){body{padding:12px}.standalone{padding:20px}}';
+  for (const entry of manifest.moves) {
+    if (entry.from !== 'daily' || entry.to !== 'work-practice' ||
+        path.basename(entry.slug) !== entry.slug || /[\\/]/.test(entry.slug)) {
+      throw new Error('不合法的迁移配置');
+    }
+    const targetFile = path.join(DIST, entry.to, entry.slug + '.html');
+    if (!fs.existsSync(targetFile)) throw new Error('迁移后的网页不存在：' + targetFile);
+    const target = '../' + entry.to + '/' + enc(entry.slug) + '.html';
+    const redirect = '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">' +
+      '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<meta http-equiv="refresh" content="0;url=' + esc(target) + '">' +
+      '<link rel="canonical" href="' + esc(target) + '"><title>内容已移入实践</title></head>' +
+      '<body><p>本文已移入实践目录。<a href="' + esc(target) + '">打开实践网页</a></p></body></html>';
+    fs.mkdirSync(path.join(DIST, entry.from), { recursive: true });
+    fs.writeFileSync(path.join(DIST, entry.from, entry.slug + '.html'), redirect, 'utf8');
+
+    const rendered = fs.readFileSync(targetFile, 'utf8');
+    const match = rendered.match(/<article class="post">[\s\S]*?<\/article>/);
+    if (!match) throw new Error('未找到文章正文：' + targetFile);
+    const article = match[0].replace(/(<img\b[^>]*\bsrc=")([^"]+)(")/g, (all, before, url, after) => {
+      if (/^data:/i.test(url)) return all;
+      if (/^https?:/i.test(url)) throw new Error('单文件版存在未内联远程图片：' + url);
+      const abs = path.resolve(path.dirname(targetFile), decodeURIComponent(url));
+      if (!abs.startsWith(DIST + path.sep)) throw new Error('图片路径超出构建目录');
+      const ext = path.extname(abs).toLowerCase();
+      const mime = {'.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg',
+        '.jpeg':'image/jpeg','.webp':'image/webp','.gif':'image/gif'}[ext];
+      if (!mime) throw new Error('不支持的图片类型：' + abs);
+      return before + 'data:' + mime + ';base64,' + fs.readFileSync(abs).toString('base64') + after;
+    });
+    const title = (rendered.match(/<title>([\s\S]*?)<\/title>/) || [,'技术实践'])[1];
+    const standalone = '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">' +
+      '<meta name="viewport" content="width=device-width,initial-scale=1"><title>' +
+      title + '</title><style>' + standaloneCss + '</style></head><body><main class="standalone">' +
+      article + '</main></body></html>';
+    const sourceFile = path.resolve(REPO, entry.destination);
+    if (!sourceFile.startsWith(path.join(REPO, '02-Work-Practice') + path.sep)) {
+      throw new Error('单文件输出路径超出实践目录');
+    }
+    fs.writeFileSync(sourceFile.replace(/\.md$/i,'.html'), standalone, 'utf8');
+  }
+  console.log('迁移兼容：' + manifest.moves.length + ' 个旧 URL 跳转、' +
+    manifest.moves.length + ' 份单文件实践阅读版');
+}
+
+writeMovedContentArtifacts();

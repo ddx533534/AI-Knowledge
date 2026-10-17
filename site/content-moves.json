@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "movedAt": "2026-10-17",
+  "reason": "用户要求非日报内容归入实践，日报只保留每日简报",
+  "moves": [
+    {
+      "slug": "2026-10-13-LLM推理不确定性-全文翻译",
+      "from": "daily",
+      "to": "work-practice",
+      "source": "03-Daily/2026-10-13-LLM推理不确定性-全文翻译.md",
+      "destination": "02-Work-Practice/2026-10-13-LLM推理不确定性-全文翻译.md"
+    },
+    {
+      "slug": "2026-10-13-LLM推理不确定性-总结分析",
+      "from": "daily",
+      "to": "work-practice",
+      "source": "03-Daily/2026-10-13-LLM推理不确定性-总结分析.md",
+      "destination": "02-Work-Practice/2026-10-13-LLM推理不确定性-总结分析.md"
+    },
+    {
+      "slug": "2026-10-16-计算机基础复习-并发-TCP-幂等与事务",
+      "from": "daily",
+      "to": "work-practice",
+      "source": "03-Daily/2026-10-16-计算机基础复习-并发-TCP-幂等与事务.md",
+      "destination": "02-Work-Practice/2026-10-16-计算机基础复习-并发-TCP-幂等与事务.md"
+    },
+    {
+      "slug": "2026-10-17-计算机基础复习-缓存-线程调度与锁",
+      "from": "daily",
+      "to": "work-practice",
+      "source": "03-Daily/2026-10-17-计算机基础复习-缓存-线程调度与锁.md",
+      "destination": "02-Work-Practice/2026-10-17-计算机基础复习-缓存-线程调度与锁.md"
+    }
+  ]
+}
